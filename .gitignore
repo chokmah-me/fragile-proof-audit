@@ -19,3 +19,6 @@ venv/
 # local secrets / mint receipts
 .zenodo-*.json
 .env
+
+# third-party mirrors (pin SHA in results/*_audit_meta.json instead)
+incoming/Euler-Mascheroni/

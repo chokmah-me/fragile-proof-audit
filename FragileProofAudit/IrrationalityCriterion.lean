@@ -1,11 +1,8 @@
 /-
 Copyright (c) 2026 Chokmah LLC. All rights reserved.
-Standard irrationality criterion scaffolding. Filled in Phase 1(b).
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Chokmah LLC
 -/
-import Mathlib.Data.Real.Basic
-import Mathlib.Tactic
-
-namespace FragileProofAudit.IrrationalityCriterion
 
 /-!
 # Irrationality criterion (Phase 0 stub)
@@ -18,6 +15,8 @@ If there exist sequences `A n : ℤ`, `B n : ℤ` with `A n ≠ 0` such that
 Align with Apéry / Liu–Zhang–Zhi (arXiv:2503.07625) when landing the proof.
 This stub exists so the campaign library builds under the pinned mathlib.
 -/
+
+namespace FragileProofAudit.IrrationalityCriterion
 
 theorem module_present : True := trivial
 

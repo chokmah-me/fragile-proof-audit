@@ -46,7 +46,12 @@ from pathlib import Path
 DEFAULT_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 
 # Directories that contain build artifacts or vendored dependencies, not our sources.
-SKIP_DIRS = {".lake", "lake-packages", "build", ".git", ".github", "_target", "results"}
+# Campaign-local: also skip third-party mirrors and non-Lean trees so forge
+# audits the FragileProofAudit library, not incoming/*/comparator sorry holes.
+SKIP_DIRS = {
+    ".lake", "lake-packages", "build", ".git", ".github", "_target", "results",
+    "incoming", "corpus", "docs", "scripts",
+}
 
 FORBIDDEN_TOKENS = {
     "sorry": r"\bsorry\b",

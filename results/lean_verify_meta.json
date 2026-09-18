@@ -1,0 +1,66 @@
+{
+  "project": "C:\\Users\\Elke Shayna\\Documents\\00Dev\\fragile-proof-audit",
+  "target": "FragileProofAudit",
+  "timestamp": "2026-09-18T21:58:36+00:00",
+  "verdict": "VERIFIED",
+  "findings": [
+    {
+      "check": "project_shape",
+      "status": "PASS",
+      "detail": "lakefile.toml, toolchain leanprover/lean4:v4.32.2",
+      "hits": []
+    },
+    {
+      "check": "no_sorry_admit",
+      "status": "PASS",
+      "detail": "no sorry/admit/sorryAx in sources",
+      "hits": []
+    },
+    {
+      "check": "native_decide",
+      "status": "PASS",
+      "detail": "no native_decide",
+      "hits": []
+    },
+    {
+      "check": "local_axiom_declarations",
+      "status": "PASS",
+      "detail": "no locally declared axioms",
+      "hits": []
+    },
+    {
+      "check": "lake_build",
+      "status": "PASS",
+      "detail": "`lake build FragileProofAudit` exited 0",
+      "hits": []
+    },
+    {
+      "check": "build_sorry_warnings",
+      "status": "PASS",
+      "detail": "no sorry warnings in build output",
+      "hits": []
+    },
+    {
+      "check": "axiom_audit",
+      "status": "PASS",
+      "detail": "all 3 declaration(s) within allowlist",
+      "hits": [
+        {
+          "violations": {},
+          "unresolved": [],
+          "audited": 3,
+          "expected": 3
+        }
+      ]
+    }
+  ],
+  "files_scanned": 3,
+  "declarations_found": 3,
+  "allowlist": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "toolchain": "leanprover/lean4:v4.32.2",
+  "build_exit_code": 0
+}

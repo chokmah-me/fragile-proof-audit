@@ -24,7 +24,9 @@ N/A primary. Secondary: evaluate displayed Z-formula if present.
 If kernel-clean on the real statement → stop schedule, escalate immediately.
 
 ## Fill during Phase 1(a)
-- [ ] Commit SHA
-- [ ] Toolchain / mathlib deps
-- [ ] Sorry/axiom/decide catalog
-- [ ] Statement-fidelity paragraph
+- [x] Commit SHA — `cacf87dd54f01eebc2790f6e17273023097fcd96`
+- [x] Toolchain / mathlib deps — Lean/mathlib `v4.29.0`
+- [x] Sorry/axiom/decide catalog — main file 0; comparator Challenge 6× sorry
+- [x] Statement-fidelity paragraph — see `docs/audits/gamma-aejonanonymous.md`
+
+**Outcome:** break via statement non-fidelity (proves `¬ is_rational_gamma`, not irrationality of γ). No historic escalate.

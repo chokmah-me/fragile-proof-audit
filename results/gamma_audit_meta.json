@@ -1,0 +1,351 @@
+{
+  "timestamp": "2026-09-18T21:55:17.229108+00:00",
+  "root": "C:\\Users\\Elke Shayna\\Documents\\00Dev\\fragile-proof-audit\\incoming\\Euler-Mascheroni",
+  "lean_file_count": 5,
+  "hit_counts": {
+    "sorry": 6
+  },
+  "hits": [
+    {
+      "kind": "sorry",
+      "path": "comparator/Challenge.lean",
+      "line": 34,
+      "text": "sorry"
+    },
+    {
+      "kind": "sorry",
+      "path": "comparator/Challenge.lean",
+      "line": 59,
+      "text": "by sorry"
+    },
+    {
+      "kind": "sorry",
+      "path": "comparator/Challenge.lean",
+      "line": 68,
+      "text": "sorry"
+    },
+    {
+      "kind": "sorry",
+      "path": "comparator/Challenge.lean",
+      "line": 118,
+      "text": "sorry"
+    },
+    {
+      "kind": "sorry",
+      "path": "comparator/Challenge.lean",
+      "line": 137,
+      "text": "sorry"
+    },
+    {
+      "kind": "sorry",
+      "path": "comparator/Challenge.lean",
+      "line": 142,
+      "text": "sorry"
+    }
+  ],
+  "declarations": [
+    {
+      "kind": "structure",
+      "name": "SimpleFrac",
+      "path": "comparator/Challenge.lean",
+      "line": 8
+    },
+    {
+      "kind": "def",
+      "name": "nat_pow",
+      "path": "comparator/Challenge.lean",
+      "line": 14
+    },
+    {
+      "kind": "def",
+      "name": "series_term",
+      "path": "comparator/Challenge.lean",
+      "line": 23
+    },
+    {
+      "kind": "theorem",
+      "name": "term_positivity",
+      "path": "comparator/Challenge.lean",
+      "line": 32
+    },
+    {
+      "kind": "def",
+      "name": "frac_lt",
+      "path": "comparator/Challenge.lean",
+      "line": 44
+    },
+    {
+      "kind": "def",
+      "name": "frac_eq",
+      "path": "comparator/Challenge.lean",
+      "line": 51
+    },
+    {
+      "kind": "theorem",
+      "name": "nat_pow_pos",
+      "path": "comparator/Challenge.lean",
+      "line": 58
+    },
+    {
+      "kind": "theorem",
+      "name": "terms_decreasing",
+      "path": "comparator/Challenge.lean",
+      "line": 65
+    },
+    {
+      "kind": "def",
+      "name": "add_frac",
+      "path": "comparator/Challenge.lean",
+      "line": 74
+    },
+    {
+      "kind": "def",
+      "name": "partial_sum",
+      "path": "comparator/Challenge.lean",
+      "line": 79
+    },
+    {
+      "kind": "structure",
+      "name": "TailTrap",
+      "path": "comparator/Challenge.lean",
+      "line": 95
+    },
+    {
+      "kind": "def",
+      "name": "get_trap",
+      "path": "comparator/Challenge.lean",
+      "line": 100
+    },
+    {
+      "kind": "theorem",
+      "name": "tail_is_small",
+      "path": "comparator/Challenge.lean",
+      "line": 115
+    },
+    {
+      "kind": "def",
+      "name": "is_rational_gamma",
+      "path": "comparator/Challenge.lean",
+      "line": 124
+    },
+    {
+      "kind": "theorem",
+      "name": "scaled_gap_is_small",
+      "path": "comparator/Challenge.lean",
+      "line": 131
+    },
+    {
+      "kind": "theorem",
+      "name": "gamma_irrational",
+      "path": "comparator/Challenge.lean",
+      "line": 139
+    },
+    {
+      "kind": "structure",
+      "name": "SimpleFrac",
+      "path": "comparator/Solution.lean",
+      "line": 8
+    },
+    {
+      "kind": "def",
+      "name": "nat_pow",
+      "path": "comparator/Solution.lean",
+      "line": 14
+    },
+    {
+      "kind": "def",
+      "name": "series_term",
+      "path": "comparator/Solution.lean",
+      "line": 23
+    },
+    {
+      "kind": "theorem",
+      "name": "term_positivity",
+      "path": "comparator/Solution.lean",
+      "line": 32
+    },
+    {
+      "kind": "def",
+      "name": "frac_lt",
+      "path": "comparator/Solution.lean",
+      "line": 44
+    },
+    {
+      "kind": "def",
+      "name": "frac_eq",
+      "path": "comparator/Solution.lean",
+      "line": 51
+    },
+    {
+      "kind": "theorem",
+      "name": "nat_pow_pos",
+      "path": "comparator/Solution.lean",
+      "line": 58
+    },
+    {
+      "kind": "theorem",
+      "name": "terms_decreasing",
+      "path": "comparator/Solution.lean",
+      "line": 65
+    },
+    {
+      "kind": "def",
+      "name": "add_frac",
+      "path": "comparator/Solution.lean",
+      "line": 96
+    },
+    {
+      "kind": "def",
+      "name": "partial_sum",
+      "path": "comparator/Solution.lean",
+      "line": 101
+    },
+    {
+      "kind": "structure",
+      "name": "TailTrap",
+      "path": "comparator/Solution.lean",
+      "line": 117
+    },
+    {
+      "kind": "def",
+      "name": "get_trap",
+      "path": "comparator/Solution.lean",
+      "line": 122
+    },
+    {
+      "kind": "theorem",
+      "name": "tail_is_small",
+      "path": "comparator/Solution.lean",
+      "line": 137
+    },
+    {
+      "kind": "def",
+      "name": "is_rational_gamma",
+      "path": "comparator/Solution.lean",
+      "line": 149
+    },
+    {
+      "kind": "theorem",
+      "name": "scaled_gap_is_small",
+      "path": "comparator/Solution.lean",
+      "line": 156
+    },
+    {
+      "kind": "theorem",
+      "name": "gamma_irrational",
+      "path": "comparator/Solution.lean",
+      "line": 175
+    },
+    {
+      "kind": "structure",
+      "name": "SimpleFrac",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 6
+    },
+    {
+      "kind": "def",
+      "name": "nat_pow",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 12
+    },
+    {
+      "kind": "def",
+      "name": "series_term",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 21
+    },
+    {
+      "kind": "theorem",
+      "name": "term_positivity",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 30
+    },
+    {
+      "kind": "def",
+      "name": "frac_lt",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 42
+    },
+    {
+      "kind": "def",
+      "name": "frac_eq",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 49
+    },
+    {
+      "kind": "theorem",
+      "name": "nat_pow_pos",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 56
+    },
+    {
+      "kind": "theorem",
+      "name": "terms_decreasing",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 63
+    },
+    {
+      "kind": "def",
+      "name": "add_frac",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 94
+    },
+    {
+      "kind": "def",
+      "name": "partial_sum",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 99
+    },
+    {
+      "kind": "structure",
+      "name": "TailTrap",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 115
+    },
+    {
+      "kind": "def",
+      "name": "get_trap",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 120
+    },
+    {
+      "kind": "theorem",
+      "name": "tail_is_small",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 135
+    },
+    {
+      "kind": "def",
+      "name": "is_rational_gamma",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 147
+    },
+    {
+      "kind": "theorem",
+      "name": "scaled_gap_is_small",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 154
+    },
+    {
+      "kind": "theorem",
+      "name": "gamma_irrational",
+      "path": "Proof_Of_Euler-Mascheroni_Constant_Irrationality.lean",
+      "line": 173
+    }
+  ],
+  "statement_heuristics": {
+    "mentions_eulMascheroniConst": false,
+    "mentions_Irrational": false,
+    "mentions_Real_gamma": false,
+    "has_mathlib_import": true
+  },
+  "commit": "cacf87dd54f01eebc2790f6e17273023097fcd96",
+  "toolchain": "leanprover/lean4:v4.29.0",
+  "mathlib": "v4.29.0",
+  "verdict": "break_statement_nonfidelity",
+  "proves": "Not is_rational_gamma p q hq (homemade predicate)",
+  "does_not_prove": "Irrational Real.eulMascheroniConst",
+  "main_file_sorry_count": 0,
+  "comparator_sorry_count": 6,
+  "brief": "docs/audits/gamma-aejonanonymous.md"
+}

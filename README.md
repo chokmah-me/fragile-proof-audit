@@ -55,8 +55,8 @@ python scripts/forge/verify_lean_project.py --project . --target FragileProofAud
 
 | Phase | Status |
 |---|---|
-| 0 Readiness | **in progress** — repo skeleton, harness, CI hooks |
-| 1(a) γ audit (`AEjonanonymous/Euler-Mascheroni`) | pending |
+| 0 Readiness | **done** — pin v4.32.2, harness 6/6, forge VERIFIED, CI workflow |
+| 1(a) γ audit (`AEjonanonymous/Euler-Mascheroni`) | **done** — break: statement non-fidelity (`¬ is_rational_gamma`, not mathlib γ); see `docs/audits/gamma-aejonanonymous.md` |
 | 1(b) Suman ζ(5) | pending |
 | 1(c) Kim ζ(5) | pending |
 | 2–3 | see campaign plan |
