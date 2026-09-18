@@ -1,0 +1,21 @@
+/.lake/
+/build/
+*.olean
+
+# forge / gate receipts may be large; keep briefs, ignore raw dumps if needed
+results/lake_build*.txt
+results/*_raw.txt
+
+.scratchpad/
+/_tmp/
+*.ndjson
+
+scripts/**/__pycache__/
+scripts/**/*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# local secrets / mint receipts
+.zenodo-*.json
+.env

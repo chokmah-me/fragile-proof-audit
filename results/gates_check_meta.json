@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-09-18T21:42:16.190739+00:00",
+  "phase": 0,
+  "gates": [
+    {
+      "name": "harness_selftest",
+      "ok": true,
+      "exit_code": 0
+    }
+  ],
+  "all_ok": true
+}
