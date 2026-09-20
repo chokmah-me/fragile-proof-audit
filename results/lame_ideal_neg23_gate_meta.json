@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-20T08:02:07.545811+00:00",
+  "timestamp": "2026-09-20T11:36:14.027561+00:00",
   "phase": "3i++",
   "gate": "lame_ideal_neg23",
   "source": "classical ideal-class witness for Q(\u221a-23); Lagarias-style exercise",
@@ -67,6 +67,6 @@
   "false_instance": null,
   "ok": true,
   "claims_cyclotomic_class_number": false,
-  "flt_regular": "deferred \u2014 quadratic ideal arithmetic only",
-  "lean": "IdealWitness.lean \u2014 norm obstruction by decide/nlinarith"
+  "flt_regular": "blocked \u2014 upstream lean v4.34.* vs campaign pin v4.32.2",
+  "lean": "IdealWitness + IdealPrincipal (Algebra.norm bridge; \u00acIsPrincipal under IsDedekindDomain OKNeg23)"
 }

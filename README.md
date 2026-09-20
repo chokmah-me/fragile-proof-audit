@@ -11,7 +11,7 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
-| **Resume** | Fresh session → **flt-regular / cyclotomic Ideal** or per-claim Agoh–Giuga — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Resume** | Fresh session → **IsDedekindDomain OKNeg23 / cyclotomic Ideal / h⁺** or per-claim Agoh–Giuga — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 
 ---
 
@@ -92,7 +92,7 @@ non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
 | **1(a)** γ audit (`AEjonanonymous/Euler-Mascheroni`) | **done** — break: statement non-fidelity. Proves `¬ is_rational_gamma`, not mathlib γ. Brief: [`docs/audits/gamma-aejonanonymous.md`](docs/audits/gamma-aejonanonymous.md) |
 | **1(b)** Suman ζ(5) | **done** — Eq. (48) base-case kill; gate + Lean witnesses; brief [`docs/audits/suman-zeta5.md`](docs/audits/suman-zeta5.md) |
 | **1(c)** Kim ζ(5) | compressed appendix — not a blocker |
-| **2(d)** Odd-zeta 202601.1609 | **BREAK** — `Λ_m` not evaluable (Lemma 3.2 is an LCM, not a sequence). [`docs/audits/odd-zeta-202601.md`](docs/audits/odd-zeta-202601.md) |
+| **2(d)** Odd-zeta 202601.1609 | **BREAK (corrected 2026-09-20)** — PDF pinned; Lemma 5.1 never supplies admissible `(q,α,δ)` at the paper's own `λ=2n+3`, `n=1..5`. Superseded prior "`Λ_m` unevaluable" claim. [`docs/audits/odd-zeta-202601.md`](docs/audits/odd-zeta-202601.md) |
 | **2(e)** Erdős–Straus | **PASS (escalate)** — Conjecture 1 covers all hard-class primes `< 10^5`; no Lean kill. [`docs/audits/es-covering.md`](docs/audits/es-covering.md) |
 | **2(f)** RR / HJO | **PASS** — \(Z=P\) q-expand + Lemma 12; OreReduce capability-limited. [`docs/audits/rr-qexpand.md`](docs/audits/rr-qexpand.md) |
 | **2(g)** PDN1 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks capability-limited. [`docs/audits/pdn1.md`](docs/audits/pdn1.md) |

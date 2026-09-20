@@ -129,8 +129,8 @@ def main() -> int:
         else "norm-2 element exists or form/Minkowski mismatch",
         "ok": all_ok,
         "claims_cyclotomic_class_number": False,
-        "flt_regular": "deferred — quadratic ideal arithmetic only",
-        "lean": "IdealWitness.lean — norm obstruction by decide/nlinarith",
+        "flt_regular": "blocked — upstream lean v4.34.* vs campaign pin v4.32.2",
+        "lean": "IdealWitness + IdealPrincipal (Algebra.norm bridge; ¬IsPrincipal under IsDedekindDomain OKNeg23)",
     }
     out = RESULTS / "lame_ideal_neg23_gate_meta.json"
     out.write_text(json.dumps(meta, indent=2), encoding="utf-8")

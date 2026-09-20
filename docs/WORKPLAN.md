@@ -2,8 +2,12 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 3(i)++ quadratic ideal norm obstruction VERIFIED;
-**resume at flt-regular / cyclotomic Ideal.IsPrincipal, or per-claim Agoh–Giuga**  
+**Checkpoint:** 2026-09-20 — Phase 3(i)+++ Ideal.IsPrincipal obstruction on `OKNeg23` VERIFIED;
+Phase 2(d) odd-zeta 202601.1609 REOPENED and RE-BROKEN on the pinned real PDF
+(Lemma 5.1 parameter-existence gate — the old "not evaluable" verdict is retired, see
+`docs/audits/odd-zeta-202601.md`);
+**resume at IsDedekindDomain instance / cyclotomic Ideal / proved h⁺, per-claim Agoh–Giuga,
+or draft the 2(d) Lemma 5.1 short note**  
  
 **Pin:** Lean / mathlib `v4.32.2` (same as `catalan-sun-lean`)  
 **Compute:** laptop · Python (`mpmath`, `Fraction`, SymPy) · no Sage/Magma/cluster  
@@ -15,12 +19,14 @@ This file is the **executable resume checklist**. Full harvest ranking lives in
 
 ---
 
-## Resume here — after Phase 3(i)++ ideal norm obstruction
+## Resume here — after Phase 3(i)+++ Ideal.IsPrincipal on OKNeg23
 
-**3(i) Lamé 1847:** **DONE through 3(i)++** —
+**3(i) Lamé 1847:** **DONE through 3(i)+++** —
 gate \(h^-_{23}=3\); Lean Premise/QuadraticWitness/Maillet Bareiss;
-quadratic ideal gate + Lean `no_norm_two_equation` (norm obstruction for
-`P|(2)` in \(\mathbb{Q}(\sqrt{-23})\)). Evidence: `FragileProofAudit/Lame/`,
+quadratic ideal gate + `no_norm_two_equation`;
+`IdealPrincipal` on `OKNeg23 := QuadraticAlgebra ℤ (-6) 1` with
+`Algebra.norm` bridge and `not_isPrincipal_of_absNorm_two` under
+`[IsDedekindDomain OKNeg23]`. Evidence: `FragileProofAudit/Lame/`,
 `scripts/gates/lame_h23.py`, `scripts/gates/lame_ideal_neg23.py`,
 `docs/audits/lame-1847.md`.
 
@@ -29,17 +35,23 @@ quadratic ideal gate + Lean `no_norm_two_equation` (norm obstruction for
 
 **Next options:**
 
-1. **flt-regular / cyclotomic Ideal** — mathlib `Ideal.IsPrincipal` for a
-   non-principal ideal in `𝓞(ℚ(ζ₂₃))`, or lake dependency on flt-regular;
-   optional proved \(h^+_{23}=1\).
-2. **Per-claim Agoh–Giuga audit** — blueprint a concrete claimed proof against
+1. **`IsDedekindDomain OKNeg23` instance** — drop the Dedekind hypothesis on
+   `not_isPrincipal_of_absNorm_two`; then exhibit a concrete ideal with
+   `absNorm = 2` (e.g. `(2, θ)`).
+2. **Cyclotomic Ideal / proved \(h^+\)** — lift to `𝓞(ℚ(ζ₂₃))`, or prove
+   \(h^+_{23}=1\).
+3. **Per-claim Agoh–Giuga audit** — blueprint a concrete claimed proof against
    the kit; instantiate failing lemma at \(g=30\) or \(g=858\).
-3. Optional: von Staudt–Clausen / Agoh–Bernoulli bridge (same kit, not blocking).
+4. Optional: von Staudt–Clausen / Agoh–Bernoulli bridge (same kit, not blocking).
+
+**Blocked:** flt-regular as a lake dependency — upstream toolchain is
+`leanprover/lean4:v4.34.*` while this campaign pins `v4.32.2` (match
+`catalan-sun-lean`). Do not bump the pin casually.
 
 Do **not** claim the Agoh–Giuga conjecture. Do **not** confuse Kummer-regular
 (\(23\nmid h\)) with UFD (\(h=1\)). Do **not** claim Lean proved
 `classNumber (CyclotomicField 23 ℚ) = 3` — Bareiss owns \(h^-\); \(h^+\) stays cited.
-Do **not** claim `Ideal.IsPrincipal` yet — 3(i)++ is the Diophantine obstruction only.
+Do **not** claim an unconditional `IsDedekindDomain OKNeg23` instance yet.
 
 ---
 
@@ -53,10 +65,11 @@ pwsh ./scripts/verify.ps1
 ```
 
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
-PASS, `lame_ideal_neg23` PASS, lake + forge VERIFIED (includes `Lame.IdealWitness`).
+PASS, `lame_ideal_neg23` PASS, lake + forge VERIFIED (includes
+`Lame.IdealWitness` + `Lame.IdealPrincipal`).
 
 **3(i) landing:** gate `76521e6`; Premise/QuadraticWitness `9ae01da`; Maillet
-Bareiss `7a8da40`; IdealWitness follows.
+Bareiss `7a8da40`; IdealWitness `9e7d8f2`; IdealPrincipal follows.
 
 ---
 
@@ -84,12 +97,12 @@ Bareiss `7a8da40`; IdealWitness follows.
 | **0** | Pin, harness, CI, forge | `README.md`, `results/lean_verify_meta.json` |
 | **1(a)** γ | **G** — statement non-fidelity. Proves `¬ is_rational_gamma`, not mathlib γ | `docs/audits/gamma-aejonanonymous.md` |
 | **1(b)** Suman ζ(5) | **B** — Eq. (48) at `n=1` has `a=2b`, `a=b` under `0 ≤ k ≤ d_1` | `docs/audits/suman-zeta5.md`, `scripts/gates/suman_eq48.py`, `FragileProofAudit/SumanZeta5/BaseCase.lean` |
-| **2(d)** odd-zeta 202601.1609 | **BREAK** — Lemma 3.2 is an LCM, not a sequence; `Λ_m` at ζ(5) unevaluable | `docs/audits/odd-zeta-202601.md`, `scripts/gates/odd_zeta_1609.py` |
+| **2(d)** odd-zeta 202601.1609 | **BREAK (corrected 2026-09-20)** — Lemma 5.1 never supplies admissible `(q,α,δ)`: `g(α*)>0` for every `q>e^λ−1` at `λ=2n+3`, `n=1..5`, sampled 300 orders of magnitude; superseded prior "`Λ_m` unevaluable" claim (that was false, PDF now pinned) | `docs/audits/odd-zeta-202601.md`, `scripts/gates/odd_zeta_1609.py`, `incoming/odd-zeta-202601/` (gitignored, sha256 in gate meta) |
 | **2(e)** Erdős–Straus 2404.01508 | **PASS (escalate)** — Conjecture 1 covers hard-class primes `< 10^5`; no Lean kill | `docs/audits/es-covering.md`, `scripts/gates/es_cover.py` |
 | **2(f)** RR / HJO 2608.05480+15219 | **PASS** — \(Z=P\) + Lemma 12; OreReduce (34) **capability-limited** | `docs/audits/rr-qexpand.md`, `scripts/gates/rr_qexpand.py` |
 | **2(g)** PDN1 2503.00004 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks **capability-limited** | `docs/audits/pdn1.md`, `scripts/gates/pdn1.py`, `incoming/pdn1/` |
 | **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `GiugaOnFactors`/`KorseltOnFactors`/`oracle_seven` | `docs/audits/agoh-giuga.md`, `scripts/gates/giuga_oracle.py`, `FragileProofAudit/AgohGiuga/` |
-| **3(i)** Lamé 1847 | **PASS** — through 3(i)++: Bareiss `mailletAbsDet_23=3` + ideal norm obstruction for \(\mathbb{Q}(\sqrt{-23})\) | `docs/audits/lame-1847.md`, `FragileProofAudit/Lame/` |
+| **3(i)** Lamé 1847 | **PASS** — through 3(i)+++: Bareiss + ideal norm obstruction + `IdealPrincipal` on `OKNeg23` (Dedekind hyp) | `docs/audits/lame-1847.md`, `FragileProofAudit/Lame/` |
 | **Criterion module** | Apéry-shaped `irrational_of_integer_forms_tendsto_zero` | `FragileProofAudit/IrrationalityCriterion.lean` |
 
 ---
@@ -106,13 +119,14 @@ Bareiss `7a8da40`; IdealWitness follows.
 
 ---
 
-## After 3(i)++ ideal norm obstruction
+## After 3(i)+++ Ideal.IsPrincipal on OKNeg23
 
 | ID | Target | First milestone |
 |---|---|---|
-| 3(i)+++ | Cyclotomic Ideal / classNumber | flt-regular `Ideal.IsPrincipal` in `𝓞(ℚ(ζ₂₃))`, or proved `h^+` |
+| 3(i)++++ | Dedekind instance / concrete ideal | `IsDedekindDomain OKNeg23`; exhibit `absNorm P = 2` |
+| 3(i)# | Cyclotomic Ideal / classNumber | `Ideal.IsPrincipal` in `𝓞(ℚ(ζ₂₃))`, or proved `h^+` |
 | 3(j) | Sun batch 2603.29973 | After HypergeometricEval exists |
-| 2(d) pin | 202601.1609 PDF | Pin in `incoming/` if preprints.org returns 200 |
+| 2(d) done | 202601.1609 PDF | **Pinned** (user-supplied download); Lemma 5.1 gate BREAK landed — write up as short note |
 | 3(h)+ | Per-claim Agoh–Giuga | Concrete claimed proof vs kit at \(g=30\) / \(858\) |
 
 ---
