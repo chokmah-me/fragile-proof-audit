@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-09-20T02:59:57.011911+00:00",
-  "phase": "2f",
+  "timestamp": "2026-09-20T03:42:21.971465+00:00",
+  "phase": "2g",
   "gates": [
     {
       "name": "harness_selftest",
@@ -24,6 +24,11 @@
     },
     {
       "name": "rr_qexpand",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "pdn1",
       "ok": true,
       "exit_code": 0
     }

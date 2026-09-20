@@ -2,7 +2,7 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 2(f) PASS (Ore capability-limited); resume at 2(g)  
+**Checkpoint:** 2026-09-20 — Phase 2(g) PASS (notebooks capability-limited); resume at 3(h)  
 **Pin:** Lean / mathlib `v4.32.2` (same as `catalan-sun-lean`)  
 **Compute:** laptop · Python (`mpmath`, `Fraction`, SymPy) · no Sage/Magma/cluster  
 
@@ -12,14 +12,13 @@ This file is the **executable resume checklist**. Full harvest ranking lives in
 
 ---
 
-## Resume here — Phase 2(g) PDN1
+## Resume here — Phase 3(h) Agoh–Giuga kit
 
-**Source:** arXiv:2503.00004  
-**First milestone:** Diff authors’ notebooks / replay declared computations  
-**Attack type:** E (CAS transcript) / computational claim gate  
+**First milestone:** Giuga oracle numbers verified  
+**Attack type:** finite primality-characterization audit  
 
-Do not reopen 2(e)/2(f) as kills — both **PASS**ed their executable gates
-(2(f) OreReduce remains capability-limited, not a BREAK).
+Do not reopen 2(e)–2(g) as kills — all three **PASS**ed their executable gates
+(Ore / Mathematica notebooks remain capability-limited, not BREAKs).
 
 ---
 
@@ -33,7 +32,8 @@ pwsh ./scripts/verify.ps1
 ```
 
 Expect: harness 6/6, `suman_eq48` PASS (BREAK), `odd_zeta_1609` PASS (BREAK),
-`es_cover` PASS, `rr_qexpand` PASS (Ore capability-limited), lake + forge VERIFIED.
+`es_cover` PASS, `rr_qexpand` PASS, `pdn1` PASS (notebooks capability-limited),
+lake + forge VERIFIED.
 
 ---
 
@@ -62,6 +62,7 @@ Expect: harness 6/6, `suman_eq48` PASS (BREAK), `odd_zeta_1609` PASS (BREAK),
 | **2(d)** odd-zeta 202601.1609 | **BREAK** — Lemma 3.2 is an LCM, not a sequence; `Λ_m` at ζ(5) unevaluable | `docs/audits/odd-zeta-202601.md`, `scripts/gates/odd_zeta_1609.py` |
 | **2(e)** Erdős–Straus 2404.01508 | **PASS (escalate)** — Conjecture 1 covers all hard-class primes `< 10^5`; odd-`k` fold side-check OK; no Lean kill | `docs/audits/es-covering.md`, `scripts/gates/es_cover.py`, `incoming/erdos-straus-2404.01508.pdf` |
 | **2(f)** RR / HJO 2608.05480+15219 | **PASS** on Type-D \(Z=P\) q-expand + Lemma 12; OreReduce (34) **capability-limited** (no RISC) | `docs/audits/rr-qexpand.md`, `scripts/gates/rr_qexpand.py` |
+| **2(g)** PDN1 2503.00004 | **PASS** on GF + Thm 1.1/1.2 samples + modular eq (3.13); Mathematica notebooks **capability-limited** | `docs/audits/pdn1.md`, `scripts/gates/pdn1.py`, `incoming/pdn1/` |
 | **Criterion module** | Apéry-shaped `irrational_of_integer_forms_tendsto_zero` | `FragileProofAudit/IrrationalityCriterion.lean` |
 
 Last checkpoint before 2(e)/2(f) landings: `a73e6a7` (WORKPLAN resume pin).

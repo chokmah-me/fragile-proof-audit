@@ -11,7 +11,7 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
-| **Resume** | Fresh session → **Phase 2(g) PDN1** — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Resume** | Fresh session → **Phase 3(h) Agoh–Giuga kit** — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 
 ---
 
@@ -84,7 +84,8 @@ re-attack it.
 | **2(d)** Odd-zeta 202601.1609 | **BREAK** — `Λ_m` not evaluable (Lemma 3.2 is an LCM, not a sequence). [`docs/audits/odd-zeta-202601.md`](docs/audits/odd-zeta-202601.md) |
 | **2(e)** Erdős–Straus | **PASS (escalate)** — Conjecture 1 covers all hard-class primes `< 10^5`; no Lean kill. [`docs/audits/es-covering.md`](docs/audits/es-covering.md) |
 | **2(f)** RR / HJO | **PASS** — \(Z=P\) q-expand + Lemma 12; OreReduce capability-limited. [`docs/audits/rr-qexpand.md`](docs/audits/rr-qexpand.md) |
-| **2(g)** | PDN1 2503.00004 (next) |
+| **2(g)** PDN1 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks capability-limited. [`docs/audits/pdn1.md`](docs/audits/pdn1.md) |
+| **3(h)** | Agoh–Giuga kit (next) |
 | **3** Infrastructure | Agoh–Giuga kit · Lamé pinpoint · Sun batch `2603.29973` |
 
 Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md).

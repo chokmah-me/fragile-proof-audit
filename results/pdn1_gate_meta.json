@@ -1,0 +1,116 @@
+{
+  "timestamp": "2026-09-20T03:42:21.960020+00:00",
+  "phase": "2g",
+  "source": "arXiv:2503.00004",
+  "pdf": "incoming/pdn1-2503.00004.pdf",
+  "generating_function": {
+    "formula": "J_2^2 / J_1^5",
+    "PDN1_2": 18,
+    "expected_PDN1_2": 18,
+    "ok": true,
+    "head": [
+      1,
+      5,
+      18,
+      55,
+      149,
+      371,
+      867,
+      1923,
+      4086,
+      8374,
+      16634,
+      32152
+    ]
+  },
+  "congruences": {
+    "rows": [
+      {
+        "mod": 25,
+        "residue": 24,
+        "power": 5,
+        "checked": 20,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.1 1.7 \u03b1=1"
+      },
+      {
+        "mod": 125,
+        "residue": 74,
+        "power": 25,
+        "checked": 4,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.1 1.8 \u03b1=1 r=71"
+      },
+      {
+        "mod": 125,
+        "residue": 124,
+        "power": 25,
+        "checked": 4,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.1 1.8 \u03b1=1 r=119"
+      },
+      {
+        "mod": 625,
+        "residue": 599,
+        "power": 25,
+        "checked": 1,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.1 1.7 \u03b1=2"
+      },
+      {
+        "mod": 7,
+        "residue": 5,
+        "power": 7,
+        "checked": 40,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.2 1.9 \u03b1=1"
+      },
+      {
+        "mod": 49,
+        "residue": 47,
+        "power": 49,
+        "checked": 10,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.2 1.10 \u03b1=1"
+      },
+      {
+        "mod": 343,
+        "residue": 243,
+        "power": 49,
+        "checked": 2,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.2 1.9 \u03b1=2"
+      }
+    ],
+    "all_ok": true
+  },
+  "modular_eq_313": {
+    "ok": true,
+    "max_abs_diff": 0,
+    "t_relation": {
+      "ok": true,
+      "max_abs_diff": 0
+    },
+    "N": 80
+  },
+  "notebook_replay": {
+    "status": "capability-limited",
+    "reason": "Authors' supplements are Mathematica notebooks (github.com/tztgm1/PDN1-congruences-modulo-5 and -modulo-7). Campaign stack has no Mathematica; full CAS transcript replay and seventh-order equation (4.8) are not executed here.",
+    "pinned": {
+      "mod5_dir": "incoming\\pdn1\\mod5",
+      "mod7_dir": "incoming\\pdn1\\mod7",
+      "mod5_nb": true,
+      "mod7_nb": true
+    },
+    "note": "Blocked notebook replay is not a BREAK of the congruence route."
+  },
+  "verdict": "PASS",
+  "note": "PASS escalates the Type-D GF/congruence/(3.13) route. Does not certify (4.8) or the full Mathematica supplements."
+}
