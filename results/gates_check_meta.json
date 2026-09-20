@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-09-20T07:48:38.445797+00:00",
-  "phase": "3i",
+  "timestamp": "2026-09-20T08:02:07.555465+00:00",
+  "phase": "3i++",
   "gates": [
     {
       "name": "harness_selftest",
@@ -39,6 +39,11 @@
     },
     {
       "name": "lame_h23",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "lame_ideal_neg23",
       "ok": true,
       "exit_code": 0
     }

@@ -10,3 +10,4 @@ import FragileProofAudit.AgohGiuga.Oracle
 import FragileProofAudit.Lame.Premise
 import FragileProofAudit.Lame.QuadraticWitness
 import FragileProofAudit.Lame.Maillet
+import FragileProofAudit.Lame.IdealWitness

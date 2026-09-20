@@ -2,8 +2,8 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 3(i)+ Maillet Bareiss `mailletAbsDet_23=3` VERIFIED;
-**resume at flt-regular ideal witness, or per-claim Agoh–Giuga**  
+**Checkpoint:** 2026-09-20 — Phase 3(i)++ quadratic ideal norm obstruction VERIFIED;
+**resume at flt-regular / cyclotomic Ideal.IsPrincipal, or per-claim Agoh–Giuga**  
  
 **Pin:** Lean / mathlib `v4.32.2` (same as `catalan-sun-lean`)  
 **Compute:** laptop · Python (`mpmath`, `Fraction`, SymPy) · no Sage/Magma/cluster  
@@ -15,21 +15,23 @@ This file is the **executable resume checklist**. Full harvest ranking lives in
 
 ---
 
-## Resume here — after Phase 3(i)+ Maillet Bareiss
+## Resume here — after Phase 3(i)++ ideal norm obstruction
 
-**3(i) Lamé 1847:** **DONE (gate + Lean Premise/QuadraticWitness + Maillet Bareiss)** —
-Python Maillet \(h^-_{23}=3\); Lean `not_lame_*_of_classNumber_eq_three`;
-Lean exhaustive 3 reduced forms of disc `-23`; Lean fuel-bounded Bareiss
-`mailletAbsDet 23 = 3` (OEIS pins through 19). Evidence: `FragileProofAudit/Lame/`,
-`docs/blueprint/lame-1847.md`, `scripts/gates/lame_h23.py`, `docs/audits/lame-1847.md`.
+**3(i) Lamé 1847:** **DONE through 3(i)++** —
+gate \(h^-_{23}=3\); Lean Premise/QuadraticWitness/Maillet Bareiss;
+quadratic ideal gate + Lean `no_norm_two_equation` (norm obstruction for
+`P|(2)` in \(\mathbb{Q}(\sqrt{-23})\)). Evidence: `FragileProofAudit/Lame/`,
+`scripts/gates/lame_h23.py`, `scripts/gates/lame_ideal_neg23.py`,
+`docs/audits/lame-1847.md`.
 
 **3(h) Agoh–Giuga kit:** **DONE** — Python oracle PASS + Lean `Criteria`/`Oracle`
 (`oracle_seven`).
 
 **Next options:**
 
-1. **flt-regular ideal witness** — concrete non-principal ideal in
-   `𝓞(ℚ(ζ₂₃))` (or lake dependency on flt-regular).
+1. **flt-regular / cyclotomic Ideal** — mathlib `Ideal.IsPrincipal` for a
+   non-principal ideal in `𝓞(ℚ(ζ₂₃))`, or lake dependency on flt-regular;
+   optional proved \(h^+_{23}=1\).
 2. **Per-claim Agoh–Giuga audit** — blueprint a concrete claimed proof against
    the kit; instantiate failing lemma at \(g=30\) or \(g=858\).
 3. Optional: von Staudt–Clausen / Agoh–Bernoulli bridge (same kit, not blocking).
@@ -37,6 +39,7 @@ Lean exhaustive 3 reduced forms of disc `-23`; Lean fuel-bounded Bareiss
 Do **not** claim the Agoh–Giuga conjecture. Do **not** confuse Kummer-regular
 (\(23\nmid h\)) with UFD (\(h=1\)). Do **not** claim Lean proved
 `classNumber (CyclotomicField 23 ℚ) = 3` — Bareiss owns \(h^-\); \(h^+\) stays cited.
+Do **not** claim `Ideal.IsPrincipal` yet — 3(i)++ is the Diophantine obstruction only.
 
 ---
 
@@ -50,10 +53,10 @@ pwsh ./scripts/verify.ps1
 ```
 
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
-PASS, lake + forge VERIFIED (includes `AgohGiuga.Oracle` + `Lame.Premise` /
-`QuadraticWitness` / `Maillet` with `mailletAbsDet_23`).
+PASS, `lame_ideal_neg23` PASS, lake + forge VERIFIED (includes `Lame.IdealWitness`).
 
-**3(i) landing:** gate `76521e6`; Premise/QuadraticWitness `9ae01da`; Maillet Bareiss follows.
+**3(i) landing:** gate `76521e6`; Premise/QuadraticWitness `9ae01da`; Maillet
+Bareiss `7a8da40`; IdealWitness follows.
 
 ---
 
@@ -86,7 +89,7 @@ PASS, lake + forge VERIFIED (includes `AgohGiuga.Oracle` + `Lame.Premise` /
 | **2(f)** RR / HJO 2608.05480+15219 | **PASS** — \(Z=P\) + Lemma 12; OreReduce (34) **capability-limited** | `docs/audits/rr-qexpand.md`, `scripts/gates/rr_qexpand.py` |
 | **2(g)** PDN1 2503.00004 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks **capability-limited** | `docs/audits/pdn1.md`, `scripts/gates/pdn1.py`, `incoming/pdn1/` |
 | **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `GiugaOnFactors`/`KorseltOnFactors`/`oracle_seven` | `docs/audits/agoh-giuga.md`, `scripts/gates/giuga_oracle.py`, `FragileProofAudit/AgohGiuga/` |
-| **3(i)** Lamé 1847 | **PASS** — gate \(h^-_{23}=3\); Lean Premise + QuadraticWitness + Maillet Bareiss `mailletAbsDet_23=3` VERIFIED | `docs/audits/lame-1847.md`, `FragileProofAudit/Lame/` |
+| **3(i)** Lamé 1847 | **PASS** — through 3(i)++: Bareiss `mailletAbsDet_23=3` + ideal norm obstruction for \(\mathbb{Q}(\sqrt{-23})\) | `docs/audits/lame-1847.md`, `FragileProofAudit/Lame/` |
 | **Criterion module** | Apéry-shaped `irrational_of_integer_forms_tendsto_zero` | `FragileProofAudit/IrrationalityCriterion.lean` |
 
 ---
@@ -103,11 +106,11 @@ PASS, lake + forge VERIFIED (includes `AgohGiuga.Oracle` + `Lame.Premise` /
 
 ---
 
-## After 3(i)+ Maillet Bareiss
+## After 3(i)++ ideal norm obstruction
 
 | ID | Target | First milestone |
 |---|---|---|
-| 3(i)++ | Ideal / classNumber | flt-regular non-principal ideal, or Lean `classNumber=3` with proved `h^+` |
+| 3(i)+++ | Cyclotomic Ideal / classNumber | flt-regular `Ideal.IsPrincipal` in `𝓞(ℚ(ζ₂₃))`, or proved `h^+` |
 | 3(j) | Sun batch 2603.29973 | After HypergeometricEval exists |
 | 2(d) pin | 202601.1609 PDF | Pin in `incoming/` if preprints.org returns 200 |
 | 3(h)+ | Per-claim Agoh–Giuga | Concrete claimed proof vs kit at \(g=30\) / \(858\) |

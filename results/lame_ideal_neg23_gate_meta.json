@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-09-20T08:02:07.545811+00:00",
+  "phase": "3i++",
+  "gate": "lame_ideal_neg23",
+  "source": "classical ideal-class witness for Q(\u221a-23); Lagarias-style exercise",
+  "criterion": {
+    "norm_obstruction": "no \u03b1\u2208O_K with |N(\u03b1)|=2",
+    "cube_principal": "N(\u03b8\u22122)=8 supports P\u00b3 principal",
+    "minkowski": "(2/\u03c0)\u221a23 < 4",
+    "forms": "exactly 3 reduced forms of disc -23"
+  },
+  "no_norm_two": {
+    "equation": "a^2 + 23 b^2 = 8",
+    "all_integer_solutions": [],
+    "even_parity_solutions": [],
+    "ok": true,
+    "note": "empty solution set \u21d2 no \u03b1\u2208O_K with |N(\u03b1)|=2"
+  },
+  "theta_minus_two": {
+    "theta": {
+      "a": 1,
+      "b": 1,
+      "formula": "(1+\u221a-23)/2"
+    },
+    "theta_minus_two": {
+      "a": -3,
+      "b": 1,
+      "formula": "(-3+\u221a-23)/2"
+    },
+    "norm_numerator": 32,
+    "norm": 8,
+    "expected_norm": 8,
+    "ok": true,
+    "note": "N(\u03b8\u22122)=2\u00b3; classically P\u00b3=(\u03b8\u22122) for P=(2,\u03b8)"
+  },
+  "minkowski": {
+    "discriminant": -23,
+    "minkowski_bound": 3.053121172684614,
+    "floor_bound": 3,
+    "ok": true,
+    "note": "every ideal class has a nonzero ideal of absNorm \u2264 3"
+  },
+  "quadratic_forms": {
+    "reduced_forms": [
+      {
+        "a": 1,
+        "b": 1,
+        "c": 6
+      },
+      {
+        "a": 2,
+        "b": -1,
+        "c": 3
+      },
+      {
+        "a": 2,
+        "b": 1,
+        "c": 3
+      }
+    ],
+    "class_number_via_forms": 3,
+    "ok": true
+  },
+  "verdict": "PASS",
+  "lemma": "O_K of Q(\u221a-23) is a PID (would be needed if Lam\u00e9-style UFD held after base change)",
+  "instance": "P = (2, (1+\u221a-23)/2), N(P)=2",
+  "false_instance": null,
+  "ok": true,
+  "claims_cyclotomic_class_number": false,
+  "flt_regular": "deferred \u2014 quadratic ideal arithmetic only",
+  "lean": "IdealWitness.lean \u2014 norm obstruction by decide/nlinarith"
+}
