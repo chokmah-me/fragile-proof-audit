@@ -17,3 +17,4 @@ import FragileProofAudit.Lame.DedekindField
 import FragileProofAudit.Lame.IdealNormTwo
 import FragileProofAudit.Lame.CyclotomicEmbed
 import FragileProofAudit.Lame.CyclotomicIdeal
+import FragileProofAudit.Lame.CyclotomicPrimeTwo

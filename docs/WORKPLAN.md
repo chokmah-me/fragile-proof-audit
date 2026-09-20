@@ -2,19 +2,21 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 3(i)# **`OKNeg23 ↪ 𝓞(ℚ(ζ₂₃))` VERIFIED**
-(ring embedding, injective, via `embedToRingOfIntegers`; see below). Phase
-3(i)#a Gauss-sum embed `gauss23² = −23` in `ℚ(ζ₂₃)` VERIFIED; Phase
-3(i)+++++ concrete ideal `(2, θ)` with `absNorm = 2` non-principal VERIFIED;
-Phase 3(i)++++ `IsDedekindDomain OKNeg23` VERIFIED; Phase 2(d) odd-zeta
-202601.1609 RE-BROKEN at Lemma 5.1; **audit-integrity pass landed
-2026-09-20** — verdict lock + discrimination controls; **all eight verdicts
-unchanged**, but what several of them *mean* changed (see **Track B**).
-**Track B item 1 landed same day** — `lame_ideal_neg23` discrimination
-control built, NO FALSE POSITIVE.
+**Checkpoint:** 2026-09-20 — Phase 3(i)#+a **norm pin VERIFIED**: any prime of
+`𝓞(ℚ(ζ₂₃))` above `2` has `absNorm = 2^11`, not `2` (`CyclotomicPrimeTwo.lean`,
+axiom-clean). Phase 3(i)# `OKNeg23 ↪ 𝓞(ℚ(ζ₂₃))` VERIFIED (ring embedding,
+injective, via `embedToRingOfIntegers`); Phase 3(i)#a Gauss-sum embed
+`gauss23² = −23` in `ℚ(ζ₂₃)` VERIFIED; Phase 3(i)+++++ concrete ideal `(2, θ)`
+with `absNorm = 2` non-principal VERIFIED; Phase 3(i)++++ `IsDedekindDomain
+OKNeg23` VERIFIED; Phase 2(d) odd-zeta 202601.1609 RE-BROKEN at Lemma 5.1;
+**audit-integrity pass landed 2026-09-20** — verdict lock + discrimination
+controls; **all eight verdicts unchanged**, but what several of them *mean*
+changed (see **Track B**). **Track B item 1 landed same day** —
+`lame_ideal_neg23` discrimination control built, NO FALSE POSITIVE.
 
-**Resume at either:** *(A)* pushed-forward non-principal ideal in
-`𝓞(ℚ(ζ₂₃))`, or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d)
+**Resume at either:** *(A)* the decomposition-group identification needed to
+finish the pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))` (norm target now
+pinned at `2^11`), or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d)
 write-up decision (Track B item 2).
 
 (2(d) write-up was declined — **worth revisiting**: after the false-positive
@@ -49,14 +51,30 @@ Evidence: `FragileProofAudit/Lame/`,
 **3(h) Agoh–Giuga kit:** **DONE** — Python oracle PASS + Lean `Criteria`/`Oracle`
 (`oracle_seven`).
 
+**3(i)#+a Norm pin (2026-09-20):** **DONE** — before attempting the pushforward,
+pinned what the target norm has to be. `ord₂ mod 23 = 11` (`2^11 = 2048 ≡ 1`),
+so mathlib's `IsCyclotomicExtension.Rat.inertiaDeg_eq_of_not_dvd` +
+`Ideal.absNorm_eq_pow_inertiaDeg'` give: **any** prime of `𝓞(ℚ(ζ₂₃))` lying
+over `(2)` has absolute norm `2^11 = 2048`, never `2`. Confirms in Lean the
+suspicion already in this file: `Ideal.map embedToRingOfIntegers P2` cannot
+land on a norm-2 ideal. Axiom-clean (`propext`/`Classical.choice`/
+`Quot.sound` only). Evidence: `FragileProofAudit/Lame/CyclotomicPrimeTwo.lean`.
+
 **Next options:**
 
 1. **Pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))`** — now that
-   `embedToRingOfIntegers` exists, push `P2 = (2, θ)` forward via
-   `Ideal.map`/`Ideal.comap` and show the image is still not
-   `Submodule.IsPrincipal` (norm behavior under a possibly non-Galois
-   embedding needs care — `𝓞(ℚ(ζ₂₃))` has degree 22 over `ℚ`, not 2, so this
-   is not just transport of the same norm); or prove \(h^+_{23}=1\).
+   `embedToRingOfIntegers` exists and the target norm is pinned at `2^11`,
+   the remaining gap is identification, not arithmetic: show
+   `Ideal.map embedToRingOfIntegers P2` is *prime* (not just contained in
+   one) and equals *the* prime above `(2)` fixed by `L23`. Informal argument:
+   `Gal(ℚ(ζ₂₃)/ℚ)` is cyclic of order 22; the decomposition group of a prime
+   above 2 has order `ef = 11·1 = 11`, the unique order-11 subgroup, whose
+   fixed field is exactly `L23` — so each of the two primes above 2 in
+   `ℚ(ζ₂₃)` is inert over the corresponding prime of `L23`, i.e. the
+   extension of `P2` stays prime. Formalizing this needs a decomposition-group
+   / fixed-field correspondence connecting `OKNeg23`'s coordinate presentation
+   to the actual subfield fixed by that subgroup — not yet attempted, and not
+   small; or sidestep norms entirely and prove \(h^+_{23}=1\) directly.
 2. **Per-claim Agoh–Giuga audit** — blueprint a concrete claimed proof against
    the kit; instantiate failing lemma at \(g=30\) or \(g=858\).
 3. Optional: von Staudt–Clausen / Agoh–Bernoulli bridge (same kit, not blocking).
@@ -150,8 +168,8 @@ pwsh ./scripts/verify.ps1
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
 PASS, `lame_ideal_neg23` PASS, **verdict lock 8/8 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
-`Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal`;
-140 declarations, axiom-clean).
+`Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
+`Lame.CyclotomicPrimeTwo`; axiom-clean).
 
 Controls are **not** run by `verify.ps1` — they are operator instruments:
 
@@ -233,7 +251,8 @@ for what the audit altered about their meaning and support.
 | 3(i)+++++ | Concrete ideal | **DONE** — `P2 = (2, θ)`, `absNorm = 2`, `¬ IsPrincipal` |
 | 3(i)#a | Gauss-sum embed | **DONE** — `gauss23 ^ 2 = -23` in `CyclotomicField 23 ℚ` |
 | 3(i)# | Cyclotomic embedding | **DONE** — `embedToRingOfIntegers : OKNeg23 →+* 𝓞(ℚ(ζ₂₃))`, injective |
-| 3(i)#+ | Pushed-forward ideal / classNumber | `Ideal.map embedToRingOfIntegers P2`, `¬ Ideal.IsPrincipal`, or proved `h^+` |
+| 3(i)#+a | Norm pin for primes above 2 | **DONE** — any prime over `(2)` in `𝓞(ℚ(ζ₂₃))` has `absNorm = 2^11`, via `ord₂ mod 23 = 11` |
+| 3(i)#+ | Pushed-forward ideal / classNumber | `Ideal.map embedToRingOfIntegers P2` prime + decomposition-group identification with the norm-`2^11` prime, `¬ Ideal.IsPrincipal`, or proved `h^+` |
 | 3(j) | Sun batch 2603.29973 | After HypergeometricEval exists |
 | 2(d) done | 202601.1609 PDF | **Pinned**; Lemma 5.1 BREAK landed, false-positive control clear, now an **infimum** result — write-up **decision to revisit** (Track B item 2) |
 | 3(h)+ | Per-claim Agoh–Giuga | Concrete claimed proof vs kit at \(g=30\) / \(858\) |
