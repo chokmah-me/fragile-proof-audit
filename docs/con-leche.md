@@ -63,7 +63,20 @@ mathematical content — it says nothing about which proof-audit targets
 
 ## What the runs show for this project
 
-No con-leche run has happened yet. After the first CI run, replace this
-section with the export line count and `con-leche: accepted N declarations`
-figure, per commit, the way `catalan-sun-lean/docs/con-leche.md` tracks its
-own runs.
+Measured on GitHub `ubuntu-latest`, commit `0778a34` (two-job export/check
+split),
+[Actions run 35533962641](https://github.com/chokmah-me/fragile-proof-audit/actions/runs/35533962641):
+
+- export: **48 011 617** NDJSON lines (`FragileProofAudit` plus the Mathlib /
+  Batteries / … cone `lean4export` walks from the default target);
+- `con-leche: accepted 409239 declarations (--verified)` in ~10 min
+  (check job ~15 min after export finished).
+
+So the currently proved default-target material — including the Lamé /
+Agoh–Giuga / Suman slices on the forge target — is, after export, a kernel
+environment this checker accepts. If the set-theory hypothesis holds, those
+statements are true in the model (they are not a proof of `False`).
+
+Later pushes re-export and re-check. A red **check** job means the new commit
+is not accepted in this sense. A red job that dies while installing Lean
+(disk full) is infrastructure, not a mathematical reject.
