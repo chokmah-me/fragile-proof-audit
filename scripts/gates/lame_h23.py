@@ -205,7 +205,7 @@ def main() -> int:
         else "h^-_23 ≠ 3 or OEIS/quadratic mismatch",
         "ok": all_ok,
         "break_route": not all_ok,
-        "lean": "deferred — gate before prove; Lean pinpoint atop flt-regular next",
+        "lean": "Maillet Bareiss mailletAbsDet_23 VERIFIED; Premise/QuadraticWitness VERIFIED; classNumber=3 still gated (h^+ cited)",
         "claims_flt": False,
     }
     out = RESULTS / "lame_h23_gate_meta.json"

@@ -11,7 +11,7 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
-| **Resume** | Fresh session → **3(i)+ Maillet Lean / ideal** or per-claim Agoh–Giuga — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Resume** | Fresh session → **flt-regular ideal** or per-claim Agoh–Giuga — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 
 ---
 
@@ -97,7 +97,7 @@ non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
 | **2(f)** RR / HJO | **PASS** — \(Z=P\) q-expand + Lemma 12; OreReduce capability-limited. [`docs/audits/rr-qexpand.md`](docs/audits/rr-qexpand.md) |
 | **2(g)** PDN1 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks capability-limited. [`docs/audits/pdn1.md`](docs/audits/pdn1.md) |
 | **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `oracle_seven`. [`docs/audits/agoh-giuga.md`](docs/audits/agoh-giuga.md) |
-| **3(i)** Lamé 1847 | **PASS** — gate \(h^-_{23}=3\) + Lean Premise/QuadraticWitness. [`docs/audits/lame-1847.md`](docs/audits/lame-1847.md) |
+| **3(i)** Lamé 1847 | **PASS** — gate \(h^-_{23}=3\) + Lean Premise/QuadraticWitness/Maillet Bareiss. [`docs/audits/lame-1847.md`](docs/audits/lame-1847.md) |
 | **3** Infrastructure | Agoh–Giuga kit · Lamé pinpoint · Sun batch `2603.29973` |
 
 Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md).

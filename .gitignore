@@ -22,3 +22,5 @@ venv/
 
 # third-party mirrors (pin SHA in results/*_audit_meta.json instead)
 incoming/Euler-Mascheroni/
+
+tmp/
