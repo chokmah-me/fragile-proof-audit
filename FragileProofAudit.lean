@@ -14,3 +14,4 @@ import FragileProofAudit.Lame.IdealWitness
 import FragileProofAudit.Lame.IdealPrincipal
 import FragileProofAudit.Lame.DedekindScratch
 import FragileProofAudit.Lame.DedekindField
+import FragileProofAudit.Lame.IdealNormTwo
