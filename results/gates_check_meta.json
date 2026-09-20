@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-09-20T03:42:21.971465+00:00",
-  "phase": "2g",
+  "timestamp": "2026-09-20T05:48:51.750008+00:00",
+  "phase": "3h",
   "gates": [
     {
       "name": "harness_selftest",
@@ -29,6 +29,11 @@
     },
     {
       "name": "pdn1",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "giuga_oracle",
       "ok": true,
       "exit_code": 0
     }

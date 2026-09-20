@@ -1,0 +1,602 @@
+{
+  "timestamp": "2026-09-20T05:48:51.739077+00:00",
+  "phase": "3h",
+  "gate": "giuga_oracle",
+  "source": "OEIS A007850 terms 1\u20137; harvest \u00a73.4 Agoh\u2013Giuga genre kit",
+  "citations": [
+    "https://oeis.org/A007850",
+    "corpus/fragile-formalizable-proofs-report.md \u00a73.4",
+    "https://carmamaths.org/jon/giuga2013.pdf"
+  ],
+  "criterion": {
+    "giuga": "p | (g/p - 1) for every prime p | g",
+    "korselt_carmichael": "(p-1) | (g-1) for every prime p | g",
+    "oracle": "Giuga \u2227 \u00acCarmichael for each listed g"
+  },
+  "count": 7,
+  "rows": [
+    {
+      "g": 30,
+      "primes": [
+        2,
+        3,
+        5
+      ],
+      "product": 30,
+      "factorization_ok": true,
+      "squarefree": true,
+      "giuga_checks": [
+        {
+          "p": 2,
+          "g_over_p_minus_1": 14,
+          "p_divides": true
+        },
+        {
+          "p": 3,
+          "g_over_p_minus_1": 9,
+          "p_divides": true
+        },
+        {
+          "p": 5,
+          "g_over_p_minus_1": 5,
+          "p_divides": true
+        }
+      ],
+      "is_giuga": true,
+      "korselt_checks": [
+        {
+          "p": 2,
+          "p_minus_1": 1,
+          "g_minus_1": 29,
+          "divides": true
+        },
+        {
+          "p": 3,
+          "p_minus_1": 2,
+          "g_minus_1": 29,
+          "divides": false
+        },
+        {
+          "p": 5,
+          "p_minus_1": 4,
+          "g_minus_1": 29,
+          "divides": false
+        }
+      ],
+      "is_carmichael": false,
+      "korselt_failing_primes": [
+        3,
+        5
+      ],
+      "giuga_and_not_carmichael": true,
+      "ok": true
+    },
+    {
+      "g": 858,
+      "primes": [
+        2,
+        3,
+        11,
+        13
+      ],
+      "product": 858,
+      "factorization_ok": true,
+      "squarefree": true,
+      "giuga_checks": [
+        {
+          "p": 2,
+          "g_over_p_minus_1": 428,
+          "p_divides": true
+        },
+        {
+          "p": 3,
+          "g_over_p_minus_1": 285,
+          "p_divides": true
+        },
+        {
+          "p": 11,
+          "g_over_p_minus_1": 77,
+          "p_divides": true
+        },
+        {
+          "p": 13,
+          "g_over_p_minus_1": 65,
+          "p_divides": true
+        }
+      ],
+      "is_giuga": true,
+      "korselt_checks": [
+        {
+          "p": 2,
+          "p_minus_1": 1,
+          "g_minus_1": 857,
+          "divides": true
+        },
+        {
+          "p": 3,
+          "p_minus_1": 2,
+          "g_minus_1": 857,
+          "divides": false
+        },
+        {
+          "p": 11,
+          "p_minus_1": 10,
+          "g_minus_1": 857,
+          "divides": false
+        },
+        {
+          "p": 13,
+          "p_minus_1": 12,
+          "g_minus_1": 857,
+          "divides": false
+        }
+      ],
+      "is_carmichael": false,
+      "korselt_failing_primes": [
+        3,
+        11,
+        13
+      ],
+      "giuga_and_not_carmichael": true,
+      "ok": true
+    },
+    {
+      "g": 1722,
+      "primes": [
+        2,
+        3,
+        7,
+        41
+      ],
+      "product": 1722,
+      "factorization_ok": true,
+      "squarefree": true,
+      "giuga_checks": [
+        {
+          "p": 2,
+          "g_over_p_minus_1": 860,
+          "p_divides": true
+        },
+        {
+          "p": 3,
+          "g_over_p_minus_1": 573,
+          "p_divides": true
+        },
+        {
+          "p": 7,
+          "g_over_p_minus_1": 245,
+          "p_divides": true
+        },
+        {
+          "p": 41,
+          "g_over_p_minus_1": 41,
+          "p_divides": true
+        }
+      ],
+      "is_giuga": true,
+      "korselt_checks": [
+        {
+          "p": 2,
+          "p_minus_1": 1,
+          "g_minus_1": 1721,
+          "divides": true
+        },
+        {
+          "p": 3,
+          "p_minus_1": 2,
+          "g_minus_1": 1721,
+          "divides": false
+        },
+        {
+          "p": 7,
+          "p_minus_1": 6,
+          "g_minus_1": 1721,
+          "divides": false
+        },
+        {
+          "p": 41,
+          "p_minus_1": 40,
+          "g_minus_1": 1721,
+          "divides": false
+        }
+      ],
+      "is_carmichael": false,
+      "korselt_failing_primes": [
+        3,
+        7,
+        41
+      ],
+      "giuga_and_not_carmichael": true,
+      "ok": true
+    },
+    {
+      "g": 66198,
+      "primes": [
+        2,
+        3,
+        11,
+        17,
+        59
+      ],
+      "product": 66198,
+      "factorization_ok": true,
+      "squarefree": true,
+      "giuga_checks": [
+        {
+          "p": 2,
+          "g_over_p_minus_1": 33098,
+          "p_divides": true
+        },
+        {
+          "p": 3,
+          "g_over_p_minus_1": 22065,
+          "p_divides": true
+        },
+        {
+          "p": 11,
+          "g_over_p_minus_1": 6017,
+          "p_divides": true
+        },
+        {
+          "p": 17,
+          "g_over_p_minus_1": 3893,
+          "p_divides": true
+        },
+        {
+          "p": 59,
+          "g_over_p_minus_1": 1121,
+          "p_divides": true
+        }
+      ],
+      "is_giuga": true,
+      "korselt_checks": [
+        {
+          "p": 2,
+          "p_minus_1": 1,
+          "g_minus_1": 66197,
+          "divides": true
+        },
+        {
+          "p": 3,
+          "p_minus_1": 2,
+          "g_minus_1": 66197,
+          "divides": false
+        },
+        {
+          "p": 11,
+          "p_minus_1": 10,
+          "g_minus_1": 66197,
+          "divides": false
+        },
+        {
+          "p": 17,
+          "p_minus_1": 16,
+          "g_minus_1": 66197,
+          "divides": false
+        },
+        {
+          "p": 59,
+          "p_minus_1": 58,
+          "g_minus_1": 66197,
+          "divides": false
+        }
+      ],
+      "is_carmichael": false,
+      "korselt_failing_primes": [
+        3,
+        11,
+        17,
+        59
+      ],
+      "giuga_and_not_carmichael": true,
+      "ok": true
+    },
+    {
+      "g": 2214408306,
+      "primes": [
+        2,
+        3,
+        11,
+        23,
+        31,
+        47057
+      ],
+      "product": 2214408306,
+      "factorization_ok": true,
+      "squarefree": true,
+      "giuga_checks": [
+        {
+          "p": 2,
+          "g_over_p_minus_1": 1107204152,
+          "p_divides": true
+        },
+        {
+          "p": 3,
+          "g_over_p_minus_1": 738136101,
+          "p_divides": true
+        },
+        {
+          "p": 11,
+          "g_over_p_minus_1": 201309845,
+          "p_divides": true
+        },
+        {
+          "p": 23,
+          "g_over_p_minus_1": 96278621,
+          "p_divides": true
+        },
+        {
+          "p": 31,
+          "g_over_p_minus_1": 71432525,
+          "p_divides": true
+        },
+        {
+          "p": 47057,
+          "g_over_p_minus_1": 47057,
+          "p_divides": true
+        }
+      ],
+      "is_giuga": true,
+      "korselt_checks": [
+        {
+          "p": 2,
+          "p_minus_1": 1,
+          "g_minus_1": 2214408305,
+          "divides": true
+        },
+        {
+          "p": 3,
+          "p_minus_1": 2,
+          "g_minus_1": 2214408305,
+          "divides": false
+        },
+        {
+          "p": 11,
+          "p_minus_1": 10,
+          "g_minus_1": 2214408305,
+          "divides": false
+        },
+        {
+          "p": 23,
+          "p_minus_1": 22,
+          "g_minus_1": 2214408305,
+          "divides": false
+        },
+        {
+          "p": 31,
+          "p_minus_1": 30,
+          "g_minus_1": 2214408305,
+          "divides": false
+        },
+        {
+          "p": 47057,
+          "p_minus_1": 47056,
+          "g_minus_1": 2214408305,
+          "divides": false
+        }
+      ],
+      "is_carmichael": false,
+      "korselt_failing_primes": [
+        3,
+        11,
+        23,
+        31,
+        47057
+      ],
+      "giuga_and_not_carmichael": true,
+      "ok": true
+    },
+    {
+      "g": 24423128562,
+      "primes": [
+        2,
+        3,
+        7,
+        43,
+        3041,
+        4447
+      ],
+      "product": 24423128562,
+      "factorization_ok": true,
+      "squarefree": true,
+      "giuga_checks": [
+        {
+          "p": 2,
+          "g_over_p_minus_1": 12211564280,
+          "p_divides": true
+        },
+        {
+          "p": 3,
+          "g_over_p_minus_1": 8141042853,
+          "p_divides": true
+        },
+        {
+          "p": 7,
+          "g_over_p_minus_1": 3489018365,
+          "p_divides": true
+        },
+        {
+          "p": 43,
+          "g_over_p_minus_1": 567979733,
+          "p_divides": true
+        },
+        {
+          "p": 3041,
+          "g_over_p_minus_1": 8031281,
+          "p_divides": true
+        },
+        {
+          "p": 4447,
+          "g_over_p_minus_1": 5492045,
+          "p_divides": true
+        }
+      ],
+      "is_giuga": true,
+      "korselt_checks": [
+        {
+          "p": 2,
+          "p_minus_1": 1,
+          "g_minus_1": 24423128561,
+          "divides": true
+        },
+        {
+          "p": 3,
+          "p_minus_1": 2,
+          "g_minus_1": 24423128561,
+          "divides": false
+        },
+        {
+          "p": 7,
+          "p_minus_1": 6,
+          "g_minus_1": 24423128561,
+          "divides": false
+        },
+        {
+          "p": 43,
+          "p_minus_1": 42,
+          "g_minus_1": 24423128561,
+          "divides": false
+        },
+        {
+          "p": 3041,
+          "p_minus_1": 3040,
+          "g_minus_1": 24423128561,
+          "divides": false
+        },
+        {
+          "p": 4447,
+          "p_minus_1": 4446,
+          "g_minus_1": 24423128561,
+          "divides": false
+        }
+      ],
+      "is_carmichael": false,
+      "korselt_failing_primes": [
+        3,
+        7,
+        43,
+        3041,
+        4447
+      ],
+      "giuga_and_not_carmichael": true,
+      "ok": true
+    },
+    {
+      "g": 432749205173838,
+      "primes": [
+        2,
+        3,
+        7,
+        59,
+        163,
+        1381,
+        775807
+      ],
+      "product": 432749205173838,
+      "factorization_ok": true,
+      "squarefree": true,
+      "giuga_checks": [
+        {
+          "p": 2,
+          "g_over_p_minus_1": 216374602586918,
+          "p_divides": true
+        },
+        {
+          "p": 3,
+          "g_over_p_minus_1": 144249735057945,
+          "p_divides": true
+        },
+        {
+          "p": 7,
+          "g_over_p_minus_1": 61821315024833,
+          "p_divides": true
+        },
+        {
+          "p": 59,
+          "g_over_p_minus_1": 7334732291081,
+          "p_divides": true
+        },
+        {
+          "p": 163,
+          "g_over_p_minus_1": 2654903099225,
+          "p_divides": true
+        },
+        {
+          "p": 1381,
+          "g_over_p_minus_1": 313359308597,
+          "p_divides": true
+        },
+        {
+          "p": 775807,
+          "g_over_p_minus_1": 557805233,
+          "p_divides": true
+        }
+      ],
+      "is_giuga": true,
+      "korselt_checks": [
+        {
+          "p": 2,
+          "p_minus_1": 1,
+          "g_minus_1": 432749205173837,
+          "divides": true
+        },
+        {
+          "p": 3,
+          "p_minus_1": 2,
+          "g_minus_1": 432749205173837,
+          "divides": false
+        },
+        {
+          "p": 7,
+          "p_minus_1": 6,
+          "g_minus_1": 432749205173837,
+          "divides": false
+        },
+        {
+          "p": 59,
+          "p_minus_1": 58,
+          "g_minus_1": 432749205173837,
+          "divides": false
+        },
+        {
+          "p": 163,
+          "p_minus_1": 162,
+          "g_minus_1": 432749205173837,
+          "divides": false
+        },
+        {
+          "p": 1381,
+          "p_minus_1": 1380,
+          "g_minus_1": 432749205173837,
+          "divides": false
+        },
+        {
+          "p": 775807,
+          "p_minus_1": 775806,
+          "g_minus_1": 432749205173837,
+          "divides": false
+        }
+      ],
+      "is_carmichael": false,
+      "korselt_failing_primes": [
+        3,
+        7,
+        59,
+        163,
+        1381,
+        775807
+      ],
+      "giuga_and_not_carmichael": true,
+      "ok": true
+    }
+  ],
+  "failing_g": [],
+  "verdict": "PASS",
+  "lemma": "known Giuga composites are Giuga and fail Korselt (standing oracle)",
+  "instance": "OEIS A007850 terms 1\u20137 with pinned factorizations",
+  "false_instance": null,
+  "ok": true,
+  "break_route": false,
+  "lean": "deferred \u2014 gate before prove; Lean Giuga/Korselt after green gate",
+  "conjecture_claimed": false
+}

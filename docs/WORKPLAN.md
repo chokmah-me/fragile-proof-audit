@@ -2,7 +2,7 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 2(g) landed; **resume in a fresh session at 3(h)**  
+**Checkpoint:** 2026-09-20 — Phase 3(h) oracle landed; **resume Lean Giuga/Korselt kit**  
 **Pin:** Lean / mathlib `v4.32.2` (same as `catalan-sun-lean`)  
 **Compute:** laptop · Python (`mpmath`, `Fraction`, SymPy) · no Sage/Magma/cluster  
 **Habit:** commit each phase when it lands (do not leave a dirty tree for the next session)
@@ -13,52 +13,17 @@ This file is the **executable resume checklist**. Full harvest ranking lives in
 
 ---
 
-## Resume here — Phase 3(h) Agoh–Giuga kit
+## Resume here — Phase 3(h) Lean kit (after green oracle)
 
 **Genre:** claimed proofs that “\(n\) prime ⟺ Agoh/Giuga congruence”  
-**Attack type:** finite oracle audit (reusable kit), then per-claim blueprint  
-**First milestone:** verify the seven known Giuga numbers are Giuga and
-**non-Carmichael** (Korselt fails) — the standing counterexample oracle  
-**Blueprint to fill:** `docs/blueprint/agoh-giuga.md` (create on resume)  
-**Gate:** `scripts/gates/giuga_oracle.py` → `results/giuga_oracle_gate_meta.json`
+**Oracle milestone:** **DONE** — seven OEIS A007850 terms are Giuga ∧ ¬Carmichael  
+**Evidence:** `docs/blueprint/agoh-giuga.md`, `scripts/gates/giuga_oracle.py`,
+`results/giuga_oracle_gate_meta.json`, `docs/audits/agoh-giuga.md`  
+**Next:** small Lean `Giuga` / `Korselt` lemmas + finite oracle table as
+explicit / `norm_num` witnesses (`decide` / `native_decide`-free preferred).
+Do **not** claim the Agoh–Giuga conjecture.
 
-### Why this now
-
-- 1(a) trained **G**; 1(b) trained **B**; 2(d) was extract **BREAK**.
-- 2(e)–2(g) all **PASS**ed executable gates (escalate; do not force kills).
-- Agoh–Giuga is the harvest’s reusable **genre kit**: each new claimed proof
-  is a short audit once the oracle + Korselt/Giuga lemmas exist
-  (`corpus/fragile-formalizable-proofs-report.md` §3.4).
-
-### Day checklist (do in order)
-
-1. **Oracle table (exact integers)**
-   - Known Giuga composites (harvest spot-check list):  
-     `30`, `858`, `1722`, `66198`, `2214408306`, `24423128562`
-     (+ confirm the seventh from CARMA / ProofAtlas; pin citation).
-   - For each \(g\): check Giuga criterion \(p \mid (g/p - 1)\) for all primes
-     \(p \mid g\); check Korselt / Carmichael \((p-1) \mid (g-1)\) — expect
-     **Giuga ∧ ¬Carmichael**.
-   - Write quotes + table into `docs/blueprint/agoh-giuga.md`. No Lean yet.
-2. **Numeric gate** — `scripts/gates/giuga_oracle.py`
-   - Exact integer arithmetic only.
-   - Emit `results/giuga_oracle_gate_meta.json` with per-\(g\) witnesses.
-   - Register in `scripts/gates/check.py`.
-3. **Lean only after a green gate**
-   - Small `Giuga` / `Korselt` lemmas + the finite oracle table as `decide` /
-     `native_decide`-free witnesses (prefer explicit proofs / `norm_num`).
-   - Do **not** claim the Agoh–Giuga conjecture; kit is for auditing *claims*.
-4. **Acceptance**
-   - [ ] Blueprint with oracle table + criterion quotes
-   - [ ] Gate ran; meta JSON written; all listed \(g\) Giuga ∧ ¬Carmichael
-   - [ ] `pwsh ./scripts/verify.ps1` green
-   - [ ] Audit note `docs/audits/agoh-giuga.md`
-   - [ ] **Commit** the phase before leaving the session
-
-**Abort:** if a “seventh” Giuga number cannot be sourced with a citable list →
-gate the six verified ones, document the gap, do not invent a seventh.
-
-### After the oracle (same phase or next)
+### After Lean kit (same phase or next)
 
 Per new claimed proof: blueprint against the kit; instantiate failing lemma at
 \(g=30\) or \(g=858\). Optional later: von Staudt–Clausen / Agoh–Bernoulli bridge.
@@ -74,11 +39,11 @@ pip install -r requirements.txt
 pwsh ./scripts/verify.ps1
 ```
 
-Expect: harness 6/6, `suman_eq48` PASS (verdict BREAK), `odd_zeta_1609` PASS
-(verdict BREAK), `es_cover` PASS, `rr_qexpand` PASS (Ore capability-limited),
-`pdn1` PASS (notebooks capability-limited), lake + forge VERIFIED.
+Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, lake + forge
+VERIFIED. Then author Lean Giuga/Korselt + oracle witnesses.
 
-**HEAD at this checkpoint:** `b64abae` (Phase 2(g)). Prior: `728c416` (2(e)+2(f)).
+**Oracle landing:** Phase 3(h) gate PASS on main (message prefix
+`Phase 3(h): Agoh-Giuga oracle`). Prior: `a49cd00` (WORKPLAN), `b64abae` (2g).
 
 ---
 
@@ -110,6 +75,7 @@ Expect: harness 6/6, `suman_eq48` PASS (verdict BREAK), `odd_zeta_1609` PASS
 | **2(e)** Erdős–Straus 2404.01508 | **PASS (escalate)** — Conjecture 1 covers hard-class primes `< 10^5`; no Lean kill | `docs/audits/es-covering.md`, `scripts/gates/es_cover.py` |
 | **2(f)** RR / HJO 2608.05480+15219 | **PASS** — \(Z=P\) + Lemma 12; OreReduce (34) **capability-limited** | `docs/audits/rr-qexpand.md`, `scripts/gates/rr_qexpand.py` |
 | **2(g)** PDN1 2503.00004 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks **capability-limited** | `docs/audits/pdn1.md`, `scripts/gates/pdn1.py`, `incoming/pdn1/` |
+| **3(h) oracle** Agoh–Giuga | **PASS** — seven known Giuga numbers are Giuga ∧ ¬Carmichael | `docs/audits/agoh-giuga.md`, `scripts/gates/giuga_oracle.py` |
 | **Criterion module** | Apéry-shaped `irrational_of_integer_forms_tendsto_zero` | `FragileProofAudit/IrrationalityCriterion.lean` |
 
 ---

@@ -20,6 +20,7 @@ ODD_ZETA_1609 = ROOT / "scripts" / "gates" / "odd_zeta_1609.py"
 ES_COVER = ROOT / "scripts" / "gates" / "es_cover.py"
 RR_QEXPAND = ROOT / "scripts" / "gates" / "rr_qexpand.py"
 PDN1 = ROOT / "scripts" / "gates" / "pdn1.py"
+GIUGA_ORACLE = ROOT / "scripts" / "gates" / "giuga_oracle.py"
 
 
 def run_script(name: str, path: Path) -> dict:
@@ -62,9 +63,13 @@ def run_pdn1() -> dict:
     return run_script("pdn1", PDN1)
 
 
+def run_giuga_oracle() -> dict:
+    return run_script("giuga_oracle", GIUGA_ORACLE)
+
+
 def main() -> int:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    # Phase 1(b)+2(d)–2(g): harness + Suman + odd-zeta + ESC + RR + PDN1.
+    # Phase 1(b)+2(d)–2(g)+3(h): harness + prior gates + Giuga oracle.
     results = [
         run_harness(),
         run_suman_eq48(),
@@ -72,11 +77,12 @@ def main() -> int:
         run_es_cover(),
         run_rr_qexpand(),
         run_pdn1(),
+        run_giuga_oracle(),
     ]
     failed = [r for r in results if not r["ok"]]
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "phase": "2g",
+        "phase": "3h",
         "gates": [
             {
                 "name": r["name"],
