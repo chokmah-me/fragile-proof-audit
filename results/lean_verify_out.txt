@@ -4,7 +4,7 @@
   project     : C:\Users\Elke Shayna\Documents\00Dev\fragile-proof-audit\.claude\worktrees\agent-af80866ecd1aa0e9f
   target      : (all)
   toolchain   : leanprover/lean4:v4.32.2
-  timestamp   : 2026-09-20T20:42:48+00:00
+  timestamp   : 2026-09-20T20:55:23+00:00
   files       : 18
   declarations: 150
   allowlist   : Classical.choice, Quot.sound, propext
@@ -21,7 +21,7 @@
 ==========================================================================
 
 --- build output ---
-âš  [3478/3527] Replayed FragileProofAudit.Lame.Maillet
+âš  [3474/3512] Replayed FragileProofAudit.Lame.Maillet
 warning: FragileProofAudit/Lame/Maillet.lean:114:0: Unscoped option maxHeartbeats is not allowed:
 Please scope this to individual declarations, as in
 ```
@@ -31,5 +31,4 @@ example : ... := ...
 ```
 
 Note: This linter can be disabled with `set_option linter.style.setOption false`
-âœ” [3571/3572] Built FragileProofAudit (25s)
 Build completed successfully (3572 jobs).

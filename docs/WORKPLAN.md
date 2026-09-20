@@ -2,22 +2,29 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 3(i)#+a **norm pin VERIFIED**: any prime of
-`𝓞(ℚ(ζ₂₃))` above `2` has `absNorm = 2^11`, not `2` (`CyclotomicPrimeTwo.lean`,
-axiom-clean). Phase 3(i)# `OKNeg23 ↪ 𝓞(ℚ(ζ₂₃))` VERIFIED (ring embedding,
-injective, via `embedToRingOfIntegers`); Phase 3(i)#a Gauss-sum embed
-`gauss23² = −23` in `ℚ(ζ₂₃)` VERIFIED; Phase 3(i)+++++ concrete ideal `(2, θ)`
-with `absNorm = 2` non-principal VERIFIED; Phase 3(i)++++ `IsDedekindDomain
-OKNeg23` VERIFIED; Phase 2(d) odd-zeta 202601.1609 RE-BROKEN at Lemma 5.1;
-**audit-integrity pass landed 2026-09-20** — verdict lock + discrimination
-controls; **all eight verdicts unchanged**, but what several of them *mean*
-changed (see **Track B**). **Track B item 1 landed same day** —
-`lame_ideal_neg23` discrimination control built, NO FALSE POSITIVE.
+**Checkpoint:** 2026-09-20 — Phase 3(i)#+b **`Gal(ℚ(ζ₂₃)/ℚ)` cyclic of order
+22, VERIFIED** (`CyclotomicGalois.lean`, axiom-clean, 150 declarations). The
+attempt to go further and pin the decomposition-group cardinality (`Nat.card
+(stabilizer G P) = 11` via `Ideal.card_stabilizer_eq`) hit a genuine mathlib
+instance-diamond wall — see **Blocked** below; not forced through. Phase
+3(i)#+a **norm pin VERIFIED**: any prime of `𝓞(ℚ(ζ₂₃))` above `2` has `absNorm
+= 2^11`, not `2` (`CyclotomicPrimeTwo.lean`). Phase 3(i)# `OKNeg23 ↪
+𝓞(ℚ(ζ₂₃))` VERIFIED (ring embedding, injective, via `embedToRingOfIntegers`);
+Phase 3(i)#a Gauss-sum embed `gauss23² = −23` in `ℚ(ζ₂₃)` VERIFIED; Phase
+3(i)+++++ concrete ideal `(2, θ)` with `absNorm = 2` non-principal VERIFIED;
+Phase 3(i)++++ `IsDedekindDomain OKNeg23` VERIFIED; Phase 2(d) odd-zeta
+202601.1609 RE-BROKEN at Lemma 5.1; **audit-integrity pass landed 2026-09-20**
+— verdict lock + discrimination controls; **all eight verdicts unchanged**,
+but what several of them *mean* changed (see **Track B**). **Track B item 1
+landed same day** — `lame_ideal_neg23` discrimination control built, NO FALSE
+POSITIVE.
 
 **Resume at either:** *(A)* the decomposition-group identification needed to
-finish the pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))` (norm target now
-pinned at `2^11`), or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d)
-write-up decision (Track B item 2).
+finish the pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))` — `Gal(ℚ(ζ₂₃)/ℚ)`
+is now pinned cyclic of order 22, but `Ideal.card_stabilizer_eq` is blocked on
+an `Algebra ℤ Cyclotomic23` / `Algebra ℚ Cyclotomic23` instance diamond (see
+**Blocked**), or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d) write-up
+decision (Track B item 2).
 
 (2(d) write-up was declined — **worth revisiting**: after the false-positive
 control it is the campaign's only sendable artifact. See Track B item 2.)
@@ -60,26 +67,61 @@ suspicion already in this file: `Ideal.map embedToRingOfIntegers P2` cannot
 land on a norm-2 ideal. Axiom-clean (`propext`/`Classical.choice`/
 `Quot.sound` only). Evidence: `FragileProofAudit/Lame/CyclotomicPrimeTwo.lean`.
 
+**3(i)#+b Cyclic Galois group (2026-09-20):** **DONE** —
+`Gal(ℚ(ζ₂₃)/ℚ)` is cyclic of order 22. `Cyclotomic23/ℚ` is Galois
+(`IsCyclotomicExtension.isGalois`); `cyclotomic 23 ℚ` is irreducible
+(`Polynomial.cyclotomic.irreducible_rat`), giving
+`IsCyclotomicExtension.autEquivPow : Gal(Cyclotomic23/ℚ) ≃* (ZMod 23)ˣ`;
+`(ZMod 23)ˣ` is cyclic (`ZMod.isCyclic_units_prime`, 23 prime), and cyclicity
+transports along the `MulEquiv` (`isCyclic_of_surjective`); order 22 via
+`Nat.card (ZMod 23)ˣ = (23).totient = 22`. Axiom-clean, 150 declarations.
+Evidence: `FragileProofAudit/Lame/CyclotomicGalois.lean`.
+
 **Next options:**
 
 1. **Pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))`** — now that
-   `embedToRingOfIntegers` exists and the target norm is pinned at `2^11`,
-   the remaining gap is identification, not arithmetic: show
-   `Ideal.map embedToRingOfIntegers P2` is *prime* (not just contained in
-   one) and equals *the* prime above `(2)` fixed by `L23`. Informal argument:
-   `Gal(ℚ(ζ₂₃)/ℚ)` is cyclic of order 22; the decomposition group of a prime
-   above 2 has order `ef = 11·1 = 11`, the unique order-11 subgroup, whose
-   fixed field is exactly `L23` — so each of the two primes above 2 in
-   `ℚ(ζ₂₃)` is inert over the corresponding prime of `L23`, i.e. the
-   extension of `P2` stays prime. Formalizing this needs a decomposition-group
-   / fixed-field correspondence connecting `OKNeg23`'s coordinate presentation
-   to the actual subfield fixed by that subgroup — not yet attempted, and not
-   small; or sidestep norms entirely and prove \(h^+_{23}=1\) directly.
+   `embedToRingOfIntegers` exists, the target norm is pinned at `2^11`, and
+   `Gal(ℚ(ζ₂₃)/ℚ)` is confirmed cyclic of order 22, the remaining gap is
+   identification, not arithmetic: show `Ideal.map embedToRingOfIntegers P2`
+   is *prime* (not just contained in one) and equals *the* prime above `(2)`
+   fixed by `L23`. **Attempted 2026-09-20 and blocked** — see below. Informal
+   argument stands: the decomposition group of a prime above 2 has order
+   `ef = 11·1 = 11`, the unique order-11 subgroup of the cyclic group of
+   order 22, whose fixed field is exactly `L23`; formalizing this needs a
+   decomposition-group / fixed-field correspondence connecting `OKNeg23`'s
+   coordinate presentation to the actual subfield fixed by that subgroup; or
+   sidestep norms entirely and prove \(h^+_{23}=1\) directly.
 2. **Per-claim Agoh–Giuga audit** — blueprint a concrete claimed proof against
    the kit; instantiate failing lemma at \(g=30\) or \(g=858\).
 3. Optional: von Staudt–Clausen / Agoh–Bernoulli bridge (same kit, not blocking).
 
-**Blocked:** flt-regular as a lake dependency — upstream toolchain is
+**Blocked (2026-09-20):** the decomposition-group cardinality step
+(`Ideal.card_stabilizer_eq` from `Mathlib.NumberTheory.RamificationInertia.Galois`,
+which would give `Nat.card (MulAction.stabilizer Gal(ℚ(ζ₂₃)/ℚ) P) = 11` for
+`P` a prime over `(2)`) hit a genuine mathlib instance diamond, not a missing
+lemma: `IsGaloisGroup.of_isFractionRing Gal(Cyclotomic23/ℚ) ℤ (𝓞 Cyclotomic23)
+ℚ Cyclotomic23` needs `[IsScalarTower ℤ ℚ Cyclotomic23]`, which *is* available
+standalone (`AddCommGroup.intIsScalarTower`, fully generic), but fails to
+synthesize once `Algebra ℤ Cyclotomic23` has already been pinned to
+`CyclotomicField.instAlgebra` (mathlib's `deriving instance Algebra A,
+IsScalarTower A K for CyclotomicField n K` mechanism) while `Algebra ℚ
+Cyclotomic23` gets independently pinned to `DivisionRing.toRatAlgebra` —
+`trace.Meta.synthInstance` confirms the failure is exactly at
+`IsScalarTower ℤ ℚ Cyclotomic23` after those two choices are locked in.
+Forcing `Algebra ℚ Cyclotomic23 := CyclotomicField.algebra 23 ℚ` via `haveI`
+did **not** fix it (still fails — the ambient ambiguity between the two
+`Algebra ℚ` instances seems to be the actual cause, not merely which one is
+picked). This is not a missing-lemma gap of the kind flagged in advance (the
+group-theory "unique order-11 subgroup of a cyclic group of order 22" lemma
+was never reached — the block is earlier, at the ring-theoretic instance
+wiring for `IsGaloisGroup`). Not forced through; no file committed with a
+`sorry`. A future session should either (a) hunt for the right
+`letI`/`Algebra.compHom`-based override that makes all three of `Algebra ℤ
+Cyclotomic23`, `Algebra ℚ Cyclotomic23`, `IsScalarTower ℤ ℚ Cyclotomic23`
+mutually defeq-consistent for instance synthesis, or (b) sidestep
+`Ideal.card_stabilizer_eq` entirely and go for `h^+_{23}=1` directly.
+
+flt-regular as a lake dependency is separately blocked — upstream toolchain is
 `leanprover/lean4:v4.34.*` while this campaign pins `v4.32.2` (match
 `catalan-sun-lean`). Do not bump the pin casually.
 
@@ -169,7 +211,8 @@ Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
 PASS, `lame_ideal_neg23` PASS, **verdict lock 8/8 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
 `Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
-`Lame.CyclotomicPrimeTwo`; axiom-clean).
+`Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois`; axiom-clean, 150
+declarations).
 
 Controls are **not** run by `verify.ps1` — they are operator instruments:
 
@@ -252,7 +295,8 @@ for what the audit altered about their meaning and support.
 | 3(i)#a | Gauss-sum embed | **DONE** — `gauss23 ^ 2 = -23` in `CyclotomicField 23 ℚ` |
 | 3(i)# | Cyclotomic embedding | **DONE** — `embedToRingOfIntegers : OKNeg23 →+* 𝓞(ℚ(ζ₂₃))`, injective |
 | 3(i)#+a | Norm pin for primes above 2 | **DONE** — any prime over `(2)` in `𝓞(ℚ(ζ₂₃))` has `absNorm = 2^11`, via `ord₂ mod 23 = 11` |
-| 3(i)#+ | Pushed-forward ideal / classNumber | `Ideal.map embedToRingOfIntegers P2` prime + decomposition-group identification with the norm-`2^11` prime, `¬ Ideal.IsPrincipal`, or proved `h^+` |
+| 3(i)#+b | `Gal(ℚ(ζ₂₃)/ℚ)` cyclic order 22 | **DONE** — via `autEquivPow ≃* (ZMod 23)ˣ` + `ZMod.isCyclic_units_prime` |
+| 3(i)#+ | Pushed-forward ideal / classNumber | **BLOCKED 2026-09-20** on an `Algebra ℤ`/`Algebra ℚ` instance diamond for `Cyclotomic23` inside `Ideal.card_stabilizer_eq` (see **Blocked**, above); needs `Ideal.map embedToRingOfIntegers P2` prime + decomposition-group identification with the norm-`2^11` prime, `¬ Ideal.IsPrincipal`, or proved `h^+` |
 | 3(j) | Sun batch 2603.29973 | After HypergeometricEval exists |
 | 2(d) done | 202601.1609 PDF | **Pinned**; Lemma 5.1 BREAK landed, false-positive control clear, now an **infimum** result — write-up **decision to revisit** (Track B item 2) |
 | 3(h)+ | Per-claim Agoh–Giuga | Concrete claimed proof vs kit at \(g=30\) / \(858\) |
