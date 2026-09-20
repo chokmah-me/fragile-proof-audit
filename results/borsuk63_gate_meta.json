@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-09-20T21:00:54.110185+00:00",
+  "phase": "track-c",
+  "gate": "borsuk63",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "source": "https://github.com/maaxgrin/borsuk-63-counterexample",
+  "pin_commit": "cdcdbeac2e692b8641218c70ce9f414522e125e5",
+  "pin_script_sha256": "c3144ffeb009c634eeaf2f0eb45c70ef4eeeb779f55e2d8ffd4446b0ba4d9673",
+  "command": [
+    "C:\\Users\\Elke Shayna\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "C:\\Users\\Elke Shayna\\Documents\\00Dev\\fragile-proof-audit\\incoming\\borsuk-63\\verify_borsuk63.py"
+  ],
+  "observed_script_sha256": "c3144ffeb009c634eeaf2f0eb45c70ef4eeeb779f55e2d8ffd4446b0ba4d9673",
+  "observed_commit": "cdcdbeac2e692b8641218c70ce9f414522e125e5",
+  "returncode": 0,
+  "elapsed_s": 3.932,
+  "stdout_tail": [
+    "B3 to B1 [0]",
+    "B3 to B2 [0]",
+    "B3 to C [80]",
+    "C to B1 [8]",
+    "C to B2 [8]",
+    "C to B3 [8]",
+    "C internal [76]",
+    "K5 full witness [0, 122, 126, 130, 134]",
+    "has K6 full False",
+    "has K6 on C False",
+    "b 0 NbC size 80 has K5 on NbC False",
+    "all exact verification checks passed"
+  ],
+  "verdict": "PASS"
+}

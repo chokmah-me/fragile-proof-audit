@@ -1,0 +1,81 @@
+{
+  "timestamp": "2026-09-20T20:57:19.202314+00:00",
+  "root": "C:\\Users\\Elke Shayna\\Documents\\00Dev\\fragile-proof-audit\\incoming\\quantum-hedetniemi",
+  "lean_file_count": 382,
+  "hit_counts": {},
+  "hits": [],
+  "declarations": [
+    {
+      "kind": "def",
+      "name": "quantumChromaticNumber",
+      "path": "lean/Hedetniemi/ColorCount.lean",
+      "line": 79
+    },
+    {
+      "kind": "structure",
+      "name": "ProjectiveColoring",
+      "path": "lean/Hedetniemi/Model.lean",
+      "line": 9
+    },
+    {
+      "kind": "def",
+      "name": "QuantumColorable",
+      "path": "lean/Hedetniemi/Model.lean",
+      "line": 17
+    },
+    {
+      "kind": "def",
+      "name": "CStarColorable",
+      "path": "lean/Hedetniemi/Round4/CStarModel.lean",
+      "line": 8
+    },
+    {
+      "kind": "theorem",
+      "name": "regularG_quantumChromaticNumber_lower",
+      "path": "lean_extension/Hedetniemi/Expository/RegularCounterexample.lean",
+      "line": 127
+    },
+    {
+      "kind": "theorem",
+      "name": "regular_quantum_counterexample",
+      "path": "lean_extension/Hedetniemi/Expository/RegularCounterexample.lean",
+      "line": 142
+    },
+    {
+      "kind": "theorem",
+      "name": "regular_quantum_hedetniemi_fails",
+      "path": "lean_extension/Hedetniemi/Expository/RegularCounterexample.lean",
+      "line": 149
+    },
+    {
+      "kind": "theorem",
+      "name": "regular_cstar_counterexample",
+      "path": "lean_extension/Hedetniemi/Expository/RegularCounterexample.lean",
+      "line": 156
+    },
+    {
+      "kind": "theorem",
+      "name": "regular_cstar_hedetniemi_fails",
+      "path": "lean_extension/Hedetniemi/Expository/RegularCounterexample.lean",
+      "line": 170
+    }
+  ],
+  "statement_heuristics": {
+    "mentions_eulMascheroniConst": false,
+    "mentions_Irrational": false,
+    "mentions_Real_gamma": false,
+    "has_mathlib_import": true
+  },
+  "pin_commit": "95c0ac05e9b7ea50b827ec491661eed2ed0147b4",
+  "pin_pdf": "incoming/hedetniemi-2609.20690.pdf",
+  "author_toolchain": "leanprover/lean4:v4.19.0",
+  "campaign_pin": "v4.32.2",
+  "kernel_status": "UNKNOWN",
+  "python_certificates": "PASS",
+  "declaration_count": 4552,
+  "declarations_truncated": true,
+  "lake_cache_get": "PASS",
+  "lake_cache_files": 6641,
+  "author_toolchain_installed": "leanprover/lean4:v4.19.0",
+  "lake_build_Hedetniemi": "failed: no Hedetniemi.lean root; use python lean/check.py"
+}

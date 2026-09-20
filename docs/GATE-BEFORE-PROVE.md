@@ -106,6 +106,16 @@ A control issues no campaign verdict and is **not** registered in
 `scripts/gates/check.py`. The verdict lock stays a lock on findings; controls
 are run by the operator when a target is landed or revisited.
 
+### Track C pins are instruments too
+
+`scripts/gates/borsuk63.py` and the Zeiss Hedetniemi numerics / `axiom_audit.py`
+scan live next to the locked gates but are **not** in `EXPECTED_VERDICT`. They
+write `results/` receipts. A PASS means the pinned third-party certificate still
+runs on this laptop, not that this campaign killed a live proof route. Do not
+promote them into the eight-row lock. See [`docs/WORKPLAN.md`](WORKPLAN.md)
+Track C, [`docs/audits/borsuk-63.md`](audits/borsuk-63.md),
+[`docs/audits/hedetniemi-q.md`](audits/hedetniemi-q.md).
+
 ### Corollary: never gate on a check that cannot fail
 
 `es_cover`'s `odd_k_automatic_fold` gated the verdict on five branches that are

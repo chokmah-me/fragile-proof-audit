@@ -11,7 +11,7 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
-| **Resume** | Fresh session → **IsDedekindDomain OKNeg23 / cyclotomic Ideal / h⁺** or per-claim Agoh–Giuga — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Resume** | Fresh session → cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), per-claim Agoh–Giuga, or the 2(d) write-up — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 
 ---
 
@@ -65,7 +65,8 @@ non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
 |---|---|
 | `FragileProofAudit/` | Lean modules (`AxiomAudit`, `IrrationalityCriterion`, …) |
 | `scripts/harness/` | Exact arithmetic + rising-factorial conventions |
-| `scripts/gates/` | Numeric gates (`check.py` = CI entrypoint) |
+| `scripts/gates/` | Locked numeric gates (`check.py` = CI). `borsuk63.py` in this folder is an **instrument**, not a lock row |
+| `scripts/controls/` | Discrimination instruments; never in `check.py` |
 | `scripts/forge/` | `axiom_audit.py` + lean-proof-forge verify |
 | `docs/WORKPLAN.md` | **Resume checklist** (start here) |
 | `docs/blueprint/` | Per-target blueprints |
@@ -81,6 +82,7 @@ non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
 | `corpus/fragile-formalizable-proofs-report.md` | Master harvest / ranking |
 | `corpus/harvest-addendum-analysis.md` | **Authoritative** on identifiers & fragility truth |
 | `corpus/lean4-attack-harvest.md` | Adopt 7-type taxonomy; Pith verdicts = leads |
+| `corpus/historical-collapses-gemini-export.md` | Lead. Track C pins (Borsuk-63, quantum Hedetniemi); not the resume |
 
 ---
 
@@ -97,8 +99,9 @@ non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
 | **2(f)** RR / HJO | **PASS** — \(Z=P\) q-expand + Lemma 12; OreReduce capability-limited. [`docs/audits/rr-qexpand.md`](docs/audits/rr-qexpand.md) |
 | **2(g)** PDN1 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks capability-limited. [`docs/audits/pdn1.md`](docs/audits/pdn1.md) |
 | **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `oracle_seven`. [`docs/audits/agoh-giuga.md`](docs/audits/agoh-giuga.md) |
-| **3(i)** Lamé 1847 | **PASS** — through 3(i)++ Bareiss + quadratic ideal norm obstruction. [`docs/audits/lame-1847.md`](docs/audits/lame-1847.md) |
+| **3(i)** Lamé 1847 | **PASS** — through 3(i)#+b: `Gal(ℚ(ζ₂₃)/ℚ)` cyclic of order 22. Next Lean step (decomposition-group cardinality) blocked on a mathlib instance diamond; or prove \(h^+\). [`docs/audits/lame-1847.md`](docs/audits/lame-1847.md) |
 | **3** Infrastructure | Agoh–Giuga kit · Lamé pinpoint · Sun batch `2603.29973` |
+| **Track C** | Operator pins, **not resume, not the 8-lock.** Borsuk-63 author verifier PASS; quantum Hedetniemi (arXiv:2609.20690) Python certificates + source catalog PASS, kernel UNKNOWN (their Lean 4.19.0). [`docs/audits/borsuk-63.md`](docs/audits/borsuk-63.md) · [`docs/audits/hedetniemi-q.md`](docs/audits/hedetniemi-q.md) |
 
 Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md).
 

@@ -23,5 +23,7 @@ venv/
 # third-party mirrors (pin SHA in results/*_audit_meta.json instead)
 incoming/Euler-Mascheroni/
 incoming/odd-zeta-202601/
+incoming/quantum-hedetniemi/
+incoming/borsuk-63/
 
 tmp/

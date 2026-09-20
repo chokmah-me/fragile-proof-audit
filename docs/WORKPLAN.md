@@ -198,6 +198,28 @@ Do **not** claim the Agoh–Giuga conjecture. Do **not** confuse Kummer-regular
 
 ---
 
+## Track C — historical Type F pins (not resume)
+
+**Landed 2026-09-20** from the Gemini “historical collapses” export
+(`corpus/historical-collapses-gemini-export.md`, trust: lead). These do
+**not** change the resume line above and are **not** in `EXPECTED_VERDICT`.
+
+| Pin | Clone SHA | What was run | Lock |
+|---|---|---|---|
+| Quantum Hedetniemi arXiv:2609.20690 | `95c0ac05e9b7ea50b827ec491661eed2ed0147b4` | author Python certificates PASS; `axiom_audit.py` 382 files, no `sorry`/`axiom`; kernel `UNKNOWN` (their Lean 4.19.0) | off |
+| Borsuk-63 Grinsztajn | `cdcdbeac2e692b8641218c70ce9f414522e125e5` | `scripts/gates/borsuk63.py` wraps author `verify_borsuk63.py` | off |
+
+Do **not** promote either into the eight-gate lock. Do **not** bump the
+campaign Lean pin to 4.19.0 to compile Zeiss. Operator commands:
+
+```powershell
+python scripts/gates/borsuk63.py
+python incoming/quantum-hedetniemi/numerics/check_base_graph.py
+python scripts/forge/axiom_audit.py incoming/quantum-hedetniemi --json-out results/hedetniemi_q_audit_meta.json
+```
+
+---
+
 ## Commands on resume
 
 ```powershell
@@ -220,6 +242,7 @@ Controls are **not** run by `verify.ps1` — they are operator instruments:
 python scripts/controls/es_cover_control.py 10000   # ~3 s
 python scripts/controls/break_control.py            # ~7 s
 python scripts/controls/lame_ideal_control.py       # <1 s
+python scripts/gates/borsuk63.py                    # Track C; not in the 8-lock
 ```
 
 Both exit 0. `break_control` needs the pinned PDFs under `incoming/`
