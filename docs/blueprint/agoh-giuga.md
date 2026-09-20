@@ -1,9 +1,11 @@
 # Blueprint — Phase 3(h): Agoh–Giuga genre kit (oracle milestone)
 
-**Status:** oracle extract + gate — **PASS** (Giuga ∧ ¬Carmichael on seven known \(g\))  
+**Status:** oracle gate + Lean kit — **PASS** (Giuga ∧ ¬Carmichael on seven known \(g\))  
 **Genre:** claimed proofs that “\(n\) prime ⟺ Agoh / Giuga congruence”  
 **Attack type:** finite oracle audit (reusable kit), then per-claim blueprint  
 **Gate:** `scripts/gates/giuga_oracle.py` → `results/giuga_oracle_gate_meta.json`  
+**Lean:** `FragileProofAudit/AgohGiuga/Criteria.lean`,
+`FragileProofAudit/AgohGiuga/Oracle.lean`  
 **Sources:** OEIS [A007850](https://oeis.org/A007850); harvest §3.4
 (`corpus/fragile-formalizable-proofs-report.md`); CARMA / Borwein survey;
 ProofAtlas Agoh–Giuga collaboration page
@@ -80,12 +82,14 @@ Witness sketch for \(g=30\) (harvest prototype): Giuga checks
 4. **PASS** = all seven Giuga ∧ ¬Carmichael (oracle ready; escalate to Lean kit).
 5. **BREAK** = any listed \(g\) fails Giuga or satisfies Korselt (oracle broken).
 
-## Lean (after green gate; not this landing’s acceptance)
+## Lean kit (landed)
 
-Small `Giuga` / `Korselt` lemmas + finite oracle table as explicit /
-`norm_num` witnesses (`decide` / `native_decide`-free preferred). Per new
-claimed proof thereafter: blueprint against the kit; instantiate failing
-lemma at \(g=30\) or \(g=858\). Optional later: von Staudt–Clausen /
+- `GiugaOnFactors` / `KorseltOnFactors` / `OracleWitness` on pinned factor lists.
+- Seven concrete `oracle_*` theorems + `oracle_seven`.
+- No `native_decide`; primality via `norm_num` (`Mathlib.Tactic.NormNum.Prime`).
+
+Per new claimed proof thereafter: blueprint against the kit; instantiate
+failing lemma at \(g=30\) or \(g=858\). Optional later: von Staudt–Clausen /
 Agoh–Bernoulli bridge.
 
 ## Abort

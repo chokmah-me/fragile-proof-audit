@@ -1,7 +1,7 @@
 {
   "project": "C:\\Users\\Elke Shayna\\Documents\\00Dev\\fragile-proof-audit",
   "target": "FragileProofAudit",
-  "timestamp": "2026-09-20T05:48:52+00:00",
+  "timestamp": "2026-09-20T06:16:35+00:00",
   "verdict": "VERIFIED",
   "findings": [
     {
@@ -43,19 +43,19 @@
     {
       "check": "axiom_audit",
       "status": "PASS",
-      "detail": "all 12 declaration(s) within allowlist",
+      "detail": "all 39 declaration(s) within allowlist",
       "hits": [
         {
           "violations": {},
           "unresolved": [],
-          "audited": 12,
-          "expected": 12
+          "audited": 39,
+          "expected": 39
         }
       ]
     }
   ],
-  "files_scanned": 4,
-  "declarations_found": 12,
+  "files_scanned": 6,
+  "declarations_found": 39,
   "allowlist": [
     "Classical.choice",
     "Quot.sound",

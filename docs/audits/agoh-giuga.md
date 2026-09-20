@@ -35,9 +35,14 @@ decide the Agoh–Giuga conjecture.
 
 ## Lean
 
-None this landing. Gate-before-prove: Lean `Giuga` / `Korselt` lemmas +
-oracle table come after the green gate (same phase continuation or next
-session). Do not claim the conjecture in Lean.
+Landed after the green gate:
+
+- `FragileProofAudit/AgohGiuga/Criteria.lean` — `GiugaOnFactors`,
+  `KorseltOnFactors`, `OracleWitness`
+- `FragileProofAudit/AgohGiuga/Oracle.lean` — seven `oracle_*` theorems +
+  `oracle_seven` (explicit / `norm_num` / `decide`; no `native_decide`)
+
+Does **not** claim the Agoh–Giuga conjecture.
 
 ## Not done, on purpose
 

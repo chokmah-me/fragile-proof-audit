@@ -4,9 +4,9 @@
   project     : C:\Users\Elke Shayna\Documents\00Dev\fragile-proof-audit
   target      : FragileProofAudit
   toolchain   : leanprover/lean4:v4.32.2
-  timestamp   : 2026-09-20T05:48:52+00:00
-  files       : 4
-  declarations: 12
+  timestamp   : 2026-09-20T06:16:35+00:00
+  files       : 6
+  declarations: 39
   allowlist   : Classical.choice, Quot.sound, propext
 --------------------------------------------------------------------------
   [ PASS ] project_shape: lakefile.toml, toolchain leanprover/lean4:v4.32.2
@@ -15,10 +15,10 @@
   [ PASS ] local_axiom_declarations: no locally declared axioms
   [ PASS ] lake_build: `lake build FragileProofAudit` exited 0
   [ PASS ] build_sorry_warnings: no sorry warnings in build output
-  [ PASS ] axiom_audit: all 12 declaration(s) within allowlist
+  [ PASS ] axiom_audit: all 39 declaration(s) within allowlist
 --------------------------------------------------------------------------
   VERDICT: VERIFIED
 ==========================================================================
 
 --- build output ---
-Build completed successfully (1898 jobs).
+Build completed successfully (1901 jobs).
