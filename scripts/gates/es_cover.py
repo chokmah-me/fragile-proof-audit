@@ -120,54 +120,70 @@ def hard_primes_below(limit: int) -> list[int]:
 
 
 def odd_k_automatic_fold(sample_k: range | None = None) -> dict:
-    """Side check: Appendix II claim that odd k is automatic via d=u=1, v=2.
+    """Appendix II's odd-k automatic fold, and why it misses the gate universe.
 
-    For k odd, k+1 is even, so 1 | (k+1), 2 | (k+1), and 4·1−1 = 3 divides
-    1+2. Hence (4d−1)/(k+d) is Egyptian of order 2, giving a Type II solution
-    of 4/(4k+1). Hard residues are all ≡1 (mod 8), so k is even there — this
-    fold never covers the gate universe.
+    The fold's own arithmetic is a TAUTOLOGY, not a test. With the paper's
+    hardcoded d, u, v = 1, 1, 2 every branch holds identically for every odd k:
+
+        (k+d) % u        u = 1, so x % 1 == 0 always
+        (k+d) % v        v = 2 and k odd, so k+1 is even always
+        (u+v) % (4d-1)   3 % 3 == 0 always
+        a*y*z == b*(y+z) y = k+1, z = (k+1)/2 gives 3(k+1)^2/2 on both sides
+        egyptian3(...)   follows identically from the line above
+
+    Those branches are kept as executable documentation of the identity, but
+    they cannot fail and therefore must never gate a verdict. (They did, until
+    2026-09-20.)
+
+    The *failable* fact -- the one that actually licenses excluding this fold
+    from the gate universe -- is that every hard residue is 1 (mod 8), so k is
+    even on all of them and the odd-k fold never applies. 840 = 0 (mod 8), so
+    p = r (mod 840) implies p = r (mod 8) and the residue test is sound. That
+    invariant is what `ok` reports; it fails the moment HARD_RESIDUES acquires
+    a class the fold would actually cover.
     """
     if sample_k is None:
         sample_k = range(1, 200, 2)
-    failures: list[int] = []
+    identity_failures: list[int] = []
     for k in sample_k:
         if k % 2 == 0:
             continue
         d, u, v = 1, 1, 2
-        # 4d-1 | u+v and u,v | (k+d)
         if (k + d) % u != 0 or (k + d) % v != 0:
-            failures.append(k)
+            identity_failures.append(k)
             continue
         if (u + v) % (4 * d - 1) != 0:
-            failures.append(k)
+            identity_failures.append(k)
             continue
-        # Lift to ESC solution: 4/n = 1/x + 1/(n y) + 1/(n z) with n=4k+1, x=k+d
         n = 4 * k + 1
         x = k + d
-        # From  (4d-1)/x = 1/y' + 1/z' with y'=y, z'=z in paper notation —
-        # identity used in Theorem 10: 4/n = 1/x + 1/(n y) + 1/(n z) where
-        # (4d-1)/x = 1/y + 1/z. With u,v | x and 4d-1 | u+v one standard
-        # choice is y = x/u * ((u+v)/(4d-1)), z = x/v * ((u+v)/(4d-1)) wait:
-        # classical: a/b Egyptian-2 iff ∃u,v|b with a|u+v; then
-        # a/b = 1/(b/u · (u+v)/a) + 1/(b/v · (u+v)/a).
         a = 4 * d - 1
         b = x
         y = (b // u) * ((u + v) // a)
         z = (b // v) * ((u + v) // a)
         if a * y * z != b * (y + z):
-            failures.append(k)
+            identity_failures.append(k)
             continue
-        # Full ESC triple
         if not egyptian3(n, x, n * y, n * z):
-            failures.append(k)
+            identity_failures.append(k)
+
+    # The scope invariant: every hard residue is 1 (mod 8) => k even there.
+    hard_residues_all_even_k = all(r % 8 == 1 for r in HARD_RESIDUES)
+    offending = [r for r in HARD_RESIDUES if r % 8 != 1]
+
     return {
-        "note": "NOT the covering gate. Appendix II odd-k fold only.",
-        "sample_odd_k_count": len([k for k in sample_k if k % 2 == 1]),
-        "failures": failures[:10],
-        "ok": len(failures) == 0,
-        "hard_residues_all_even_k": all(
-            ((r - 1) // 4) % 2 == 0 for r in HARD_RESIDUES
+        "note": (
+            "NOT the covering gate. Appendix II odd-k fold only. The identity "
+            "branches are tautological and are documentation, not a test; "
+            "`ok` reports the failable scope invariant instead."
         ),
+        "sample_odd_k_count": len([k for k in sample_k if k % 2 == 1]),
+        "identity_is_tautological": True,
+        "identity_failures": identity_failures[:10],
+        "identity_holds": len(identity_failures) == 0,
+        "hard_residues_all_even_k": hard_residues_all_even_k,
+        "residues_covered_by_odd_k_fold": offending,
+        "ok": hard_residues_all_even_k,
     }
 
 
@@ -246,8 +262,10 @@ def main() -> int:
     elif wide is not None and not wide["all_covered"]:
         verdict = "BREAK"
     elif not odd_k["ok"]:
-        # Side-check failure is a harness/transcription alarm, not covering BREAK.
-        verdict = "BREAK"
+        # The odd-k fold would cover part of the gate universe, so the sweep is
+        # no longer testing what it claims. That is a misconfigured gate, not a
+        # kill of the paper's route -- same stance as suman's ABORT_TRANSCRIPTION.
+        verdict = "ABORT_SCOPE"
     else:
         verdict = "PASS"
 
@@ -289,8 +307,9 @@ def main() -> int:
         u = (first["uncovered"] or (wide["uncovered"] if wide else []))[0]
         print(f"  first uncovered: p={u['p']} ≡{u['residue_mod_840']} (mod 840)")
     print(
-        f"  odd-k side check ok={odd_k['ok']} "
-        f"(hard classes all even k={odd_k['hard_residues_all_even_k']})"
+        f"  odd-k scope invariant ok={odd_k['ok']} "
+        f"(all hard residues =1 mod 8: {odd_k['hard_residues_all_even_k']}; "
+        f"identity branches tautological, not gating)"
     )
     print(f"  verdict: {verdict}")
     print(f"Wrote {out}")

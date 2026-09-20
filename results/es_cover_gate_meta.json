@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-20T17:08:22.897376+00:00",
+  "timestamp": "2026-09-20T18:38:47.103716+00:00",
   "phase": "2e",
   "source": "arXiv:2404.01508",
   "pdf": "incoming/erdos-straus-2404.01508.pdf",
@@ -323,11 +323,14 @@
     "all_covered": true
   },
   "odd_k_side_check": {
-    "note": "NOT the covering gate. Appendix II odd-k fold only.",
+    "note": "NOT the covering gate. Appendix II odd-k fold only. The identity branches are tautological and are documentation, not a test; `ok` reports the failable scope invariant instead.",
     "sample_odd_k_count": 100,
-    "failures": [],
-    "ok": true,
-    "hard_residues_all_even_k": true
+    "identity_is_tautological": true,
+    "identity_failures": [],
+    "identity_holds": true,
+    "hard_residues_all_even_k": true,
+    "residues_covered_by_odd_k_fold": [],
+    "ok": true
   },
   "verdict": "PASS",
   "note": "PASS escalates \u2014 does not prove ESC. BREAK is a covering-route kill, not a claim that ESC is false."
