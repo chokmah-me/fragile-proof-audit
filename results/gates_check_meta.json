@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-09-20T06:16:34.593662+00:00",
-  "phase": "3h",
+  "timestamp": "2026-09-20T06:32:56.132325+00:00",
+  "phase": "3i",
   "gates": [
     {
       "name": "harness_selftest",
@@ -34,6 +34,11 @@
     },
     {
       "name": "giuga_oracle",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "lame_h23",
       "ok": true,
       "exit_code": 0
     }

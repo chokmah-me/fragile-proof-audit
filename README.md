@@ -11,7 +11,7 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
-| **Resume** | Fresh session → **Phase 3(h) Agoh–Giuga kit** — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Resume** | Fresh session → **Phase 3(i) Lean pinpoint** (Lamé / flt-regular) or per-claim Agoh–Giuga — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 
 ---
 

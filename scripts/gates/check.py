@@ -21,6 +21,7 @@ ES_COVER = ROOT / "scripts" / "gates" / "es_cover.py"
 RR_QEXPAND = ROOT / "scripts" / "gates" / "rr_qexpand.py"
 PDN1 = ROOT / "scripts" / "gates" / "pdn1.py"
 GIUGA_ORACLE = ROOT / "scripts" / "gates" / "giuga_oracle.py"
+LAME_H23 = ROOT / "scripts" / "gates" / "lame_h23.py"
 
 
 def run_script(name: str, path: Path) -> dict:
@@ -67,9 +68,13 @@ def run_giuga_oracle() -> dict:
     return run_script("giuga_oracle", GIUGA_ORACLE)
 
 
+def run_lame_h23() -> dict:
+    return run_script("lame_h23", LAME_H23)
+
+
 def main() -> int:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    # Phase 1(b)+2(d)–2(g)+3(h): harness + prior gates + Giuga oracle.
+    # Phase 1(b)+2(d)–2(g)+3(h)+3(i): harness + prior gates + Lamé h_23.
     results = [
         run_harness(),
         run_suman_eq48(),
@@ -78,11 +83,12 @@ def main() -> int:
         run_rr_qexpand(),
         run_pdn1(),
         run_giuga_oracle(),
+        run_lame_h23(),
     ]
     failed = [r for r in results if not r["ok"]]
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "phase": "3h",
+        "phase": "3i",
         "gates": [
             {
                 "name": r["name"],

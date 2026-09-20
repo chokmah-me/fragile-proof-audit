@@ -4,7 +4,7 @@
   project     : C:\Users\Elke Shayna\Documents\00Dev\fragile-proof-audit
   target      : FragileProofAudit
   toolchain   : leanprover/lean4:v4.32.2
-  timestamp   : 2026-09-20T06:16:35+00:00
+  timestamp   : 2026-09-20T06:33:00+00:00
   files       : 6
   declarations: 39
   allowlist   : Classical.choice, Quot.sound, propext

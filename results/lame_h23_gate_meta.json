@@ -1,0 +1,179 @@
+{
+  "timestamp": "2026-09-20T06:32:56.092235+00:00",
+  "phase": "3i",
+  "gate": "lame_h23",
+  "source": "harvest \u00a74.1 Lam\u00e9 1847; OEIS A000927; Washington cyclotomic tables",
+  "citations": [
+    "https://oeis.org/A000927",
+    "corpus/fragile-formalizable-proofs-report.md \u00a74.1",
+    "https://afm.episciences.org/16046/pdf"
+  ],
+  "criterion": {
+    "h_minus": "Maillet determinant (OEIS A000927 formula)",
+    "first_failure": "least odd prime p with h^-_p > 1 equals 23",
+    "quadratic_witness": "h(Q(\u221a-23)) = 3 via reduced forms of disc -23",
+    "plus_part_cited": "h^+_23 = 1 classical \u21d2 h_23 = 3 (not recomputed here)"
+  },
+  "oeis_pin": {
+    "rows": [
+      {
+        "p": 2,
+        "h_minus": 1,
+        "oeis": 1,
+        "ok": true
+      },
+      {
+        "p": 3,
+        "h_minus": 1,
+        "oeis": 1,
+        "ok": true
+      },
+      {
+        "p": 5,
+        "h_minus": 1,
+        "oeis": 1,
+        "ok": true
+      },
+      {
+        "p": 7,
+        "h_minus": 1,
+        "oeis": 1,
+        "ok": true
+      },
+      {
+        "p": 11,
+        "h_minus": 1,
+        "oeis": 1,
+        "ok": true
+      },
+      {
+        "p": 13,
+        "h_minus": 1,
+        "oeis": 1,
+        "ok": true
+      },
+      {
+        "p": 17,
+        "h_minus": 1,
+        "oeis": 1,
+        "ok": true
+      },
+      {
+        "p": 19,
+        "h_minus": 1,
+        "oeis": 1,
+        "ok": true
+      },
+      {
+        "p": 23,
+        "h_minus": 3,
+        "oeis": 3,
+        "ok": true
+      },
+      {
+        "p": 29,
+        "h_minus": 8,
+        "oeis": 8,
+        "ok": true
+      },
+      {
+        "p": 31,
+        "h_minus": 9,
+        "oeis": 9,
+        "ok": true
+      },
+      {
+        "p": 37,
+        "h_minus": 37,
+        "oeis": 37,
+        "ok": true
+      },
+      {
+        "p": 41,
+        "h_minus": 121,
+        "oeis": 121,
+        "ok": true
+      },
+      {
+        "p": 43,
+        "h_minus": 211,
+        "oeis": 211,
+        "ok": true
+      },
+      {
+        "p": 47,
+        "h_minus": 695,
+        "oeis": 695,
+        "ok": true
+      }
+    ],
+    "ok": true
+  },
+  "first_failure": {
+    "first_p_with_h_minus_gt_1": 23,
+    "h_minus_23": 3,
+    "expected_first": 23,
+    "expected_h_minus_23": 3,
+    "ok": true
+  },
+  "quadratic_Q_sqrt_minus_23": {
+    "discriminant": -23,
+    "reduced_forms": [
+      {
+        "a": 1,
+        "b": 1,
+        "c": 6
+      },
+      {
+        "a": 2,
+        "b": -1,
+        "c": 3
+      },
+      {
+        "a": 2,
+        "b": 1,
+        "c": 3
+      }
+    ],
+    "class_number": 3,
+    "expected_forms": [
+      {
+        "a": 1,
+        "b": 1,
+        "c": 6
+      },
+      {
+        "a": 2,
+        "b": -1,
+        "c": 3
+      },
+      {
+        "a": 2,
+        "b": 1,
+        "c": 3
+      }
+    ],
+    "expected_class_number": 3,
+    "ok": true
+  },
+  "h_23_composite": {
+    "h_minus": 3,
+    "h_plus_cited": 1,
+    "h": 3,
+    "note": "h = h^- h^+ with h^+_23=1 cited from classical tables"
+  },
+  "regular_vs_ufd": {
+    "23_divides_h": false,
+    "23_is_kummer_regular": true,
+    "ufd_fails": true,
+    "note": "23 \u2224 3 so 23 is regular in Kummer's sense; Lam\u00e9 still fails because UFD needs h=1, not merely p \u2224 h"
+  },
+  "verdict": "PASS",
+  "lemma": "Z[\u03b6_p] UFD for every odd prime p (Lam\u00e9 premise)",
+  "instance": "p = 23",
+  "false_instance": null,
+  "ok": true,
+  "break_route": false,
+  "lean": "deferred \u2014 gate before prove; Lean pinpoint atop flt-regular next",
+  "claims_flt": false
+}
