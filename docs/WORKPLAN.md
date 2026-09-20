@@ -2,8 +2,9 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 3(i) gate milestone complete (`h₂₃⁻=3`);
-**resume at Lean pinpoint atop flt-regular, or per-claim Agoh–Giuga**  
+**Checkpoint:** 2026-09-20 — Phase 3(i) gate + Lean Premise/QuadraticWitness;
+**resume at Maillet Lean det / flt-regular ideal witness, or per-claim Agoh–Giuga**  
+ 
 **Pin:** Lean / mathlib `v4.32.2` (same as `catalan-sun-lean`)  
 **Compute:** laptop · Python (`mpmath`, `Fraction`, SymPy) · no Sage/Magma/cluster  
 **Habit:** commit each phase when it lands (do not leave a dirty tree for the next session)
@@ -14,20 +15,21 @@ This file is the **executable resume checklist**. Full harvest ranking lives in
 
 ---
 
-## Resume here — after Phase 3(i) gate
+## Resume here — after Phase 3(i) Lean slice
 
-**3(i) Lamé 1847 (gate):** **DONE** — Maillet \(h^-_{23}=3\), OEIS A000927 pin
-through \(p=47\), quadratic \(h(\mathbb{Q}(\sqrt{-23}))=3\). Evidence:
-`docs/blueprint/lame-1847.md`, `scripts/gates/lame_h23.py`,
-`docs/audits/lame-1847.md`, `results/lame_h23_gate_meta.json`.
+**3(i) Lamé 1847:** **DONE (gate + Lean Premise/QuadraticWitness)** —
+Python Maillet \(h^-_{23}=3\); Lean `not_lame_*_of_classNumber_eq_three`;
+Lean exhaustive 3 reduced forms of disc `-23`. Maillet `|det|` in Lean
+deferred. Evidence: `FragileProofAudit/Lame/`, `docs/blueprint/lame-1847.md`,
+`scripts/gates/lame_h23.py`, `docs/audits/lame-1847.md`.
 
 **3(h) Agoh–Giuga kit:** **DONE** — Python oracle PASS + Lean `Criteria`/`Oracle`
 (`oracle_seven`).
 
 **Next options:**
 
-1. **3(i) Lean pinpoint** — atop flt-regular; formal \(h_{23}=3\) or concrete
-   non-UFD witness at Lamé’s irreducibility step.
+1. **3(i) Maillet Lean / ideal witness** — kernel-reducible Bareiss `|det|=3`,
+   or flt-regular concrete non-principal ideal in `𝓞(ℚ(ζ₂₃))`.
 2. **Per-claim Agoh–Giuga audit** — blueprint a concrete claimed proof against
    the kit; instantiate failing lemma at \(g=30\) or \(g=858\).
 3. Optional: von Staudt–Clausen / Agoh–Bernoulli bridge (same kit, not blocking).
@@ -47,10 +49,10 @@ pwsh ./scripts/verify.ps1
 ```
 
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
-PASS, lake + forge VERIFIED (includes `AgohGiuga.Oracle`; no Lamé Lean yet).
+PASS, lake + forge VERIFIED (includes `AgohGiuga.Oracle` + `Lame.Premise` /
+`QuadraticWitness` / `Maillet` stub).
 
-**3(i) landing:** `Phase 3(i)` gate commit on main. Prior: `ec6571c` (3h Lean),
-`4f0fde5` (3h oracle).
+**3(i) landing:** gate commit `76521e6`; Lean slice commit follows.
 
 ---
 
@@ -83,7 +85,7 @@ PASS, lake + forge VERIFIED (includes `AgohGiuga.Oracle`; no Lamé Lean yet).
 | **2(f)** RR / HJO 2608.05480+15219 | **PASS** — \(Z=P\) + Lemma 12; OreReduce (34) **capability-limited** | `docs/audits/rr-qexpand.md`, `scripts/gates/rr_qexpand.py` |
 | **2(g)** PDN1 2503.00004 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks **capability-limited** | `docs/audits/pdn1.md`, `scripts/gates/pdn1.py`, `incoming/pdn1/` |
 | **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `GiugaOnFactors`/`KorseltOnFactors`/`oracle_seven` | `docs/audits/agoh-giuga.md`, `scripts/gates/giuga_oracle.py`, `FragileProofAudit/AgohGiuga/` |
-| **3(i)** Lamé 1847 (gate) | **PASS** — \(h^-_{23}=3\) Maillet + OEIS pin; \(h(\mathbb{Q}(\sqrt{-23}))=3\); Lean deferred | `docs/audits/lame-1847.md`, `scripts/gates/lame_h23.py` |
+| **3(i)** Lamé 1847 | **PASS** — gate \(h^-_{23}=3\); Lean Premise + QuadraticWitness VERIFIED; Maillet det Lean deferred | `docs/audits/lame-1847.md`, `FragileProofAudit/Lame/` |
 | **Criterion module** | Apéry-shaped `irrational_of_integer_forms_tendsto_zero` | `FragileProofAudit/IrrationalityCriterion.lean` |
 
 ---
@@ -100,11 +102,11 @@ PASS, lake + forge VERIFIED (includes `AgohGiuga.Oracle`; no Lamé Lean yet).
 
 ---
 
-## After 3(i) gate
+## After 3(i) Lean slice
 
 | ID | Target | First milestone |
 |---|---|---|
-| 3(i) Lean | Lamé pinpoint | Atop flt-regular; formal \(h_{23}=3\) or non-UFD witness |
+| 3(i)+ | Maillet Lean / ideal | Kernel Bareiss `|det|=3` or flt-regular non-principal ideal |
 | 3(j) | Sun batch 2603.29973 | After HypergeometricEval exists |
 | 2(d) pin | 202601.1609 PDF | Pin in `incoming/` if preprints.org returns 200 |
 

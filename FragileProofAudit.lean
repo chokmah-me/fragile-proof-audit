@@ -7,3 +7,6 @@ import FragileProofAudit.IrrationalityCriterion
 import FragileProofAudit.SumanZeta5.BaseCase
 import FragileProofAudit.AgohGiuga.Criteria
 import FragileProofAudit.AgohGiuga.Oracle
+import FragileProofAudit.Lame.Premise
+import FragileProofAudit.Lame.QuadraticWitness
+import FragileProofAudit.Lame.Maillet
