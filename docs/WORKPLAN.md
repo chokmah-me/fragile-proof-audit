@@ -8,11 +8,12 @@
 VERIFIED; Phase 2(d) odd-zeta 202601.1609 RE-BROKEN at Lemma 5.1;
 **audit-integrity pass landed 2026-09-20** — verdict lock + discrimination
 controls; **all eight verdicts unchanged**, but what several of them *mean*
-changed (see **Track B**).
+changed (see **Track B**). **Track B item 1 landed same day** —
+`lame_ideal_neg23` discrimination control built, NO FALSE POSITIVE.
 
 **Resume at either:** *(A)* `OKNeg23 ↪ 𝓞(ζ₂₃)` / cyclotomic Ideal / proved
-h⁺, or per-claim Agoh–Giuga — *(B)* the `lame_ideal_neg23` control, then the
-2(d) write-up decision.
+h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d) write-up decision (Track B
+item 2).
 
 (2(d) write-up was declined — **worth revisiting**: after the false-positive
 control it is the campaign's only sendable artifact. See Track B item 2.)
@@ -93,13 +94,13 @@ Do **not** claim the Agoh–Giuga conjecture. Do **not** confuse Kummer-regular
 
 ### Resume here (Track B), in order
 
-1. **`lame_ideal_neg23` discrimination control** — the one gap the doctrine
-   marks *required* but unbuilt. "No α with |N(α)| = 2" is a non-existence
-   result from a bounded search (`norm_equation_solutions`, `b ∈ {−1,0,1}`),
-   the shape that has misled this campaign twice. The control must confirm the
-   search **does** return solutions where they exist (`32 → (±3, ±1)`,
-   `24 → (±1, ±1)`) and that `b_bound = isqrt(target//23) + 1` is not
-   truncating the domain. ~30 lines; pattern in `scripts/controls/break_control.py`.
+1. ~~`lame_ideal_neg23` discrimination control~~ — **DONE 2026-09-20**,
+   `scripts/controls/lame_ideal_control.py`. Confirms the search finds real
+   solutions (`32 → (±3, ±1)`, `24 → (±1, ±1)`, `4 → (±2, 0)`); reproduces
+   `norm_equation_solutions` against a brute force at 10x `b_bound` for seven
+   targets (no truncation); shows the parity filter accepts at target=32 (not
+   just vacuously true at target=8). Verdict: NO FALSE POSITIVE. Not
+   registered in `check.py` — instrument, not a gate, per doctrine.
 
 2. **2(d) write-up decision — revisit.** After the false-positive control this
    is the campaign's **only sendable artifact**: a 2026 preprint with no
@@ -147,6 +148,7 @@ Controls are **not** run by `verify.ps1` — they are operator instruments:
 ```powershell
 python scripts/controls/es_cover_control.py 10000   # ~3 s
 python scripts/controls/break_control.py            # ~7 s
+python scripts/controls/lame_ideal_control.py       # <1 s
 ```
 
 Both exit 0. `break_control` needs the pinned PDFs under `incoming/`

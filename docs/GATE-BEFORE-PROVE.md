@@ -86,17 +86,19 @@ differences.
 | `es_cover` | PASS — existence by parameter search | **required** — `controls/es_cover_control.py` |
 | `suman_eq48` | BREAK — witness by construction | **required** — `controls/break_control.py` |
 | `odd_zeta_1609` | BREAK — non-existence by sampling | **required** — `controls/break_control.py` |
-| `lame_ideal_neg23` | PASS — non-existence by bounded search | **required — NOT YET BUILT** |
+| `lame_ideal_neg23` | PASS — non-existence by bounded search | **required** — `controls/lame_ideal_control.py` |
 | `rr_qexpand` | PASS — exact series equality | ceremony; the classical `(2,3)` anchor already serves |
 | `pdn1` | PASS — exact divisibility, 6 747 points | ceremony; the fast-path/oracle self-test serves |
 | `giuga_oracle` | PASS — decidable predicates on explicit integers | ceremony |
 | `lame_h23` | PASS — computed class number | ceremony; the OEIS pin over 15 primes already serves |
 
-`lame_ideal_neg23` is the outstanding gap: "no α with |N(α)| = 2" is a
-non-existence result from a bounded search (`norm_equation_solutions`), exactly
-the shape that has misled this campaign before. Its control should confirm the
-search *does* return solutions for targets where they exist (e.g. `32` →
-`(±3, ±1)`) and that `b_bound` is not truncating the domain.
+`lame_ideal_neg23` control landed 2026-09-20: confirms the search *does*
+return solutions for targets where they exist (`32` → `(±3, ±1)`, `24` →
+`(±1, ±1)`, `4` → `(±2, 0)`); reproduces `norm_equation_solutions` exactly
+against a brute force run at 10x the formula's `b_bound` for seven targets
+(no truncation); and shows the `(a − b) % 2 == 0` parity filter is capable of
+*accepting* (at target=32, not just rejecting at target=8, where it would be
+vacuously true). Verdict: NO FALSE POSITIVE.
 
 ### Controls are instruments, not gates
 

@@ -1,7 +1,7 @@
 {
   "project": "C:\\Users\\Elke Shayna\\Documents\\00Dev\\fragile-proof-audit",
   "target": "FragileProofAudit",
-  "timestamp": "2026-09-20T17:08:40+00:00",
+  "timestamp": "2026-09-20T19:49:15+00:00",
   "verdict": "VERIFIED",
   "findings": [
     {
@@ -54,7 +54,7 @@
       ]
     }
   ],
-  "files_scanned": 22,
+  "files_scanned": 15,
   "declarations_found": 128,
   "allowlist": [
     "Classical.choice",
