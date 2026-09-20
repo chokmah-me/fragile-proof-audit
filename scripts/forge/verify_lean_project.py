@@ -43,6 +43,12 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from pathlib import Path
 
+for _s in (sys.stdout, sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, OSError):
+        pass
+
 DEFAULT_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 
 # Directories that contain build artifacts or vendored dependencies, not our sources.

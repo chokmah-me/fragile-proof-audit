@@ -2,18 +2,20 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 3(i)#a Gauss-sum embed `gauss23² = −23` in
-`ℚ(ζ₂₃)` VERIFIED; Phase 3(i)+++++ concrete ideal `(2, θ)` with
-`absNorm = 2` non-principal VERIFIED; Phase 3(i)++++ `IsDedekindDomain OKNeg23`
-VERIFIED; Phase 2(d) odd-zeta 202601.1609 RE-BROKEN at Lemma 5.1;
-**audit-integrity pass landed 2026-09-20** — verdict lock + discrimination
-controls; **all eight verdicts unchanged**, but what several of them *mean*
-changed (see **Track B**). **Track B item 1 landed same day** —
-`lame_ideal_neg23` discrimination control built, NO FALSE POSITIVE.
+**Checkpoint:** 2026-09-20 — Phase 3(i)# **`OKNeg23 ↪ 𝓞(ℚ(ζ₂₃))` VERIFIED**
+(ring embedding, injective, via `embedToRingOfIntegers`; see below). Phase
+3(i)#a Gauss-sum embed `gauss23² = −23` in `ℚ(ζ₂₃)` VERIFIED; Phase
+3(i)+++++ concrete ideal `(2, θ)` with `absNorm = 2` non-principal VERIFIED;
+Phase 3(i)++++ `IsDedekindDomain OKNeg23` VERIFIED; Phase 2(d) odd-zeta
+202601.1609 RE-BROKEN at Lemma 5.1; **audit-integrity pass landed
+2026-09-20** — verdict lock + discrimination controls; **all eight verdicts
+unchanged**, but what several of them *mean* changed (see **Track B**).
+**Track B item 1 landed same day** — `lame_ideal_neg23` discrimination
+control built, NO FALSE POSITIVE.
 
-**Resume at either:** *(A)* `OKNeg23 ↪ 𝓞(ζ₂₃)` / cyclotomic Ideal / proved
-h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d) write-up decision (Track B
-item 2).
+**Resume at either:** *(A)* pushed-forward non-principal ideal in
+`𝓞(ℚ(ζ₂₃))`, or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d)
+write-up decision (Track B item 2).
 
 (2(d) write-up was declined — **worth revisiting**: after the false-positive
 control it is the campaign's only sendable artifact. See Track B item 2.)
@@ -30,12 +32,16 @@ This file is the **executable resume checklist**. Full harvest ranking lives in
 
 ## Resume here — after Phase 3(i)#a Gauss-sum embed
 
-**3(i) Lamé 1847:** **DONE through 3(i)#a** —
+**3(i) Lamé 1847:** **DONE through 3(i)#** —
 gate \(h^-_{23}=3\); Lean Premise/QuadraticWitness/Maillet Bareiss;
 quadratic ideal gate + `no_norm_two_equation`;
 `IdealPrincipal` + **`IsDedekindDomain OKNeg23`** + concrete
 `P2 = (2, θ)` with `absNorm P2 = 2` and `¬ IsPrincipal P2`;
-**`CyclotomicEmbed`**: `gauss23 ^ 2 = -23` in `CyclotomicField 23 ℚ`.
+**`CyclotomicEmbed`**: `gauss23 ^ 2 = -23` in `CyclotomicField 23 ℚ`;
+**`CyclotomicIdeal`**: `embedToRingOfIntegers : OKNeg23 →+* 𝓞 (CyclotomicField
+23 ℚ)`, injective — `OKNeg23 ↪ 𝓞(ℚ(ζ₂₃))` as a ring embedding (θ ↦
+`(1+gauss23)/2`, same minimal polynomial `X²−X+6`; integrality transported
+via `Module.Finite ℤ OKNeg23` / `map_isIntegral_int`).
 Evidence: `FragileProofAudit/Lame/`,
 `scripts/gates/lame_h23.py`, `scripts/gates/lame_ideal_neg23.py`,
 `docs/audits/lame-1847.md`.
@@ -45,9 +51,12 @@ Evidence: `FragileProofAudit/Lame/`,
 
 **Next options:**
 
-1. **`OKNeg23 ↪ 𝓞(ℚ(ζ₂₃))` / cyclotomic Ideal** — use `gauss23` to build the
-   algebra / ring-of-integers map, then non-principal ideal in `𝓞`; or prove
-   \(h^+_{23}=1\).
+1. **Pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))`** — now that
+   `embedToRingOfIntegers` exists, push `P2 = (2, θ)` forward via
+   `Ideal.map`/`Ideal.comap` and show the image is still not
+   `Submodule.IsPrincipal` (norm behavior under a possibly non-Galois
+   embedding needs care — `𝓞(ℚ(ζ₂₃))` has degree 22 over `ℚ`, not 2, so this
+   is not just transport of the same norm); or prove \(h^+_{23}=1\).
 2. **Per-claim Agoh–Giuga audit** — blueprint a concrete claimed proof against
    the kit; instantiate failing lemma at \(g=30\) or \(g=858\).
 3. Optional: von Staudt–Clausen / Agoh–Bernoulli bridge (same kit, not blocking).
@@ -141,7 +150,8 @@ pwsh ./scripts/verify.ps1
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
 PASS, `lame_ideal_neg23` PASS, **verdict lock 8/8 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
-`Lame.IdealNormTwo` + `Lame.CyclotomicEmbed`).
+`Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal`;
+140 declarations, axiom-clean).
 
 Controls are **not** run by `verify.ps1` — they are operator instruments:
 
@@ -222,7 +232,8 @@ for what the audit altered about their meaning and support.
 | 3(i)++++ | Dedekind instance | **DONE** — `IsDedekindDomain OKNeg23` via integral closure |
 | 3(i)+++++ | Concrete ideal | **DONE** — `P2 = (2, θ)`, `absNorm = 2`, `¬ IsPrincipal` |
 | 3(i)#a | Gauss-sum embed | **DONE** — `gauss23 ^ 2 = -23` in `CyclotomicField 23 ℚ` |
-| 3(i)# | Cyclotomic Ideal / classNumber | `OKNeg23 ↪ 𝓞(ℚ(ζ₂₃))`, `Ideal.IsPrincipal`, or proved `h^+` |
+| 3(i)# | Cyclotomic embedding | **DONE** — `embedToRingOfIntegers : OKNeg23 →+* 𝓞(ℚ(ζ₂₃))`, injective |
+| 3(i)#+ | Pushed-forward ideal / classNumber | `Ideal.map embedToRingOfIntegers P2`, `¬ Ideal.IsPrincipal`, or proved `h^+` |
 | 3(j) | Sun batch 2603.29973 | After HypergeometricEval exists |
 | 2(d) done | 202601.1609 PDF | **Pinned**; Lemma 5.1 BREAK landed, false-positive control clear, now an **infimum** result — write-up **decision to revisit** (Track B item 2) |
 | 3(h)+ | Per-claim Agoh–Giuga | Concrete claimed proof vs kit at \(g=30\) / \(858\) |
