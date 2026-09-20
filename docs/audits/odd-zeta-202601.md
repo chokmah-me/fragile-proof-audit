@@ -91,3 +91,60 @@ its own conclusion.
 - Did not claim a closed-form proof of `sup_q λ*(q) < 5`; the numeric
   sampling across 300 orders of magnitude is the gate, consistent with this
   project's "numeric gate, escalate if it ever flips" discipline.
+
+---
+
+## False-positive control (2026-09-20)
+
+Harness: `scripts/controls/break_control.py`. This gate has already issued one
+verdict that had to be retracted (see the correction section above), which
+makes it the campaign's highest false-positive risk.
+
+### 1. Algebraic self-consistency (the Jana-Karmakar trap)
+
+`g_alpha_star()`'s closed form against direct evaluation of `g` at `alpha*`:
+worst relative disagreement **6.2e-60** over 21 `(lambda, q)` points. And
+`alpha*` is confirmed to be the **minimiser**, not a maximiser -- `g` is convex
+in `alpha` since `d²g/dalpha² = 1/(1+alpha) - 1/(1+q+alpha) > 0`. Had it been a
+maximiser the gate would have been minimising the wrong quantity and the BREAK
+would have been an artefact.
+
+### 2. Discrimination: can this gate ever decline to fire?
+
+Large-`q` behaviour is governed by `c(lambda) = 1 - lambda + log(e^lambda - 1)`;
+`c < 0` means `g(alpha*) -> -infinity`, so admissible `q` genuinely exist and a
+correct gate **must not** break. Dense scan, 3001 points over 60 decades:
+
+| lambda | c(lambda) | min g(alpha*) | admissible q? |
+|---|---|---|---|
+| 0.1 | -1.3522 | -1.42e+59 | **yes** |
+| 0.3 | -0.3502 | -1.23e+59 | **yes** |
+| 0.45 | -0.0151 | -8.57e+57 | **yes** |
+| 0.5 | +0.0672 | 1.64872 | no |
+| 2.0 | +0.8546 | 7.38906 | no |
+| **5, 7, 9, 11, 13** | ~+1 | 148.4 … 442414 | **no** |
+
+The instrument reports admissible `q` exactly where they exist and none at the
+paper's `lambda = 2n+3`, with the transition at `lambda* ~ 0.458`. A gate that
+broke on every input would be worthless; this one discriminates.
+
+### 3. The BREAK is an infimum, not a sample
+
+This **upgrades** the "not done, on purpose" caveat below. For `lambda >= 0.5`
+the minimum of `g(alpha*)` over the whole admissible domain `q > e^lambda - 1`
+is attained at the domain boundary, where `g = g(0) = 1 + q = e^lambda`
+exactly. The dense scan reproduces this to six figures:
+
+`148.413 = e^5`, `1096.63 = e^7`, `8103.09 = e^9`, `59874.2 = e^11`,
+`442414 = e^13`.
+
+So "no admissible `q`" is not a claim about ten sampled points; it is
+`inf_q g(alpha*) = e^lambda > 0`. The 300-orders-of-magnitude sampling was not
+hiding a dip -- there is no dip to hide.
+
+### 4. Convention sensitivity
+
+`lambda` in `{3, 5, 7, 9, 11, 13, 15}`: no admissible `q` at any. The BREAK does
+not depend on the `lambda := kappa + 2 = 2n + 3` convention.
+
+**Control verdict: NO FALSE POSITIVE.** 2(d) stands.
