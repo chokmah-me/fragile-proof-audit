@@ -1,0 +1,104 @@
+{
+  "timestamp": "2026-09-20T00:56:13.835179+00:00",
+  "gate": "odd_zeta_1609",
+  "source_claim": "Preprints.org 202601.1609.v1",
+  "doi": "10.20944/preprints202601.1609.v1",
+  "pdf_pinned": false,
+  "quoted_closed_forms": {
+    "g_alpha": "g(\u03b1) = 1+q+\u03bb\u03b1 + (1+q)log(1+q) + (1+\u03b1)log(1+\u03b1) \u2212 (1+q+\u03b1)log(1+q+\u03b1)",
+    "A_m_definition": "A_m^{(q)} := D_m^{(q)}  (LCM, not a sequence formula)",
+    "B_m_definition": "B_m^{(q)} := \u03a9_m D_m L_m^{(\u2264K)}",
+    "Lambda_m_definition": "\u039b_m = A_m \u03b6(2n+1) \u2212 B_m = \u03a9_m D_m L_m^{(>K)}"
+  },
+  "required_for_Lambda": {
+    "W_m_q": "asymmetric beta kernel",
+    "S_m_q": "kernel CDF",
+    "Omega_m_q": "prefactor in (11)\u2013(12)",
+    "F_m_k": "weights in \u03a3 F_{m,k}/k^{2n+1}",
+    "L_m_q": "weighted / truncated polylog moments",
+    "K": "truncation cutoff as a function of m",
+    "D_m_q": "explicit LCM range for denominators"
+  },
+  "lambda_zeta5": {
+    "target": "zeta(5)",
+    "n": 2,
+    "requested": {
+      "m": 1,
+      "q": 1
+    },
+    "A_m": null,
+    "B_m": null,
+    "Lambda_m": null,
+    "missing_symbols": [
+      "W_m_q",
+      "S_m_q",
+      "Omega_m_q",
+      "F_m_k",
+      "L_m_q",
+      "K",
+      "D_m_q"
+    ],
+    "evaluable": false,
+    "reason": "Lemma 3.2 defines A_m as an LCM D_m and B_m via \u03a9, truncated moments L(\u2264K), and unnamed kernel W. No closed (m,q) \u2192 (A,B)."
+  },
+  "g_alpha_side_check": {
+    "note": "NOT the \u039b_m gate. Parameter existence for (24) only.",
+    "found_g_negative": true,
+    "samples": [
+      {
+        "q": 1,
+        "lambda": 0.01,
+        "alpha_star": 98.50083333194551,
+        "g_at_alpha_star": -1.2338716582049756
+      },
+      {
+        "q": 1,
+        "lambda": 0.05,
+        "alpha_star": 18.50416649306586,
+        "g_at_alpha_star": 0.3156662520625133
+      },
+      {
+        "q": 1,
+        "lambda": 0.1,
+        "alpha_star": 8.508331944775042,
+        "g_at_alpha_star": 0.9341259000758022
+      },
+      {
+        "q": 2,
+        "lambda": 0.01,
+        "alpha_star": 198.00166666389103,
+        "g_at_alpha_star": -4.320789533765264
+      },
+      {
+        "q": 2,
+        "lambda": 0.05,
+        "alpha_star": 38.00833298613172,
+        "g_at_alpha_star": -1.1817137132302946
+      },
+      {
+        "q": 2,
+        "lambda": 0.1,
+        "alpha_star": 18.016663889550085,
+        "g_at_alpha_star": 0.10520558279625902
+      },
+      {
+        "q": 5,
+        "lambda": 0.01,
+        "alpha_star": 496.50416665972756,
+        "g_at_alpha_star": -14.35746284342622
+      },
+      {
+        "q": 5,
+        "lambda": 0.05,
+        "alpha_star": 96.52083246532929,
+        "g_at_alpha_star": -6.449773292089105
+      }
+    ]
+  },
+  "verdict": "BREAK",
+  "lemma": "displayed integer forms \u039b_m^{(q)} = A_m \u03b6(2n+1) \u2212 B_m with evaluable A_m, B_m",
+  "instance": "\u03b6(5), m=1, q=1 (any explicit pair would have sufficed)",
+  "false_instance": "A_m, B_m are defined only in terms of ungiven D_m, \u03a9_m, L_m, K, W_m",
+  "ok": true,
+  "break_route": true
+}

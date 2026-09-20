@@ -30,6 +30,7 @@ Full campaign plan (phases, per-target blocks, dependency graph, risk register) 
 | Phase 1(a) γ audit | `docs/audits/gamma-aejonanonymous.md` — break via statement non-fidelity |
 | `AxiomAudit` scanner | `scripts/forge/axiom_audit.py` |
 | Phase 1(b) Suman ζ(5) | blueprint quotes · `suman_eq48` BREAK · Lean BaseCase + criterion |
+| Phase 2(d) odd-zeta 202601.1609 | extract BREAK: `Λ_m` not evaluable (`docs/audits/odd-zeta-202601.md`) |
 
 **γ outcome (short):** artifact proves `¬ is_rational_gamma` (homemade); does **not** prove `Irrational` of mathlib γ. Main file 0 sorry; comparator has 6. No historic escalate.
 
@@ -64,23 +65,35 @@ Full campaign plan (phases, per-target blocks, dependency graph, risk register) 
 
 ---
 
-## Resume here — Phase 1(c) Kim ζ(5)
+## Phase 2(d) odd-zeta 202601.1609 — extract BREAK
+
+**Source:** Preprints.org 202601.1609.v1 · doi:10.20944/preprints202601.1609.v1  
+**Blueprint:** `docs/blueprint/odd-zeta-202601.md`  
+**Note:** `docs/audits/odd-zeta-202601.md`
+
+Quoted Lemma 3.2: `A_m := D_m` (LCM), `B_m := Ω D L_{≤K}`. Kernel `W_m`, `Ω`,
+`F_{m,k}`, `K`, `D_m` are unnamed as closed forms. **`Λ_m` at ζ(5) is not
+evaluable** — harvest third outcome, not a Kim detour.
+
+`g(α)` is quoted and is a different object; do not treat `g<0` as `|Λ_m|→0`.
+
+---
+
+## Compressed later — Phase 1(c) Kim ζ(5) (not a blocker)
 
 **Source:** arXiv:1105.0730 · Zudilin / OEIS A013663  
 **Blueprint:** `docs/blueprint/kim-zeta5.md`
 
-1. Extract ε-inequality after eq. (3.3); define symbols.
-2. Gate at `n_k ∈ {10,100,1000}`, `N = 1` → `scripts/gates/kim_eps.py`.
-3. Lean: Tendsto kill or finite-threshold kill of the universal claim.
-4. Shared dossier with Suman (“two generations, one genre”).
+Numeric ε-table only (`n_k ∈ {10,100,1000}`, `N=1`); no Tendsto unless surprising.
+Does not gate 2(e)+.
 
 ---
 
-## Later (do not start before 1(b)–1(c) land)
+## Later (1(b) landed; 2(d) extract BREAK recorded)
 
 | ID | Target | First milestone |
 |---|---|---|
-| 2(d) | Odd-zeta preprint 202601.1609 | Extract A_m, B_m; ‖Λ_m‖ for ζ(5), m≤50 |
+| 2(d) | Odd-zeta preprint 202601.1609 | **BREAK** — `Λ_m` not evaluable; pin PDF if 200 OK |
 | 2(e) | Erdős–Straus arXiv:2404.01508 | Sweep primes <10⁵ in hard classes mod 840 |
 | 2(f) | RR 2608.05480 / 2608.15219 | q-expand in SymPy (no Sage) |
 | 2(g) | PDN1 2503.00004 | Diff authors’ notebooks; 200+ q-terms |
@@ -107,4 +120,4 @@ pwsh ./scripts/verify.ps1
 
 ## Next concrete action
 
-**Phase 1(c) step 1 — extract Kim ε-inequality after eq. (3.3) into `docs/blueprint/kim-zeta5.md`.**
+**Phase 2(e) — Erdős–Straus covering (arXiv:2404.01508): transcribe claimed families and sweep primes in hard classes mod 840.** Kim remains a compressed appendix, not the resume pointer. Pin 202601.1609 PDF if a 200 OK appears.

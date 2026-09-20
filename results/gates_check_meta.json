@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-09-20T00:28:46.638583+00:00",
-  "phase": "1b",
+  "timestamp": "2026-09-20T00:54:59.602382+00:00",
+  "phase": "2d",
   "gates": [
     {
       "name": "harness_selftest",
@@ -9,6 +9,11 @@
     },
     {
       "name": "suman_eq48",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "odd_zeta_1609",
       "ok": true,
       "exit_code": 0
     }

@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 HARNESS_SELFTEST = ROOT / "scripts" / "harness" / "selftest.py"
 SUMAN_EQ48 = ROOT / "scripts" / "gates" / "suman_eq48.py"
+ODD_ZETA_1609 = ROOT / "scripts" / "gates" / "odd_zeta_1609.py"
 
 
 def run_script(name: str, path: Path) -> dict:
@@ -42,14 +43,18 @@ def run_suman_eq48() -> dict:
     return run_script("suman_eq48", SUMAN_EQ48)
 
 
+def run_odd_zeta_1609() -> dict:
+    return run_script("odd_zeta_1609", ODD_ZETA_1609)
+
+
 def main() -> int:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    # Phase 1(b): harness + Suman Eq. (48) base-case gate.
-    results = [run_harness(), run_suman_eq48()]
+    # Phase 1(b)+2(d): harness + Suman Eq. (48) + odd-zeta underspecification gate.
+    results = [run_harness(), run_suman_eq48(), run_odd_zeta_1609()]
     failed = [r for r in results if not r["ok"]]
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "phase": "1b",
+        "phase": "2d",
         "gates": [
             {
                 "name": r["name"],
