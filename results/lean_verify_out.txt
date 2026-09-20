@@ -4,9 +4,9 @@
   project     : C:\Users\Elke Shayna\Documents\00Dev\fragile-proof-audit
   target      : FragileProofAudit
   toolchain   : leanprover/lean4:v4.32.2
-  timestamp   : 2026-09-20T16:39:07+00:00
-  files       : 14
-  declarations: 118
+  timestamp   : 2026-09-20T17:08:40+00:00
+  files       : 22
+  declarations: 128
   allowlist   : Classical.choice, Quot.sound, propext
 --------------------------------------------------------------------------
   [ PASS ] project_shape: lakefile.toml, toolchain leanprover/lean4:v4.32.2
@@ -15,13 +15,13 @@
   [ PASS ] local_axiom_declarations: no locally declared axioms
   [ PASS ] lake_build: `lake build FragileProofAudit` exited 0
   [ PASS ] build_sorry_warnings: no sorry warnings in build output
-  [ PASS ] axiom_audit: all 118 declaration(s) within allowlist
+  [ PASS ] axiom_audit: all 128 declaration(s) within allowlist
 --------------------------------------------------------------------------
   VERDICT: VERIFIED
 ==========================================================================
 
 --- build output ---
-⚠ [3470/3489] Replayed FragileProofAudit.Lame.Maillet
+⚠ [3478/3503] Replayed FragileProofAudit.Lame.Maillet
 warning: FragileProofAudit/Lame/Maillet.lean:114:0: Unscoped option maxHeartbeats is not allowed:
 Please scope this to individual declarations, as in
 ```
@@ -31,5 +31,5 @@ example : ... := ...
 ```
 
 Note: This linter can be disabled with `set_option linter.style.setOption false`
-✔ [3488/3489] Built FragileProofAudit (27s)
-Build completed successfully (3489 jobs).
+✔ [3512/3513] Built FragileProofAudit (28s)
+Build completed successfully (3513 jobs).

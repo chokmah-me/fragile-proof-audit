@@ -2,10 +2,11 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 3(i)+++++ concrete ideal `(2, θ)` with
+**Checkpoint:** 2026-09-20 — Phase 3(i)#a Gauss-sum embed `gauss23² = −23` in
+`ℚ(ζ₂₃)` VERIFIED; Phase 3(i)+++++ concrete ideal `(2, θ)` with
 `absNorm = 2` non-principal VERIFIED; Phase 3(i)++++ `IsDedekindDomain OKNeg23`
 VERIFIED; Phase 2(d) odd-zeta 202601.1609 RE-BROKEN at Lemma 5.1;
-**resume at cyclotomic Ideal / proved h⁺, or per-claim Agoh–Giuga**
+**resume at OKNeg23 ↪ 𝓞(ζ₂₃) / cyclotomic Ideal / proved h⁺, or per-claim Agoh–Giuga**
 (2(d) write-up declined — gate stays as internal audit record)
 
 **Pin:** Lean / mathlib `v4.32.2` (same as `catalan-sun-lean`)  
@@ -18,13 +19,14 @@ This file is the **executable resume checklist**. Full harvest ranking lives in
 
 ---
 
-## Resume here — after Phase 3(i)+++++ concrete absNorm-2 ideal
+## Resume here — after Phase 3(i)#a Gauss-sum embed
 
-**3(i) Lamé 1847:** **DONE through 3(i)+++++** —
+**3(i) Lamé 1847:** **DONE through 3(i)#a** —
 gate \(h^-_{23}=3\); Lean Premise/QuadraticWitness/Maillet Bareiss;
 quadratic ideal gate + `no_norm_two_equation`;
 `IdealPrincipal` + **`IsDedekindDomain OKNeg23`** + concrete
-`P2 = (2, θ)` with `absNorm P2 = 2` and `¬ IsPrincipal P2`.
+`P2 = (2, θ)` with `absNorm P2 = 2` and `¬ IsPrincipal P2`;
+**`CyclotomicEmbed`**: `gauss23 ^ 2 = -23` in `CyclotomicField 23 ℚ`.
 Evidence: `FragileProofAudit/Lame/`,
 `scripts/gates/lame_h23.py`, `scripts/gates/lame_ideal_neg23.py`,
 `docs/audits/lame-1847.md`.
@@ -34,7 +36,8 @@ Evidence: `FragileProofAudit/Lame/`,
 
 **Next options:**
 
-1. **Cyclotomic Ideal / proved \(h^+\)** — lift to `𝓞(ℚ(ζ₂₃))`, or prove
+1. **`OKNeg23 ↪ 𝓞(ℚ(ζ₂₃))` / cyclotomic Ideal** — use `gauss23` to build the
+   algebra / ring-of-integers map, then non-principal ideal in `𝓞`; or prove
    \(h^+_{23}=1\).
 2. **Per-claim Agoh–Giuga audit** — blueprint a concrete claimed proof against
    the kit; instantiate failing lemma at \(g=30\) or \(g=858\).
@@ -62,11 +65,11 @@ pwsh ./scripts/verify.ps1
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
 PASS, `lame_ideal_neg23` PASS, lake + forge VERIFIED (includes
 `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
-`Lame.IdealNormTwo`).
+`Lame.IdealNormTwo` + `Lame.CyclotomicEmbed`).
 
 **3(i) landing:** gate `76521e6`; Premise/QuadraticWitness `9ae01da`; Maillet
 Bareiss `7a8da40`; IdealWitness `9e7d8f2`; IdealPrincipal `4444ea9`;
-Dedekind `c36aa9a`; IdealNormTwo follows.
+Dedekind `c36aa9a`; IdealNormTwo `bc2bd06`; CyclotomicEmbed follows.
 
 ---
 
@@ -99,7 +102,7 @@ Dedekind `c36aa9a`; IdealNormTwo follows.
 | **2(f)** RR / HJO 2608.05480+15219 | **PASS** — \(Z=P\) + Lemma 12; OreReduce (34) **capability-limited** | `docs/audits/rr-qexpand.md`, `scripts/gates/rr_qexpand.py` |
 | **2(g)** PDN1 2503.00004 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks **capability-limited** | `docs/audits/pdn1.md`, `scripts/gates/pdn1.py`, `incoming/pdn1/` |
 | **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `GiugaOnFactors`/`KorseltOnFactors`/`oracle_seven` | `docs/audits/agoh-giuga.md`, `scripts/gates/giuga_oracle.py`, `FragileProofAudit/AgohGiuga/` |
-| **3(i)** Lamé 1847 | **PASS** — through 3(i)+++++: Bareiss + ideal + Dedekind + concrete `(2,θ)` non-principal | `docs/audits/lame-1847.md`, `FragileProofAudit/Lame/` |
+| **3(i)** Lamé 1847 | **PASS** — through 3(i)#a: Bareiss + ideal + Dedekind + concrete `(2,θ)` + Gauss-sum `√−23` in `ℚ(ζ₂₃)` | `docs/audits/lame-1847.md`, `FragileProofAudit/Lame/` |
 | **Criterion module** | Apéry-shaped `irrational_of_integer_forms_tendsto_zero` | `FragileProofAudit/IrrationalityCriterion.lean` |
 
 ---
@@ -122,7 +125,8 @@ Dedekind `c36aa9a`; IdealNormTwo follows.
 |---|---|---|
 | 3(i)++++ | Dedekind instance | **DONE** — `IsDedekindDomain OKNeg23` via integral closure |
 | 3(i)+++++ | Concrete ideal | **DONE** — `P2 = (2, θ)`, `absNorm = 2`, `¬ IsPrincipal` |
-| 3(i)# | Cyclotomic Ideal / classNumber | `Ideal.IsPrincipal` in `𝓞(ℚ(ζ₂₃))`, or proved `h^+` |
+| 3(i)#a | Gauss-sum embed | **DONE** — `gauss23 ^ 2 = -23` in `CyclotomicField 23 ℚ` |
+| 3(i)# | Cyclotomic Ideal / classNumber | `OKNeg23 ↪ 𝓞(ℚ(ζ₂₃))`, `Ideal.IsPrincipal`, or proved `h^+` |
 | 3(j) | Sun batch 2603.29973 | After HypergeometricEval exists |
 | 2(d) done | 202601.1609 PDF | **Pinned** (user-supplied download); Lemma 5.1 gate BREAK landed and closed — no write-up planned |
 | 3(h)+ | Per-claim Agoh–Giuga | Concrete claimed proof vs kit at \(g=30\) / \(858\) |
