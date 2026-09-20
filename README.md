@@ -48,6 +48,17 @@ re-attack it.
 
 ---
 
+## External kernel check (con-leche)
+
+Beyond `lake build`, every push also runs
+[con-leche](https://github.com/leanprover/con-leche) — an independent Lean
+kernel that re-checks an NDJSON export of the built library, catching bugs
+that exist only in Lean's own kernel and rejecting leftover `sorry`s or
+non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
+[`docs/con-leche.md`](docs/con-leche.md).
+
+---
+
 ## Layout
 
 | Path | Role |
@@ -85,7 +96,8 @@ re-attack it.
 | **2(e)** Erdős–Straus | **PASS (escalate)** — Conjecture 1 covers all hard-class primes `< 10^5`; no Lean kill. [`docs/audits/es-covering.md`](docs/audits/es-covering.md) |
 | **2(f)** RR / HJO | **PASS** — \(Z=P\) q-expand + Lemma 12; OreReduce capability-limited. [`docs/audits/rr-qexpand.md`](docs/audits/rr-qexpand.md) |
 | **2(g)** PDN1 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks capability-limited. [`docs/audits/pdn1.md`](docs/audits/pdn1.md) |
-| **3(h)** | Agoh–Giuga kit (next) |
+| **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `oracle_seven`. [`docs/audits/agoh-giuga.md`](docs/audits/agoh-giuga.md) |
+| **3(i)** Lamé 1847 | **PASS (gate)** — \(h^-_{23}=3\); Lean pinpoint next. [`docs/audits/lame-1847.md`](docs/audits/lame-1847.md) |
 | **3** Infrastructure | Agoh–Giuga kit · Lamé pinpoint · Sun batch `2603.29973` |
 
 Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md).
