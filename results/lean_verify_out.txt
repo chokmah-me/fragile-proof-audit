@@ -1,27 +1,27 @@
 ==========================================================================
   lean-proof-forge :: verification report
 ==========================================================================
-  project     : C:\Users\Elke Shayna\Documents\00Dev\fragile-proof-audit
-  target      : FragileProofAudit
+  project     : C:\Users\Elke Shayna\Documents\00Dev\fragile-proof-audit\.claude\worktrees\agent-af80866ecd1aa0e9f
+  target      : (all)
   toolchain   : leanprover/lean4:v4.32.2
-  timestamp   : 2026-09-20T20:29:47+00:00
-  files       : 17
-  declarations: 147
+  timestamp   : 2026-09-20T20:42:48+00:00
+  files       : 18
+  declarations: 150
   allowlist   : Classical.choice, Quot.sound, propext
 --------------------------------------------------------------------------
   [ PASS ] project_shape: lakefile.toml, toolchain leanprover/lean4:v4.32.2
   [ PASS ] no_sorry_admit: no sorry/admit/sorryAx in sources
   [ PASS ] native_decide: no native_decide
   [ PASS ] local_axiom_declarations: no locally declared axioms
-  [ PASS ] lake_build: `lake build FragileProofAudit` exited 0
+  [ PASS ] lake_build: `lake build` exited 0
   [ PASS ] build_sorry_warnings: no sorry warnings in build output
-  [ PASS ] axiom_audit: all 147 declaration(s) within allowlist
+  [ PASS ] axiom_audit: all 150 declaration(s) within allowlist
 --------------------------------------------------------------------------
   VERDICT: VERIFIED
 ==========================================================================
 
 --- build output ---
-âš  [3478/3560] Replayed FragileProofAudit.Lame.Maillet
+âš  [3478/3527] Replayed FragileProofAudit.Lame.Maillet
 warning: FragileProofAudit/Lame/Maillet.lean:114:0: Unscoped option maxHeartbeats is not allowed:
 Please scope this to individual declarations, as in
 ```
@@ -31,5 +31,5 @@ example : ... := ...
 ```
 
 Note: This linter can be disabled with `set_option linter.style.setOption false`
-âœ” [3568/3569] Built FragileProofAudit (19s)
-Build completed successfully (3569 jobs).
+âœ” [3571/3572] Built FragileProofAudit (25s)
+Build completed successfully (3572 jobs).

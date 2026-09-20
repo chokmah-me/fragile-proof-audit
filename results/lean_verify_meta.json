@@ -1,7 +1,7 @@
 {
-  "project": "C:\\Users\\Elke Shayna\\Documents\\00Dev\\fragile-proof-audit",
-  "target": "FragileProofAudit",
-  "timestamp": "2026-09-20T20:29:47+00:00",
+  "project": "C:\\Users\\Elke Shayna\\Documents\\00Dev\\fragile-proof-audit\\.claude\\worktrees\\agent-af80866ecd1aa0e9f",
+  "target": null,
+  "timestamp": "2026-09-20T20:42:48+00:00",
   "verdict": "VERIFIED",
   "findings": [
     {
@@ -31,7 +31,7 @@
     {
       "check": "lake_build",
       "status": "PASS",
-      "detail": "`lake build FragileProofAudit` exited 0",
+      "detail": "`lake build` exited 0",
       "hits": []
     },
     {
@@ -43,19 +43,19 @@
     {
       "check": "axiom_audit",
       "status": "PASS",
-      "detail": "all 147 declaration(s) within allowlist",
+      "detail": "all 150 declaration(s) within allowlist",
       "hits": [
         {
           "violations": {},
           "unresolved": [],
-          "audited": 147,
-          "expected": 147
+          "audited": 150,
+          "expected": 150
         }
       ]
     }
   ],
-  "files_scanned": 17,
-  "declarations_found": 147,
+  "files_scanned": 18,
+  "declarations_found": 150,
   "allowlist": [
     "Classical.choice",
     "Quot.sound",
