@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-20T17:08:39.709242+00:00",
+  "timestamp": "2026-09-20T17:28:04.614339+00:00",
   "phase": "2g",
   "source": "arXiv:2503.00004",
   "pdf": "incoming/pdn1-2503.00004.pdf",
@@ -23,71 +23,177 @@
       32152
     ]
   },
+  "fastpath_selftest": {
+    "degree": 150,
+    "modulus": "10^50",
+    "mismatches": 0,
+    "first_bad": [],
+    "ok": true
+  },
   "congruences": {
+    "depth_N": 30000,
     "rows": [
       {
         "mod": 25,
         "residue": 24,
         "power": 5,
-        "checked": 20,
+        "checked": 1200,
+        "out_of_range": false,
         "ok": true,
         "failures": [],
-        "label": "Thm1.1 1.7 \u03b1=1"
-      },
-      {
-        "mod": 125,
-        "residue": 74,
-        "power": 25,
-        "checked": 4,
-        "ok": true,
-        "failures": [],
-        "label": "Thm1.1 1.8 \u03b1=1 r=71"
-      },
-      {
-        "mod": 125,
-        "residue": 124,
-        "power": 25,
-        "checked": 4,
-        "ok": true,
-        "failures": [],
-        "label": "Thm1.1 1.8 \u03b1=1 r=119"
+        "label": "Thm1.1 (1.7) alpha=1"
       },
       {
         "mod": 625,
         "residue": 599,
         "power": 25,
-        "checked": 1,
+        "checked": 48,
+        "out_of_range": false,
         "ok": true,
         "failures": [],
-        "label": "Thm1.1 1.7 \u03b1=2"
+        "label": "Thm1.1 (1.7) alpha=2"
+      },
+      {
+        "mod": 15625,
+        "residue": 14974,
+        "power": 125,
+        "checked": 1,
+        "out_of_range": false,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.1 (1.7) alpha=3"
+      },
+      {
+        "mod": 125,
+        "residue": 74,
+        "power": 25,
+        "checked": 240,
+        "out_of_range": false,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.1 (1.8) alpha=1 r=71"
+      },
+      {
+        "mod": 125,
+        "residue": 124,
+        "power": 25,
+        "checked": 240,
+        "out_of_range": false,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.1 (1.8) alpha=1 r=119"
+      },
+      {
+        "mod": 3125,
+        "residue": 1849,
+        "power": 125,
+        "checked": 10,
+        "out_of_range": false,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.1 (1.8) alpha=2 r=71"
+      },
+      {
+        "mod": 3125,
+        "residue": 3099,
+        "power": 125,
+        "checked": 9,
+        "out_of_range": false,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.1 (1.8) alpha=2 r=119"
+      },
+      {
+        "mod": 78125,
+        "residue": 46224,
+        "power": 625,
+        "checked": 0,
+        "out_of_range": true,
+        "ok": false,
+        "failures": [],
+        "label": "Thm1.1 (1.8) alpha=3 r=71"
+      },
+      {
+        "mod": 78125,
+        "residue": 77474,
+        "power": 625,
+        "checked": 0,
+        "out_of_range": true,
+        "ok": false,
+        "failures": [],
+        "label": "Thm1.1 (1.8) alpha=3 r=119"
       },
       {
         "mod": 7,
         "residue": 5,
         "power": 7,
-        "checked": 40,
+        "checked": 4286,
+        "out_of_range": false,
         "ok": true,
         "failures": [],
-        "label": "Thm1.2 1.9 \u03b1=1"
-      },
-      {
-        "mod": 49,
-        "residue": 47,
-        "power": 49,
-        "checked": 10,
-        "ok": true,
-        "failures": [],
-        "label": "Thm1.2 1.10 \u03b1=1"
+        "label": "Thm1.2 (1.9) alpha=1"
       },
       {
         "mod": 343,
         "residue": 243,
         "power": 49,
-        "checked": 2,
+        "checked": 87,
+        "out_of_range": false,
         "ok": true,
         "failures": [],
-        "label": "Thm1.2 1.9 \u03b1=2"
+        "label": "Thm1.2 (1.9) alpha=2"
+      },
+      {
+        "mod": 16807,
+        "residue": 11905,
+        "power": 343,
+        "checked": 2,
+        "out_of_range": false,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.2 (1.9) alpha=3"
+      },
+      {
+        "mod": 49,
+        "residue": 47,
+        "power": 49,
+        "checked": 612,
+        "out_of_range": false,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.2 (1.10) alpha=1"
+      },
+      {
+        "mod": 2401,
+        "residue": 2301,
+        "power": 343,
+        "checked": 12,
+        "out_of_range": false,
+        "ok": true,
+        "failures": [],
+        "label": "Thm1.2 (1.10) alpha=2"
+      },
+      {
+        "mod": 117649,
+        "residue": 112747,
+        "power": 2401,
+        "checked": 0,
+        "out_of_range": true,
+        "ok": false,
+        "failures": [],
+        "label": "Thm1.2 (1.10) alpha=3"
       }
+    ],
+    "data_points": 6747,
+    "alpha_reached": [
+      "1",
+      "2",
+      "3"
+    ],
+    "out_of_range_rows": [
+      "Thm1.1 (1.8) alpha=3 r=71",
+      "Thm1.1 (1.8) alpha=3 r=119",
+      "Thm1.2 (1.10) alpha=3"
     ],
     "all_ok": true
   },
@@ -112,5 +218,5 @@
     "note": "Blocked notebook replay is not a BREAK of the congruence route."
   },
   "verdict": "PASS",
-  "note": "PASS escalates the Type-D GF/congruence/(3.13) route. Does not certify (4.8) or the full Mathematica supplements."
+  "note": "PASS escalates the Type-D GF/congruence/(3.13) route. Does not certify (4.8) or the full Mathematica supplements, and does not attack the induction as a logical-gap (Type G) target."
 }

@@ -7,6 +7,7 @@ Phase 1+: each target gate registers here and must stay green in CI.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -24,13 +25,77 @@ GIUGA_ORACLE = ROOT / "scripts" / "gates" / "giuga_oracle.py"
 LAME_H23 = ROOT / "scripts" / "gates" / "lame_h23.py"
 LAME_IDEAL_NEG23 = ROOT / "scripts" / "gates" / "lame_ideal_neg23.py"
 
+# ---------------------------------------------------------------------------
+# Verdict lock.
+#
+# Gate scripts deliberately exit 0 whether they find PASS or BREAK: a BREAK is
+# the campaign's desired finding, not a build failure. The consequence was that
+# NOTHING detected a verdict flip in either direction -- a dependency bump that
+# silently turned a landed BREAK back into a PASS would have left CI green.
+#
+# Each gate's verdict is therefore pinned here and compared against the meta
+# JSON it wrote. Deviation in EITHER direction fails the run. Changing an entry
+# is a deliberate act that should land in the same commit as the re-audit.
+# ---------------------------------------------------------------------------
+
+EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
+    "suman_eq48": ("suman_gate_meta.json", "BREAK"),
+    "odd_zeta_1609": ("odd_zeta_gate_meta.json", "BREAK"),
+    "es_cover": ("es_cover_gate_meta.json", "PASS"),
+    "rr_qexpand": ("rr_qexpand_gate_meta.json", "PASS"),
+    "pdn1": ("pdn1_gate_meta.json", "PASS"),
+    "giuga_oracle": ("giuga_oracle_gate_meta.json", "PASS"),
+    "lame_h23": ("lame_h23_gate_meta.json", "PASS"),
+    "lame_ideal_neg23": ("lame_ideal_neg23_gate_meta.json", "PASS"),
+}
+
+
+def check_verdicts() -> list[dict]:
+    """Compare each gate's recorded verdict against its pinned expectation."""
+    rows: list[dict] = []
+    for name, (meta_name, expected) in EXPECTED_VERDICT.items():
+        path = RESULTS / meta_name
+        actual: str | None = None
+        note = ""
+        if not path.exists():
+            note = "meta file missing"
+        else:
+            try:
+                actual = json.loads(path.read_text(encoding="utf-8")).get("verdict")
+                if actual is None:
+                    note = "no verdict key"
+            except json.JSONDecodeError as exc:
+                note = f"unreadable meta: {exc}"
+        rows.append(
+            {
+                "name": name,
+                "meta": meta_name,
+                "expected": expected,
+                "actual": actual,
+                "ok": actual == expected,
+                "note": note,
+            }
+        )
+    return rows
+
+
 
 def run_script(name: str, path: Path) -> dict:
+    """Run a gate, forcing UTF-8 on both ends.
+
+    Gates print mathematical notation (√, ≡, θ). Under a cp1252
+    console the *child's* own print() raises UnicodeEncodeError, so the gate
+    exits 1 having already written a correct verdict -- a passing gate reported
+    as FAIL, and a red verify.ps1, purely from the operator's code page.
+    """
     proc = subprocess.run(
         [sys.executable, str(path)],
         cwd=str(ROOT),
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
     )
     return {
         "name": name,
@@ -78,6 +143,14 @@ def run_lame_ideal_neg23() -> dict:
 
 
 def main() -> int:
+    # The suite relays child output containing mathematical notation; a cp1252
+    # console would otherwise kill the runner itself while every gate passed.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, OSError):
+            pass
+
     RESULTS.mkdir(parents=True, exist_ok=True)
     # Phase 1(b)+2(d)–2(g)+3(h)+3(i)+3(i)++: prior gates + Lamé ideal witness.
     results = [
@@ -92,6 +165,8 @@ def main() -> int:
         run_lame_ideal_neg23(),
     ]
     failed = [r for r in results if not r["ok"]]
+    verdicts = check_verdicts()
+    drifted = [v for v in verdicts if not v["ok"]]
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "phase": "3i++",
@@ -103,7 +178,9 @@ def main() -> int:
             }
             for r in results
         ],
-        "all_ok": not failed,
+        "verdict_lock": verdicts,
+        "verdict_drift": [v["name"] for v in drifted],
+        "all_ok": not failed and not drifted,
     }
     out = RESULTS / "gates_check_meta.json"
     out.write_text(json.dumps(meta, indent=2), encoding="utf-8")
@@ -114,8 +191,23 @@ def main() -> int:
             print(r["stdout"].rstrip())
         if r["stderr"]:
             print(r["stderr"].rstrip(), file=sys.stderr)
+    print("\n=== verdict lock ===")
+    for v in verdicts:
+        mark = "ok" if v["ok"] else "DRIFT"
+        extra = f" ({v['note']})" if v["note"] else ""
+        print(
+            f"[{mark}] {v['name']}: expected {v['expected']}, "
+            f"got {v['actual']}{extra}"
+        )
+    if drifted:
+        print(
+            "\nVERDICT DRIFT -- a gate's finding changed without the pin being "
+            "updated. Re-audit the target, then update EXPECTED_VERDICT in the "
+            "same commit."
+        )
+
     print(f"\nWrote {out}")
-    return 1 if failed else 0
+    return 1 if (failed or drifted) else 0
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-20T17:08:40.053155+00:00",
+  "timestamp": "2026-09-20T17:28:05.052920+00:00",
   "phase": "3i++",
   "gates": [
     {
@@ -48,5 +48,72 @@
       "exit_code": 0
     }
   ],
+  "verdict_lock": [
+    {
+      "name": "suman_eq48",
+      "meta": "suman_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "odd_zeta_1609",
+      "meta": "odd_zeta_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "es_cover",
+      "meta": "es_cover_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "rr_qexpand",
+      "meta": "rr_qexpand_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "pdn1",
+      "meta": "pdn1_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "giuga_oracle",
+      "meta": "giuga_oracle_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "lame_h23",
+      "meta": "lame_h23_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "lame_ideal_neg23",
+      "meta": "lame_ideal_neg23_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
+    }
+  ],
+  "verdict_drift": [],
   "all_ok": true
 }

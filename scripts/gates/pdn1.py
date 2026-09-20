@@ -32,7 +32,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 
-PDN1_N = 700  # need ≥ 625+599 for Thm 1.1 α=2 sample (625n+599)
+PDN1_EXACT_N = 260   # exact dense oracle: GF harness + fast-path self-test
+PDN1_DEEP_N = 30000  # mod-arithmetic congruence depth (CI); --deep raises it
+PDN1_DEEP_N_FULL = 150000  # operator depth: reaches α=3 on all four families
 MOD_EQ_N = 80
 
 
@@ -261,84 +263,239 @@ def check_modular_eq_313(N: int) -> dict:
     }
 
 
+# ---------------------------------------------------------------------------
+# Fast mod-arithmetic series.
+#
+# The exact dense builder above is O(N^2 log N) and caps out near N~10^3, which
+# left Thm 1.1 (1.7) alpha=2 tested at exactly ONE index and alpha=3 at none.
+# Congruence claims only need coefficients modulo a prime power, so build the
+# series mod M instead, via
+#
+#     J_2^2 / J_1^5 = (J_2/J_1)^2 * (1/J_1^3)
+#
+# with J_1, J_2 sparse (Euler pentagonal), J_1^3 sparse (Jacobi), sparse
+# inversions O(N sqrt N), and the two dense products done by Kronecker
+# substitution on Python bigints rather than O(N^2) convolution.
+#
+# Audit the auditor: pdn1_fastpath_selftest() requires this path to reproduce
+# the exact dense oracle coefficient-for-coefficient before a verdict issues.
+# ---------------------------------------------------------------------------
+
+
+def penta_sparse(delta: int, N: int) -> list[tuple[int, int]]:
+    """prod (1 - q^(delta n)) = sum_k (-1)^k q^(delta k(3k-1)/2)."""
+    terms: list[tuple[int, int]] = []
+    k = 0
+    while True:
+        added = False
+        for kk in ((k, -k) if k else (0,)):
+            e = delta * kk * (3 * kk - 1) // 2
+            if 0 <= e <= N:
+                terms.append((e, -1 if kk % 2 else 1))
+                added = True
+        if k and not added:
+            break
+        k += 1
+    return sorted(set(terms))
+
+
+def jacobi_cube_sparse(N: int) -> list[tuple[int, int]]:
+    """(q;q)_inf^3 = sum_{k>=0} (-1)^k (2k+1) q^(k(k+1)/2)."""
+    terms: list[tuple[int, int]] = []
+    k = 0
+    while True:
+        e = k * (k + 1) // 2
+        if e > N:
+            break
+        terms.append((e, (2 * k + 1) * (-1 if k % 2 else 1)))
+        k += 1
+    return terms
+
+
+def inv_sparse(sp: list[tuple[int, int]], N: int, M: int) -> list[int]:
+    """Invert a sparse series whose constant term is 1."""
+    assert dict(sp).get(0, 0) % M == 1 % M
+    terms = [(e, c % M) for e, c in sp if e > 0]
+    B = [0] * (N + 1)
+    B[0] = 1
+    for n in range(1, N + 1):
+        s = 0
+        for e, c in terms:
+            if e > n:
+                break
+            s += c * B[n - e]
+        B[n] = (-s) % M
+    return B
+
+
+def mul_sparse_mod(A: list[int], sp: list[tuple[int, int]], N: int, M: int) -> list[int]:
+    """Dense A times sparse sp; sp coefficients may be any residue."""
+    C = [0] * (N + 1)
+    for e, c in sp:
+        if e > N:
+            continue
+        if c == 1:
+            for i in range(0, N - e + 1):
+                a = A[i]
+                if a:
+                    C[i + e] += a
+        elif c == -1:
+            for i in range(0, N - e + 1):
+                a = A[i]
+                if a:
+                    C[i + e] -= a
+        else:
+            for i in range(0, N - e + 1):
+                a = A[i]
+                if a:
+                    C[i + e] += c * a
+    return [x % M for x in C]
+
+
+def _pack(A: list[int], nb: int) -> int:
+    b = bytearray()
+    for a in A:
+        b += int(a).to_bytes(nb, "little")
+    return int.from_bytes(bytes(b), "little")
+
+
+def kmul_mod(A: list[int], B: list[int], N: int, M: int) -> list[int]:
+    """Dense x dense via Kronecker substitution, truncated to degree N.
+
+    Limb width is chosen so no product coefficient can carry into its
+    neighbour: every coefficient is < (N+1)*(M-1)^2.
+    """
+    nb = ((N + 1) * (M - 1) ** 2).bit_length() // 8 + 2
+    x = _pack(A[: N + 1], nb) * _pack(B[: N + 1], nb)
+    raw = x.to_bytes(nb * (2 * (N + 1) + 2), "little")
+    return [
+        int.from_bytes(raw[i * nb : (i + 1) * nb], "little") % M
+        for i in range(N + 1)
+    ]
+
+
+def pdn1_series_mod(N: int, M: int) -> list[int]:
+    """Sum PDN1(n) q^n mod M, to degree N."""
+    invJ1 = inv_sparse(penta_sparse(1, N), N, M)
+    Y = mul_sparse_mod(invJ1, penta_sparse(2, N), N, M)   # J_2 / J_1
+    Y2 = kmul_mod(Y, Y, N, M)                             # J_2^2 / J_1^2
+    return kmul_mod(Y2, inv_sparse(jacobi_cube_sparse(N), N, M), N, M)
+
+
+def pdn1_fastpath_selftest(P_exact: list[int]) -> dict:
+    """Fast mod path must reproduce the exact dense oracle exactly."""
+    n = min(len(P_exact) - 1, 150)
+    M = 10 ** 50
+    fast = pdn1_series_mod(n, M)
+    bad = [i for i in range(n + 1) if P_exact[i] % M != fast[i]]
+    return {
+        "degree": n,
+        "modulus": "10^50",
+        "mismatches": len(bad),
+        "first_bad": bad[:5],
+        "ok": not bad,
+    }
+
+
 def residue_thm11(alpha: int, kind: str, r: int | None = None) -> tuple[int, int, int]:
-    """Return (modulus, residue, power) for Theorem 1.1 instances."""
+    """Return (modulus, residue, power) for Theorem 1.1 instances.
+
+    The // 24 is only meaningful when 24 actually divides the numerator; a
+    silent floor would test a progression the paper never stated.
+    """
     if kind == "1.7":
-        mod = 5 ** (2 * alpha)
-        res = (23 * 5 ** (2 * alpha) + 1) // 24
-        power = 5**alpha
-        return mod, res, power
+        num = 23 * 5 ** (2 * alpha) + 1
+        assert num % 24 == 0, f"(1.7) alpha={alpha}: 24 does not divide {num}"
+        return 5 ** (2 * alpha), num // 24, 5 ** alpha
     if kind == "1.8":
         assert r is not None
-        mod = 5 ** (2 * alpha + 1)
-        res = (r * 5 ** (2 * alpha) + 1) // 24
-        power = 5 ** (alpha + 1)
-        return mod, res, power
+        num = r * 5 ** (2 * alpha) + 1
+        assert num % 24 == 0, f"(1.8) alpha={alpha} r={r}: 24 does not divide {num}"
+        return 5 ** (2 * alpha + 1), num // 24, 5 ** (alpha + 1)
     raise ValueError(kind)
 
 
 def residue_thm12(alpha: int, kind: str) -> tuple[int, int, int]:
     if kind == "1.9":
-        mod = 7 ** (2 * alpha - 1)
-        res = (17 * 7 ** (2 * alpha - 1) + 1) // 24
-        power = 7**alpha
-        return mod, res, power
+        num = 17 * 7 ** (2 * alpha - 1) + 1
+        assert num % 24 == 0, f"(1.9) alpha={alpha}: 24 does not divide {num}"
+        return 7 ** (2 * alpha - 1), num // 24, 7 ** alpha
     if kind == "1.10":
-        mod = 7 ** (2 * alpha)
-        res = (23 * 7 ** (2 * alpha) + 1) // 24
-        power = 7 ** (alpha + 1)
-        return mod, res, power
+        num = 23 * 7 ** (2 * alpha) + 1
+        assert num % 24 == 0, f"(1.10) alpha={alpha}: 24 does not divide {num}"
+        return 7 ** (2 * alpha), num // 24, 7 ** (alpha + 1)
     raise ValueError(kind)
 
 
-def check_progression(
-    P: list[int], mod: int, res: int, power: int, *, nmax: int
-) -> dict:
+def check_progression(P: list[int], mod: int, res: int, power: int, *, N: int) -> dict:
+    """Every index = res (mod `mod`) up to N must vanish mod `power`.
+
+    `ok` requires checked > 0: a progression whose first index already exceeds
+    N is reported out_of_range, never as a silent pass.
+    """
     fails: list[dict] = []
     checked = 0
-    for n in range(nmax):
+    n = 0
+    while True:
         idx = mod * n + res
-        if idx >= len(P):
+        if idx > N:
             break
         checked += 1
         if P[idx] % power != 0:
-            fails.append({"n": n, "index": idx, "value": P[idx]})
+            fails.append({"n": n, "index": idx, "residue": P[idx] % power})
             if len(fails) >= 3:
                 break
+        n += 1
     return {
         "mod": mod,
         "residue": res,
         "power": power,
         "checked": checked,
+        "out_of_range": checked == 0,
         "ok": len(fails) == 0 and checked > 0,
         "failures": fails,
     }
 
 
-def run_congruences(P: list[int]) -> dict:
+def run_congruences(P5: list[int], P7: list[int], N: int) -> dict:
+    """Theorem 1.1 (5-adic) and 1.2 (7-adic) progressions through alpha = 3.
+
+    A row the depth N cannot reach is recorded out_of_range and excluded from
+    all_ok, so the meta always shows which alpha were actually exercised.
+    """
     rows = []
-    specs = [
-        ("1.7", 1, None, 20),
-        ("1.8", 1, 71, 4),
-        ("1.8", 1, 119, 4),
-        ("1.7", 2, None, 1),
-        ("1.9", 1, None, 40),
-        ("1.10", 1, None, 10),
-        ("1.9", 2, None, 2),
-    ]
-    all_ok = True
-    for kind, alpha, r, nmax in specs:
-        if kind.startswith("1.7") or kind.startswith("1.8"):
-            mod, res, power = residue_thm11(alpha, kind, r)
-            label = f"Thm1.1 {kind} α={alpha}" + (f" r={r}" if r else "")
-        else:
-            mod, res, power = residue_thm12(alpha, kind)
-            label = f"Thm1.2 {kind} α={alpha}"
-        row = check_progression(P, mod, res, power, nmax=nmax)
-        row["label"] = label
+    for alpha in (1, 2, 3):
+        mod, res, power = residue_thm11(alpha, "1.7")
+        row = check_progression(P5, mod, res, power, N=N)
+        row["label"] = f"Thm1.1 (1.7) alpha={alpha}"
         rows.append(row)
-        all_ok = all_ok and row["ok"]
-    return {"rows": rows, "all_ok": all_ok}
+    for alpha in (1, 2, 3):
+        for r in (71, 119):
+            mod, res, power = residue_thm11(alpha, "1.8", r)
+            row = check_progression(P5, mod, res, power, N=N)
+            row["label"] = f"Thm1.1 (1.8) alpha={alpha} r={r}"
+            rows.append(row)
+    for alpha in (1, 2, 3):
+        mod, res, power = residue_thm12(alpha, "1.9")
+        row = check_progression(P7, mod, res, power, N=N)
+        row["label"] = f"Thm1.2 (1.9) alpha={alpha}"
+        rows.append(row)
+    for alpha in (1, 2, 3):
+        mod, res, power = residue_thm12(alpha, "1.10")
+        row = check_progression(P7, mod, res, power, N=N)
+        row["label"] = f"Thm1.2 (1.10) alpha={alpha}"
+        rows.append(row)
+
+    exercised = [r for r in rows if not r["out_of_range"]]
+    reached = sorted({r["label"].split("alpha=")[1].split()[0] for r in exercised})
+    return {
+        "depth_N": N,
+        "rows": rows,
+        "data_points": sum(r["checked"] for r in rows),
+        "alpha_reached": reached,
+        "out_of_range_rows": [r["label"] for r in rows if r["out_of_range"]],
+        "all_ok": all(r["ok"] for r in exercised) and len(exercised) > 0,
+    }
 
 
 def notebook_status() -> dict:
@@ -364,7 +521,10 @@ def notebook_status() -> dict:
 
 def main() -> int:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    P = pdn1_series(PDN1_N)
+    deep = "--deep" in sys.argv
+    N = PDN1_DEEP_N_FULL if deep else PDN1_DEEP_N
+
+    P = pdn1_series(PDN1_EXACT_N)
     gf = {
         "formula": "J_2^2 / J_1^5",
         "PDN1_2": P[2],
@@ -372,11 +532,14 @@ def main() -> int:
         "ok": P[2] == 18,
         "head": P[:12],
     }
-    cong = run_congruences(P)
+    selftest = pdn1_fastpath_selftest(P)
+    P5 = pdn1_series_mod(N, 5 ** 10)
+    P7 = pdn1_series_mod(N, 7 ** 9)
+    cong = run_congruences(P5, P7, N)
     mod_eq = check_modular_eq_313(MOD_EQ_N)
     notebooks = notebook_status()
 
-    if not gf["ok"] or not cong["all_ok"] or not mod_eq["ok"]:
+    if not gf["ok"] or not selftest["ok"] or not cong["all_ok"] or not mod_eq["ok"]:
         verdict = "BREAK"
     else:
         verdict = "PASS"
@@ -387,13 +550,15 @@ def main() -> int:
         "source": "arXiv:2503.00004",
         "pdf": "incoming/pdn1-2503.00004.pdf",
         "generating_function": gf,
+        "fastpath_selftest": selftest,
         "congruences": cong,
         "modular_eq_313": mod_eq,
         "notebook_replay": notebooks,
         "verdict": verdict,
         "note": (
-            "PASS escalates the Type-D GF/congruence/(3.13) route. "
-            "Does not certify (4.8) or the full Mathematica supplements."
+            "PASS escalates the Type-D GF/congruence/(3.13) route. Does not "
+            "certify (4.8) or the full Mathematica supplements, and does not "
+            "attack the induction as a logical-gap (Type G) target."
         ),
     }
     out = RESULTS / "pdn1_gate_meta.json"
@@ -401,11 +566,23 @@ def main() -> int:
 
     print("[PASS] pdn1" if verdict == "PASS" else "[BREAK] pdn1")
     print(f"  GF PDN1(2)={P[2]} (expect 18): {'ok' if gf['ok'] else 'FAIL'}")
+    print(
+        f"  fastpath selftest vs exact oracle: "
+        f"{'ok' if selftest['ok'] else 'FAIL'} "
+        f"(deg {selftest['degree']}, {selftest['mismatches']} mismatches)"
+    )
+    print(
+        f"  congruence depth N={cong['depth_N']} "
+        f"points={cong['data_points']} alpha reached={cong['alpha_reached']}"
+    )
     for row in cong["rows"]:
+        if row["out_of_range"]:
+            print(f"  {row['label']}: out_of_range (first index > N)")
+            continue
         print(
             f"  {row['label']}: "
             f"{'ok' if row['ok'] else 'FAIL'} "
-            f"checked={row['checked']} ≡0 (mod {row['power']}) "
+            f"checked={row['checked']} =0 (mod {row['power']}) "
             f"on {row['mod']}n+{row['residue']}"
         )
     print(
