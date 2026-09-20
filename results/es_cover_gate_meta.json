@@ -1,0 +1,334 @@
+{
+  "timestamp": "2026-09-20T02:59:50.758453+00:00",
+  "phase": "2e",
+  "source": "arXiv:2404.01508",
+  "pdf": "incoming/erdos-straus-2404.01508.pdf",
+  "hard_residues_mod_840": [
+    1,
+    121,
+    169,
+    289,
+    361,
+    529
+  ],
+  "conjecture": "exists d,n: p \u2261 -4d (mod 4dn-1) or p \u2261 -n (mod 4dn-1)",
+  "first_pass": {
+    "limit": 10000,
+    "hard_prime_count": 27,
+    "stats": {
+      "A_only": 2,
+      "B_only": 1,
+      "both": 24,
+      "neither": 0
+    },
+    "uncovered": [],
+    "sample_covered": [
+      {
+        "p": 1009,
+        "residue_mod_840": 169,
+        "type_A": {
+          "d": 11,
+          "n": 8,
+          "solution": [
+            253,
+            88792,
+            2042216
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 1,
+          "n": 92,
+          "solution": [
+            276,
+            3027,
+            92828
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 1129,
+        "residue_mod_840": 289,
+        "type_A": {
+          "d": 1,
+          "n": 26,
+          "solution": [
+            285,
+            29354,
+            8365890
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 5,
+          "n": 29,
+          "solution": [
+            290,
+            11290,
+            163705
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 1201,
+        "residue_mod_840": 361,
+        "type_A": {
+          "d": 2,
+          "n": 5,
+          "solution": [
+            308,
+            12010,
+            1849540
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 1,
+          "n": 39,
+          "solution": [
+            312,
+            9608,
+            46839
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 1801,
+        "residue_mod_840": 121,
+        "type_A": {
+          "d": 1,
+          "n": 24,
+          "solution": [
+            455,
+            43224,
+            19666920
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 1,
+          "n": 164,
+          "solution": [
+            492,
+            5403,
+            295364
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 2521,
+        "residue_mod_840": 1,
+        "type_A": null,
+        "type_B": {
+          "d": 11,
+          "n": 29,
+          "solution": [
+            638,
+            55462,
+            804199
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 2689,
+        "residue_mod_840": 169,
+        "type_A": {
+          "d": 2,
+          "n": 11,
+          "solution": [
+            680,
+            59158,
+            20113720
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 1,
+          "n": 87,
+          "solution": [
+            696,
+            21512,
+            233943
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      }
+    ],
+    "all_covered": true
+  },
+  "wide_pass": {
+    "limit": 100000,
+    "hard_prime_count": 273,
+    "stats": {
+      "A_only": 3,
+      "B_only": 2,
+      "both": 268,
+      "neither": 0
+    },
+    "uncovered": [],
+    "sample_covered": [
+      {
+        "p": 1009,
+        "residue_mod_840": 169,
+        "type_A": {
+          "d": 11,
+          "n": 8,
+          "solution": [
+            253,
+            88792,
+            2042216
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 1,
+          "n": 92,
+          "solution": [
+            276,
+            3027,
+            92828
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 1129,
+        "residue_mod_840": 289,
+        "type_A": {
+          "d": 1,
+          "n": 26,
+          "solution": [
+            285,
+            29354,
+            8365890
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 5,
+          "n": 29,
+          "solution": [
+            290,
+            11290,
+            163705
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 1201,
+        "residue_mod_840": 361,
+        "type_A": {
+          "d": 2,
+          "n": 5,
+          "solution": [
+            308,
+            12010,
+            1849540
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 1,
+          "n": 39,
+          "solution": [
+            312,
+            9608,
+            46839
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 1801,
+        "residue_mod_840": 121,
+        "type_A": {
+          "d": 1,
+          "n": 24,
+          "solution": [
+            455,
+            43224,
+            19666920
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 1,
+          "n": 164,
+          "solution": [
+            492,
+            5403,
+            295364
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 2521,
+        "residue_mod_840": 1,
+        "type_A": null,
+        "type_B": {
+          "d": 11,
+          "n": 29,
+          "solution": [
+            638,
+            55462,
+            804199
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      },
+      {
+        "p": 2689,
+        "residue_mod_840": 169,
+        "type_A": {
+          "d": 2,
+          "n": 11,
+          "solution": [
+            680,
+            59158,
+            20113720
+          ],
+          "egyptian_ok": true
+        },
+        "type_B": {
+          "d": 1,
+          "n": 87,
+          "solution": [
+            696,
+            21512,
+            233943
+          ],
+          "egyptian_ok": true
+        },
+        "covered": true
+      }
+    ],
+    "all_covered": true
+  },
+  "odd_k_side_check": {
+    "note": "NOT the covering gate. Appendix II odd-k fold only.",
+    "sample_odd_k_count": 100,
+    "failures": [],
+    "ok": true,
+    "hard_residues_all_even_k": true
+  },
+  "verdict": "PASS",
+  "note": "PASS escalates \u2014 does not prove ESC. BREAK is a covering-route kill, not a claim that ESC is false."
+}

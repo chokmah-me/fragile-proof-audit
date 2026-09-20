@@ -2,7 +2,7 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — resume in a fresh session here  
+**Checkpoint:** 2026-09-20 — Phase 2(f) PASS (Ore capability-limited); resume at 2(g)  
 **Pin:** Lean / mathlib `v4.32.2` (same as `catalan-sun-lean`)  
 **Compute:** laptop · Python (`mpmath`, `Fraction`, SymPy) · no Sage/Magma/cluster  
 
@@ -12,47 +12,14 @@ This file is the **executable resume checklist**. Full harvest ranking lives in
 
 ---
 
-## Resume here — Phase 2(e) Erdős–Straus covering
+## Resume here — Phase 2(g) PDN1
 
-**Source:** arXiv:2404.01508 (*A Complete Congruence System for the Erdős–Straus Conjecture*)  
-**Blueprint to fill:** `docs/blueprint/es-covering.md` (create on resume)  
-**Attack type:** F (counterexample search) on a **live** covering claim  
-**Gate:** `scripts/gates/es_cover.py` → `results/es_cover_gate_meta.json`
+**Source:** arXiv:2503.00004  
+**First milestone:** Diff authors’ notebooks / replay declared computations  
+**Attack type:** E (CAS transcript) / computational claim gate  
 
-### Why this, not Kim, not more odd-zeta
-
-- 1(a) already trained **G** (statement non-fidelity).
-- 1(b) already trained **B** (base-case kill).
-- 2(d) already showed odd-zeta `Λ_m` is **not evaluable** — there is no `m`-sweep.
-- Kim’s `n_k` table would train **F** on a 2011 corpse (cheap appendix, not a blocker).
-- Erdős–Straus trains **F** on a live covering lemma: one uncovered prime in a hard
-  class mod 840 kills the route. A pass **escalates**.
-
-### Day checklist (do in order)
-
-1. **Extract before Python**
-   - Download arXiv:2404.01508 into `incoming/`.
-   - Quote the claimed covering families and the hard residues
-     `{1, 121, 169, 289, 361, 529}` mod 840.
-   - Write `docs/blueprint/es-covering.md` with those quotes. No Lean yet.
-2. **Numeric gate** — `scripts/gates/es_cover.py`
-   - Exact `Fraction` / integer arithmetic only.
-   - First pass: primes `< 10^4` in the six hard classes (widen to `< 10^5` if clean).
-   - Log first uncovered prime **or** first parameter that violates the paper’s
-     divisibility (e.g. the “automatic” odd-`k` fold).
-   - Register in `scripts/gates/check.py`; write `results/es_cover_gate_meta.json`.
-3. **Lean only after a green (or BREAK) gate**
-   - If BREAK: a witness prime + `not_covered` lemma; do **not** claim ESC is false.
-   - If PASS: stop and escalate — do not force a kill.
-4. **Acceptance**
-   - [ ] Quoted families in blueprint
-   - [ ] Gate ran; meta JSON written
-   - [ ] `pwsh ./scripts/verify.ps1` green
-   - [ ] Note under `docs/audits/es-covering.md` (lemma · instance · false instance,
-         or “survived this sweep”)
-
-**Abort:** if the paper’s families cannot be transcribed into an executable checker
-→ same treatment as 2(d): **BREAK underspecified**, do not invent identities.
+Do not reopen 2(e)/2(f) as kills — both **PASS**ed their executable gates
+(2(f) OreReduce remains capability-limited, not a BREAK).
 
 ---
 
@@ -65,8 +32,8 @@ pip install -r requirements.txt
 pwsh ./scripts/verify.ps1
 ```
 
-Expect: harness 6/6, `suman_eq48` PASS (verdict BREAK), `odd_zeta_1609` PASS
-(verdict BREAK, `Λ_m` unevaluable), lake + forge VERIFIED.
+Expect: harness 6/6, `suman_eq48` PASS (BREAK), `odd_zeta_1609` PASS (BREAK),
+`es_cover` PASS, `rr_qexpand` PASS (Ore capability-limited), lake + forge VERIFIED.
 
 ---
 
@@ -93,9 +60,11 @@ Expect: harness 6/6, `suman_eq48` PASS (verdict BREAK), `odd_zeta_1609` PASS
 | **1(a)** γ | **G** — statement non-fidelity. Proves `¬ is_rational_gamma`, not mathlib γ | `docs/audits/gamma-aejonanonymous.md` |
 | **1(b)** Suman ζ(5) | **B** — Eq. (48) at `n=1` has `a=2b`, `a=b` under `0 ≤ k ≤ d_1` | `docs/audits/suman-zeta5.md`, `scripts/gates/suman_eq48.py`, `FragileProofAudit/SumanZeta5/BaseCase.lean` |
 | **2(d)** odd-zeta 202601.1609 | **BREAK** — Lemma 3.2 is an LCM, not a sequence; `Λ_m` at ζ(5) unevaluable | `docs/audits/odd-zeta-202601.md`, `scripts/gates/odd_zeta_1609.py` |
+| **2(e)** Erdős–Straus 2404.01508 | **PASS (escalate)** — Conjecture 1 covers all hard-class primes `< 10^5`; odd-`k` fold side-check OK; no Lean kill | `docs/audits/es-covering.md`, `scripts/gates/es_cover.py`, `incoming/erdos-straus-2404.01508.pdf` |
+| **2(f)** RR / HJO 2608.05480+15219 | **PASS** on Type-D \(Z=P\) q-expand + Lemma 12; OreReduce (34) **capability-limited** (no RISC) | `docs/audits/rr-qexpand.md`, `scripts/gates/rr_qexpand.py` |
 | **Criterion module** | Apéry-shaped `irrational_of_integer_forms_tendsto_zero` | `FragileProofAudit/IrrationalityCriterion.lean` |
 
-Last pushed commit at checkpoint: `278b801` (2(d) extract BREAK).
+Last checkpoint before 2(e)/2(f) landings: `a73e6a7` (WORKPLAN resume pin).
 
 ---
 

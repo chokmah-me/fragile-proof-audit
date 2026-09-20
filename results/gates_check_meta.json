@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-09-20T00:54:59.602382+00:00",
-  "phase": "2d",
+  "timestamp": "2026-09-20T02:59:57.011911+00:00",
+  "phase": "2f",
   "gates": [
     {
       "name": "harness_selftest",
@@ -14,6 +14,16 @@
     },
     {
       "name": "odd_zeta_1609",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "es_cover",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "rr_qexpand",
       "ok": true,
       "exit_code": 0
     }

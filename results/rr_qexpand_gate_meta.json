@@ -1,0 +1,198 @@
+{
+  "timestamp": "2026-09-20T02:59:57.000759+00:00",
+  "phase": "2f",
+  "sources": [
+    "arXiv:2608.05480",
+    "arXiv:2608.15219"
+  ],
+  "pdfs": [
+    "incoming/rr-2608.05480.pdf",
+    "incoming/rr-2608.15219.pdf"
+  ],
+  "zp_expand": {
+    "checks": [
+      {
+        "a": 2,
+        "b": 3,
+        "N": 40,
+        "ok": true,
+        "first_diff_degree": null,
+        "P_head": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          3,
+          3
+        ],
+        "Z_head": [
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          3,
+          3
+        ],
+        "gap_count": 1
+      },
+      {
+        "a": 3,
+        "b": 4,
+        "N": 30,
+        "ok": true,
+        "first_diff_degree": null,
+        "P_head": [
+          1,
+          2,
+          3,
+          5,
+          8,
+          11,
+          17,
+          24
+        ],
+        "Z_head": [
+          1,
+          2,
+          3,
+          5,
+          8,
+          11,
+          17,
+          24
+        ],
+        "gap_count": 3
+      },
+      {
+        "a": 3,
+        "b": 5,
+        "N": 24,
+        "ok": true,
+        "first_diff_degree": null,
+        "P_head": [
+          1,
+          2,
+          4,
+          6,
+          11,
+          16,
+          25,
+          36
+        ],
+        "Z_head": [
+          1,
+          2,
+          4,
+          6,
+          11,
+          16,
+          25,
+          36
+        ],
+        "gap_count": 4
+      },
+      {
+        "a": 3,
+        "b": 7,
+        "N": 15,
+        "ok": true,
+        "first_diff_degree": null,
+        "P_head": [
+          1,
+          2,
+          5,
+          8,
+          15,
+          24,
+          40,
+          60
+        ],
+        "Z_head": [
+          1,
+          2,
+          5,
+          8,
+          15,
+          24,
+          40,
+          60
+        ],
+        "gap_count": 6
+      },
+      {
+        "a": 3,
+        "b": 8,
+        "N": 12,
+        "ok": true,
+        "first_diff_degree": null,
+        "P_head": [
+          1,
+          2,
+          5,
+          9,
+          16,
+          27,
+          45,
+          70
+        ],
+        "Z_head": [
+          1,
+          2,
+          5,
+          9,
+          16,
+          27,
+          45,
+          70
+        ],
+        "gap_count": 7
+      }
+    ],
+    "all_ok": true
+  },
+  "lemma12": {
+    "source": "2608.15219 Lemma 12 (b=4)",
+    "degree": 50,
+    "rows": [
+      {
+        "r1": 0,
+        "ok": true,
+        "first_diff_degree": null
+      },
+      {
+        "r1": 1,
+        "ok": true,
+        "first_diff_degree": null
+      },
+      {
+        "r1": 2,
+        "ok": true,
+        "first_diff_degree": null
+      },
+      {
+        "r1": 3,
+        "ok": true,
+        "first_diff_degree": null
+      },
+      {
+        "r1": 4,
+        "ok": true,
+        "first_diff_degree": null
+      }
+    ],
+    "all_ok": true
+  },
+  "ore_reduce_34": {
+    "source": "2608.15219 identity (34) / OreReduce cofactors",
+    "status": "capability-limited",
+    "reason": "Verification needs RISC HolonomicFunctions OreReduce over a q-shift operator algebra (Mathematica). Campaign stack is Python mpmath/Fraction/SymPy only \u2014 no Sage/Magma/RISC. Authors state (34) is independently checkable from printed cofactors; we do not invent those operators here.",
+    "note": "Blocked replay is not a BREAK of Z=P."
+  },
+  "verdict": "PASS",
+  "note": "PASS escalates the Type-D q-expand route; does not certify the geometric point-count identification or the b=8 Ore proof. BREAK is a coefficient mismatch, not a claim that HJO is false.",
+  "harvest_correction": "2608.05480 eq. (5) is the published HJO geometric identity S_q = Z(q^{-1}) prod (1-q^{-n})^{-1}, not an unpublished q-series."
+}

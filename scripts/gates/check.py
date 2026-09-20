@@ -17,6 +17,8 @@ RESULTS = ROOT / "results"
 HARNESS_SELFTEST = ROOT / "scripts" / "harness" / "selftest.py"
 SUMAN_EQ48 = ROOT / "scripts" / "gates" / "suman_eq48.py"
 ODD_ZETA_1609 = ROOT / "scripts" / "gates" / "odd_zeta_1609.py"
+ES_COVER = ROOT / "scripts" / "gates" / "es_cover.py"
+RR_QEXPAND = ROOT / "scripts" / "gates" / "rr_qexpand.py"
 
 
 def run_script(name: str, path: Path) -> dict:
@@ -47,14 +49,28 @@ def run_odd_zeta_1609() -> dict:
     return run_script("odd_zeta_1609", ODD_ZETA_1609)
 
 
+def run_es_cover() -> dict:
+    return run_script("es_cover", ES_COVER)
+
+
+def run_rr_qexpand() -> dict:
+    return run_script("rr_qexpand", RR_QEXPAND)
+
+
 def main() -> int:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    # Phase 1(b)+2(d): harness + Suman Eq. (48) + odd-zeta underspecification gate.
-    results = [run_harness(), run_suman_eq48(), run_odd_zeta_1609()]
+    # Phase 1(b)+2(d)+2(e)+2(f): harness + Suman + odd-zeta + ESC + RR q-expand.
+    results = [
+        run_harness(),
+        run_suman_eq48(),
+        run_odd_zeta_1609(),
+        run_es_cover(),
+        run_rr_qexpand(),
+    ]
     failed = [r for r in results if not r["ok"]]
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "phase": "2d",
+        "phase": "2f",
         "gates": [
             {
                 "name": r["name"],
