@@ -1,37 +1,93 @@
-# Audit note — odd-zeta preprint 202601.1609 (Phase 2(d) extract)
+# Audit note — odd-zeta preprint 202601.1609 (Phase 2(d), corrected 2026-09-20)
 
 **Claim artifact:** Archan Chattopadhyay, *On the Irrationality of the Odd Zeta Values*,
-Preprints.org 202601.1609.v1 (doi:10.20944/preprints202601.1609.v1).  
+Preprints.org 202601.1609.v1 (doi:10.20944/preprints202601.1609.v1).
 **Campaign objects:** `docs/blueprint/odd-zeta-202601.md`,
 `scripts/gates/odd_zeta_1609.py`, `results/odd_zeta_gate_meta.json`.
 
-## Bug report (lemma · instance · false instance)
+**PDF pin:** `incoming/odd-zeta-202601/preprints202601.1609.v1.pdf`
+sha256 `686998ff30f778fba4aa9a3874ccf09637bd76663a4edb7c39fae24b1125aae2`
+(gitignored per repo convention; SHA recorded here and in the gate meta JSON).
+
+## Correction to the prior (2026-09) verdict
+
+The original Phase 2(d) note, written against OCR/indexed excerpts before the
+PDF could be pinned, claimed:
+
+> Lemma 3.2 defines `A_m := D_m` (an LCM) and `B_m := Ω D L_{≤K}`; `W_m`,
+> `Ω_m`, `F_{m,k}`, `K`, `D_m` have no closed evaluable form. `Λ_m` is not a
+> number.
+
+**This is false.** Against the actual PDF, every symbol in Lemma 3.2 is an
+explicit finite object:
+
+- `W_m^{(q)}(x) := C((q+1)m, m) x^m(1-x)^{qm}` — explicit polynomial.
+- `Ω_m^{(q)} := (q+1)m + 1` — explicit integer.
+- `F_{m,k}^{(q)} := ((q+1)m)!(m+k)! / (m!((q+1)m+k+1)!)` — explicit rational.
+- `D_m^{(q)} := lcm_{1≤k≤K} den(F_{m,k}/k^{2n+1})` — explicit LCM, computable
+  for any finite `K`.
+- `A_m := D_m`, `B_m := Ω_m D_m L_m^{(≤K)}`, `Λ_m := A_m ζ(2n+1) − B_m`.
+
+`scripts/gates/odd_zeta_1609.py::demonstrate_lambda_evaluable` computes
+`A_m, B_m, Λ_m` exactly at `n=2` (ζ(5)), `m=4`, `q=1`, `K=4` — a concrete
+witness that the construction is a real number, not a symbolic dead end.
+**That specific BREAK is retired.**
+
+## The real break: Lemma 5.1 never fires (Phase 2(d), reopened as BREAK)
+
+### Bug report (lemma · instance · false instance)
 
 | Field | Content |
 |---|---|
-| **Lemma** | There exist explicit integer forms `Λ_m^{(q)} = A_m^{(q)} ζ(2n+1) − B_m^{(q)}` whose size tends to 0 |
-| **Instance** | `ζ(5)` (`n=2`), any explicit `(m,q)` — campaign asked for `m=1,q=1` |
-| **False instance** | Lemma 3.2 defines `A_m := D_m` (an LCM) and `B_m := Ω D L_{≤K}`; `W_m`, `Ω_m`, `F_{m,k}`, `K`, `D_m` have no closed evaluable form. `Λ_m` is not a number |
+| **Lemma 5.1** | "With λ>0, there exist parameters `q ∈ ℕ, δ ∈ (0,1), α>0` which satisfy (24)," where (24) is `1+q+λα < min(γ^{(q)}(α), −log δ)` and `λ := κ+2`, `κ := 2n+1` |
+| **Instance** | The paper's own λ, i.e. `λ = 2n+3` for `n = 1, 2, 3, 4, 5` (ζ(3), ζ(5), ζ(7), ζ(9), ζ(11)) |
+| **False instance** | For every admissible `q > e^λ−1` sampled across ~300 orders of magnitude above that boundary, `g(α*)` — the paper's own closed form at its unique critical point `α* := q/(e^λ−1) − 1` — is **strictly positive**. No `q` exists making `g(α*) < 0`, so no admissible `(q, α, δ)` exists |
 
-This is harvest outcome three: *asymptotic claims asserted without displayed computation.*
-It is a **route** kill (displayed-forms + decay), not a claim that odd zetas are rational.
+**Verdict: BREAK.** Lemma 5.1's displayed existence claim is false at every
+`n ≥ 1` the theorem claims to cover — including `n = 1` (ζ(3)), which is
+already known true by Apéry, but this paper's own construction cannot reach
+even that case. Without admissible parameters, condition (24) never holds,
+the exponential-decay bound of §4.3 is never invoked, the hypothesis of
+Theorem 5.1 (the irrationality criterion) is never established, and
+Theorem 1.1 is unproven by this route for every odd zeta value.
 
-## What was gated
+### What was gated
 
-- Attempted `Λ_m` at ζ(5): **not evaluable**.
-- Side check only: the paper’s `g(α)` *can* be negative for some `(q,λ,α)` with
-  `λ < log(1+q)`. That is **not** `Λ_m`.
+Closed form (paper's own, verified against the PDF, eq. between (23)-(24)):
 
-## PDF pin
+```
+g(α*)(λ, q) = (1+q)(1 + log(1+q) − λ) − q·log(q/(e^λ − 1))
+```
 
-Official PDF 403 from preprints.org (Akamai). Quotes from indexed `download_pub`
-fulltext + ResearchGate OCR of the 11-page v1. Re-pin when a 200 OK exists;
-the evaluability BREAK does not depend on a local file.
+- At the domain boundary `q = e^λ − 1` (where `α* → 0`), `g(α*) = g(0) = 1+q
+  = e^λ` **exactly** — positive by construction, for any λ.
+- Sampled `q` from that boundary out to `qmin·10^300`, for `λ = 5, 7, 9, 11,
+  13` (n = 1..5): minimum observed `g(α*)` is `≈ e^λ` (achieved right at the
+  boundary) and it only grows from there. Never negative, anywhere sampled.
+- This is a numeric gate (finite sampling across 300 orders of magnitude,
+  monotone-looking, consistent with the paper's own `∂_λ g(α*) = q/(e^λ−1)
+  − 1 > 0` on the admissible domain), not a closed-form proof that no valid
+  `q` exists for *any* real number — but the sampled range comfortably
+  exceeds anything a numerical claim in a preprint could be relying on.
+- Contrast: the paper's own worked existence sketch implicitly needs `λ`
+  small (its limit argument `lim_{λ→0+} g(α*) = −∞` is real), but the
+  paper's *own* λ is pinned at `2n+3 ≥ 5` by its definition of κ. The
+  informal region where `g(α*) < 0` is achievable (small λ, moderate q) is
+  nowhere near the paper's actual operating point.
 
 ## Lean
 
-None. Gate-before-prove. `IrrationalityCriterion` already covers Theorem 5.1.
+None. Gate-before-prove; this is a numeric/analytic gate on the paper's own
+displayed closed form, not requiring a Lean slice to be informative. A Lean
+formalization (if ever pursued) would fix a rigorous upper bound proving
+`g(α*)(λ,q) > 0` for all `λ ≥ 5, q > e^λ−1` — likely tractable via the same
+convexity/monotonicity facts the paper itself proves (§5.1), turned against
+its own conclusion.
 
 ## Not done, on purpose
 
-Did not invent a Chen-1999 beta kernel. Did not fall back to Kim ζ(5).
+- Did not invent a Chen-1999 beta kernel.
+- Did not fall back to Kim ζ(5).
+- Did not claim a closed-form proof of `sup_q λ*(q) < 5`; the numeric
+  sampling across 300 orders of magnitude is the gate, consistent with this
+  project's "numeric gate, escalate if it ever flips" discipline.

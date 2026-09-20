@@ -1,104 +1,72 @@
 {
-  "timestamp": "2026-09-20T08:01:51.733051+00:00",
+  "timestamp": "2026-09-20T11:35:50.671515+00:00",
   "gate": "odd_zeta_1609",
-  "source_claim": "Preprints.org 202601.1609.v1",
+  "source_claim": "Preprints.org 202601.1609.v1 (Archan Chattopadhyay)",
   "doi": "10.20944/preprints202601.1609.v1",
-  "pdf_pinned": false,
-  "quoted_closed_forms": {
-    "g_alpha": "g(\u03b1) = 1+q+\u03bb\u03b1 + (1+q)log(1+q) + (1+\u03b1)log(1+\u03b1) \u2212 (1+q+\u03b1)log(1+q+\u03b1)",
-    "A_m_definition": "A_m^{(q)} := D_m^{(q)}  (LCM, not a sequence formula)",
-    "B_m_definition": "B_m^{(q)} := \u03a9_m D_m L_m^{(\u2264K)}",
-    "Lambda_m_definition": "\u039b_m = A_m \u03b6(2n+1) \u2212 B_m = \u03a9_m D_m L_m^{(>K)}"
+  "pdf_pinned": true,
+  "pdf_path": "incoming\\odd-zeta-202601\\preprints202601.1609.v1.pdf",
+  "pdf_sha256": "686998ff30f778fba4aa9a3874ccf09637bd76663a4edb7c39fae24b1125aae2",
+  "correction_2026_09_20": "Prior verdict (pdf_pinned=false) claimed Lambda_m 'has no closed evaluable form.' False: Lemma 3.2's A_m, B_m are finite rationals/lcms, demonstrated below. That claim is retired.",
+  "lambda_evaluable_demo": {
+    "kappa": 5,
+    "m": 4,
+    "q": 1,
+    "K": 4,
+    "A_m": "160123392",
+    "B_m": "81546525",
+    "Lambda_m": "84489864.4125018389149683576832303732491978464491252299415659",
+    "evaluable": true
   },
-  "required_for_Lambda": {
-    "W_m_q": "asymmetric beta kernel",
-    "S_m_q": "kernel CDF",
-    "Omega_m_q": "prefactor in (11)\u2013(12)",
-    "F_m_k": "weights in \u03a3 F_{m,k}/k^{2n+1}",
-    "L_m_q": "weighted / truncated polylog moments",
-    "K": "truncation cutoff as a function of m",
-    "D_m_q": "explicit LCM range for denominators"
-  },
-  "lambda_zeta5": {
-    "target": "zeta(5)",
-    "n": 2,
-    "requested": {
-      "m": 1,
-      "q": 1
-    },
-    "A_m": null,
-    "B_m": null,
-    "Lambda_m": null,
-    "missing_symbols": [
-      "W_m_q",
-      "S_m_q",
-      "Omega_m_q",
-      "F_m_k",
-      "L_m_q",
-      "K",
-      "D_m_q"
-    ],
-    "evaluable": false,
-    "reason": "Lemma 3.2 defines A_m as an LCM D_m and B_m via \u03a9, truncated moments L(\u2264K), and unnamed kernel W. No closed (m,q) \u2192 (A,B)."
-  },
-  "g_alpha_side_check": {
-    "note": "NOT the \u039b_m gate. Parameter existence for (24) only.",
-    "found_g_negative": true,
-    "samples": [
+  "lemma_5_1_parameter_existence": {
+    "note": "g(alpha*) sampled from q=qmin (boundary, alpha*->0) out to qmin*10^300. At the boundary g(alpha*)=g(0)=1+qmin=e^lambda exactly (positive by construction); no sampled q anywhere in between goes negative for any n>=1.",
+    "per_n": [
       {
-        "q": 1,
-        "lambda": 0.01,
-        "alpha_star": 98.50083333194551,
-        "g_at_alpha_star": -1.2338716582049756
+        "n": 1,
+        "lambda": 5,
+        "qmin": "147.413159102576603421115580040552279623487667593878989046753",
+        "g_at_qmin_boundary": "148.413159102576603421115580040552279623487667593878989046753",
+        "min_g_alpha_star_sampled": 148.4131738438925,
+        "admissible_q_found": false
       },
       {
-        "q": 1,
-        "lambda": 0.05,
-        "alpha_star": 18.50416649306586,
-        "g_at_alpha_star": 0.3156662520625133
+        "n": 2,
+        "lambda": 7,
+        "qmin": "1095.63315842845859926372023828812143244221913483361314378274",
+        "g_at_qmin_boundary": "1096.63315842845859926372023828812143244221913483361314378274",
+        "min_g_alpha_star_sampled": 1096.6332679917743,
+        "admissible_q_found": false
       },
       {
-        "q": 1,
-        "lambda": 0.1,
-        "alpha_star": 8.508331944775042,
-        "g_at_alpha_star": 0.9341259000758022
+        "n": 3,
+        "lambda": 9,
+        "qmin": "8102.08392757538400770999668943275996501147608783161346250016",
+        "g_at_qmin_boundary": "8103.08392757538400770999668943275996501147608783161346250016",
+        "min_g_alpha_star_sampled": 8103.084737783777,
+        "admissible_q_found": false
       },
       {
-        "q": 2,
-        "lambda": 0.01,
-        "alpha_star": 198.00166666389103,
-        "g_at_alpha_star": -4.320789533765264
+        "n": 4,
+        "lambda": 11,
+        "qmin": "59873.1417151978184553264857922577816142610796957409686527715",
+        "g_at_qmin_boundary": "59874.1417151978184553264857922577816142610796957409686527715",
+        "min_g_alpha_star_sampled": 59874.14770251199,
+        "admissible_q_found": false
       },
       {
-        "q": 2,
-        "lambda": 0.05,
-        "alpha_star": 38.00833298613172,
-        "g_at_alpha_star": -1.1817137132302946
-      },
-      {
-        "q": 2,
-        "lambda": 0.1,
-        "alpha_star": 18.016663889550085,
-        "g_at_alpha_star": 0.10520558279625902
-      },
-      {
-        "q": 5,
-        "lambda": 0.01,
-        "alpha_star": 496.50416665972756,
-        "g_at_alpha_star": -14.35746284342622
-      },
-      {
-        "q": 5,
-        "lambda": 0.05,
-        "alpha_star": 96.52083246532929,
-        "g_at_alpha_star": -6.449773292089105
+        "n": 5,
+        "lambda": 13,
+        "qmin": "442412.392008920503326102775949088281784391306060589715572359",
+        "g_at_qmin_boundary": "442413.392008920503326102775949088281784391306060589715572359",
+        "min_g_alpha_star_sampled": 442413.4362501597,
+        "admissible_q_found": false
       }
-    ]
+    ],
+    "any_admissible_q_found_for_n_ge_1": false
   },
   "verdict": "BREAK",
-  "lemma": "displayed integer forms \u039b_m^{(q)} = A_m \u03b6(2n+1) \u2212 B_m with evaluable A_m, B_m",
-  "instance": "\u03b6(5), m=1, q=1 (any explicit pair would have sufficed)",
-  "false_instance": "A_m, B_m are defined only in terms of ungiven D_m, \u03a9_m, L_m, K, W_m",
+  "lemma": "Lemma 5.1: for lambda>0 there exist q in N, delta in (0,1), alpha>0 satisfying (24): 1+q+lambda*alpha < min(gamma^{(q)}(alpha), -log delta)",
+  "instance": "lambda = 2n+3 for n=1..5 (the paper's own kappa=2n+1, lambda:=kappa+2)",
+  "false_instance": "g(alpha*(lambda,q)) is strictly positive for every admissible q>e^lambda-1, at every tested n>=1 (n=1..5); no witnessing q exists",
   "ok": true,
   "break_route": true
 }
