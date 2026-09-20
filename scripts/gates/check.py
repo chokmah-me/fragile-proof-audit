@@ -15,17 +15,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
 HARNESS_SELFTEST = ROOT / "scripts" / "harness" / "selftest.py"
+SUMAN_EQ48 = ROOT / "scripts" / "gates" / "suman_eq48.py"
 
 
-def run_harness() -> dict:
+def run_script(name: str, path: Path) -> dict:
     proc = subprocess.run(
-        [sys.executable, str(HARNESS_SELFTEST)],
+        [sys.executable, str(path)],
         cwd=str(ROOT),
         capture_output=True,
         text=True,
     )
     return {
-        "name": "harness_selftest",
+        "name": name,
         "exit_code": proc.returncode,
         "stdout": proc.stdout,
         "stderr": proc.stderr,
@@ -33,14 +34,22 @@ def run_harness() -> dict:
     }
 
 
+def run_harness() -> dict:
+    return run_script("harness_selftest", HARNESS_SELFTEST)
+
+
+def run_suman_eq48() -> dict:
+    return run_script("suman_eq48", SUMAN_EQ48)
+
+
 def main() -> int:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    # Phase 0: only the harness. Later phases append gate callables here.
-    results = [run_harness()]
+    # Phase 1(b): harness + Suman Eq. (48) base-case gate.
+    results = [run_harness(), run_suman_eq48()]
     failed = [r for r in results if not r["ok"]]
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "phase": 0,
+        "phase": "1b",
         "gates": [
             {
                 "name": r["name"],

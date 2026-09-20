@@ -1,0 +1,131 @@
+{
+  "timestamp": "2026-09-20T00:28:46.614436+00:00",
+  "gate": "suman_eq48",
+  "source_claim": "arXiv:2407.07121v6",
+  "source_refutation": "arXiv:2411.16774",
+  "equation": "d_n*a - 2*d_n*b = -k*b",
+  "constraints": "d_n | k*b, 0 <= k <= d_n, n >= 1",
+  "n": 1,
+  "d_1": 1,
+  "canonical_witnesses": [
+    {
+      "a": 2,
+      "b": 1,
+      "k": 0,
+      "family": "a=2b"
+    },
+    {
+      "a": 1,
+      "b": 1,
+      "k": 1,
+      "family": "a=b"
+    }
+  ],
+  "witness_count": 10,
+  "witnesses": [
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 2,
+      "b": 1,
+      "k": 0,
+      "a_over_b": "2/1"
+    },
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 1,
+      "b": 1,
+      "k": 1,
+      "a_over_b": "1/1"
+    },
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 4,
+      "b": 2,
+      "k": 0,
+      "a_over_b": "4/2"
+    },
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 2,
+      "b": 2,
+      "k": 1,
+      "a_over_b": "2/2"
+    },
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 6,
+      "b": 3,
+      "k": 0,
+      "a_over_b": "6/3"
+    },
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 3,
+      "b": 3,
+      "k": 1,
+      "a_over_b": "3/3"
+    },
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 8,
+      "b": 4,
+      "k": 0,
+      "a_over_b": "8/4"
+    },
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 4,
+      "b": 4,
+      "k": 1,
+      "a_over_b": "4/4"
+    },
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 10,
+      "b": 5,
+      "k": 0,
+      "a_over_b": "10/5"
+    },
+    {
+      "n": 1,
+      "d_n": 1,
+      "a": 5,
+      "b": 5,
+      "k": 1,
+      "a_over_b": "5/5"
+    }
+  ],
+  "families": {
+    "a_eq_2b": 5,
+    "a_eq_b": 5,
+    "other": 0
+  },
+  "empty_range_trap": {
+    "range_label": "Eq.(47)-style 1 <= k <= d_1 - 1",
+    "lo": 1,
+    "hi": 0,
+    "is_empty": true,
+    "note": "Do not use this range for the gate; induction targets Eq. (48)."
+  },
+  "zeta5_gap": {
+    "zeta5_approx": "1.0369277551433699263313654864570341680570809195019",
+    "gap_from_1": "0.036927755143369926331365486457034168057080919501914",
+    "gap_from_1_float": 0.03692775514336993,
+    "expected_gap_gt": 0.03,
+    "ok": true
+  },
+  "verdict": "BREAK",
+  "lemma": "Eq. (48) has no integer solutions",
+  "instance": "n=1, d_1=1, 0 <= k <= 1",
+  "false_instance": "solutions a=2b (k=0) and a=b (k=1) exist",
+  "ok": true
+}

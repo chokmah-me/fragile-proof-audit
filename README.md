@@ -11,7 +11,7 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
-| **Resume** | After Shabbat → **Phase 1(b) Suman ζ(5)** — see [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Resume** | **Phase 1(c) Kim ζ(5)** next — see [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 
 ---
 
@@ -79,8 +79,8 @@ re-attack it.
 |---|---|
 | **0** Readiness | **done** — pin, harness 6/6, forge VERIFIED, CI |
 | **1(a)** γ audit (`AEjonanonymous/Euler-Mascheroni`) | **done** — break: statement non-fidelity. Proves `¬ is_rational_gamma`, not mathlib γ. Brief: [`docs/audits/gamma-aejonanonymous.md`](docs/audits/gamma-aejonanonymous.md) |
-| **1(b)** Suman ζ(5) | **next** — derive k-range from paper; `IrrationalityCriterion` + base-case witnesses |
-| **1(c)** Kim ζ(5) | pending — ε-inequality + Tendsto / threshold kill |
+| **1(b)** Suman ζ(5) | **done** — Eq. (48) base-case kill; gate + Lean witnesses; brief [`docs/audits/suman-zeta5.md`](docs/audits/suman-zeta5.md) |
+| **1(c)** Kim ζ(5) | **next** — ε-inequality + Tendsto / threshold kill |
 | **2** Gates at scale | odd-zeta decay · Erdős–Straus cover · RR q-expand · PDN1 |
 | **3** Infrastructure | Agoh–Giuga kit · Lamé pinpoint · Sun batch `2603.29973` |
 
