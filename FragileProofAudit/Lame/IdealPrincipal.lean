@@ -23,14 +23,17 @@ For `z = re + im·θ` one has
 so `|N(z)| = 2` forces the Diophantine equation `a² + 23 b² = 8` already
 killed in `IdealWitness`.
 
-Under `IsDedekindDomain OKNeg23` (classical for `O_K`; not yet an instance on
-this coordinate model), any ideal of absolute norm `2` is therefore
-**not** `Submodule.IsPrincipal`, via mathlib `Ideal.absNorm_span_singleton`.
+Under `IsDedekindDomain OKNeg23` (now available as an instance via
+`FragileProofAudit.Lame.DedekindField`), any ideal of absolute norm `2` is
+therefore **not** `Submodule.IsPrincipal`, via mathlib
+`Ideal.absNorm_span_singleton`.
 
 Honest scope:
 * mathlib `Submodule.IsPrincipal` / `Ideal.absNorm` on the coordinate model
   `OKNeg23`, not yet `𝓞 (CyclotomicField 23 ℚ)`.
-* `IsDedekindDomain OKNeg23` remains a hypothesis (not an instance).
+* `IsDedekindDomain OKNeg23` is proved in `DedekindField.lean` (integral
+  closure of `ℤ` in `AdjoinRoot (X²−X+6)`); a concrete ideal with
+  `absNorm = 2` is still outstanding.
 * flt-regular lake dependency remains blocked by toolchain mismatch
   (upstream `v4.34.*` vs campaign pin `v4.32.2`).
 -/
@@ -121,8 +124,9 @@ theorem not_exists_generator_norm_two :
   rintro ⟨z, hz⟩
   exact no_algebra_norm_two z hz
 
-/-- **Ideal.IsPrincipal obstruction** (needs Dedekind on the model ring):
-an ideal of absolute norm `2` cannot be principal. -/
+/-- **Ideal.IsPrincipal obstruction**: an ideal of absolute norm `2` cannot be
+principal. The Dedekind hypothesis is discharged by the instance in
+`DedekindField`. -/
 theorem not_isPrincipal_of_absNorm_two [IsDedekindDomain OKNeg23]
     (I : Ideal OKNeg23) (hI : Ideal.absNorm I = 2) :
     ¬ Submodule.IsPrincipal I := by

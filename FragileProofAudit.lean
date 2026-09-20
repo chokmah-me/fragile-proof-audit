@@ -12,3 +12,5 @@ import FragileProofAudit.Lame.QuadraticWitness
 import FragileProofAudit.Lame.Maillet
 import FragileProofAudit.Lame.IdealWitness
 import FragileProofAudit.Lame.IdealPrincipal
+import FragileProofAudit.Lame.DedekindScratch
+import FragileProofAudit.Lame.DedekindField

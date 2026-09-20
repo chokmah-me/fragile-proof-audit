@@ -2,13 +2,13 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 3(i)+++ Ideal.IsPrincipal obstruction on `OKNeg23` VERIFIED;
-Phase 2(d) odd-zeta 202601.1609 REOPENED and RE-BROKEN on the pinned real PDF
-(Lemma 5.1 parameter-existence gate — the old "not evaluable" verdict is retired, see
+**Checkpoint:** 2026-09-20 — Phase 3(i)++++ `IsDedekindDomain OKNeg23` VERIFIED
+(via `IsIntegralClosure OKNeg23 ℤ L23`); Phase 3(i)+++ Ideal.IsPrincipal obstruction
+VERIFIED; Phase 2(d) odd-zeta 202601.1609 RE-BROKEN at Lemma 5.1 (see
 `docs/audits/odd-zeta-202601.md`);
-**resume at IsDedekindDomain instance / cyclotomic Ideal / proved h⁺, per-claim Agoh–Giuga,
-or draft the 2(d) Lemma 5.1 short note**  
- 
+**resume at concrete ideal with `absNorm = 2`, or cyclotomic Ideal / proved h⁺, or
+per-claim Agoh–Giuga** (2(d) write-up declined — gate stays as internal audit record)
+
 **Pin:** Lean / mathlib `v4.32.2` (same as `catalan-sun-lean`)  
 **Compute:** laptop · Python (`mpmath`, `Fraction`, SymPy) · no Sage/Magma/cluster  
 **Habit:** commit each phase when it lands (do not leave a dirty tree for the next session)
@@ -19,14 +19,16 @@ This file is the **executable resume checklist**. Full harvest ranking lives in
 
 ---
 
-## Resume here — after Phase 3(i)+++ Ideal.IsPrincipal on OKNeg23
+## Resume here — after Phase 3(i)++++ IsDedekindDomain OKNeg23
 
-**3(i) Lamé 1847:** **DONE through 3(i)+++** —
+**3(i) Lamé 1847:** **DONE through 3(i)++++** —
 gate \(h^-_{23}=3\); Lean Premise/QuadraticWitness/Maillet Bareiss;
 quadratic ideal gate + `no_norm_two_equation`;
 `IdealPrincipal` on `OKNeg23 := QuadraticAlgebra ℤ (-6) 1` with
-`Algebra.norm` bridge and `not_isPrincipal_of_absNorm_two` under
-`[IsDedekindDomain OKNeg23]`. Evidence: `FragileProofAudit/Lame/`,
+`Algebra.norm` bridge and `not_isPrincipal_of_absNorm_two`;
+**`IsDedekindDomain OKNeg23` instance** via
+`IsIntegralClosure OKNeg23 ℤ L23` (`DedekindScratch` + `DedekindField`).
+Evidence: `FragileProofAudit/Lame/`,
 `scripts/gates/lame_h23.py`, `scripts/gates/lame_ideal_neg23.py`,
 `docs/audits/lame-1847.md`.
 
@@ -35,9 +37,8 @@ quadratic ideal gate + `no_norm_two_equation`;
 
 **Next options:**
 
-1. **`IsDedekindDomain OKNeg23` instance** — drop the Dedekind hypothesis on
-   `not_isPrincipal_of_absNorm_two`; then exhibit a concrete ideal with
-   `absNorm = 2` (e.g. `(2, θ)`).
+1. **Concrete ideal with `absNorm = 2`** — exhibit e.g. `(2, θ)` on `OKNeg23`
+   and apply `not_isPrincipal_of_absNorm_two` unconditionally.
 2. **Cyclotomic Ideal / proved \(h^+\)** — lift to `𝓞(ℚ(ζ₂₃))`, or prove
    \(h^+_{23}=1\).
 3. **Per-claim Agoh–Giuga audit** — blueprint a concrete claimed proof against
@@ -51,7 +52,6 @@ quadratic ideal gate + `no_norm_two_equation`;
 Do **not** claim the Agoh–Giuga conjecture. Do **not** confuse Kummer-regular
 (\(23\nmid h\)) with UFD (\(h=1\)). Do **not** claim Lean proved
 `classNumber (CyclotomicField 23 ℚ) = 3` — Bareiss owns \(h^-\); \(h^+\) stays cited.
-Do **not** claim an unconditional `IsDedekindDomain OKNeg23` instance yet.
 
 ---
 
@@ -66,10 +66,11 @@ pwsh ./scripts/verify.ps1
 
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
 PASS, `lame_ideal_neg23` PASS, lake + forge VERIFIED (includes
-`Lame.IdealWitness` + `Lame.IdealPrincipal`).
+`Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField`).
 
 **3(i) landing:** gate `76521e6`; Premise/QuadraticWitness `9ae01da`; Maillet
-Bareiss `7a8da40`; IdealWitness `9e7d8f2`; IdealPrincipal follows.
+Bareiss `7a8da40`; IdealWitness `9e7d8f2`; IdealPrincipal `4444ea9`;
+Dedekind instance follows.
 
 ---
 
@@ -102,7 +103,7 @@ Bareiss `7a8da40`; IdealWitness `9e7d8f2`; IdealPrincipal follows.
 | **2(f)** RR / HJO 2608.05480+15219 | **PASS** — \(Z=P\) + Lemma 12; OreReduce (34) **capability-limited** | `docs/audits/rr-qexpand.md`, `scripts/gates/rr_qexpand.py` |
 | **2(g)** PDN1 2503.00004 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks **capability-limited** | `docs/audits/pdn1.md`, `scripts/gates/pdn1.py`, `incoming/pdn1/` |
 | **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `GiugaOnFactors`/`KorseltOnFactors`/`oracle_seven` | `docs/audits/agoh-giuga.md`, `scripts/gates/giuga_oracle.py`, `FragileProofAudit/AgohGiuga/` |
-| **3(i)** Lamé 1847 | **PASS** — through 3(i)+++: Bareiss + ideal norm obstruction + `IdealPrincipal` on `OKNeg23` (Dedekind hyp) | `docs/audits/lame-1847.md`, `FragileProofAudit/Lame/` |
+| **3(i)** Lamé 1847 | **PASS** — through 3(i)++++: Bareiss + ideal norm + `IdealPrincipal` + `IsDedekindDomain OKNeg23` | `docs/audits/lame-1847.md`, `FragileProofAudit/Lame/` |
 | **Criterion module** | Apéry-shaped `irrational_of_integer_forms_tendsto_zero` | `FragileProofAudit/IrrationalityCriterion.lean` |
 
 ---
@@ -119,14 +120,15 @@ Bareiss `7a8da40`; IdealWitness `9e7d8f2`; IdealPrincipal follows.
 
 ---
 
-## After 3(i)+++ Ideal.IsPrincipal on OKNeg23
+## After 3(i)++++ IsDedekindDomain OKNeg23
 
 | ID | Target | First milestone |
 |---|---|---|
-| 3(i)++++ | Dedekind instance / concrete ideal | `IsDedekindDomain OKNeg23`; exhibit `absNorm P = 2` |
+| 3(i)++++ | Dedekind instance | **DONE** — `IsDedekindDomain OKNeg23` via integral closure |
+| 3(i)+++++ | Concrete ideal | exhibit `absNorm P = 2` (e.g. `(2, θ)`) and apply obstruction |
 | 3(i)# | Cyclotomic Ideal / classNumber | `Ideal.IsPrincipal` in `𝓞(ℚ(ζ₂₃))`, or proved `h^+` |
 | 3(j) | Sun batch 2603.29973 | After HypergeometricEval exists |
-| 2(d) done | 202601.1609 PDF | **Pinned** (user-supplied download); Lemma 5.1 gate BREAK landed — write up as short note |
+| 2(d) done | 202601.1609 PDF | **Pinned** (user-supplied download); Lemma 5.1 gate BREAK landed and closed — no write-up planned |
 | 3(h)+ | Per-claim Agoh–Giuga | Concrete claimed proof vs kit at \(g=30\) / \(858\) |
 
 ---
