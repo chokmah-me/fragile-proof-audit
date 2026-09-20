@@ -11,7 +11,7 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
-| **Resume** | **Phase 2(e) Erdős–Straus covering** — see [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Resume** | Fresh session → **Phase 2(e) Erdős–Straus covering** — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 
 ---
 
@@ -56,7 +56,7 @@ re-attack it.
 | `scripts/harness/` | Exact arithmetic + rising-factorial conventions |
 | `scripts/gates/` | Numeric gates (`check.py` = CI entrypoint) |
 | `scripts/forge/` | `axiom_audit.py` + lean-proof-forge verify |
-| `docs/WORKPLAN.md` | **Resume checklist** (start here after Shabbat) |
+| `docs/WORKPLAN.md` | **Resume checklist** (start here) |
 | `docs/blueprint/` | Per-target blueprints |
 | `docs/audits/` | Bug-report style write-ups |
 | `corpus/` | Scout reports (graded trust) |
