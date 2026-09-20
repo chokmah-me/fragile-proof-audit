@@ -34,9 +34,19 @@ Exit codes: **0** accept, **1** reject (invalid environment), **2** decline
 anything but 0.
 
 Pins live in `.github/workflows/con-leche.yml` (`CON_LECHE_REV`,
-`LEAN4EXPORT_REF`) — same pins as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean),
-matching this repo's own `lean-toolchain` (`v4.32.2`). Bump them on purpose,
-not by floating `master`.
+`LEAN4EXPORT_REF`) — same pins as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean).
+`LEAN4EXPORT_REF` must match this repo's `lean-toolchain` (`v4.32.2`);
+`CON_LECHE_REV` follows con-leche's own toolchain (v4.33.0 at the current
+pin). Bump them on purpose, not by floating `master`.
+
+CI is two jobs so those toolchains never share one runner disk:
+
+1. **`export`** — `lake build` + lean4export on v4.32.2; uploads the NDJSON.
+2. **`check`** — builds only con-leche, downloads the NDJSON, runs
+   `--verified`.
+
+A red job that dies while *installing* Lean (disk full, unpack error) is
+infrastructure, not checker `reject` / `decline`.
 
 ## Why we run it
 

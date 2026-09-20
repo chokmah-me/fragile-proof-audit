@@ -2,13 +2,18 @@
 # con-leche --verified.  Exit 0 = accept; 1 reject; 2 decline (checker
 # coverage gap); 3 error/OOM.  CI fails on anything but 0.
 #
+# Split into two jobs so campaign Lean v4.32.2 (+ Mathlib .lake) never
+# shares a runner disk with con-leche's own toolchain (v4.33.0 at the
+# current pin). A single-job layout OOMed the disk while unpacking the
+# second toolchain.
+#
 # CON_LECHE_REV is pinned so this job does not float with upstream
 # master.  Bump it deliberately.  LEAN4EXPORT_REF must match this
 # repo's lean-toolchain.
 #
 # ubuntu-latest has ~7 GB RAM.  A Mathlib-scale stream may OOM; --jobs 1
-# is the first mitigation.  If this job dies with exit 3, use a larger
-# runner.
+# is the first mitigation.  If the check job dies with exit 3, use a
+# larger runner.
 
 name: con-leche
 
@@ -29,9 +34,9 @@ env:
   LEAN4EXPORT_REF: v4.32.2
 
 jobs:
-  check:
+  export:
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 180
     steps:
       - name: Checkout FragileProofAudit
         uses: actions/checkout@v4
@@ -69,6 +74,34 @@ jobs:
         working-directory: _tmp/lean4export
         run: lake build
 
+      - name: Export FragileProofAudit
+        run: |
+          set -euo pipefail
+          mkdir -p _tmp
+          LEAN_PATH="$(lake env printenv LEAN_PATH)"
+          export LEAN_PATH
+          _tmp/lean4export/.lake/build/bin/lean4export FragileProofAudit > _tmp/fragile-proof-audit.ndjson
+          wc -l _tmp/fragile-proof-audit.ndjson
+
+      - name: Upload NDJSON export
+        uses: actions/upload-artifact@v4
+        with:
+          name: fragile-proof-audit-ndjson
+          path: _tmp/fragile-proof-audit.ndjson
+          retention-days: 7
+
+  check:
+    needs: export
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Install elan
+        run: |
+          set -euo pipefail
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
       - name: Checkout con-leche
         uses: actions/checkout@v4
         with:
@@ -88,25 +121,23 @@ jobs:
         working-directory: _tmp/con-leche
         run: lake build con-leche
 
-      - name: Export FragileProofAudit
-        run: |
-          set -euo pipefail
-          mkdir -p _tmp
-          LEAN_PATH="$(lake env printenv LEAN_PATH)"
-          export LEAN_PATH
-          _tmp/lean4export/.lake/build/bin/lean4export FragileProofAudit > _tmp/fragile-proof-audit.ndjson
-          wc -l _tmp/fragile-proof-audit.ndjson
+      - name: Download NDJSON export
+        uses: actions/download-artifact@v4
+        with:
+          name: fragile-proof-audit-ndjson
+          path: _tmp
 
       - name: con-leche --verified
         run: |
           set -euo pipefail
+          wc -l _tmp/fragile-proof-audit.ndjson
           _tmp/con-leche/.lake/build/bin/con-leche --verified --jobs=1 _tmp/fragile-proof-audit.ndjson
 
       - name: Upload export on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: fragile-proof-audit-ndjson
+          name: fragile-proof-audit-ndjson-failed-check
           path: _tmp/fragile-proof-audit.ndjson
           retention-days: 7
           if-no-files-found: ignore
