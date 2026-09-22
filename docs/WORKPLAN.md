@@ -17,14 +17,27 @@ Phase 3(i)++++ `IsDedekindDomain OKNeg23` VERIFIED; Phase 2(d) odd-zeta
 — verdict lock + discrimination controls; **all eight verdicts unchanged**,
 but what several of them *mean* changed (see **Track B**). **Track B item 1
 landed same day** — `lame_ideal_neg23` discrimination control built, NO FALSE
-POSITIVE.
+POSITIVE. **Track D opened 2026-09-21** — ingested
+`corpus/live-fragile-proofs-2024-2026.md` (7 arXiv-verified candidate
+targets from an AI deep-research export; distinct from the Gemini export,
+all 7 IDs live-checked). Two targets gated + controlled same day:
+`cohen_subadditivity` (BREAK) and `baste_domination` (BREAK, closed both
+bounds independently including an exact branch-and-bound search this
+campaign wrote for γ(G)≥16). Both registered in `scripts/gates/check.py`;
+neither has a Lean scaffold yet.
 
-**Resume at either:** *(A)* the decomposition-group identification needed to
+**Resume at any of:** *(A)* the decomposition-group identification needed to
 finish the pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))` — `Gal(ℚ(ζ₂₃)/ℚ)`
 is now pinned cyclic of order 22, but `Ideal.card_stabilizer_eq` is blocked on
 an `Algebra ℤ Cyclotomic23` / `Algebra ℚ Cyclotomic23` instance diamond (see
 **Blocked**), or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d) write-up
-decision (Track B item 2).
+decision (Track B item 2) — *(C)* Track D: next candidate is Sárközy's
+sum-product conjecture (`docs/blueprint/cohen-subadditivity.md` and
+`docs/blueprint/baste-domination.md` are the templates to follow; corpus
+doc's own ranking has Sárközy next, then Tang-Zhang, Thakur,
+Chung-Graham gap-set — this last one is **not yet cross-checked** against
+the corpus doc's Section headers, verify before starting — then NCI, then
+Salez-Youssef).
 
 (2(d) write-up was declined — **worth revisiting**: after the false-positive
 control it is the campaign's only sendable artifact. See Track B item 2.)
