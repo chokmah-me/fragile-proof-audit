@@ -2,7 +2,9 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 (latest) — **Kempe–Fritsch gated + controlled,
+**Checkpoint:** 2026-09-22 (latest) — **Gomila Λ-bound full finite replay VERIFIED PASS (3,149,013/3,149,013 rows).** Ran the audit repo's own fail-closed verifier (`verifiers/verify_finite_and_binding.py`, Python 3.12.3 + mpmath 1.2.1, 220-bit interval arithmetic, exit code 0) on a fresh download of all 15 sealed shards at pinned audit-repo commit `a74738d`: 15/15 shard SHA-256 checksums match the repo's `SHA256SUMS` pins; leg p235711 ({2,3,5,7,11}) — 4 files, 12 runs, N=690988..728999, 38,012 rows, min floor 0.000000791366 @690988, UNCERT=0; leg p2357 ({2,3,5,7}) — 1 file, 1 run, N=729000..818999, 90,000 rows, min 0.000315112459 @729000, UNCERT=0; leg p235 ({2,3,5}) — 1 file, 1 run, N=819000..1027999, 209,000 rows, min 0.000305788807 @819000, UNCERT=0; leg p23 ({2,3}) — 9 files, 9 runs, N=1028000..3840000, 2,812,001 rows, min 0.000309285478 @1028000, UNCERT=0; global 3,149,013 rows, N=690988..3840000, gaps=0, overlaps=0, UNCERT=0; error budget 12/12 gates, eAB≤2.057023688667e-12, eC0≤2.33492848188649183e-7, Emax≤2.33494905212337849e-7 (within the claimed 2.33495e-7); normalizer/corr monotonicity 6/6 gates, Xi_ub=−1.363112154757640042<0; binding floor = 7.91366e-7 − 2.33494905212337849e-7 = 5.57871094787e-7 > 0. RESULT PASS: full finite Triangle weld B=893927/5000000 rows=3149013. **Not a BREAK — an audit confirmation**; not on the 23/23 verdict lock. README + this workplan synced. Evidence: `docs/blueprint/gomila-lambda.md`.
+
+Prior checkpoint, same day (earlier): **Kempe–Fritsch gated + controlled,
 verdict BREAK.** Continued down the same harvest report's ranked list after
 Tait–Tutte (prior checkpoint): harvest rank 6, Kempe's 1879 four-color
 algorithm, refuted by Fritsch & Fritsch's (1998) 9-vertex counterexample.
@@ -668,9 +670,9 @@ Do **not** claim the Agoh–Giuga conjecture. Do **not** confuse Kummer-regular
 |---|---|
 | **2(g) PDN1** | Real defect, in the *gate*. α=2 rested on 1 and 2 integers and α=3 was untested — **81 data points total**. Added a mod-arithmetic path (sparse Euler/Jacobi + Kronecker substitution) self-tested against the exact dense oracle. CI now **6 747** points reaching α=3 in ~7 s; `--deep` gives **33 746** with α=3 on all four families. All hold. |
 | **2(e) ES** | PASS *reinterpreted*. Matched control: coverage carries **no** information — every perturbed congruence covers *more* primes than the real one — but `egyptian3` separates **100 % / exactly 0 %**. The gate certifies **Theorems 4 and 7** (the implication), not Conjecture 1 (the existential). The paper never claimed to prove ESC; its abstract conjectures the covering. |
-| **2(f) RR** | `nmax` circularity tested directly: raising it by 3 never moves `Z`, and the largest *contributing* ‖n‖ is 4–6 against a cutoff of 11–14. Degree push — (3,8) 12→**22** (past Frobenius 13), (3,7) 15→26, (3,5) 24→34 — all MATCH. |
+| **2(f)** RR | `nmax` circularity tested directly: raising it by 3 never moves `Z`, and the largest *contributing* ‖n‖ is 4–6 against a cutoff of 11–14. Degree push — (3,8) 12→**22** (past Frobenius 13), (3,7) 15→26, (3,5) 24→34 — all MATCH. |
 | **1(b) Suman** | False-positive control clear. The search has no discriminating power on its own; the verdict rests entirely on the `k = 0` endpoint, verified verbatim in the PDF, reinforced by (49) being stated with **no** mention of ζ(5), and matched to Chen et al. |
-| **2(d) odd-zeta** | False-positive control clear, and **upgraded**: the BREAK is an **infimum**, not a sample. For λ ≥ 0.5 the minimum over the whole domain is at the boundary, `g = 1+q = e^λ` exactly (148.413 = e⁵ … 442414 = e¹³). The instrument is shown to discriminate — it *finds* admissible `q` for λ < 0.458. |
+| **2(d)** odd-zeta | False-positive control clear, and **upgraded**: the BREAK is an **infimum**, not a sample. For λ ≥ 0.5 the minimum over the whole domain is at the boundary, `g = 1+q = e^λ` exactly (148.413 = e⁵ … 442414 = e¹³). The instrument is shown to discriminate — it *finds* admissible `q` for λ < 0.458. |
 | **`es_cover` odd-k** | Had gated the verdict on five branches that are tautologies in `k`. Now gates the failable scope invariant (every hard residue ≡ 1 mod 8); failure is `ABORT_SCOPE`, not `BREAK`. |
 
 ### Resume here (Track B), in order
@@ -765,7 +767,7 @@ python scripts/controls/baste_break_control.py         # ~2 s
 python scripts/controls/sarkozy_break_control.py       # ~6 s
 python scripts/controls/tang_zhang_break_control.py    # ~3 s
 python scripts/controls/thakur_break_control.py        # ~25 s
-python scripts/controls/chung_graham_break_control.py  # ~5 s
+python scripts/controls/chung_graham_spiro_break_control.py  # ~5 s
 python scripts/controls/salez_youssef_break_control.py # ~30 s
 python scripts/controls/jac_2d_break_control.py        # ~10 s
 python scripts/controls/tait_tutte_break_control.py    # <1 s
