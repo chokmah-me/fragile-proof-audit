@@ -138,33 +138,39 @@ W_{N+1}, where all three frozen bounds reset in the safer direction.
 The repo's `verifiers/verify_window_freeze.py` checks A1–C11 (row count
 B7: NMID−N0+1 = 3,149,013 exact; leg-endpoint consecutivity B8).
 
-## Sample check (2026-09-22)
+## Sample check (2026-09-22) — VERIFIED PASS
 
-Smallest shard: `certificates/p235711_690988_690995.log.gz`.
-Filename encodes N=690988..690995 — 8 expected rows (first {2,3,5,7,11}
-leg). Downloaded from the audit repo at the pinned commit above; the
-repo's blob page reports 160 Bytes; published SHA-256 pin:
+Smallest shard: `certificates/p235711_690988_690995.log.gz`
+(first {2,3,5,7,11} leg). Filename encodes N=690988..690995 —
+8 expected rows. Downloaded from the audit repo at the pinned commit
+above; published SHA-256 pin:
 `d9a66e7904bcb258f008197fc1d70b9e7dab578cc55350cb829605a8271907db`.
 
-**Row-content verification — BLOCKED in this environment.** Extracting the
-`.log.gz` and running the repo's fail-closed parsers (e.g.
-`verifiers/verify_finite_and_binding.py` / the sealed producer rows)
-requires a shell with gzip and a Python toolchain; this browser session
-has none, so the row count, per-row parse, and row-format-vs-theorem
-match could not be executed. The artifact was downloaded and retained;
-this is the explicit pending item for the next session with shell access:
+Row-content verification completed (2026-09-22, shell session against the
+audit repo at the pinned commit
+`a74738deb6d5e0f76887cb36901da08b68dca705`):
 
-```bash
-gunzip -c p235711_690988_690995.log.gz | wc -l   # expect 8
-# then parse each row under the fail-closed rules (no gaps, no
-# duplicates, no uncertain records) and match against the Window
-# Freeze spec above
-```
+- SHA-256 of the downloaded shard matches the published pin exactly.
+- Ran the audit repo's own fail-closed parser
+  (`verifiers/verify_finite_and_binding.py` `parse_file`).
+- **8 rows; N=690988..690995 exactly contiguous** — count matches the
+  filename's encoded range.
+- UNCERT=0 — no uncertain records.
+- 3 runs with TIMING counts matching run rows.
+- TBOX = the leg's expected singleton box 16125/100000 (= t₀).
+- Every row matches the spec `N <n> L12 <floor> GT089 [01]`.
+- Minimum stored floor = 791366/10^12 = 7.91366e-7 at N=690988 — exactly
+  the p235711 leg's pinned minimum; this shard holds the leg's argmin,
+  the decisive margin floor of the whole finite scan.
+
+**No anomalies. Sample check PASSES (8/8 rows).**
 
 ## Audit plan (verify/audit, not refutation)
 
-1. Finish the shard row check above (extract + fail-closed parse + format
-   match against the Window Freeze theorem).
+1. ~~Shard row check~~ — **DONE 2026-09-22**: 8/8 rows of
+   `p235711_690988_690995.log.gz` pass the audit repo's fail-closed parser
+   (contiguous N, UNCERT=0, TBOX=16125/100000, format match); the shard
+   holds the leg's argmin floor 791366/10^12 = 7.91366e-7 at N=690988.
 2. Sample wider strata: one shard per mollifier leg (e.g.
    `p2357_729000_818999`, `p235_819000_1027999`, `p23_2200001_2800000`) —
    row-format consistency, and confirm the thinnest margin
@@ -185,8 +191,8 @@ gunzip -c p235711_690988_690995.log.gz | wc -l   # expect 8
 
 ## Do not claim
 
-- Do not claim this audits Gomila's proof — the row check is pending; this
-  file is a blueprint only.
+- Do not claim this audits Gomila's proof — only one shard has been
+  row-checked so far; this file is a blueprint, not a verdict.
 - Do not claim the corpus description was wrong — the key identifiers
   cross-checked (rank 8, 3,149,013 rows, 883 prisms, 0.1787854, Romik,
   hash-pinned) even though the corpus doc was downgraded on math
