@@ -2,7 +2,36 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 (later still) — **KRR-CL "bigger enumerator"
+**Checkpoint:** 2026-09-22 (latest) — **Sárközy sum-product Lean scaffold
+landed, ported not built.** Asked which of the 17 scaffold-free gates was
+*actually* tractable, not "likely" — checked two. Cohen: wrote a throwaway
+probe (`isCyclic`/`Csigma` on `Nat.Coprime`/`Nat.totient`/`Nat.count`), ran
+it through `lake env lean` against this project's real mathlib v4.32.2;
+`DecidablePred` synthesized with no manual wiring, `by decide` proved
+`Csigma 31 = 10` and (with `maxRecDepth 4000`) `Csigma 200 = 45` — confirmed
+tractable, not yet built (probe deleted, not committed). Sárközy: the
+pinned PDF's four ✓✓-marked results are already formalized by the author
+(Tang) at a public GitHub URL cited in the paper's own references, built
+with Aristotle + human review. Fetched it, verified it's real (717 lines,
+theorem names match the paper exactly), and **ported it verbatim** into
+`FragileProofAudit/Sarkozy/UPNT65.lean`. Compiled against this campaign's
+pin (v4.32.2, newer than their v4.28.0) with **zero errors** on the first
+attempt — one deprecation warning fixed (`push_neg`→`push Not`), one
+`private lemma` had its modifier dropped because this campaign's
+`axiom_audit.py` cannot resolve Lean 4's private-name mangling by
+fully-qualified name (everything else needed no changes). `verify.ps1`:
+**verdict lock 21/21, Lean forge VERIFIED, 184 declarations, axiom-clean**
+(`propext`/`Classical.choice`/`Quot.sound` only, no `sorry`, no
+`native_decide`). This proves Sárközy's Conjecture 65/1.1 false **in full
+generality** (quantified over all `c>0`, `p₀`), not just the finite prime
+list `scripts/gates/sarkozy_sum_product.py` spot-checks — a third,
+independent confirmation alongside the Python gate's two computational
+paths. Evidence: `docs/audits/sarkozy-sum-product.md`. Cohen's scaffold
+(same tractability tier, not yet built — needs Ibarra's `Nat.count_add`
+window-splitting trick to reach `Csigma(3959)` without a `native_decide`)
+is the natural next Lean session.
+
+Prior checkpoint, same day (earlier): **KRR-CL "bigger enumerator"
 built and found vacuous, not a gate.** Dossier II's own "Next options" list
 scored the exhaustive composition-lemma inequality check
 (`score(f^2) <= score(f)`, n=5..9) higher (R=9) than the already-landed
@@ -620,8 +649,8 @@ BREAK, `salez_youssef_logsobolev` BREAK, `tpc_area` BREAK, `es5_eq35` BREAK,
 **verdict lock 21/21 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
 `Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
-`Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois`; axiom-clean, 150
-declarations).
+`Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois` + `Sarkozy.UPNT65`;
+axiom-clean, 184 declarations).
 
 Controls are **not** run by `verify.ps1` — they are operator instruments:
 

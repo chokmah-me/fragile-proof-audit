@@ -4,9 +4,9 @@
   project     : C:\Users\Elke Shayna\Documents\00Dev\fragile-proof-audit
   target      : FragileProofAudit
   toolchain   : leanprover/lean4:v4.32.2
-  timestamp   : 2026-09-22T11:32:54+00:00
-  files       : 18
-  declarations: 150
+  timestamp   : 2026-09-22T12:15:49+00:00
+  files       : 19
+  declarations: 184
   allowlist   : Classical.choice, Quot.sound, propext
 --------------------------------------------------------------------------
   [ PASS ] project_shape: lakefile.toml, toolchain leanprover/lean4:v4.32.2
@@ -15,13 +15,13 @@
   [ PASS ] local_axiom_declarations: no locally declared axioms
   [ PASS ] lake_build: `lake build FragileProofAudit` exited 0
   [ PASS ] build_sorry_warnings: no sorry warnings in build output
-  [ PASS ] axiom_audit: all 150 declaration(s) within allowlist
+  [ PASS ] axiom_audit: all 184 declaration(s) within allowlist
 --------------------------------------------------------------------------
   VERDICT: VERIFIED
 ==========================================================================
 
 --- build output ---
-âš  [3462/3487] Replayed FragileProofAudit.Lame.Maillet
+âš  [8661/8674] Replayed FragileProofAudit.Lame.Maillet
 warning: FragileProofAudit/Lame/Maillet.lean:114:0: Unscoped option maxHeartbeats is not allowed:
 Please scope this to individual declarations, as in
 ```
@@ -31,5 +31,1027 @@ example : ... := ...
 ```
 
 Note: This linter can be disabled with `set_option linter.style.setOption false`
-Build completed successfully (3572 jobs).
+âš  [8672/8674] Built FragileProofAudit.Sarkozy.UPNT65 (105s)
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:0: * 'Ported from Quan':
+Copyright line should start with 'Copyright (c) YYYY'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:37: * 'alization accompanying':
+Copyright line should end with '. All rights reserved.'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" (arXiv:2603.29992v2), Section 3, formalized with the Aristotle
+theorem prover (Harmonic) plus human review by Wouter van Doorn.
+
+Source: https://github.com/QuanyuTang/Lean-files/blob/main/UPNT65.lean
+sha256 of the fetched source (before this campaign's port edits):
+802ac3b0a09b6c1178bf643f7dd843fcf42c71d08bff66630982e7e7a51b7be9
+Fetched: 2026-09-22. Original environment: leanprover/lean4:v4.28.0,mathlib commit 8f9d9cff6bd728b17a24e163c9402775d9e6a365. This campaign
+pins leanprover/lean4:v4.32.2 (lean-toolchain) -- ported verbatim except
+for changes noted inline where the newer mathlib required them.
+
+This proves the FULL content of scripts/gates/sarkozy_sum_product.py's
+already-locked BREAK: SÃ¡rkÃ¶zy's Conjecture 65/1.1 is false, with the exact
+threshold 1/2 (Tang's Theorem 2.2 / Corollary 2.3 / Remark 2.4), not merely
+the specific finite-prime witnesses the Python gate spot-checks.':
+If an authors line spans multiple lines, each line but the last must end with a trailing comma
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" ':
+The authors line should begin with 'Authors: '
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:20: * '.':
+Please, do not end the authors' line with a period.
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:3:0: * '"A counterexample to a conjecture of SÃ¡rkÃ¶zy on sums and products modulo':
+Second copyright line should be "Released under Apache 2.0 license as described in the file LICENSE."
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:21:0: The module doc-string for a file should be the first command after the imports.
+Please, add a module doc-string before `open scoped Pointwise`.
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:22:0: linter.style.header:402:26: error: unexpected token '#'; expected term
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:0: * 'Ported from Quan':
+Copyright line should start with 'Copyright (c) YYYY'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:37: * 'alization accompanying':
+Copyright line should end with '. All rights reserved.'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" (arXiv:2603.29992v2), Section 3, formalized with the Aristotle
+theorem prover (Harmonic) plus human review by Wouter van Doorn.
+
+Source: https://github.com/QuanyuTang/Lean-files/blob/main/UPNT65.lean
+sha256 of the fetched source (before this campaign's port edits):
+802ac3b0a09b6c1178bf643f7dd843fcf42c71d08bff66630982e7e7a51b7be9
+Fetched: 2026-09-22. Original environment: leanprover/lean4:v4.28.0,mathlib commit 8f9d9cff6bd728b17a24e163c9402775d9e6a365. This campaign
+pins leanprover/lean4:v4.32.2 (lean-toolchain) -- ported verbatim except
+for changes noted inline where the newer mathlib required them.
+
+This proves the FULL content of scripts/gates/sarkozy_sum_product.py's
+already-locked BREAK: SÃ¡rkÃ¶zy's Conjecture 65/1.1 is false, with the exact
+threshold 1/2 (Tang's Theorem 2.2 / Corollary 2.3 / Remark 2.4), not merely
+the specific finite-prime witnesses the Python gate spot-checks.':
+If an authors line spans multiple lines, each line but the last must end with a trailing comma
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" ':
+The authors line should begin with 'Authors: '
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:20: * '.':
+Please, do not end the authors' line with a period.
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:3:0: * '"A counterexample to a conjecture of SÃ¡rkÃ¶zy on sums and products modulo':
+Second copyright line should be "Released under Apache 2.0 license as described in the file LICENSE."
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:22:0: The module doc-string for a file should be the first command after the imports.
+Please, add a module doc-string before `open Finset ZMod Fintype`.
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:0: * 'Ported from Quan':
+Copyright line should start with 'Copyright (c) YYYY'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:37: * 'alization accompanying':
+Copyright line should end with '. All rights reserved.'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" (arXiv:2603.29992v2), Section 3, formalized with the Aristotle
+theorem prover (Harmonic) plus human review by Wouter van Doorn.
+
+Source: https://github.com/QuanyuTang/Lean-files/blob/main/UPNT65.lean
+sha256 of the fetched source (before this campaign's port edits):
+802ac3b0a09b6c1178bf643f7dd843fcf42c71d08bff66630982e7e7a51b7be9
+Fetched: 2026-09-22. Original environment: leanprover/lean4:v4.28.0,mathlib commit 8f9d9cff6bd728b17a24e163c9402775d9e6a365. This campaign
+pins leanprover/lean4:v4.32.2 (lean-toolchain) -- ported verbatim except
+for changes noted inline where the newer mathlib required them.
+
+This proves the FULL content of scripts/gates/sarkozy_sum_product.py's
+already-locked BREAK: SÃ¡rkÃ¶zy's Conjecture 65/1.1 is false, with the exact
+threshold 1/2 (Tang's Theorem 2.2 / Corollary 2.3 / Remark 2.4), not merely
+the specific finite-prime witnesses the Python gate spot-checks.':
+If an authors line spans multiple lines, each line but the last must end with a trailing comma
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" ':
+The authors line should begin with 'Authors: '
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:20: * '.':
+Please, do not end the authors' line with a period.
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:3:0: * '"A counterexample to a conjecture of SÃ¡rkÃ¶zy on sums and products modulo':
+Second copyright line should be "Released under Apache 2.0 license as described in the file LICENSE."
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:22:0: The module doc-string for a file should be the first command after the imports.
+Please, add a module doc-string before `noncomputable section`.
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:0: * 'Ported from Quan':
+Copyright line should start with 'Copyright (c) YYYY'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:37: * 'alization accompanying':
+Copyright line should end with '. All rights reserved.'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" (arXiv:2603.29992v2), Section 3, formalized with the Aristotle
+theorem prover (Harmonic) plus human review by Wouter van Doorn.
+
+Source: https://github.com/QuanyuTang/Lean-files/blob/main/UPNT65.lean
+sha256 of the fetched source (before this campaign's port edits):
+802ac3b0a09b6c1178bf643f7dd843fcf42c71d08bff66630982e7e7a51b7be9
+Fetched: 2026-09-22. Original environment: leanprover/lean4:v4.28.0,mathlib commit 8f9d9cff6bd728b17a24e163c9402775d9e6a365. This campaign
+pins leanprover/lean4:v4.32.2 (lean-toolchain) -- ported verbatim except
+for changes noted inline where the newer mathlib required them.
+
+This proves the FULL content of scripts/gates/sarkozy_sum_product.py's
+already-locked BREAK: SÃ¡rkÃ¶zy's Conjecture 65/1.1 is false, with the exact
+threshold 1/2 (Tang's Theorem 2.2 / Corollary 2.3 / Remark 2.4), not merely
+the specific finite-prime witnesses the Python gate spot-checks.':
+If an authors line spans multiple lines, each line but the last must end with a trailing comma
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" ':
+The authors line should begin with 'Authors: '
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:20: * '.':
+Please, do not end the authors' line with a period.
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:3:0: * '"A counterexample to a conjecture of SÃ¡rkÃ¶zy on sums and products modulo':
+Second copyright line should be "Released under Apache 2.0 license as described in the file LICENSE."
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:22:0: The module doc-string for a file should be the first command after the imports.
+Please, add a module doc-string before `namespace FragileProofAudit.Sarkozy`.
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:0: * 'Ported from Quan':
+Copyright line should start with 'Copyright (c) YYYY'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:37: * 'alization accompanying':
+Copyright line should end with '. All rights reserved.'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" (arXiv:2603.29992v2), Section 3, formalized with the Aristotle
+theorem prover (Harmonic) plus human review by Wouter van Doorn.
+
+Source: https://github.com/QuanyuTang/Lean-files/blob/main/UPNT65.lean
+sha256 of the fetched source (before this campaign's port edits):
+802ac3b0a09b6c1178bf643f7dd843fcf42c71d08bff66630982e7e7a51b7be9
+Fetched: 2026-09-22. Original environment: leanprover/lean4:v4.28.0,mathlib commit 8f9d9cff6bd728b17a24e163c9402775d9e6a365. This campaign
+pins leanprover/lean4:v4.32.2 (lean-toolchain) -- ported verbatim except
+for changes noted inline where the newer mathlib required them.
+
+This proves the FULL content of scripts/gates/sarkozy_sum_product.py's
+already-locked BREAK: SÃ¡rkÃ¶zy's Conjecture 65/1.1 is false, with the exact
+threshold 1/2 (Tang's Theorem 2.2 / Corollary 2.3 / Remark 2.4), not merely
+the specific finite-prime witnesses the Python gate spot-checks.':
+If an authors line spans multiple lines, each line but the last must end with a trailing comma
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" ':
+The authors line should begin with 'Authors: '
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:20: * '.':
+Please, do not end the authors' line with a period.
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:3:0: * '"A counterexample to a conjecture of SÃ¡rkÃ¶zy on sums and products modulo':
+Second copyright line should be "Released under Apache 2.0 license as described in the file LICENSE."
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:22:0: The module doc-string for a file should be the first command after the imports.
+Please, add a module doc-string before `variable {p : â„•} [hp : Fact (Nat.Prime p)]`.
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:0: * 'Ported from Quan':
+Copyright line should start with 'Copyright (c) YYYY'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:37: * 'alization accompanying':
+Copyright line should end with '. All rights reserved.'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" (arXiv:2603.29992v2), Section 3, formalized with the Aristotle
+theorem prover (Harmonic) plus human review by Wouter van Doorn.
+
+Source: https://github.com/QuanyuTang/Lean-files/blob/main/UPNT65.lean
+sha256 of the fetched source (before this campaign's port edits):
+802ac3b0a09b6c1178bf643f7dd843fcf42c71d08bff66630982e7e7a51b7be9
+Fetched: 2026-09-22. Original environment: leanprover/lean4:v4.28.0,mathlib commit 8f9d9cff6bd728b17a24e163c9402775d9e6a365. This campaign
+pins leanprover/lean4:v4.32.2 (lean-toolchain) -- ported verbatim except
+for changes noted inline where the newer mathlib required them.
+
+This proves the FULL content of scripts/gates/sarkozy_sum_product.py's
+already-locked BREAK: SÃ¡rkÃ¶zy's Conjecture 65/1.1 is false, with the exact
+threshold 1/2 (Tang's Theorem 2.2 / Corollary 2.3 / Remark 2.4), not merely
+the specific finite-prime witnesses the Python gate spot-checks.':
+If an authors line spans multiple lines, each line but the last must end with a trailing comma
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" ':
+The authors line should begin with 'Authors: '
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:20: * '.':
+Please, do not end the authors' line with a period.
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:3:0: * '"A counterexample to a conjecture of SÃ¡rkÃ¶zy on sums and products modulo':
+Second copyright line should be "Released under Apache 2.0 license as described in the file LICENSE."
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:22:0: The module doc-string for a file should be the first command after the imports.
+Please, add a module doc-string before `lemma prime : Nat.Prime p :=
+  hp.out`.
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:0: * 'Ported from Quan':
+Copyright line should start with 'Copyright (c) YYYY'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:2:37: * 'alization accompanying':
+Copyright line should end with '. All rights reserved.'
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" (arXiv:2603.29992v2), Section 3, formalized with the Aristotle
+theorem prover (Harmonic) plus human review by Wouter van Doorn.
+
+Source: https://github.com/QuanyuTang/Lean-files/blob/main/UPNT65.lean
+sha256 of the fetched source (before this campaign's port edits):
+802ac3b0a09b6c1178bf643f7dd843fcf42c71d08bff66630982e7e7a51b7be9
+Fetched: 2026-09-22. Original environment: leanprover/lean4:v4.28.0,mathlib commit 8f9d9cff6bd728b17a24e163c9402775d9e6a365. This campaign
+pins leanprover/lean4:v4.32.2 (lean-toolchain) -- ported verbatim except
+for changes noted inline where the newer mathlib required them.
+
+This proves the FULL content of scripts/gates/sarkozy_sum_product.py's
+already-locked BREAK: SÃ¡rkÃ¶zy's Conjecture 65/1.1 is false, with the exact
+threshold 1/2 (Tang's Theorem 2.2 / Corollary 2.3 / Remark 2.4), not merely
+the specific finite-prime witnesses the Python gate spot-checks.':
+If an authors line spans multiple lines, each line but the last must end with a trailing comma
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:0: * 'a prime" ':
+The authors line should begin with 'Authors: '
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:4:20: * '.':
+Please, do not end the authors' line with a period.
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:3:0: * '"A counterexample to a conjecture of SÃ¡rkÃ¶zy on sums and products modulo':
+Second copyright line should be "Released under Apache 2.0 license as described in the file LICENSE."
+
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:22:0: The module doc-string for a file should be the first command after the imports.
+Please, add a module doc-string before `/-!## Proposition 2.1 -/
+`.
+
+Note: This linter can be disabled with `set_option linter.style.header false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:105:2: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:107:2: `rintro (rfl | rfl | rfl | rfl | rfl | rfl) a`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 105!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:129:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:151:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:154:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:157:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:158:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:162:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:163:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:171:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:194:32: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:194:32: Try this:
+  [apply] simp_all +decide only [mem_singleton, ne_eq, forall_eq]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:195:4: `intro h`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 194!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:194:32: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:194:32: Try this:
+  [apply] simp_all +decide only [mem_singleton, ne_eq, forall_eq]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:197:4: `by_contra h_contra`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 194!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:194:32: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:194:32: Try this:
+  [apply] simp_all +decide only [mem_singleton, ne_eq, forall_eq]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:201:19: `(rcases p with (_ | _ | _ | _ | _ | p) <;> cases hu <;> contradiction; )`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 194!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:212:4: The `refine'` tactic is discouraged: please strongly consider using `refine` or `apply` instead.
+
+Note: This linter can be disabled with `set_option linter.style.refine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:211:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:211:4: Try this:
+  [apply] simp +zetaDelta only [mem_insert, mem_singleton, ne_eq, forall_eq_or_imp, forall_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:212:4: `refine' âŸ¨_, _, _âŸ©`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 211.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:211:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:211:4: Try this:
+  [apply] simp +zetaDelta only [mem_insert, mem_singleton, ne_eq, forall_eq_or_imp, forall_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:214:6: `unfold ts_map st_map`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 211.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:211:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:211:4: Try this:
+  [apply] simp +zetaDelta only [mem_insert, mem_singleton, ne_eq, forall_eq_or_imp, forall_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:216:6: `unfold st_map ts_map`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 211.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:241:107: `simp_all +decide [ avoidsOne ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:241:107: Try this:
+  [apply] simp_all +decide only [ne_eq]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:243:6: `exact cross_orbit_safe hdisj (hAo hc') (hBo hc) |>.1 |> fun h => by rwa [add_comm];`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 241!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:245:4: `rcases hc with (hc | hc)`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:245:4: `rcases hc with (hc | hc)`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:245:35: `rcases hc' with (hc' | hc')`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:245:35: `rcases hc' with (hc' | hc')`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:245:35: `rcases hc' with (hc' | hc')`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:245:35: `rcases hc' with (hc' | hc')`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:246:6: `exact hA.2 _ hc _ hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:246:6: `exact hA.2 _ hc _ hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:246:6: `exact hA.2 _ hc _ hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:246:6: `exact hA.2 _ hc _ hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:247:6: `exact cross_orbit_safe hdisj (hAo hc) (hBo hc') |>.2`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:247:6: `exact cross_orbit_safe hdisj (hAo hc) (hBo hc') |>.2`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:247:6: `exact cross_orbit_safe hdisj (hAo hc) (hBo hc') |>.2`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:247:6: `exact cross_orbit_safe hdisj (hAo hc) (hBo hc') |>.2`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:247:6: `exact cross_orbit_safe hdisj (hAo hc) (hBo hc') |>.2`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:247:6: `exact cross_orbit_safe hdisj (hAo hc) (hBo hc') |>.2`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:248:6: `have hc_orb : c âˆˆ orb b := hBo hc`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:248:6: `have hc_orb : c âˆˆ orb b := hBo hc`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:248:6: `have hc_orb : c âˆˆ orb b := hBo hc`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:248:6: `have hc_orb : c âˆˆ orb b := hBo hc`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:249:6: `have hc'_orb : c' âˆˆ orb a := hAo hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:249:6: `have hc'_orb : c' âˆˆ orb a := hAo hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:249:6: `have hc'_orb : c' âˆˆ orb a := hAo hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:249:6: `have hc'_orb : c' âˆˆ orb a := hAo hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:250:58: `(exact this.2)`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:252:6: `exact hB.2 _ hc _ hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:252:6: `exact hB.2 _ hc _ hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:252:6: `exact hB.2 _ hc _ hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: `simp +zetaDelta at *` is a flexible tactic that potentially modifies all hypotheses and the current goal with a wildcard `*`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:244:4: Try this:
+  [apply] simp +zetaDelta only [ne_eq] at *
+info: FragileProofAudit/Sarkozy/UPNT65.lean:252:6: `exact hB.2 _ hc _ hc'`
+uses a rigid tactic. Previously, the flexible tactic `simp`, which potentially modified all hypotheses and the goal with a wildcard `*`, was used on line 244.
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:241:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:275:16: `simp_all +decide [ Finset.subset_iff ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:275:16: Try this:
+  [apply] simp_all +decide only [singleton_subset_iff]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:276:4: `exact Exists.choose_spec â€¹âˆƒ u âˆˆ O, u ^ 2 - u + 1 = 0â€º |>.1`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 275!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:275:16: `simp_all +decide [ Finset.subset_iff ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:284:4: `exact âŸ¨Exists.choose_spec â€¹_â€º, h_orb _ (Exists.choose_spec â€¹_â€º)âŸ©`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 275!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:281:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:283:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:286:0: Please, add a comment explaining the need for modifying the maxHeartbeat limit, as in
+set_option maxHeartbeats 400000 in
+-- reason for change
+...
+
+Note: This linter can be disabled with `set_option linter.style.maxHeartbeats false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:296:38: `simp_all +decide [ Finset.ext_iff, orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:296:38: Try this:
+  [apply] simp_all +decide only [ne_eq]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:297:6: `exact fun h => hâ‚� <| h â–¸ this`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 296!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:296:38: `simp_all +decide [ Finset.ext_iff, orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:296:38: Try this:
+  [apply] simp_all +decide only [ne_eq]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:299:6: `intro h`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 296!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:296:38: `simp_all +decide [ Finset.ext_iff, orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:296:38: Try this:
+  [apply] simp_all +decide only [ne_eq]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:301:6: `contrapose! hâ‚‚`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 296!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:296:38: `simp_all +decide [ Finset.ext_iff, orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:296:38: Try this:
+  [apply] simp_all +decide only [ne_eq]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:303:6: `exact fun h => hâ‚‚ <| h â–¸ this`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 296!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:301:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:309:2: The `cases'` tactic is discouraged: please strongly consider using `obtain`, `rcases` or `cases` instead.
+
+Note: This linter can be disabled with `set_option linter.style.cases false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:327:6: The `refine'` tactic is discouraged: please strongly consider using `refine` or `apply` instead.
+
+Note: This linter can be disabled with `set_option linter.style.refine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:306:0: Please, add a comment explaining the need for modifying the maxHeartbeat limit, as in
+set_option maxHeartbeats 800000 in
+-- reason for change
+...
+
+Note: This linter can be disabled with `set_option linter.style.maxHeartbeats false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:315:18: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:315:18: Try this:
+  [apply] simp_all +decide only [card_singleton, mul_one, add_zero]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:316:4: `unfold orb at *`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 315!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:315:18: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:315:18: Try this:
+  [apply] simp_all +decide only [card_singleton, mul_one, add_zero]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:317:4: `unfold s_map t_map st_map ts_map sts_map at *`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 315!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:350:22: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:352:10: `rw [Finset.card_insert_of_notMem, Finset.card_insert_of_notMem]`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 350!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:350:22: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:353:12: `unfold ts_map st_map`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 350!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:350:22: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:354:12: `rw [inv_eq_one_div, div_eq_iff]`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 350!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:350:22: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:358:14: `rcases this with (h | h | h | h | h | h)`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 350!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:326:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:330:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:333:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:336:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:337:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:358:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:387:10: The `refine'` tactic is discouraged: please strongly consider using `refine` or `apply` instead.
+
+Note: This linter can be disabled with `set_option linter.style.refine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:377:0: Please, add a comment explaining the need for modifying the maxHeartbeat limit, as in
+set_option maxHeartbeats 1600000 in
+-- reason for change
+...
+
+Note: This linter can be disabled with `set_option linter.style.maxHeartbeats false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:385:10: `unfold s_map t_map st_map ts_map sts_map`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:386:10: `rw [Finset.card_eq_three]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:387:10: `refine' âŸ¨2, 1 - 2, 2â�»Â¹, _, _, _, _âŸ©`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:388:12: `rw [eq_neg_iff_add_eq_zero]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:389:12: `erw [ZMod.natCast_eq_zero_iff]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:389:47: `exact Nat.not_dvd_of_pos_of_lt (by decide) (by linarith)`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:390:12: `rw [inv_eq_one_div, eq_div_iff]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:391:14: `intro h`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:391:23: `rcases p with (_ | _ | _ | _ | _ | p)`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:391:79: `contradiction`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:391:79: `contradiction`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:392:14: `erw [ZMod.natCast_eq_zero_iff]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:392:49: `exact Nat.not_dvd_of_pos_of_lt (by decide) (by linarith)`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:393:12: `rw [inv_eq_one_div, eq_div_iff]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:394:14: `rw [neg_eq_iff_add_eq_zero]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:395:14: `erw [ZMod.natCast_eq_zero_iff]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:395:49: `exact Nat.not_dvd_of_pos_of_lt (by decide) (by linarith)`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:396:14: `erw [ZMod.natCast_eq_zero_iff]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: `simp +decide [ orb ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:384:10: Try this:
+  [apply] simp +decide only [ite_eq_left_iff, zero_ne_one, imp_false, Decidable.not_not]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:396:49: `exact Nat.not_dvd_of_pos_of_lt (by decide) (by linarith)`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 384!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:398:40: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:403:10: `rcases h_cases with (rfl | rfl | rfl | rfl | rfl | h_cases)`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 398!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:398:40: `simp_all +decide` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:408:12: `unfold s_map t_map st_map ts_map sts_map at *`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 398!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:419:111: `simp_all +decide [ Finset.disjoint_left ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:420:10: `exact fun y hy hy' => hOO' <| orb_eq_of_mem hy â–¸ orb_eq_of_mem hy' â–¸ rfl`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 419!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:423:6: `simp_all +decide [ Finset.sum_add_distrib]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:424:6: `exact
+  Eq.symm
+    (Nat.div_eq_of_eq_mul_left zero_lt_two (Nat.sub_eq_of_eq_add <| by rw [â†� Finset.mul_sum _ _ _] at *; linarith))`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 423!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:426:107: `simp +decide [ *, Finset.disjoint_left ]` is a flexible tactic modifying `âŠ¢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:428:6: `exact fun a ha hb =>
+  this (choose_indep_subset (orbit_of_mem_image (Finset.mem_image_of_mem _ (Finset.mem_univ _))) ha)
+    (choose_indep_subset (orbit_of_mem_image (Finset.mem_image_of_mem _ (Finset.mem_univ _))) hb)`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 426!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:429:4: `simp_all +decide [ avoidsOne ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:430:20: `intro a x hx b y hy`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 429!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:429:4: `simp_all +decide [ avoidsOne ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:430:20: `intro a x hx b y hy`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 429!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:429:4: `simp_all +decide [ avoidsOne ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:433:8: `exact this.1 _ (hxy â–¸ hx) _ hy`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 429!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:429:4: `simp_all +decide [ avoidsOne ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:436:8: `exact
+  cross_orbit_safe hdisj
+      (choose_indep_subset (orbit_of_mem_image (Finset.mem_image_of_mem _ (Finset.mem_univ _)) |> fun h => by aesop) hx)
+      (choose_indep_subset (orbit_of_mem_image (Finset.mem_image_of_mem _ (Finset.mem_univ _)) |> fun h => by aesop)
+        hy) |>.1`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 429!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:429:4: `simp_all +decide [ avoidsOne ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:439:8: `exact this.2 a (by aesop) b (by aesop)`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 429!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:429:4: `simp_all +decide [ avoidsOne ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:442:8: `exact cross_orbit_safe h_disjoint (choose_indep_subset (âŸ¨x, rflâŸ©) hx) (choose_indep_subset (âŸ¨y, rflâŸ©) hy) |>.2`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 429!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:380:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:382:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:389:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:392:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:395:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:396:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:400:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:402:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:403:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:419:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:421:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:422:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:424:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:426:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:428:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:436:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:442:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:452:6: `simp_all +decide [ Finset.ext_iff ]` is a flexible tactic modifying `âŠ¢`. Try `simp_all?` and use the suggested `simp_all only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:454:6: `exact hA.1 a b ha hb hab`
+modifies the current goal, which was modified by the flexible tactic `simp_all` on line 452!
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:451:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:480:12: The `refine'` tactic is discouraged: please strongly consider using `refine` or `apply` instead.
+
+Note: This linter can be disabled with `set_option linter.style.refine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:483:10: The `refine'` tactic is discouraged: please strongly consider using `refine` or `apply` instead.
+
+Note: This linter can be disabled with `set_option linter.style.refine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:475:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:478:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+warning: FragileProofAudit/Sarkozy/UPNT65.lean:481:100: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+info: FragileProofAudit/Sarkozy/UPNT65.lean:494:0: 'FragileProofAudit.Sarkozy.sarkozy_threshold_sharp' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:495:0: 'FragileProofAudit.Sarkozy.exact_extremal_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: FragileProofAudit/Sarkozy/UPNT65.lean:496:0: 'FragileProofAudit.Sarkozy.sarkozy_conjecture_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+âœ” [8673/8674] Built FragileProofAudit (24s)
+Build completed successfully (8674 jobs).
 warning: mathlib: repository 'C:\Users\Elke Shayna\Documents\00Dev\fragile-proof-audit\.lake/packages\mathlib' has local changes

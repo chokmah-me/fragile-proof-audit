@@ -5,6 +5,7 @@ Private campaign artifact. Gates refute routes, not theorems.
 import FragileProofAudit.AxiomAudit
 import FragileProofAudit.IrrationalityCriterion
 import FragileProofAudit.SumanZeta5.BaseCase
+import FragileProofAudit.Sarkozy.UPNT65
 import FragileProofAudit.AgohGiuga.Criteria
 import FragileProofAudit.AgohGiuga.Oracle
 import FragileProofAudit.Lame.Premise

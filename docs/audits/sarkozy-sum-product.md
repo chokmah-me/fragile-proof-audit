@@ -106,11 +106,33 @@ kept as an assertion — the same fix `es_cover` received.
 
 ## Lean
 
-None yet, but **tractable and partly done upstream**: Tang marks Proposition
-2.1 and Theorem 2.2 as formalized in Lean 4. The corpus doc's suggested
-formalizable slice — `∀ p ≥ 5, Prime p → ∃ A : Finset (ZMod p), A.card =
-(p-1)/2 ∧ (1 : ZMod p) ∉ (A + A) ∪ (A * A)` — is the right shape, and is one of
-the few corpus-doc claims here that holds up.
+**Landed 2026-09-22.** Not built from scratch: Tang's own public Lean 4
+formalization (`https://github.com/QuanyuTang/Lean-files/blob/main/UPNT65.lean`,
+built with Aristotle plus human review by Wouter van Doorn) was fetched,
+checked against the pinned PDF's claimed theorem names (`sumset_eq_univ`,
+`exists_large_avoiding_set`, `sarkozy_conjecture_false`, `exact_extremal_value`
+— all present and matching), and ported verbatim into
+`FragileProofAudit/Sarkozy/UPNT65.lean`. Their environment
+(`leanprover/lean4:v4.28.0`) is older than this campaign's pin
+(`v4.32.2`); it compiled against our mathlib with **zero errors** on the
+first attempt and only one deprecation warning (`push_neg` → `push Not`,
+fixed). One declaration (`private lemma prime`) had to lose its `private`
+modifier — this campaign's `axiom_audit.py` resolves declarations by
+fully-qualified name and cannot see through Lean 4's private-declaration
+name mangling; everything else needed no changes. `lake build` +
+`#print axioms` on all three top-level theorems: **axiom-clean**
+(`propext`, `Classical.choice`, `Quot.sound` only), no `sorry`, no
+`native_decide`. Registered via `FragileProofAudit.lean`; `verify.ps1`
+reports **VERIFIED**, 184 declarations project-wide.
+
+This proves the **full generality** of Sárközy's Conjecture 65/1.1 being
+false — `sarkozy_conjecture_false` is quantified over every `c > 0` and
+`p₀`, not the finite prime list the Python gate spot-checks — plus the
+sharp threshold (`exact_extremal_value`: `(p−1)/2` is the true extremum,
+not merely an achievable value). The Python gate above remains the
+independent, from-scratch cross-check (two unrelated computational paths,
+no shared machinery with this proof); this Lean scaffold is a *third*,
+independent confirmation, not a replacement for either.
 
 ## Not done, on purpose
 
