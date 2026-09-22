@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-09-22T02:12:15.671080+00:00",
+  "control": "chung_graham_break_control",
+  "gate": "chung_graham_spiro",
+  "matched_claim_l1_l2": {
+    "D1": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "U1": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "D2": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      10
+    ],
+    "U2": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      10
+    ],
+    "D1_eq_U1": true,
+    "D2_eq_U2": true,
+    "ok": true
+  },
+  "negative_window_l3": {
+    "N": 5000,
+    "D3": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      10,
+      11,
+      13
+    ],
+    "U3": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      10,
+      11,
+      13
+    ],
+    "D3_eq_U3_over_range": true,
+    "ok": true
+  },
+  "path_b_depth_check": {
+    "n_checked": 219,
+    "n_unambiguous": 192,
+    "disagreements": [],
+    "witness_block_confirmed_unambiguous": true,
+    "ok": true
+  },
+  "transcription_check": {
+    "D_2_17_matches": true,
+    "U_2_17_matches": true,
+    "D_2_113_matches": true,
+    "ok": true
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true
+}

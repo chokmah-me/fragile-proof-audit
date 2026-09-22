@@ -2,7 +2,35 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-21 — Track D#5 **`thakur_carlitz` gated + controlled,
+**Checkpoint:** 2026-09-21 — Track D#6 **`chung_graham_spiro` gated +
+controlled, verdict BREAK**. Cross-checked the "Chung-Graham Gap-Set" row
+against the corpus doc's own Section headers first, per the resume-note flag
+— found it is a **ghost entry**: Sections 1-3 cover exactly seven other
+targets, each with a full "Target Identifier" block and a Works Cited
+number; Chung-Graham has neither, appearing only in the final ranking table
+with no arXiv ID, no claimed theorem, no citation, and an incomplete name
+(the real conjecture is Chung-Graham-**Spiro**, J. Number Theory 210
+(2020)). Located the actual refutation by live web search:
+Mohsen Aliabadi (2026), arXiv:2609.04473, `9 ∈ U_4 \ D_4` at `l=4`
+(`incoming/chung-graham-spiro-2609.04473.pdf`). Gate reproduces the witness
+by two independent paths: a direct translation of the paper's own `(a,b,t)`
+representation algorithm (Path A, validated by exact transcription match
+against two independently-sized literal lists printed in the PDF, `D∩[2,17]`
+and the full 54-element `D∩[2,113]`), and a from-scratch simulation of the
+original slow-Fibonacci-walk definition (Path B, agrees with Path A on all
+192 unambiguous integers checked in `[2,220]`; 27 excluded as genuine ties
+this campaign's naive brute force can't resolve without the original 2020
+paper's tie-breaking rule — reported openly, not hidden). Caught and fixed a
+category-error bug during development (conflating "is 9 itself an
+up-integer" with "is 9 a gap value in `U_4`" — different questions).
+Discrimination control (`scripts/controls/chung_graham_break_control.py`)
+verdict **NO FALSE POSITIVE**: the same machinery correctly reproduces the
+paper's own *true* claims at `l=1,2`, and correctly finds no discrepancy at
+the paper's own flagged-open `l=3` case. Registered in
+`scripts/gates/check.py`; **verdict lock now 14/14**; no Lean scaffold yet.
+Evidence: `docs/blueprint/chung-graham-spiro.md`.
+
+Prior Track D checkpoint (2026-09-21): Track D#5 **`thakur_carlitz` gated + controlled,
 verdict BREAK**. Thakur's 2015 conjecture (every Carlitz-Wieferich prime of
 `F_q[T]` in odd characteristic has degree divisible by the characteristic
 `p`) refuted at an explicit degree-5 prime over `F_{19^3}`
@@ -85,8 +113,12 @@ campaign wrote for γ(G)≥16). A third, `sarkozy_sum_product`, landed
 2026-09-21 (BREAK, first Track D target to need a real PDF fetch since the
 corpus doc's own text was unusable for it). A fifth, `thakur_carlitz`,
 landed 2026-09-21 (BREAK, second Track D target needing a real PDF fetch —
-same image-corruption failure mode as Tang-Zhang). All five registered in
-`scripts/gates/check.py`; none has a Lean scaffold yet.
+same image-corruption failure mode as Tang-Zhang). A sixth,
+`chung_graham_spiro`, also landed 2026-09-21 (BREAK) — worst provenance
+failure yet: the corpus doc has no body section for this target at all (a
+table-only ghost entry, no arXiv ID, incomplete name), so the refutation was
+located by live web search instead of any corpus-doc lead. All six
+registered in `scripts/gates/check.py`; none has a Lean scaffold yet.
 
 **Resume at any of:** *(A)* the decomposition-group identification needed to
 finish the pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))` — `Gal(ℚ(ζ₂₃)/ℚ)`
@@ -94,16 +126,18 @@ is now pinned cyclic of order 22, but `Ideal.card_stabilizer_eq` is blocked on
 an `Algebra ℤ Cyclotomic23` / `Algebra ℚ Cyclotomic23` instance diamond (see
 **Blocked**), or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d) write-up
 decision (Track B item 2) — *(C)* Track D: Cohen, Baste, Sárközy, Tang-Zhang,
-and Thakur are now all gated + controlled (BREAK ×5); next candidate per
-the corpus doc's own ranking is Chung-Graham gap-set — this
-target is **not yet cross-checked** against the corpus doc's Section
-headers, verify before starting — then NCI, then Salez-Youssef.
+Thakur, and Chung-Graham-Spiro are now all gated + controlled (BREAK ×6);
+next candidate per the corpus doc's own ranking is NCI (its "Target
+Identifier" block exists, unlike Chung-Graham's — but re-verify before
+starting, given this session's ghost-entry discovery), then Salez-Youssef.
 `docs/blueprint/cohen-subadditivity.md`, `docs/blueprint/baste-domination.md`,
 `docs/blueprint/sarkozy-sum-product.md`, `docs/blueprint/tang-zhang-schatten.md`,
-and `docs/blueprint/thakur-carlitz.md` are the templates to follow — the
-last two also demonstrate the fallback when the corpus doc's own text is
-too corrupted to gate from directly: fetch and read the real PDF instead
-(see their **Local PDF pinned** lines).
+`docs/blueprint/thakur-carlitz.md`, and `docs/blueprint/chung-graham-spiro.md`
+are the templates to follow — the last three also demonstrate the fallback
+when the corpus doc's own text is corrupted or entirely missing for a
+target: fetch and read the real paper instead (see their **Local PDF
+pinned** lines; chung-graham-spiro's also documents cross-checking the
+corpus doc's Section headers before trusting a table row).
 
 (2(d) write-up was declined — **worth revisiting**: after the false-positive
 control it is the campaign's only sendable artifact. See Track B item 2.)
@@ -311,8 +345,8 @@ pwsh ./scripts/verify.ps1
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
 PASS, `lame_ideal_neg23` PASS, `cohen_subadditivity` BREAK,
 `baste_domination` BREAK, `sarkozy_sum_product` BREAK,
-`tang_zhang_schatten` BREAK, `thakur_carlitz` BREAK, **verdict lock 13/13
-ok**, lake + forge VERIFIED
+`tang_zhang_schatten` BREAK, `thakur_carlitz` BREAK, `chung_graham_spiro`
+BREAK, **verdict lock 14/14 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
 `Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
 `Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois`; axiom-clean, 150

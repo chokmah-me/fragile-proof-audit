@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22T01:53:17.996594+00:00",
+  "timestamp": "2026-09-22T02:13:57.227693+00:00",
   "phase": "3i++",
   "gates": [
     {
@@ -69,6 +69,11 @@
     },
     {
       "name": "thakur_carlitz",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "chung_graham_spiro",
       "ok": true,
       "exit_code": 0
     }
@@ -173,6 +178,14 @@
     {
       "name": "thakur_carlitz",
       "meta": "thakur_carlitz_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "chung_graham_spiro",
+      "meta": "chung_graham_spiro_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
       "ok": true,

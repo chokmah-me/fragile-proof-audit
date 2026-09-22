@@ -1,0 +1,134 @@
+{
+  "timestamp": "2026-09-22T02:13:57.167507+00:00",
+  "gate": "chung_graham_spiro",
+  "source_claim": "Chung-Graham-Spiro (2020): the l-step gap sets D_l, U_l of the down-integer/up-integer partition of Z_{>=2} agree, D_l=U_l, for every l>=1",
+  "source_refutation": "Mohsen Aliabadi (2026), arXiv:2609.04473, Theorem 1.1",
+  "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md -- NOTE: the corpus doc's 'Chung-Graham Gap-Set' row (final ranking table, row 6) has NO body section, no arXiv ID, and no Works Cited entry; located via live web search instead, and the name itself was incomplete (missing 'Spiro')",
+  "local_pdf": "incoming/chung-graham-spiro-2609.04473.pdf",
+  "instance": "l=4, witness 9",
+  "path_a_representation": {
+    "D_cap_2_17": [
+      2,
+      5,
+      7,
+      9,
+      10,
+      12,
+      13,
+      15
+    ],
+    "U_cap_2_17": [
+      3,
+      4,
+      6,
+      8,
+      11,
+      14,
+      16,
+      17
+    ],
+    "matches_paper_2_17": true,
+    "five_consecutive_up_blocks_span9": [
+      [
+        8,
+        11,
+        14,
+        16,
+        17
+      ]
+    ],
+    "nine_in_U4": true,
+    "matches_paper_D_2_113": true,
+    "five_consecutive_down_blocks_span9_in_2_113": [],
+    "nine_not_in_D4_base_case_N113": true
+  },
+  "fastpath_selftest": {
+    "N": 1000,
+    "mismatches": [],
+    "matches_bruteforce": true
+  },
+  "depth_extended_down_scan": {
+    "N": 50000,
+    "method": "fast_cgs_representation (self-tested above)",
+    "five_consecutive_down_blocks_span9": [],
+    "nine_not_in_D4_up_to_N": true
+  },
+  "path_b_slow_walk_simulation": {
+    "N_checked": 220,
+    "n_unambiguous": 192,
+    "tie_disagreement_ns_excluded": [
+      4,
+      9,
+      12,
+      20,
+      25,
+      30,
+      35,
+      48,
+      56,
+      64,
+      72,
+      80,
+      83,
+      88,
+      96,
+      117,
+      130,
+      143,
+      156,
+      169,
+      182,
+      195,
+      197,
+      205,
+      208,
+      213,
+      218
+    ],
+    "disagreements_with_path_a_on_unambiguous_subset": [],
+    "path_b_agrees_with_path_a": true,
+    "witness_integers_checked": {
+      "8": {
+        "path_a": "U",
+        "path_b": "U",
+        "tie": false,
+        "agree": true
+      },
+      "9": {
+        "path_a": "D",
+        "path_b": "D",
+        "tie": true,
+        "agree": false
+      },
+      "11": {
+        "path_a": "U",
+        "path_b": "U",
+        "tie": false,
+        "agree": true
+      },
+      "14": {
+        "path_a": "U",
+        "path_b": "U",
+        "tie": false,
+        "agree": true
+      },
+      "16": {
+        "path_a": "U",
+        "path_b": "U",
+        "tie": false,
+        "agree": true
+      },
+      "17": {
+        "path_a": "U",
+        "path_b": "U",
+        "tie": false,
+        "agree": true
+      }
+    },
+    "witnesses_confirmed": true
+  },
+  "verdict": "BREAK",
+  "lemma": "D_l = U_l for every l >= 1 (Chung-Graham-Spiro gap-set conjecture)",
+  "false_instance": "9 in U_4 \\ D_4 (witnessed by 8,11,14,16,17 in U; absent from all 5-consecutive down-blocks checked up to N=20000)",
+  "ok": true
+}

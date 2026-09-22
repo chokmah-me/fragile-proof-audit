@@ -29,6 +29,7 @@ BASTE_DOMINATION = ROOT / "scripts" / "gates" / "baste_domination.py"
 SARKOZY_SUM_PRODUCT = ROOT / "scripts" / "gates" / "sarkozy_sum_product.py"
 TANG_ZHANG_SCHATTEN = ROOT / "scripts" / "gates" / "tang_zhang_schatten.py"
 THAKUR_CARLITZ = ROOT / "scripts" / "gates" / "thakur_carlitz.py"
+CHUNG_GRAHAM_SPIRO = ROOT / "scripts" / "gates" / "chung_graham_spiro.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -57,6 +58,7 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "sarkozy_sum_product": ("sarkozy_sum_product_gate_meta.json", "BREAK"),
     "tang_zhang_schatten": ("tang_zhang_schatten_gate_meta.json", "BREAK"),
     "thakur_carlitz": ("thakur_carlitz_gate_meta.json", "BREAK"),
+    "chung_graham_spiro": ("chung_graham_spiro_gate_meta.json", "BREAK"),
 }
 
 
@@ -172,6 +174,10 @@ def run_thakur_carlitz() -> dict:
     return run_script("thakur_carlitz", THAKUR_CARLITZ)
 
 
+def run_chung_graham_spiro() -> dict:
+    return run_script("chung_graham_spiro", CHUNG_GRAHAM_SPIRO)
+
+
 def main() -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
@@ -199,6 +205,7 @@ def main() -> int:
         run_sarkozy_sum_product(),
         run_tang_zhang_schatten(),
         run_thakur_carlitz(),
+        run_chung_graham_spiro(),
     ]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()
