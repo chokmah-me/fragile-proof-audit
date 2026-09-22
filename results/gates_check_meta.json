@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-20T20:29:47.148953+00:00",
+  "timestamp": "2026-09-22T01:17:21.036308+00:00",
   "phase": "3i++",
   "gates": [
     {
@@ -44,6 +44,16 @@
     },
     {
       "name": "lame_ideal_neg23",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "cohen_subadditivity",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "baste_domination",
       "ok": true,
       "exit_code": 0
     }
@@ -110,6 +120,22 @@
       "meta": "lame_ideal_neg23_gate_meta.json",
       "expected": "PASS",
       "actual": "PASS",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "cohen_subadditivity",
+      "meta": "cohen_subadditivity_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "baste_domination",
+      "meta": "baste_domination_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
       "ok": true,
       "note": ""
     }

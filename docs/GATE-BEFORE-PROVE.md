@@ -87,6 +87,8 @@ differences.
 | `suman_eq48` | BREAK — witness by construction | **required** — `controls/break_control.py` |
 | `odd_zeta_1609` | BREAK — non-existence by sampling | **required** — `controls/break_control.py` |
 | `lame_ideal_neg23` | PASS — non-existence by bounded search | **required** — `controls/lame_ideal_control.py` |
+| `cohen_subadditivity` | BREAK — witness by construction | **required** — `controls/cohen_break_control.py` |
+| `baste_domination` | BREAK — non-existence by exhaustive search (γ≥16) + general bound (γ_e=15) | **required** — `controls/baste_break_control.py` |
 | `rr_qexpand` | PASS — exact series equality | ceremony; the classical `(2,3)` anchor already serves |
 | `pdn1` | PASS — exact divisibility, 6 747 points | ceremony; the fast-path/oracle self-test serves |
 | `giuga_oracle` | PASS — decidable predicates on explicit integers | ceremony |
@@ -99,6 +101,23 @@ against a brute force run at 10x the formula's `b_bound` for seven targets
 (no truncation); and shows the `(a − b) % 2 == 0` parity filter is capable of
 *accepting* (at target=32, not just rejecting at target=8, where it would be
 vacuously true). Verdict: NO FALSE POSITIVE.
+
+`cohen_subadditivity` control landed 2026-09-20: 500 random `(m, n)` pairs
+(`1 <= m <= n <= 500`) produced **0** subadditivity violations while the
+claimed witness `(31, 3928)` reproduced correctly, so the check is not an
+always-BREAK detector; transcription matched a live arXiv-abstract fetch on
+all 5 checked markers (no local PDF pinned for arXiv:2607.09793 yet — see
+`docs/blueprint/cohen-subadditivity.md`). Verdict: NO FALSE POSITIVE.
+
+`baste_domination` control landed 2026-09-20: the gate's own exact
+branch-and-bound dominating-set solver was run on K4 (budget=1, found=True),
+the Petersen graph (budget=3 → found=True; budget=2 → found=False, correctly
+declining below the textbook minimum), and the target graph's own 16-vertex
+upper-bound witness (budget=16 → found=True) — so the solver both finds
+small dominating sets when they exist and declines when they don't, not an
+always-False detector. A real bug (`n = NUM_VERTICES` hardcoded instead of
+`n = len(adj)`) was caught the moment the control tried a non-target graph
+and is fixed. Verdict: NO FALSE POSITIVE.
 
 ### Controls are instruments, not gates
 

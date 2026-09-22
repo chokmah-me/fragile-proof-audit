@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-09-22T01:17:01.216575+00:00",
+  "gate": "cohen_subadditivity",
+  "source_claim": "Cohen's Conjecture 66 (subadditivity of C_sigma)",
+  "source_refutation": "Ibarra, J. A. (2026), arXiv:2607.09793",
+  "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md",
+  "m": 31,
+  "n": 3928,
+  "target": 3959,
+  "C_sigma_m": 10,
+  "C_sigma_n": 686,
+  "C_sigma_target": 697,
+  "C_sigma_m_plus_n": 696,
+  "totient_implementation_agreement": {
+    "checked_up_to": 7919,
+    "mismatches": [],
+    "ok": true
+  },
+  "independent_totient_recount_agrees": true,
+  "subadditivity_claim_holds": false,
+  "verdict": "BREAK",
+  "lemma": "C_sigma(m+n) <= C_sigma(m) + C_sigma(n) for all 1<=m<=n",
+  "instance": "m=31, n=3928",
+  "false_instance": "C_sigma(3959)=697 > 696=C_sigma(31)+C_sigma(3928)",
+  "ok": true
+}

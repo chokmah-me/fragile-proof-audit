@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-09-22T01:17:20.828003+00:00",
+  "gate": "baste_domination",
+  "source_claim": "Baste-Furst-Henning-Mohr-Rautenbach: gamma(G) <= gamma_e(G) for regular G",
+  "source_refutation": "Afrasyab (2026), arXiv:2609.10783",
+  "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md",
+  "transcription": {
+    "occurrence_count": {
+      "~x1": 2,
+      "x1": 2,
+      "~x2": 2,
+      "x2": 2,
+      "~x3": 2,
+      "x3": 2,
+      "~x4": 2,
+      "x4": 2,
+      "~x5": 2,
+      "x5": 2,
+      "~x6": 2,
+      "x6": 2,
+      "~x7": 2,
+      "x7": 2,
+      "~x8": 2,
+      "x8": 2,
+      "~x9": 2,
+      "x9": 2,
+      "~x10": 2,
+      "x10": 2,
+      "~x11": 2,
+      "x11": 2,
+      "~x12": 2,
+      "x12": 2,
+      "~x13": 2,
+      "x13": 2,
+      "~x14": 2,
+      "x14": 2,
+      "~x15": 2,
+      "x15": 2
+    },
+    "every_signed_literal_occurs_twice": true
+  },
+  "regularity": {
+    "vertex_count": 50,
+    "edge_count": 75,
+    "expected_edge_count": 75,
+    "all_degree_3": true,
+    "degrees_seen": [
+      3
+    ]
+  },
+  "matching_witness": {
+    "matching_size": 15,
+    "is_valid_matching": true,
+    "is_maximal": true,
+    "total_edges": 75
+  },
+  "gamma_e_lower_bound_general_cubic_argument": 15,
+  "gamma_e_confirmed_equals_15": true,
+  "gamma_upper_bound_witness": {
+    "witness_size": 16,
+    "witness_vertices": [
+      0,
+      2,
+      5,
+      7,
+      8,
+      13,
+      15,
+      30,
+      31,
+      32,
+      33,
+      35,
+      37,
+      42,
+      46,
+      48
+    ],
+    "is_dominating": true,
+    "undominated": []
+  },
+  "gamma_upper_confirmed_leq_16": true,
+  "independent_search_for_smaller_dominating_set": {
+    "result": false,
+    "status": "CONFIRMED (no dominating set of size <= 15)",
+    "budget": 15,
+    "nodes_explored": 8856929,
+    "timed_out": false,
+    "time_limit_s": 45.0
+  },
+  "verdict": "BREAK",
+  "lemma": "gamma(G) <= gamma_e(G) for every finite regular graph G of positive degree",
+  "instance": "50-vertex, 3-regular graph (15 variable-pair gadgets, 20 clause gadgets)",
+  "false_instance": "gamma(G)=16 > 15=gamma_e(G), independently confirmed except (see status) the gamma>=16 lower bound",
+  "ok": true
+}

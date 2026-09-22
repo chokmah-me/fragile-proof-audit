@@ -24,6 +24,8 @@ PDN1 = ROOT / "scripts" / "gates" / "pdn1.py"
 GIUGA_ORACLE = ROOT / "scripts" / "gates" / "giuga_oracle.py"
 LAME_H23 = ROOT / "scripts" / "gates" / "lame_h23.py"
 LAME_IDEAL_NEG23 = ROOT / "scripts" / "gates" / "lame_ideal_neg23.py"
+COHEN_SUBADDITIVITY = ROOT / "scripts" / "gates" / "cohen_subadditivity.py"
+BASTE_DOMINATION = ROOT / "scripts" / "gates" / "baste_domination.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -47,6 +49,8 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "giuga_oracle": ("giuga_oracle_gate_meta.json", "PASS"),
     "lame_h23": ("lame_h23_gate_meta.json", "PASS"),
     "lame_ideal_neg23": ("lame_ideal_neg23_gate_meta.json", "PASS"),
+    "cohen_subadditivity": ("cohen_subadditivity_gate_meta.json", "BREAK"),
+    "baste_domination": ("baste_domination_gate_meta.json", "BREAK"),
 }
 
 
@@ -142,6 +146,14 @@ def run_lame_ideal_neg23() -> dict:
     return run_script("lame_ideal_neg23", LAME_IDEAL_NEG23)
 
 
+def run_cohen_subadditivity() -> dict:
+    return run_script("cohen_subadditivity", COHEN_SUBADDITIVITY)
+
+
+def run_baste_domination() -> dict:
+    return run_script("baste_domination", BASTE_DOMINATION)
+
+
 def main() -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
@@ -153,6 +165,7 @@ def main() -> int:
 
     RESULTS.mkdir(parents=True, exist_ok=True)
     # Phase 1(b)+2(d)–2(g)+3(h)+3(i)+3(i)++: prior gates + Lamé ideal witness.
+    # Track D#1: Cohen subadditivity (corpus/live-fragile-proofs-2024-2026.md).
     results = [
         run_harness(),
         run_suman_eq48(),
@@ -163,6 +176,8 @@ def main() -> int:
         run_giuga_oracle(),
         run_lame_h23(),
         run_lame_ideal_neg23(),
+        run_cohen_subadditivity(),
+        run_baste_domination(),
     ]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()
