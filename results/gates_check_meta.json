@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22T02:13:57.227693+00:00",
+  "timestamp": "2026-09-22T02:37:46.475237+00:00",
   "phase": "3i++",
   "gates": [
     {
@@ -74,6 +74,11 @@
     },
     {
       "name": "chung_graham_spiro",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "salez_youssef_logsobolev",
       "ok": true,
       "exit_code": 0
     }
@@ -186,6 +191,14 @@
     {
       "name": "chung_graham_spiro",
       "meta": "chung_graham_spiro_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "salez_youssef_logsobolev",
+      "meta": "salez_youssef_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
       "ok": true,

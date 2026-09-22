@@ -1,0 +1,102 @@
+{
+  "timestamp": "2026-09-22T02:37:46.423512+00:00",
+  "gate": "salez_youssef_logsobolev",
+  "source_claim": "Conjecture 1.2 (Salez-Youssef): Ollivier curvature K>0 implies alpha_LSI >= c*K/log(d) for a universal constant c",
+  "source_refutation": "Munch (2025), arXiv:2504.08055, Theorem via Section 2",
+  "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md",
+  "local_pdf": "incoming/salez-youssef-munch-2504.08055.pdf",
+  "instances": [
+    {
+      "n": 4,
+      "pi_1": "0.8599152455",
+      "min_kappa": "1/64",
+      "target_1_over_4n2": "1/64",
+      "kappa_equals_target_exact": true,
+      "cap": "9.188762249e-7",
+      "pi_B": "7.124303565e-6",
+      "R_upper_bound": "0.01088235796",
+      "K_over_logd": "0.003757018336",
+      "ratio_R_over_Klogd": "2.896541084"
+    },
+    {
+      "n": 10,
+      "pi_1": "0.9235245891",
+      "min_kappa": "1/400",
+      "target_1_over_4n2": "1/400",
+      "kappa_equals_target_exact": true,
+      "cap": "4.580746519e-16",
+      "pi_B": "2.00955961e-14",
+      "R_upper_bound": "0.0007227655125",
+      "K_over_logd": "0.0004172602509",
+      "ratio_R_over_Klogd": "1.732169578"
+    },
+    {
+      "n": 30,
+      "pi_1": "0.9697247213",
+      "min_kappa": "1/3600",
+      "target_1_over_4n2": "1/3600",
+      "kappa_equals_target_exact": true,
+      "cap": "1.081539938e-54",
+      "pi_B": "4.055419536e-52",
+      "R_upper_bound": "2.253698764e-5",
+      "K_over_logd": "3.392213009e-5",
+      "ratio_R_over_Klogd": "0.6643741882"
+    },
+    {
+      "n": 100,
+      "pi_1": "0.990292177",
+      "min_kappa": "1/40000",
+      "target_1_over_4n2": "1/40000",
+      "kappa_equals_target_exact": true,
+      "cap": "3.581183994e-223",
+      "pi_B": "1.463644255e-219",
+      "R_upper_bound": "4.855785506e-7",
+      "K_over_logd": "2.359239573e-6",
+      "ratio_R_over_Klogd": "0.2058199414"
+    },
+    {
+      "n": 300,
+      "pi_1": "0.9966997059",
+      "min_kappa": "1/360000",
+      "target_1_over_4n2": "1/360000",
+      "kappa_equals_target_exact": true,
+      "cap": "8.10693934e-801",
+      "pi_B": "2.965351817e-796",
+      "R_upper_bound": "1.492483642e-8",
+      "K_over_logd": "2.171180494e-7",
+      "ratio_R_over_Klogd": "0.06874065265"
+    },
+    {
+      "n": 1000,
+      "pi_1": "0.999002992",
+      "min_kappa": "1/4000000",
+      "target_1_over_4n2": "1/4000000",
+      "kappa_equals_target_exact": true,
+      "cap": "3.656717906e-3176",
+      "pi_B": "1.483241422e-3170",
+      "R_upper_bound": "3.377754794e-10",
+      "K_over_logd": "1.644541562e-8",
+      "ratio_R_over_Klogd": "0.02053918778"
+    },
+    {
+      "n": 3000,
+      "pi_1": "0.9996669997",
+      "min_kappa": "1/36000000",
+      "target_1_over_4n2": "1/36000000",
+      "kappa_equals_target_exact": true,
+      "cap": "5.175034297e-10944",
+      "pi_B": "1.888125889e-10937",
+      "R_upper_bound": "1.088376975e-11",
+      "K_over_logd": "1.596513057e-9",
+      "ratio_R_over_Klogd": "0.006817213111"
+    }
+  ],
+  "all_kappa_matches_1_over_4n2_exactly": true,
+  "all_pi1_over_half": true,
+  "ratio_strictly_decreasing_over_n": true,
+  "final_ratio_below_0.01": true,
+  "verdict": "BREAK",
+  "lemma": "alpha_LSI >= c*K/log(d) for a universal c, on Munch's birth-death family",
+  "false_instance": "n=3000: kappa=1/(4n^2), R(n)/[K/log d]=0.00681721 and shrinking -- no fixed c survives n -> infinity",
+  "ok": true
+}

@@ -2,34 +2,64 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-21 — Track D#7 **NCI Conjecture (arXiv:2608.27416)
-SKIPPED, no finite gate** (not a BREAK/PASS — a scope decision). Went to
-gate the corpus doc's next-ranked target (NCI has a full "Target Identifier"
-block, unlike Chung-Graham's ghost entry, so it looked trustworthy). Fetched
-and read the real paper (Wilhelm, TU Ilmenau, `incoming/nci-wilhelm-2608.27416.pdf`,
-live-checked via WebFetch first) and found the corpus doc's claimed
-"Verifiable Gate / Counterexample: Python script validating the non-existence
-of admissible sets..." does not exist in the source — **fabricated**, not
-merely corrupted-by-image-transcription like the last three targets. The
-actual refutation (Theorem 8.1 / Corollary 8.2) is a first-moment
-(probabilistic-existence) argument: Lemma 7.2 proves *some* marking `m` on
-`F_p²` (`p ≥ 10^5`) makes the lattice `P_{p,m}` admit no winning dot-algebra
-tree, via a union-bound expectation `E_p < 1`, but **exhibits no marking** —
-confirmed by the paper's own §9 Open Problems item 1, which states verbatim
-that even a small-`p` explicit counterexample is unsolved. The only
-numerically checkable content in the paper (the double-counting identities in
-`(7.1)`) is true of every finite point set unconditionally — testing it would
-be exactly the check-that-cannot-fail ceremony Governing discipline #7
-forbids. No script to write that would *reproduce* the paper's witness,
-because it has none. Filed under **Do not reopen** alongside Joshi/IUT,
-Collatz, Goldbach "monitors" — no finite gate. **Verdict lock stays 14/14**
-(nothing added/changed in `scripts/gates/check.py`). Evidence:
-`docs/blueprint/nci-conjecture.md`. **Next candidate per the corpus doc's own
-ranking: Salez-Youssef Log-Sobolev Conjecture** (arXiv:2504.08055) — appears
-to have an actual concrete algorithm (birth-death Markov chains, Ollivier
-curvature via `scipy.optimize.linprog`, spectral-gap log-Sobolev estimate),
-but **re-verify against the real paper before trusting the corpus doc's
-description**, per this session's and Chung-Graham's lesson.
+**Checkpoint:** 2026-09-21 — Track D#8 **`salez_youssef_logsobolev` gated +
+controlled, verdict BREAK**. Per this session's own standing lesson (NCI's
+corpus entry claimed a gate that turned out fabricated), fetched and read
+the real paper first (Münch, Leipzig University, arXiv:2504.08055,
+`incoming/salez-youssef-munch-2504.08055.pdf`, live-checked via WebFetch
+before download) — this time the corpus doc's description held up: Münch
+refutes the Salez-Youssef conjecture (`α_LSI ≥ c·K/log(d)` under an Ollivier
+curvature lower bound `K`, for a universal `c`) with an explicit birth-death
+chain family on `{1,...,3n}` with exact rational transition rates,
+`κ ≥ 1/(4n²)` everywhere, and a capacitary upper bound on `α_LSI` that decays
+like `1/(n³ log n)` — one power of `n` faster than `K/log d ~ 1/(n² log n)`,
+so no fixed `c` survives `n → ∞`. Gate (`scripts/gates/salez_youssef_logsobolev.py`)
+reproduces this exactly: `fractions.Fraction` transition probabilities,
+`mpmath` 80-digit stationary distribution and capacity (magnitudes down to
+`~1e-10937` at `n=3000`, far outside float64), exact-rational confirmation
+that the curvature bound is met with **equality** at every `n` tested, and
+confirmation that the ratio `R(n)/[K/log d]` is strictly decreasing across
+seven `n` values spanning three orders of magnitude, dropping below `0.01` at
+`n=3000` — the actual asymptotic mechanism, not a single snapshot.
+Discrimination control (`scripts/controls/salez_youssef_break_control.py`)
+verdict **NO FALSE POSITIVE**: ten transcription spot-checks against the
+pinned PDF's Section 2 formulas all match, and — using the paper's own named
+"this case satisfies the conjecture" example (constant curvature + log-concave
+invariant measure) — the same ratio diagnostic correctly shows the ratio
+*growing* (not vanishing) as `n` grows, confirming the machinery discriminates
+rather than always finding a "violation." Registered in `scripts/gates/check.py`;
+**verdict lock now 15/15**; no Lean scaffold (mathlib has no Ollivier
+curvature / isocapacitary / log-Sobolev coverage — the corpus doc's own
+ranking table already correctly flagged this as low tractability). Evidence:
+`docs/blueprint/salez-youssef-logsobolev.md`. This closes out the corpus
+doc's ranking table (all 8 rows now dispositioned: 6 BREAK, 1 SKIPPED/no
+finite gate, this one BREAK) — **Track D has no further corpus-doc-ranked
+candidates**; next session should check `corpus/fragile-formalizable-proofs-report.md`
+and `corpus/historical-collapses-gemini-export.md` for unexploited targets,
+or return to the Lamé/cyclotomic Lean thread (**Resume (A)** below).
+
+Prior Track D checkpoint (2026-09-21): Track D#7 **NCI Conjecture
+(arXiv:2608.27416) SKIPPED, no finite gate** (not a BREAK/PASS — a scope
+decision). Went to gate the corpus doc's next-ranked target (NCI has a full
+"Target Identifier" block, unlike Chung-Graham's ghost entry, so it looked
+trustworthy). Fetched and read the real paper (Wilhelm, TU Ilmenau,
+`incoming/nci-wilhelm-2608.27416.pdf`, live-checked via WebFetch first) and
+found the corpus doc's claimed "Verifiable Gate / Counterexample: Python
+script validating the non-existence of admissible sets..." does not exist in
+the source — **fabricated**, not merely corrupted-by-image-transcription
+like the prior three targets. The actual refutation (Theorem 8.1 / Corollary
+8.2) is a first-moment (probabilistic-existence) argument: Lemma 7.2 proves
+*some* marking `m` on `F_p²` (`p ≥ 10^5`) makes the lattice `P_{p,m}` admit
+no winning dot-algebra tree, via a union-bound expectation `E_p < 1`, but
+**exhibits no marking** — confirmed by the paper's own §9 Open Problems item
+1, which states verbatim that even a small-`p` explicit counterexample is
+unsolved. The only numerically checkable content in the paper (the
+double-counting identities in `(7.1)`) is true of every finite point set
+unconditionally — testing it would be exactly the check-that-cannot-fail
+ceremony Governing discipline #7 forbids. No script to write that would
+*reproduce* the paper's witness, because it has none. Filed under **Do not
+reopen** alongside Joshi/IUT, Collatz, Goldbach "monitors" — no finite gate.
+Evidence: `docs/blueprint/nci-conjecture.md`.
 
 Prior Track D checkpoint (2026-09-21): Track D#6 **`chung_graham_spiro` gated +
 controlled, verdict BREAK**. Cross-checked the "Chung-Graham Gap-Set" row
@@ -146,28 +176,43 @@ same image-corruption failure mode as Tang-Zhang). A sixth,
 `chung_graham_spiro`, also landed 2026-09-21 (BREAK) — worst provenance
 failure yet: the corpus doc has no body section for this target at all (a
 table-only ghost entry, no arXiv ID, incomplete name), so the refutation was
-located by live web search instead of any corpus-doc lead. All six
-registered in `scripts/gates/check.py`; none has a Lean scaffold yet.
+located by live web search instead of any corpus-doc lead. A seventh
+candidate, NCI, was SKIPPED (no finite gate) the same day — its corpus entry
+looked complete but claimed a "Verifiable Gate" fabricated relative to the
+real paper, which is a pure first-moment existence proof with no witness
+(see `docs/blueprint/nci-conjecture.md`). An eighth, `salez_youssef_logsobolev`,
+landed 2026-09-21 (BREAK) — this one's corpus description held up against the
+real paper. All seven landed BREAKs registered in `scripts/gates/check.py`;
+none has a Lean scaffold yet (mathlib coverage gaps: cyclic-number/graph
+theory targets are tractable in principle but not attempted; Ollivier
+curvature/log-Sobolev has no mathlib coverage at all).
 
 **Resume at any of:** *(A)* the decomposition-group identification needed to
 finish the pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))` — `Gal(ℚ(ζ₂₃)/ℚ)`
 is now pinned cyclic of order 22, but `Ideal.card_stabilizer_eq` is blocked on
 an `Algebra ℤ Cyclotomic23` / `Algebra ℚ Cyclotomic23` instance diamond (see
 **Blocked**), or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d) write-up
-decision (Track B item 2) — *(C)* Track D: Cohen, Baste, Sárközy, Tang-Zhang,
-Thakur, and Chung-Graham-Spiro are now all gated + controlled (BREAK ×6); NCI
-is SKIPPED (no finite gate — its "Target Identifier" block existed, unlike
-Chung-Graham's, but its "Verifiable Gate" claim turned out to be fabricated,
-not just image-corrupted); next candidate per the corpus doc's own ranking is
-Salez-Youssef (re-verify against the real paper first, as always now).
+decision (Track B item 2) — *(C)* Track D: Cohen, Baste, Sárközy, Tang-Zhang, Thakur, Chung-Graham-Spiro,
+and Salez-Youssef are now all gated + controlled (BREAK ×7); NCI is SKIPPED
+(no finite gate — its "Target Identifier" block existed, unlike Chung-Graham's,
+but its "Verifiable Gate" claim turned out to be fabricated, not just
+image-corrupted). The corpus doc's own 8-row ranking table is now fully
+dispositioned — no further candidates there. Next Track D session should
+open `corpus/fragile-formalizable-proofs-report.md` and
+`corpus/historical-collapses-gemini-export.md` for unexploited targets (apply
+the same "fetch and read the real paper before trusting any gate claim"
+discipline learned this session), or pivot back to *(A)*.
 `docs/blueprint/cohen-subadditivity.md`, `docs/blueprint/baste-domination.md`,
 `docs/blueprint/sarkozy-sum-product.md`, `docs/blueprint/tang-zhang-schatten.md`,
-`docs/blueprint/thakur-carlitz.md`, and `docs/blueprint/chung-graham-spiro.md`
-are the templates to follow — the last three also demonstrate the fallback
-when the corpus doc's own text is corrupted or entirely missing for a
-target: fetch and read the real paper instead (see their **Local PDF
-pinned** lines; chung-graham-spiro's also documents cross-checking the
-corpus doc's Section headers before trusting a table row).
+`docs/blueprint/thakur-carlitz.md`, `docs/blueprint/chung-graham-spiro.md`,
+`docs/blueprint/nci-conjecture.md`, and `docs/blueprint/salez-youssef-logsobolev.md`
+are the templates to follow — the middle four also demonstrate the fallback
+when the corpus doc's own text is corrupted, entirely missing, or (NCI)
+fabricated for a target: fetch and read the real paper instead (see their
+**Local PDF pinned** lines; chung-graham-spiro's documents cross-checking the
+corpus doc's Section headers before trusting a table row; nci-conjecture's
+documents recognizing a claimed gate that doesn't exist in the source at
+all, as opposed to merely being image-corrupted).
 
 (2(d) write-up was declined — **worth revisiting**: after the false-positive
 control it is the campaign's only sendable artifact. See Track B item 2.)
@@ -376,7 +421,7 @@ Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
 PASS, `lame_ideal_neg23` PASS, `cohen_subadditivity` BREAK,
 `baste_domination` BREAK, `sarkozy_sum_product` BREAK,
 `tang_zhang_schatten` BREAK, `thakur_carlitz` BREAK, `chung_graham_spiro`
-BREAK, **verdict lock 14/14 ok**, lake + forge VERIFIED
+BREAK, `salez_youssef_logsobolev` BREAK, **verdict lock 15/15 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
 `Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
 `Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois`; axiom-clean, 150

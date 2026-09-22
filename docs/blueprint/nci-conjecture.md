@@ -91,8 +91,8 @@ neither the cited paper nor its predecessor (Wilhelm, arXiv:2608.19414,
 the left-linear-tree paper referenced as `[2]`) contains a runnable
 counterexample script; both are pure existence proofs.
 
-**Local PDF pinned:** `incoming/nci-wilhelm-2608.27416.pdf` (gitignored),
-fetched directly from arXiv, live-checked via WebFetch before download.
+**Local PDF pinned:** `incoming/nci-wilhelm-2608.27416.pdf`, fetched directly
+from arXiv, live-checked via WebFetch before download.
 
 **Do not reopen** unless: (a) someone publishes an explicit small-`p`
 counterexample (the paper's own Open Problem 1), making a Type-F gate
