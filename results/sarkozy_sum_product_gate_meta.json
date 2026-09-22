@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22T01:44:23.229021+00:00",
+  "timestamp": "2026-09-22T01:53:17.423946+00:00",
   "gate": "sarkozy_sum_product",
   "source_claim": "Sarkozy's sum-product conjecture: exists c>0 s.t. any A subset Z/pZ with |A| >= c*p forces 1 in (A+A) union (A*A)",
   "source_refutation": "Tang, Q. (2026), arXiv:2603.29992",
@@ -23,7 +23,7 @@
         2
       ],
       "cross_check_ok": true,
-      "elapsed_s": 0.0001,
+      "elapsed_s": 0.0,
       "has_witness": true
     },
     {
@@ -36,7 +36,7 @@
         3
       ],
       "cross_check_ok": true,
-      "elapsed_s": 0.0002,
+      "elapsed_s": 0.0001,
       "has_witness": true
     },
     {
@@ -51,7 +51,7 @@
         8
       ],
       "cross_check_ok": true,
-      "elapsed_s": 0.0035,
+      "elapsed_s": 0.0043,
       "has_witness": true
     },
     {
@@ -67,7 +67,7 @@
         6
       ],
       "cross_check_ok": true,
-      "elapsed_s": 0.0189,
+      "elapsed_s": 0.0142,
       "has_witness": true
     },
     {
@@ -85,7 +85,7 @@
         12
       ],
       "cross_check_ok": true,
-      "elapsed_s": 0.394,
+      "elapsed_s": 0.3449,
       "has_witness": true
     },
     {
@@ -104,7 +104,7 @@
         15
       ],
       "cross_check_ok": true,
-      "elapsed_s": 1.7887,
+      "elapsed_s": 1.6582,
       "has_witness": true
     }
   ],

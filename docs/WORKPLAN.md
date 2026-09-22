@@ -2,7 +2,29 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-21 — Track D#4 **`tang_zhang_schatten` gated +
+**Checkpoint:** 2026-09-21 — Track D#5 **`thakur_carlitz` gated + controlled,
+verdict BREAK**. Thakur's 2015 conjecture (every Carlitz-Wieferich prime of
+`F_q[T]` in odd characteristic has degree divisible by the characteristic
+`p`) refuted at an explicit degree-5 prime over `F_{19^3}`
+(`incoming/thakur-carlitz-2607.15305.pdf`, arXiv:2607.15305, D. Niedbala
+Giraudin) — **another corpus-doc narrative unusable** (the explicit quintic
+and field data were behind untranscribed inline images), so the gate was
+built by fetching and reading the actual paper. A from-scratch pure-Python
+finite-field engine (`scripts/harness/finite_field.py` — no
+`galois`/Sage/PARI on this laptop) builds `F_{19^3}[T]/(P)`, confirms `P`
+irreducible via the standard distinct-degree test, and confirms the
+c-Wieferich condition `M_5(theta)=0` via two independently coded formulas
+(the paper's nested form and the raw alternating-sum definition) that agree.
+Discrimination control (`scripts/controls/thakur_break_control.py`) verdict
+**NO FALSE POSITIVE**: the same engine correctly identifies two known
+c-Wieferich primes at different `(degree, characteristic)` pairs
+(`T^5+4T+1`/F_5, Bamunoba-Bergström's `T^6+T^4+T^3+T^2+2T+2`/F_3) as positive
+controls, and reports 0 hits among 10 random irreducible quintics over F_19
+as negative controls. Registered in `scripts/gates/check.py`; **verdict lock
+now 13/13**; no Lean scaffold yet (likely blocked on mathlib Carlitz-module
+coverage). Evidence: `docs/blueprint/thakur-carlitz.md`.
+
+Prior Track D checkpoint (2026-09-21): Track D#4 **`tang_zhang_schatten` gated +
 controlled, verdict BREAK**. The Tang-Zhang Schatten-norm conjecture
 (a single formula `C^TZ_{p,m}` claimed sharp for all finite `p>1`) refuted
 at `p=3/2, m=2` via a real PDF pin (`incoming/tang-zhang-2608.15558.pdf`,
@@ -61,7 +83,9 @@ bounds independently including an exact branch-and-bound search this
 campaign wrote for γ(G)≥16). A third, `sarkozy_sum_product`, landed
 2026-09-21 (BREAK). A fourth, `tang_zhang_schatten`, also landed
 2026-09-21 (BREAK, first Track D target to need a real PDF fetch since the
-corpus doc's own text was unusable for it). All four registered in
+corpus doc's own text was unusable for it). A fifth, `thakur_carlitz`,
+landed 2026-09-21 (BREAK, second Track D target needing a real PDF fetch —
+same image-corruption failure mode as Tang-Zhang). All five registered in
 `scripts/gates/check.py`; none has a Lean scaffold yet.
 
 **Resume at any of:** *(A)* the decomposition-group identification needed to
@@ -69,17 +93,17 @@ finish the pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))` — `Gal(
 is now pinned cyclic of order 22, but `Ideal.card_stabilizer_eq` is blocked on
 an `Algebra ℤ Cyclotomic23` / `Algebra ℚ Cyclotomic23` instance diamond (see
 **Blocked**), or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d) write-up
-decision (Track B item 2) — *(C)* Track D: Cohen, Baste, Sárközy, and
-Tang-Zhang are now all gated + controlled (BREAK ×4); next candidate per
-the corpus doc's own ranking is Thakur, then Chung-Graham gap-set — this
-last one is **not yet cross-checked** against the corpus doc's Section
+decision (Track B item 2) — *(C)* Track D: Cohen, Baste, Sárközy, Tang-Zhang,
+and Thakur are now all gated + controlled (BREAK ×5); next candidate per
+the corpus doc's own ranking is Chung-Graham gap-set — this
+target is **not yet cross-checked** against the corpus doc's Section
 headers, verify before starting — then NCI, then Salez-Youssef.
 `docs/blueprint/cohen-subadditivity.md`, `docs/blueprint/baste-domination.md`,
-`docs/blueprint/sarkozy-sum-product.md`, and
-`docs/blueprint/tang-zhang-schatten.md` are the templates to follow — the
-last one also demonstrates the fallback when the corpus doc's own text is
+`docs/blueprint/sarkozy-sum-product.md`, `docs/blueprint/tang-zhang-schatten.md`,
+and `docs/blueprint/thakur-carlitz.md` are the templates to follow — the
+last two also demonstrate the fallback when the corpus doc's own text is
 too corrupted to gate from directly: fetch and read the real PDF instead
-(see its **Local PDF pinned** line).
+(see their **Local PDF pinned** lines).
 
 (2(d) write-up was declined — **worth revisiting**: after the false-positive
 control it is the campaign's only sendable artifact. See Track B item 2.)
@@ -287,7 +311,8 @@ pwsh ./scripts/verify.ps1
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
 PASS, `lame_ideal_neg23` PASS, `cohen_subadditivity` BREAK,
 `baste_domination` BREAK, `sarkozy_sum_product` BREAK,
-`tang_zhang_schatten` BREAK, **verdict lock 12/12 ok**, lake + forge VERIFIED
+`tang_zhang_schatten` BREAK, `thakur_carlitz` BREAK, **verdict lock 13/13
+ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
 `Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
 `Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois`; axiom-clean, 150

@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-09-22T01:52:19.118978+00:00",
+  "control": "thakur_break_control",
+  "gate": "thakur_carlitz",
+  "positive_control_5_5": {
+    "target": "T^5+4T+1 over F_5[T]",
+    "irreducible": true,
+    "is_c_wieferich": true,
+    "expected": true,
+    "ok": true
+  },
+  "positive_control_6_3": {
+    "target": "T^6+T^4+T^3+T^2+2T+2 over F_3[T]",
+    "irreducible": true,
+    "is_c_wieferich": true,
+    "expected": true,
+    "ok": true
+  },
+  "negative_controls_random_quintics_F19": {
+    "n_irreducible_quintics_tested": 10,
+    "c_wieferich_hits": 0,
+    "ok": true
+  },
+  "lemma_2_3_no_linear_factor": {
+    "prime_field_elements_checked": 19,
+    "all_fixed_by_frobenius": true,
+    "ok": true
+  },
+  "transcription_check": {
+    "leading_coeff_is_1": true,
+    "constant_term_6_17_5": true,
+    "degree_5": true,
+    "char_is_19": true,
+    "q_is_19_cubed": true,
+    "modulus_matches_c3_eq_8c2_4c_11": true,
+    "ok": true
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true
+}

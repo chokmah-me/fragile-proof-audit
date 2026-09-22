@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22T01:44:23.526541+00:00",
+  "timestamp": "2026-09-22T01:53:17.996594+00:00",
   "phase": "3i++",
   "gates": [
     {
@@ -64,6 +64,11 @@
     },
     {
       "name": "tang_zhang_schatten",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "thakur_carlitz",
       "ok": true,
       "exit_code": 0
     }
@@ -160,6 +165,14 @@
     {
       "name": "tang_zhang_schatten",
       "meta": "tang_zhang_schatten_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "thakur_carlitz",
+      "meta": "thakur_carlitz_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
       "ok": true,

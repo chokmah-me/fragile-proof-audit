@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-09-22T01:53:17.939339+00:00",
+  "gate": "thakur_carlitz",
+  "source_claim": "Thakur (2015): every c-Wieferich prime of F_q[T] (q an odd prime power) has degree divisible by the characteristic p",
+  "source_refutation": "D. Niedbala Giraudin (2026), arXiv:2607.15305v2, Theorem 1.1",
+  "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md",
+  "local_pdf": "incoming/thakur-carlitz-2607.15305.pdf",
+  "instance": "q=19^3=F_19[c]/(c^3-8c^2-4c-11), explicit quintic P(T), degree 5, char 19",
+  "field": "F_{19^3} via pure-Python engine (scripts/harness/finite_field.py)",
+  "irreducible": true,
+  "no_linear_factor_over_Fq": true,
+  "P_divides_bracket_5": true,
+  "m5_nested_form_zero": true,
+  "m5_raw_sum_form_zero": true,
+  "two_independent_m5_paths_agree": true,
+  "degree_is_5": true,
+  "char_does_not_divide_degree": true,
+  "verdict": "BREAK",
+  "lemma": "every c-Wieferich prime of F_q[T] (odd char) has degree divisible by p",
+  "false_instance": "explicit irreducible degree-5 c-Wieferich prime P over F_{19^3}, and 19 does not divide 5",
+  "ok": true
+}
