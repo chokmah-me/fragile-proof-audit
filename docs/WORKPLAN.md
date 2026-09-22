@@ -2,7 +2,27 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 (later) — **JAC-2D gated, verdict PASS
+**Checkpoint:** 2026-09-22 (later still) — **KRR-CL "bigger enumerator"
+built and found vacuous, not a gate.** Dossier II's own "Next options" list
+scored the exhaustive composition-lemma inequality check
+(`score(f^2) <= score(f)`, n=5..9) higher (R=9) than the already-landed
+Q^[1]-congruence BREAK. Built it (`scripts/controls/krr_cl_composition_scan.py`)
+and ran it: 5 902 trees (n=5..8), zero counterexamples, `score` saturates at
+the ceiling `n` on every instance because the graceful tree conjecture is
+independently known computationally far past what `(n-1)!` brute force can
+reach — the inequality reads `n<=n` regardless of the lemma's correctness.
+This is structural, not a depth limit: no reachable n makes it decisive.
+Governing discipline #7 caught it before registration; it is an instrument
+in `scripts/controls/`, not `scripts/gates/check.py` (**lock stays 21/21**).
+Corrected inline in `corpus/Fragile-Route_Harvest_Dossier_II.md` and
+`docs/audits/krr-cl.md`. Conclusion: the narrower point-witness BREAK
+already locked was the right target, not a fallback from a bigger check the
+campaign failed to build. TPC-GN's analogous edge-disjointness enumerator
+(Hit 4) was **not** attempted this session, given this pattern — a fresh
+session should read Hit 4's actual packing-composition machinery before
+assuming it inherits the same vacuity trap, rather than assuming either way.
+
+Prior checkpoint, same day (earlier): **JAC-2D gated, verdict PASS
 (escalate)**. Yucai Su, arXiv:1603.01867v43 (43 versions, 2016-2024,
 "FINAL"), claimed proof of the 2D Jacobian conjecture. Dossier II's
 "Earliest pin" was Remark 2.7 + the coefficient-comparison chain to Lemma

@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-09-22T11:46:55.449460+00:00",
+  "instrument": "krr_cl_composition_scan",
+  "target_claim": "Lemma 25's printed inequality max_sigma-cardinality(f^2) <= max_sigma-cardinality(f) for f in the semigroup with diameter>=3",
+  "corpus_pointer": "corpus/Fragile-Route_Harvest_Dossier_II.md, Hit 3 'Next options' item 2 (scored F=9 Fr=8 R=9 -- the enumerator this dossier rated highest-value)",
+  "per_n": [
+    {
+      "n": 5,
+      "trees_checked": 22,
+      "elapsed_s": 0.001,
+      "distinct_score_values_seen": [
+        5
+      ],
+      "always_saturates_at_n": true,
+      "inequality_violations": 0,
+      "reverse_inequality_violations": 0
+    },
+    {
+      "n": 6,
+      "trees_checked": 118,
+      "elapsed_s": 0.016,
+      "distinct_score_values_seen": [
+        6
+      ],
+      "always_saturates_at_n": true,
+      "inequality_violations": 0,
+      "reverse_inequality_violations": 0
+    },
+    {
+      "n": 7,
+      "trees_checked": 718,
+      "elapsed_s": 0.574,
+      "distinct_score_values_seen": [
+        7
+      ],
+      "always_saturates_at_n": true,
+      "inequality_violations": 0,
+      "reverse_inequality_violations": 0
+    },
+    {
+      "n": 8,
+      "trees_checked": 5038,
+      "elapsed_s": 24.143,
+      "distinct_score_values_seen": [
+        8
+      ],
+      "always_saturates_at_n": true,
+      "inequality_violations": 0,
+      "reverse_inequality_violations": 0
+    }
+  ],
+  "vacuous_throughout_tested_range": true,
+  "any_counterexample_found": false,
+  "conclusion": "CHECK-THAT-CANNOT-FAIL (Governing discipline #7): score(f) saturates at the ceiling n for every tree n=5..8, so the inequality reads n<=n regardless of Lemma 25's correctness. This is structural, not a depth limit -- the graceful tree conjecture is independently known for far larger n than brute-force enumeration can ever reach, so this design can never become discriminating. Does not confirm or refute Lemma 25 or the KRR conjecture. Does not supersede the already-landed krr_cl Q^[1]-congruence BREAK, which remains the decisive finding on this target.",
+  "verdict": "NOT_APPLICABLE_TAUTOLOGY",
+  "note": "Instrument only. Not registered in scripts/gates/check.py; no lock row."
+}

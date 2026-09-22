@@ -24,3 +24,30 @@
 The evaluation formula for \(P_g\) printed on the same page holds for this \(f\): on \(\Phi(g)\) it equals \(\pm\prod_{i<j}(j-i)(j^2-i^2)\), and off \(\Phi(g)\) it equals 0. The telescoping step \(x_{f^{(2)}(v)}-x_v=(x_{f^{(2)}(n-1)}-x_{f(n-1)})+(x_{f(v)}-x_v)\) is an identity.
 
 The Kotzig–Ringel–Rosa conjecture is untouched. This row does not say that a later Gnang manuscript inherits the same display.
+
+## Follow-up (2026-09-22): the "bigger" enumerator turned out to be vacuous
+
+`corpus/Fragile-Route_Harvest_Dossier_II.md`'s own "Next options" list scored
+a different, larger deliverable higher than this point-witness BREAK: an
+exhaustive check of Lemma 25's *own printed inequality*,
+\(\mathrm{score}(f^2)\le\mathrm{score}(f)\), over all trees \(n=5\ldots9\)
+(**R=9**, the highest reproducibility score anywhere in that dossier).
+Built it (`scripts/controls/krr_cl_composition_scan.py`) and ran it: **zero
+counterexamples across 5 902 trees (n=5..8), and it cannot become
+informative at any n a brute-force search could reach.** `score(h)`
+saturates at the ceiling `n` for every tree this small — every tree with
+\(n\le8\) vertices is already known gracefully labelable (the graceful
+tree conjecture is independently verified computationally far beyond what
+`(n-1)!` enumeration can reach), so the inequality reads `n<=n` regardless
+of whether Lemma 25 is correct. This is not a depth limitation to push
+past with more compute; it is structural. A prospective session should not
+try to extend this scan to n=9 or n=10 expecting a decisive answer — it
+cannot become one.
+
+**Correction to the dossier's own scoring, recorded inline there.** The
+already-landed Q^[1]-congruence BREAK above — narrower, single-witness,
+inside the *proof* rather than the *statement* — was the right target, not
+a fallback from a bigger check the campaign failed to build. Governing
+discipline #7 ("a check that cannot fail is not evidence") caught this
+before it was registered as a gate; it lives in `scripts/controls/` as a
+documented negative result, never in `scripts/gates/check.py`.

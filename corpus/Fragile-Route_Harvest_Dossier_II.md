@@ -1,4 +1,19 @@
 > **AUDIT NOTE (2026-09-22).** Lead, not a record of verdicts. Inline test-fires were not checked against a pinned PDF when this file was written. Gate only from `incoming/`. COL-FP (Kawasaki 2502.20642v2) closed VACUOUS: `docs/audits/kawasaki-collatz.md`.
+>
+> **AUDIT NOTE (2026-09-22, second pass).** Hit 3/Hit 4's "Next options" item 2
+> (the exhaustive n=5..9 composition-lemma enumerator, scored **R=9 — the
+> highest reproducibility score in this dossier**) was built and run. It is a
+> **check-that-cannot-fail**: `score(f)` saturates at the ceiling `n` for
+> every one of 5 902 trees tested (n=5..8, all diameter>=3 instances), because
+> the graceful tree conjecture is independently known computationally for far
+> larger n than brute-force enumeration can ever reach — so Lemma 25's
+> inequality reads `n<=n` regardless of whether the lemma is true. This is
+> structural, not a depth limit: no n a laptop could reach would ever make it
+> discriminating. The dossier's R=9 score for this item is wrong. See
+> `scripts/controls/krr_cl_composition_scan.py`,
+> `results/krr_cl_composition_scan_meta.json`. The already-landed point-witness
+> BREAK on the Q^{[1]} congruence step (`scripts/gates/krr_cl.py`) remains the
+> decisive finding on this target and was the right strategic choice.
 
 # Fragile-Route Harvest Dossier II — Combinatorics & Analysis, Classic-Calibration Mix
 
