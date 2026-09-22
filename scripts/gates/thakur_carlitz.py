@@ -195,10 +195,19 @@ def _md_raw_sum_generic(y: dict[int, FPoly], p: int, modulus: list[int], poly: F
 def main() -> int:
     RESULTS.mkdir(parents=True, exist_ok=True)
 
-    result = check_c_wieferich(P_CHAR, MODULUS_EXT, K_EXT, Q, POLY_P, degree=5)
+    # Read the degree off the transcribed polynomial rather than asserting it.
+    # As a literal `True` this was a check that could not fail
+    # (docs/GATE-BEFORE-PROVE.md, "never gate on a check that cannot fail");
+    # computed from POLY_P it is a real transcription check -- a mis-copied
+    # witness of the wrong degree now trips the gate instead of sliding past,
+    # and it is the SAME degree that drives the Frobenius computation below.
+    poly_degree = len(POLY_P) - 1
+    degree_is_5 = poly_degree == 5
+    divisibility_fails = (poly_degree % P_CHAR) != 0  # "19 does not divide 5"
 
-    degree_is_5 = True  # by construction (6 coefficients, leading term T^5)
-    divisibility_fails = (5 % P_CHAR) != 0  # "19 does not divide 5"
+    result = check_c_wieferich(
+        P_CHAR, MODULUS_EXT, K_EXT, Q, POLY_P, degree=poly_degree
+    )
 
     ok = (
         result["irreducible"]
@@ -231,6 +240,7 @@ def main() -> int:
         "m5_nested_form_zero": result["m5_nested_zero"],
         "m5_raw_sum_form_zero": result["m5_raw_sum_zero"],
         "two_independent_m5_paths_agree": result["paths_agree"],
+        "poly_degree_computed": poly_degree,
         "degree_is_5": degree_is_5,
         "char_does_not_divide_degree": divisibility_fails,
         "verdict": "BREAK" if ok else "ABORT_TRANSCRIPTION",

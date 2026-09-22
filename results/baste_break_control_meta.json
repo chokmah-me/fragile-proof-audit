@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-09-22T03:00:15.360264+00:00",
+  "control": "baste_break_control",
+  "gate": "baste_domination",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "transcription": {
+      "pdf_pinned": true,
+      "clause_list_matches_paper": true,
+      "clause_count_is_20": true,
+      "vertex_labeling_matches": true,
+      "dominating_witness_matches_paper_D0": true,
+      "vertex_count_matches": true,
+      "edge_count_matches": true,
+      "ok": true,
+      "provenance": "pinned PDF, second independent transcription",
+      "gate_D0": [
+        0,
+        2,
+        5,
+        7,
+        8,
+        13,
+        15,
+        30,
+        31,
+        32,
+        33,
+        35,
+        37,
+        42,
+        46,
+        48
+      ],
+      "paper_D0": [
+        0,
+        2,
+        5,
+        7,
+        8,
+        13,
+        15,
+        30,
+        31,
+        32,
+        33,
+        35,
+        37,
+        42,
+        46,
+        48
+      ]
+    },
+    "solver_discrimination": {
+      "rows": [
+        {
+          "graph": "K4",
+          "budget": 1,
+          "expected": true,
+          "found": true
+        },
+        {
+          "graph": "Petersen",
+          "budget": 3,
+          "expected": true,
+          "found": true
+        },
+        {
+          "graph": "Petersen",
+          "budget": 2,
+          "expected": false,
+          "found": false
+        },
+        {
+          "graph": "baste-50v",
+          "budget": 16,
+          "expected": true,
+          "found": true
+        }
+      ],
+      "ok": true
+    },
+    "cubic_bound_self_consistency": {
+      "k4_bound": 2,
+      "k4_known": 2,
+      "ok": true
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "local_pdf": "incoming/baste-afrasyab-2609.10783.pdf"
+}

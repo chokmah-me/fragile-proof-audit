@@ -3,15 +3,20 @@
 Same four questions as break_control.py / cohen_break_control.py /
 baste_break_control.py, applied to scripts/gates/sarkozy_sum_product.py.
 
-No local PDF pinned for arXiv:2603.29992 (Tang, Q., 2026) -- provenance
-here rests on the corpus doc's own paraphrase
-(corpus/live-fragile-proofs-2024-2026.md), which is itself internally
-inconsistent about the exact construction (its "Verifiable Gate" bullet
-contains a self-contradicting "Wait, if ... that fails" hedge). The gate
-therefore does not transcribe Tang's construction at all -- it re-derives
-witnesses by exhaustive search, so transcription fidelity here checks only
-the STATEMENT (conjecture, refutation claim, formalizable slice), not any
-claimed construction.
+PROVENANCE UPGRADE (2026-09-21 re-audit). This control used to check the
+gate's statement of the conjecture against the corpus doc's paraphrase, and
+it PASSED -- because both said the same wrong thing. The corpus doc put the
+density threshold at |A| >= c*p; Tang's Conjecture 1.1, taken from Sarkozy's
+2001 list, puts it at |A| > (1/2 - c)p. Under the corpus doc's version the
+"conjecture" is refuted by any small set and the BREAK would have been
+vacuous. A control that validates a gate against the same unchecked source
+the gate came from is not an instrument, it is an echo.
+
+The PDF is now pinned at incoming/sarkozy-tang-2603.29992.pdf. Transcription
+fidelity is tested against the paper's own structural claims, and the
+independent corroboration is now Tang's Proposition 2.1 (|A| > p/2 implies
+A+A = F_p) -- the sharpness half of the result, which shares no machinery
+with the counterexample and is separately checkable here.
 
 Run:  python scripts/controls/sarkozy_break_control.py
 Audit instrument, not a gate: issues no campaign verdict, not registered in
@@ -34,53 +39,68 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, OSError):
         pass
 
+sys.path.insert(0, str(ROOT / "scripts" / "controls"))
+
 import sarkozy_sum_product as SP  # noqa: E402
+from receipt import write_receipt  # noqa: E402
 
 BAR = "=" * 74
 
-# Verbatim from corpus/live-fragile-proofs-2024-2026.md (Section "Sarkozy's
-# Modulo a Prime Sum-Product Conjecture" and its Target Identifier block),
-# read directly from the repo file, not a live fetch.
-CORPUS_TEXT = (
-    "Sarkozy conjectured that there exist constants c and C such that for "
-    "every prime p, any set A with cardinality |A| >= c*p must satisfy the "
-    "condition 1 in (A+A) union (A*A). In March 2026, Quanyu Tang proved "
-    "that no such positive constant c can exist, destroying the conjecture "
-    "by proving the sharp threshold is exactly 1/2. "
-    "Earliest Pinpoint / Refutation Citation: Tang, Q. (2026). "
-    "\"A counterexample to a conjecture of Sarkozy on sums and products "
-    "modulo a prime.\" arXiv:2603.29992 [math.NT]. "
-    "Formalizable Slice: theorem sarkozy_conjecture_false : forall p >= 5, "
-    "Prime p -> exists A : Finset (ZMod p), A.card = (p - 1) / 2 /\\ "
-    "(1 : ZMod p) notin (A + A) union (A * A)."
-)
+PINNED_PDF = ROOT / "incoming" / "sarkozy-tang-2603.29992.pdf"
+
+# Structural claims transcribed independently from Section 2 of the pinned
+# PDF, checked against the gate's re-derivation below.
+#   - components are {0,1}, {2,1/2,-1}, possibly the roots of X^2-X+1, and
+#     6-cycles; hence the count of 6-cycles is exactly (p-5-delta)/6
+#   - delta in {0,2} and delta = 2 exactly when -3 is a square mod p
+#   - the resulting independent set has |A| = (p-1)/2
 
 
 def transcription_check() -> dict:
-    """(1) Does the gate's lemma/instance match the corpus doc's statement
-    of the conjecture and its formalizable slice -- not a strawman?
+    """(1) Do the paper's structural claims hold when re-derived from
+    scratch? These are the claims the gate's Path B relies on, so a
+    mis-transcription shows up as a structural disagreement rather than as
+    agreement between two copies of the same sentence.
     """
-    print("\n[1] Transcription fidelity (corpus/live-fragile-proofs-2024-2026.md)")
+    print("\n[1] Transcription fidelity (pinned PDF, arXiv:2603.29992v2 Section 2)")
+    rows = []
+    for p in (5, 7, 11, 13, 17, 19, 23, 31, 101, 401, 1009):
+        row = SP.tang_construction(p)
+        # delta = 2 iff -3 is a QR mod p, an independent derivation of the
+        # paper's "delta in {0,2}, the discriminant is -3" remark.
+        legendre = pow((-3) % p, (p - 1) // 2, p)
+        expected_delta = 2 if legendre == 1 else 0
+        rows.append({
+            "p": p,
+            "delta": row["delta"],
+            "expected_delta_from_legendre": expected_delta,
+            "delta_matches": row["delta"] == expected_delta,
+            "cycle_count_matches": row["cycle_count_matches"],
+            "A_size_matches": row["A_size_matches"],
+            "cycles_clean": row["cycles_are_6_cycles_without_chords"],
+        })
+        print(f"    p={p:5d} delta={row['delta']} (Legendre says "
+              f"{expected_delta}) cycles ok={row['cycle_count_matches']} "
+              f"|A|=(p-1)/2 ok={row['A_size_matches']}")
+
     checks = {
-        "conjecture_statement_matches": (
-            "1 in (A+A) union (A*A)" in CORPUS_TEXT
+        "pdf_pinned": PINNED_PDF.exists(),
+        "delta_matches_legendre_symbol": all(r["delta_matches"] for r in rows),
+        "six_cycle_count_matches_formula": all(
+            r["cycle_count_matches"] for r in rows
         ),
-        "sharp_threshold_claim_matches": "sharp threshold is exactly 1/2" in CORPUS_TEXT,
-        "citation_matches": "arXiv:2603.29992" in CORPUS_TEXT,
-        "formalizable_slice_card_matches": "A.card = (p - 1) / 2" in CORPUS_TEXT,
-        "formalizable_slice_avoids_one_matches": (
-            "(1 : ZMod p) notin (A + A) union (A * A)" in CORPUS_TEXT
+        "components_are_chordless_6_cycles": all(r["cycles_clean"] for r in rows),
+        "constructed_set_has_size_p_minus_1_over_2": all(
+            r["A_size_matches"] for r in rows
         ),
     }
     for k, v in checks.items():
         print(f"    [{'ok' if v else 'MISS'}] {k}")
     ok = all(checks.values())
-    print(f"    -> gate's lemma/instance matches the corpus doc's statement: {ok}")
+    print(f"    -> paper's Section 2 structure re-derives correctly: {ok}")
     checks["ok"] = ok
-    checks["provenance"] = (
-        "corpus doc paraphrase, no local PDF pinned for arXiv:2603.29992; "
-        "gate does not transcribe Tang's construction, only re-derives by search"
-    )
+    checks["rows"] = rows
+    checks["provenance"] = "pinned PDF, structure re-derived not paraphrased"
     return checks
 
 
@@ -161,51 +181,75 @@ def algebraic_self_consistency_check() -> dict:
         print("    unavailable -- run scripts/gates/sarkozy_sum_product.py first")
         return {"ok": None, "note": "gate meta not found"}
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
-    per_prime_ok = [row["cross_check_ok"] for row in meta.get("per_prime", [])]
+    path_a = meta.get("path_a_exhaustive_search", {})
+    per_prime_ok = [row["cross_check_ok"] for row in path_a.get("per_prime", [])]
     ok = bool(per_prime_ok) and all(per_prime_ok)
     print(f"    gate's own pairwise-vs-set cross-check ok for every tested prime: {ok}")
     return {"ok": ok, "per_prime_cross_check_ok": per_prime_ok}
 
 
 def independent_corroboration_check() -> dict:
-    """(4) A structural sanity check independent of the gate's own search:
-    for each CI prime, do the quadratic residues (a standard, easy-to-derive
-    candidate unrelated to the gate's brute-force code path) ALSO avoid 1 in
-    their sumset union productset? This does not confirm Tang's exact
-    construction (no PDF pinned to check against), but shows the phenomenon
-    is not an artifact unique to the gate's own exhaustive-search
-    implementation -- an entirely different, hand-derivable set exhibits it
-    too, for the small primes checked.
+    """(4) Tang's Proposition 2.1: if |A| > p/2 then A + A = F_p. This is the
+    OTHER half of the paper -- the sharpness bound -- and it shares no
+    machinery with the counterexample construction. It is also the check that
+    makes "(p-1)/2 is the extremal size" meaningful rather than arbitrary:
+    one element more and the phenomenon must disappear.
+
+    Two things are tested. First, the proposition itself, on random sets just
+    over the threshold. Second, the boundary: at exactly |A| = (p-1)/2 a
+    witness exists (the gate's own), while at |A| = (p+1)/2 > p/2 no set at
+    all can avoid 1, so the construction cannot be pushed further.
+
+    This replaces an earlier quadratic-residue corroboration that came back
+    negative at every tested prime. That check was looking for the phenomenon
+    in a family Tang never claimed exhibits it, so its failure was
+    uninformative -- and reporting it as a weakened corroboration overstated
+    what had gone wrong.
     """
-    print("\n[4] Independent corroboration: quadratic residues as an unrelated witness family")
+    print("\n[4] Independent corroboration: Tang's Proposition 2.1 (sharpness)")
+    rng = random.Random(29992)
     rows = []
-    for p in SP.CI_PRIMES:
-        qr = tuple(sorted({(a * a) % p for a in range(1, p)}))
-        expected_size = (p - 1) // 2
-        size_matches = len(qr) == expected_size
-        avoids = SP.avoids_one(qr, p) if size_matches else None
-        rows.append(
-            {
-                "p": p,
-                "qr_size": len(qr),
-                "expected_size": expected_size,
-                "size_matches": size_matches,
-                "qr_avoids_one": avoids,
-            }
-        )
-        print(
-            f"    p={p:3d}: |QR*|={len(qr)} (expect {expected_size}), "
-            f"QR avoids 1 in sumset/productset: {avoids}"
-        )
-    qr_ever_avoids = any(r["qr_avoids_one"] for r in rows)
-    print(f"    -> at least one unrelated (non-brute-force) witness family "
-          f"also avoids 1 for some tested prime: {qr_ever_avoids}")
+    for p in (5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47):
+        k_over = p // 2 + 1  # strictly greater than p/2
+        prop_holds = True
+        for _ in range(40):
+            a = tuple(sorted(rng.sample(range(p), k_over)))
+            sumset = {(x + y) % p for x in a for y in a}
+            if len(sumset) != p:
+                prop_holds = False
+                break
+        # Boundary: can ANY set of size (p+1)/2 avoid 1 in A+A?
+        k_boundary = (p + 1) // 2
+        any_boundary_avoids = any(
+            SP.avoids_one_via_involutions(combo, p)
+            for combo in itertools.combinations(range(p), k_boundary)
+        ) if p <= 19 else None
+        rows.append({
+            "p": p,
+            "k_over_half": k_over,
+            "proposition_2_1_holds": prop_holds,
+            "k_boundary": k_boundary,
+            "any_set_of_boundary_size_avoids_one": any_boundary_avoids,
+        })
+        print(f"    p={p:3d}: |A|={k_over}>p/2 always gives A+A=F_p: "
+              f"{prop_holds}; any |A|={k_boundary} set avoiding 1: "
+              f"{any_boundary_avoids}")
+
+    prop_always_holds = all(r["proposition_2_1_holds"] for r in rows)
+    boundary_is_sharp = all(
+        r["any_set_of_boundary_size_avoids_one"] is not True for r in rows
+    )
+    print(f"    -> Proposition 2.1 holds on every tested prime: {prop_always_holds}")
+    print(f"    -> one element above (p-1)/2 the phenomenon vanishes "
+          f"(threshold is sharp, not arbitrary): {boundary_is_sharp}")
     return {
         "rows": rows,
-        "qr_ever_avoids": qr_ever_avoids,
+        "proposition_2_1_holds": prop_always_holds,
+        "boundary_is_sharp": boundary_is_sharp,
+        "ok": prop_always_holds and boundary_is_sharp,
         "note": (
-            "does not confirm Tang's exact construction (no local PDF); "
-            "shows the phenomenon recurs in an independently-derived family"
+            "the sharpness half of Tang's paper, structurally independent of "
+            "the counterexample construction"
         ),
     }
 
@@ -223,6 +267,7 @@ def main() -> int:
         t["ok"],
         d["all_full_sets_fail"] and d["density_sensitive"] and d["not_tautological"],
         a["ok"],
+        c["ok"],
     ]
     if all(x is True for x in checks):
         verdict = "NO FALSE POSITIVE"
@@ -233,12 +278,19 @@ def main() -> int:
 
     print(f"\n{BAR}")
     print(f"sarkozy_sum_product control verdict: {verdict}")
-    if not c["qr_ever_avoids"]:
-        print("note: quadratic-residue corroboration found no match at tested "
-              "primes -- does not invalidate the gate (search-based, not QR-based), "
-              "but weakens independent corroboration to (1)+(3) only")
     print(BAR)
-    return 0 if verdict.startswith("NO FALSE POSITIVE") else 1
+    ok = verdict.startswith("NO FALSE POSITIVE")
+    write_receipt(
+        control="sarkozy_break_control",
+        gate="sarkozy_sum_product",
+        verdict=verdict,
+        checks={"transcription": t, "discrimination": d,
+                "algebraic_self_consistency": a,
+                "independent_corroboration": c},
+        ok=ok,
+        extra={"local_pdf": "incoming/sarkozy-tang-2603.29992.pdf"},
+    )
+    return 0 if ok else 1
 
 
 if __name__ == "__main__":

@@ -1,8 +1,10 @@
 """Numeric gate: Cohen's Conjecture 66 (subadditivity of Sophie Germain
 cyclic numbers) is FALSE.
 
-Source claim (corpus/live-fragile-proofs-2024-2026.md, Target Identifier
-"Cohen's Subadditivity Conjecture"; refutation Ibarra, arXiv:2607.09793):
+Source claim (refutation Ibarra, J. A. (2026), "A counterexample to a
+subadditivity conjecture of Cohen for Sophie Germain cyclic numbers",
+arXiv:2607.09793v1, PDF pinned at incoming/cohen-ibarra-2607.09793.pdf and
+the definitions below re-checked verbatim against its Section 1):
 
     n is cyclic  iff  gcd(n, phi(n)) == 1
     n is Sophie Germain cyclic  iff  n and 2n+1 are both cyclic
@@ -11,9 +13,16 @@ Source claim (corpus/live-fragile-proofs-2024-2026.md, Target Identifier
     Cohen's Conjecture 66: C_sigma(m + n) <= C_sigma(m) + C_sigma(n)
     for all 1 <= m <= n.
 
-Claimed counterexample (per the arXiv abstract, independently re-derived
-here, not copied from the corpus doc's narrative numbers): m = 31,
-n = 3928, C_sigma(3959) = 697 > 696 = C_sigma(31) + C_sigma(3928).
+Claimed counterexample (independently re-derived here, not copied from the
+corpus doc's narrative numbers): m = 31, n = 3928,
+C_sigma(3959) = 697 > 696 = C_sigma(31) + C_sigma(3928).
+
+Two anchors from the pinned PDF, both checked below rather than assumed:
+Cohen's own tabulated value C_sigma(598) = 120 (Ibarra Section 3, used there
+to validate the definition), and the eleven Sophie Germain cyclic integers
+Ibarra lists in the window (3928, 3959] -- 3929, 3931, 3935, 3941, 3943,
+3945, 3947, 3949, 3953, 3957, 3959. An off-by-one or a wrong cyclicity
+predicate would move at least one of these.
 
 Gates refute routes, not theorems: this does not claim anything about
 Cohen's Conjecture 66 beyond the single counterexample computed below.
@@ -102,14 +111,38 @@ def main() -> int:
     counts_agree = (c_m, c_n, c_target) == (c_m_td, c_n_td, c_target_td)
 
     subadditivity_claim_holds = c_target <= c_m + c_n
-    ok = totient_agree and counts_agree and not subadditivity_claim_holds
+
+    # Anchors from the pinned PDF (Section 2 / Section 3). These are genuine
+    # transcription checks on the *definition*, not ceremony: the whole BREAK
+    # rests on `cyclic` meaning gcd(n, phi(n)) == 1 and `Sophie Germain
+    # cyclic` meaning n and 2n+1 both cyclic. A wrong predicate still yields
+    # some counting function -- it just would not be Cohen's.
+    c_sigma_598 = c_sigma(598)
+    cohen_tabulated_598_matches = c_sigma_598 == 120
+    window_members = [
+        n_ for n_ in range(m + n - 30, target + 1) if is_sophie_germain_cyclic(n_)
+    ]
+    ibarra_window = [3929, 3931, 3935, 3941, 3943, 3945, 3947, 3949, 3953,
+                     3957, 3959]
+    window_matches_paper = window_members == ibarra_window
+
+    ok = (
+        totient_agree
+        and counts_agree
+        and not subadditivity_claim_holds
+        and cohen_tabulated_598_matches
+        and window_matches_paper
+    )
 
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "gate": "cohen_subadditivity",
         "source_claim": "Cohen's Conjecture 66 (subadditivity of C_sigma)",
-        "source_refutation": "Ibarra, J. A. (2026), arXiv:2607.09793",
+        "source_refutation": (
+            "Ibarra, J. A. (2026), arXiv:2607.09793v1, Theorem 1"
+        ),
         "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md",
+        "local_pdf": "incoming/cohen-ibarra-2607.09793.pdf",
         "m": m,
         "n": n,
         "target": target,
@@ -124,6 +157,12 @@ def main() -> int:
         },
         "independent_totient_recount_agrees": counts_agree,
         "subadditivity_claim_holds": subadditivity_claim_holds,
+        "definition_anchors": {
+            "C_sigma_598": c_sigma_598,
+            "cohen_tabulated_598_is_120": cohen_tabulated_598_matches,
+            "window_3928_to_3959": window_members,
+            "matches_ibarra_section_2_list": window_matches_paper,
+        },
         "verdict": "BREAK" if ok else "ABORT_TRANSCRIPTION",
         "lemma": "C_sigma(m+n) <= C_sigma(m) + C_sigma(n) for all 1<=m<=n",
         "instance": f"m={m}, n={n}",
@@ -143,6 +182,10 @@ def main() -> int:
     print(f"  C_sigma({target}) = {c_target}  (sum = {c_m + c_n})")
     print(f"  totient implementations agree up to {check_upper}: {totient_agree}")
     print(f"  independent recount agrees: {counts_agree}")
+    print(f"  C_sigma(598) = {c_sigma_598} (Cohen's tabulated 120): "
+          f"{cohen_tabulated_598_matches}")
+    print(f"  window (3928, 3959] has {len(window_members)} members, "
+          f"matches Ibarra's list: {window_matches_paper}")
     print(f"  verdict: {meta['verdict']}")
     print(f"Wrote {out}")
     return 0 if ok else 1

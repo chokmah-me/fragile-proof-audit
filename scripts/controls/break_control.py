@@ -51,6 +51,9 @@ mp.dps = 60
 import odd_zeta_1609 as OZ  # noqa: E402
 import suman_eq48 as SU  # noqa: E402
 
+sys.path.insert(0, str(ROOT / "scripts" / "controls"))
+from receipt import write_receipt  # noqa: E402
+
 BAR = "=" * 74
 SUMAN_PDF = ROOT / "incoming" / "suman-2407.07121v6.pdf"
 CHEN_PDF = ROOT / "incoming" / "chen-2411.16774.pdf"
@@ -300,13 +303,32 @@ def odd_zeta_control() -> tuple[str, dict]:
 
 
 def main() -> int:
-    v1, _ = suman_control()
-    v2, _ = odd_zeta_control()
+    v1, rec1 = suman_control()
+    v2, rec2 = odd_zeta_control()
     print("\n" + BAR)
     print(f"suman_eq48     : {v1}")
     print(f"odd_zeta_1609  : {v2}")
     print(BAR)
-    return 0 if v1.startswith("NO FALSE POSITIVE") and v2.startswith("NO FALSE POSITIVE") else 1
+    ok = v1.startswith("NO FALSE POSITIVE") and v2.startswith("NO FALSE POSITIVE")
+    # One receipt per gate: break_control covers two targets, and a shared
+    # receipt would make either verdict unreadable on its own.
+    write_receipt(
+        control="suman_break_control",
+        gate="suman_eq48",
+        verdict=v1,
+        checks=rec1,
+        ok=v1.startswith("NO FALSE POSITIVE"),
+        extra={"runner": "scripts/controls/break_control.py"},
+    )
+    write_receipt(
+        control="odd_zeta_break_control",
+        gate="odd_zeta_1609",
+        verdict=v2,
+        checks=rec2,
+        ok=v2.startswith("NO FALSE POSITIVE"),
+        extra={"runner": "scripts/controls/break_control.py"},
+    )
+    return 0 if ok else 1
 
 
 if __name__ == "__main__":

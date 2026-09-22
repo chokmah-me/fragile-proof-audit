@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-09-22T03:03:29.126837+00:00",
+  "control": "salez_youssef_break_control",
+  "gate": "salez_youssef_logsobolev",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "transcription": {
+      "ok": true,
+      "checks": {
+        "pdf_pinned": true,
+        "up_low_branch_k1": true,
+        "up_low_branch_kn": true,
+        "up_high_branch": true,
+        "down_low_branch": true,
+        "down_high_branch_low_end": true,
+        "down_high_branch_high_end": true,
+        "p_down_at_1_is_zero": true,
+        "p_up_at_3n_is_zero": true,
+        "stationary_ratio_matches_paper_formula": true
+      }
+    },
+    "discrimination": {
+      "ok": true,
+      "ratios": [
+        6.881760326708155,
+        12.522961315828669,
+        23.420954839849887,
+        40.9823332304638,
+        75.2413494260229,
+        130.66576551510653
+      ]
+    },
+    "algebraic_self_consistency": {
+      "ok": true,
+      "kappa_exact": true,
+      "pi1_over_half": true
+    },
+    "independent_corroboration": {
+      "ok": true,
+      "rows": [
+        {
+          "n": 4,
+          "max_abs_deviation": "8.43376e-81",
+          "matches_closed_form": true
+        },
+        {
+          "n": 10,
+          "max_abs_deviation": "3.3735e-80",
+          "matches_closed_form": true
+        },
+        {
+          "n": 30,
+          "max_abs_deviation": "1.3494e-79",
+          "matches_closed_form": true
+        },
+        {
+          "n": 100,
+          "max_abs_deviation": "2.6988e-79",
+          "matches_closed_form": true
+        }
+      ]
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "local_pdf": "incoming/salez-youssef-munch-2504.08055.pdf"
+}

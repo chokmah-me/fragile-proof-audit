@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-09-22T03:04:50.985765+00:00",
+  "control": "odd_zeta_break_control",
+  "gate": "odd_zeta_1609",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "closed_form_matches_direct": true,
+    "alpha_star_is_minimiser": true,
+    "discrimination": {
+      "rows": [
+        {
+          "lambda": 0.1,
+          "c": -1.3521684610440907,
+          "min_g": -1.4220894064974105e+59,
+          "admissible": true
+        },
+        {
+          "lambda": 0.2,
+          "c": -0.7077718009705198,
+          "min_g": -1.5670278558549277e+59,
+          "admissible": true
+        },
+        {
+          "lambda": 0.3,
+          "c": -0.3502256128148467,
+          "min_g": -1.225296378114925e+59,
+          "admissible": true
+        },
+        {
+          "lambda": 0.4,
+          "c": -0.10963293158892803,
+          "min_g": -5.392023735043404e+58,
+          "admissible": true
+        },
+        {
+          "lambda": 0.45,
+          "c": -0.015084388906177146,
+          "min_g": -8.572650598695218e+57,
+          "admissible": true
+        },
+        {
+          "lambda": 0.5,
+          "c": 0.06724787043281143,
+          "min_g": 1.6487219194212022,
+          "admissible": false
+        },
+        {
+          "lambda": 1.0,
+          "c": 0.5413248546129181,
+          "min_g": 2.7182835467405577,
+          "admissible": false
+        },
+        {
+          "lambda": 2.0,
+          "c": 0.8545865421311409,
+          "min_g": 7.389062487986317,
+          "admissible": false
+        },
+        {
+          "lambda": 5,
+          "c": 0.9932392505505114,
+          "min_g": 148.4133065157352,
+          "admissible": false
+        },
+        {
+          "lambda": 7,
+          "c": 0.9990877020171609,
+          "min_g": 1096.6342540616165,
+          "admissible": false
+        },
+        {
+          "lambda": 9,
+          "c": 0.9998765825802969,
+          "min_g": 8103.092029659311,
+          "admissible": false
+        },
+        {
+          "lambda": 11,
+          "c": 0.9999832981597347,
+          "min_g": 59874.201588339536,
+          "admissible": false
+        },
+        {
+          "lambda": 13,
+          "c": 0.9999977396680385,
+          "min_g": 442413.8344213125,
+          "admissible": false
+        }
+      ],
+      "fires_small_lambda": true,
+      "declines_paper_lambda": true,
+      "ok": true
+    },
+    "convention_robust": true,
+    "verdict": "NO FALSE POSITIVE"
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "runner": "scripts/controls/break_control.py"
+}

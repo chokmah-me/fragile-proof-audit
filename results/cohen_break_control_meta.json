@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-09-22T03:01:11.548505+00:00",
+  "control": "cohen_break_control",
+  "gate": "cohen_subadditivity",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "transcription": {
+      "pdf_pinned": true,
+      "sg_cyclic_list_up_to_31_matches": true,
+      "C_sigma_31_matches": true,
+      "cohen_tabulated_C_sigma_598_matches": true,
+      "window_3928_3959_matches": true,
+      "window_has_eleven_members": true,
+      "C_sigma_3959_matches": true,
+      "worked_example_phi_3929": true,
+      "worked_example_phi_7859": true,
+      "worked_example_3929_is_sg_cyclic": true,
+      "ok": true,
+      "provenance": "pinned PDF, gate predicate run against paper values"
+    },
+    "discrimination": {
+      "trials": 500,
+      "bound": 500,
+      "violations": 0,
+      "declines_on_most_inputs": true,
+      "known_witness_reproduced": true,
+      "other_violations_sample": []
+    },
+    "algebraic_self_consistency": {
+      "ok": true,
+      "totient_agree": true,
+      "recount_agrees": true
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "local_pdf": "incoming/cohen-ibarra-2607.09793.pdf"
+}

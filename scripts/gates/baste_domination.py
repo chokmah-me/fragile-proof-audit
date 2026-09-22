@@ -10,7 +10,10 @@ Conjecture"):
     gamma(G) <= gamma_e(G)   (domination number <= edge domination number).
 
 The refuting graph (construction per arxiv.org/html/2609.10783, live-fetched
-2026-09-20, NOT copied from the corpus doc's narrative numbers):
+2026-09-20, NOT copied from the corpus doc's narrative numbers; PDF pinned
+2026-09-21 at incoming/baste-afrasyab-2609.10783.pdf and the clause list,
+vertex labelling and dominating witness below all re-checked verbatim against
+its Sections 2-4 -- see scripts/controls/baste_break_control.py):
 
     15 variable-pair gadgets -> 30 "literal" vertices v_j-, v_j+ (j=1..15),
     each pair joined by a "pair edge" v_j- -- v_j+.
@@ -82,8 +85,11 @@ NUM_LITERAL_VERTICES = 2 * NUM_VARS  # 30
 NUM_VERTICES = NUM_LITERAL_VERTICES + NUM_CLAUSES  # 50
 NUM_EDGES = NUM_VARS + NUM_CLAUSES * 3  # 15 + 60 = 75
 
-# Source's explicit witnesses (live-fetched abstract text), re-checked below
-# rather than trusted.
+# Source's explicit witnesses, re-checked below rather than trusted. The
+# dominating set is the paper's D_0 (Section 4); under the paper's labelling
+# v_j^- = 2(j-1), v_j^+ = 2(j-1)+1, c_a = 29+a it is
+# {0,2,5,7,8,13,15,30,31,32,33,35,37,42,46,48}, which is exactly what the
+# gate's own independent search reports.
 SOURCE_MATCHING_IS_PAIR_EDGES = True  # M = {v_j- v_j+ : j=1..15}
 SOURCE_DOMINATING_SET = [
     ("v-", 1), ("v-", 2), ("v+", 3), ("v+", 4), ("v-", 5), ("v+", 7), ("v+", 8),
@@ -352,8 +358,11 @@ def main() -> int:
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "gate": "baste_domination",
         "source_claim": "Baste-Furst-Henning-Mohr-Rautenbach: gamma(G) <= gamma_e(G) for regular G",
-        "source_refutation": "Afrasyab (2026), arXiv:2609.10783",
+        "source_refutation": (
+            "Afrasyab, K. (2026), arXiv:2609.10783v1, Theorem 1"
+        ),
         "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md",
+        "local_pdf": "incoming/baste-afrasyab-2609.10783.pdf",
         "transcription": transcription,
         "regularity": regularity,
         "matching_witness": matching,
@@ -369,7 +378,13 @@ def main() -> int:
         "verdict": verdict,
         "lemma": "gamma(G) <= gamma_e(G) for every finite regular graph G of positive degree",
         "instance": "50-vertex, 3-regular graph (15 variable-pair gadgets, 20 clause gadgets)",
-        "false_instance": "gamma(G)=16 > 15=gamma_e(G), independently confirmed except (see status) the gamma>=16 lower bound",
+        "false_instance": (
+            f"gamma(G)=16 > 15=gamma_e(G). Both bounds closed independently "
+            f"in this gate: gamma_e=15 from an explicit maximal matching plus "
+            f"the general cubic ceil(m/5) bound; gamma<=16 from the explicit "
+            f"dominating set; gamma>=16 from this campaign's own exact "
+            f"branch-and-bound -- {gamma_lower_bound_status}"
+        ),
         "ok": ok,
     }
     out = RESULTS / "baste_domination_gate_meta.json"

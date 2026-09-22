@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-09-21T22:40:00+00:00",
+  "target": "nci_conjecture",
+  "kind": "scope decision",
+  "instrument": false,
+  "registered_in_check_py": false,
+  "verdict": "SKIPPED_NO_FINITE_GATE",
+  "note": "Not a BREAK and not a PASS. No gate script exists and none should be written; this receipt exists so a later session cannot silently re-open the target or lose the reason.",
+  "source_claim": "Non-Cancelling Intersections conjecture: any finite set union can be constructed from non-cancelling intersections via disjoint unions and complements",
+  "source_refutation": "Wilhelm, H. (2026), arXiv:2608.27416v2, Theorem 8.1 / Corollary 8.2",
+  "local_pdf": "incoming/nci-wilhelm-2608.27416.pdf",
+  "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md, ranking table row 7",
+  "why_no_gate": [
+    "The refutation is a first-moment existence argument. Lemma 7.2 bounds the expected number of admissible sets by E_p < 1 for p > 600 and concludes SOME marking m works; it exhibits none. There is no witness to reproduce.",
+    "The paper's own Section 9 Open Problems item 1 states that even a small-p explicit counterexample is unsolved, so no smaller instance is available either.",
+    "The only numerically checkable content, the double-counting identities in (7.1), holds for every finite point set unconditionally. Testing it would be a check that cannot fail -- forbidden by docs/GATE-BEFORE-PROVE.md."
+  ],
+  "corpus_doc_defect": {
+    "class": "FABRICATED",
+    "detail": "The corpus doc's 'Verifiable Gate / Counterexample' bullet claims a Python script validating non-existence of admissible sets in a marked plane configuration. No such gate exists in the source. This is distinct from the image-corruption seen for Tang-Zhang, Thakur and Chung-Graham: the claimed artifact was invented, not garbled.",
+    "internal_contradiction": "The same document's ranking table row 7 lists 'Python/CPU Gate Runtime: N/A (Symbolic logic bound)', contradicting its own body section."
+  },
+  "blueprint": "docs/blueprint/nci-conjecture.md",
+  "reopen_condition": "Only if a future paper exhibits an explicit marking m, or resolves the paper's own Section 9 open problem 1. Absent that, do not write a gate.",
+  "ok": true
+}

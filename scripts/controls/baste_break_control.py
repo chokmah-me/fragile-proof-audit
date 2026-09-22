@@ -1,9 +1,17 @@
 """False-positive control for the baste_domination BREAK gate.
 
 Same four questions as `break_control.py` / `cohen_break_control.py`, applied
-to `scripts/gates/baste_domination.py`. No local PDF pin exists for
-arXiv:2609.10783 under `incoming/` -- transcription rests on a live
-arXiv HTML fetch (2026-09-20), recorded verbatim below, not a pinned PDF.
+to `scripts/gates/baste_domination.py`.
+
+PROVENANCE UPGRADE (2026-09-21 re-audit). This control used to compare a
+prose summary of the paper against itself by substring matching -- a check
+that could not fail, the very defect the campaign forbids
+(docs/GATE-BEFORE-PROVE.md, "never gate on a check that cannot fail"). The
+PDF is now pinned at incoming/baste-afrasyab-2609.10783.pdf and the clause
+list, vertex labelling and dominating witness below are a SECOND, independent
+transcription taken from its Sections 2-4. The check compares that second
+transcription against the gate's own constants, so a mis-copied clause in
+either place now shows up as a disagreement.
 
 The gate's own lower-bound verdict (gamma(G) >= 16) comes from an exact
 branch-and-bound search this campaign wrote, not from re-running the source's
@@ -29,43 +37,85 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, OSError):
         pass
 
+sys.path.insert(0, str(ROOT / "scripts" / "controls"))
+
 import baste_domination as BD  # noqa: E402
+from receipt import write_receipt  # noqa: E402
 
 BAR = "=" * 74
 
-# Fetched live from https://arxiv.org/html/2609.10783 on 2026-09-20 (WebFetch,
-# small-model page summary, not the full PDF -- no local pin exists).
-CONSTRUCTION_SUMMARY = (
-    "30 literal vertices: pairs (v1-,v1+), ..., (v15-,v15+). "
-    "20 clause vertices c1..c20. "
-    "Each variable pair has a pair edge vj- vj+ for j = 1 to 15. "
-    "Every signed literal occurs exactly twice. "
-    "vj- = 2(j-1), vj+ = 2(j-1)+1, ca = 29+a. "
-    "M = {v1-v1+, ..., v15-v15+} saturates all 30 literal vertices and "
-    "leaves the 20 clause vertices unmatched. "
-    "In a cubic graph an edge is adjacent to at most four other edges. "
-    "gamma_e(G) >= 75/5 = 15. "
-    "D0 = 16 vertices dominates all vertices by direct inspection. "
-    "the paper enumerates all 2^20 = 1,048,576 possible clause subsets"
-)
+PINNED_PDF = ROOT / "incoming" / "baste-afrasyab-2609.10783.pdf"
+
+# Independent transcription of the twenty clauses displayed in Section 2 of
+# the pinned PDF. Positive j is x_j, negative j is not-x_j. Copied from the
+# paper, NOT from scripts/gates/baste_domination.py -- the whole point is that
+# the two transcriptions are compared against each other below.
+PAPER_CLAUSES: list[tuple[int, int, int]] = [
+    (1, 9, -11),    (-4, -10, -13),
+    (1, -9, -14),   (2, 6, 14),
+    (-5, -6, 15),   (2, -3, 15),
+    (3, 5, -9),     (-6, -12, -15),
+    (-1, 5, -11),   (4, -7, -15),
+    (-2, 8, -12),   (3, 9, 11),
+    (-4, -8, 10),   (7, -8, 13),
+    (4, 7, -13),    (-2, -7, 14),
+    (-3, 11, -14),  (8, 10, 12),
+    (-10, 12, 13),  (-1, -5, 6),
+]
+
+# Section 4: "In the numeric labeling above, set D_0 = {...}".
+PAPER_D0 = [0, 2, 5, 7, 8, 13, 15, 30, 31, 32, 33, 35, 37, 42, 46, 48]
+
+# Section 2's machine labelling, and Section 3's two bounds.
+PAPER_LABELS = {"v_minus": lambda j: 2 * (j - 1),
+                "v_plus": lambda j: 2 * (j - 1) + 1,
+                "c": lambda a: 29 + a}
+PAPER_VERTEX_COUNT = 50
+PAPER_EDGE_COUNT = 75
+PAPER_GAMMA_E = 15
+PAPER_GAMMA = 16
 
 
 def transcription_check() -> dict:
-    print("\n[1] Transcription fidelity (arXiv:2609.10783 HTML, live-fetched)")
+    """(1) Does the gate's transcription agree with an independent second
+    transcription of the pinned PDF? Compares the objects themselves, not
+    prose about them.
+    """
+    print("\n[1] Transcription fidelity (pinned PDF, arXiv:2609.10783v1)")
+
+    gate_d0 = sorted(
+        BD.literal_vertex(j, -1 if kind == "v-" else +1)
+        if kind in ("v-", "v+")
+        else BD.clause_vertex(j)
+        for kind, j in BD.SOURCE_DOMINATING_SET
+    )
+    labels_match = all(
+        BD.literal_vertex(j, -1) == PAPER_LABELS["v_minus"](j)
+        and BD.literal_vertex(j, +1) == PAPER_LABELS["v_plus"](j)
+        for j in range(1, BD.NUM_VARS + 1)
+    ) and all(
+        BD.clause_vertex(a) == PAPER_LABELS["c"](a)
+        for a in range(1, BD.NUM_CLAUSES + 1)
+    )
+
     checks = {
-        "vertex_labeling_matches": "vj- = 2(j-1), vj+ = 2(j-1)+1, ca = 29+a" in CONSTRUCTION_SUMMARY,
-        "pair_edges_15_matches": "pair edge vj- vj+ for j = 1 to 15" in CONSTRUCTION_SUMMARY,
-        "signed_literal_twice_matches": "Every signed literal occurs exactly twice" in CONSTRUCTION_SUMMARY,
-        "gamma_e_bound_matches": "gamma_e(G) >= 75/5 = 15" in CONSTRUCTION_SUMMARY,
-        "gamma_upper_witness_size_matches": "D0 = 16 vertices dominates" in CONSTRUCTION_SUMMARY,
-        "clause_subset_scale_matches": "2^20 = 1,048,576" in CONSTRUCTION_SUMMARY,
+        "pdf_pinned": PINNED_PDF.exists(),
+        "clause_list_matches_paper": [tuple(c) for c in BD.CLAUSES] == PAPER_CLAUSES,
+        "clause_count_is_20": len(PAPER_CLAUSES) == 20 == BD.NUM_CLAUSES,
+        "vertex_labeling_matches": labels_match,
+        "dominating_witness_matches_paper_D0": gate_d0 == PAPER_D0,
+        "vertex_count_matches": BD.NUM_VERTICES == PAPER_VERTEX_COUNT,
+        "edge_count_matches": BD.NUM_EDGES == PAPER_EDGE_COUNT,
     }
     for k, v in checks.items():
         print(f"    [{'ok' if v else 'MISS'}] {k}")
     ok = all(checks.values())
-    print(f"    -> gate's construction matches the source's stated construction: {ok}")
+    print(f"    -> gate's construction matches an independent reading of the "
+          f"pinned PDF: {ok}")
     checks["ok"] = ok
-    checks["provenance"] = "live HTML fetch, not a pinned PDF"
+    checks["provenance"] = "pinned PDF, second independent transcription"
+    checks["gate_D0"] = gate_d0
+    checks["paper_D0"] = PAPER_D0
     return checks
 
 
@@ -157,12 +207,22 @@ def main() -> int:
     c = cubic_bound_self_consistency_check()
 
     checks = [t["ok"], d["ok"], c["ok"]]
-    verdict = "NO FALSE POSITIVE" if all(checks) else "REVIEW"
+    ok = all(checks)
+    verdict = "NO FALSE POSITIVE" if ok else "REVIEW"
 
     print(f"\n{BAR}")
     print(f"baste_domination control verdict: {verdict}")
     print(BAR)
-    return 0 if verdict == "NO FALSE POSITIVE" else 1
+    write_receipt(
+        control="baste_break_control",
+        gate="baste_domination",
+        verdict=verdict,
+        checks={"transcription": t, "solver_discrimination": d,
+                "cubic_bound_self_consistency": c},
+        ok=ok,
+        extra={"local_pdf": "incoming/baste-afrasyab-2609.10783.pdf"},
+    )
+    return 0 if ok else 1
 
 
 if __name__ == "__main__":

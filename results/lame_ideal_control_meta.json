@@ -1,0 +1,318 @@
+{
+  "timestamp": "2026-09-22T03:04:42.379195+00:00",
+  "control": "lame_ideal_control",
+  "gate": "lame_ideal_neg23",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "positive_existence": {
+      "ok": true,
+      "record": {
+        "32": {
+          "expected": [
+            [
+              -3,
+              -1
+            ],
+            [
+              -3,
+              1
+            ],
+            [
+              3,
+              -1
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "got": [
+            [
+              -3,
+              -1
+            ],
+            [
+              -3,
+              1
+            ],
+            [
+              3,
+              -1
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "ok": true
+        },
+        "24": {
+          "expected": [
+            [
+              -1,
+              -1
+            ],
+            [
+              -1,
+              1
+            ],
+            [
+              1,
+              -1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "got": [
+            [
+              -1,
+              -1
+            ],
+            [
+              -1,
+              1
+            ],
+            [
+              1,
+              -1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "ok": true
+        },
+        "4": {
+          "expected": [
+            [
+              -2,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          "got": [
+            [
+              -2,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          "ok": true
+        }
+      }
+    },
+    "bound_not_truncating": {
+      "ok": true,
+      "record": {
+        "8": {
+          "formula_bound": 1,
+          "wide_bound": 60,
+          "wide": [],
+          "narrow": [],
+          "ok": true
+        },
+        "24": {
+          "formula_bound": 2,
+          "wide_bound": 70,
+          "wide": [
+            [
+              -1,
+              -1
+            ],
+            [
+              -1,
+              1
+            ],
+            [
+              1,
+              -1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "narrow": [
+            [
+              -1,
+              -1
+            ],
+            [
+              -1,
+              1
+            ],
+            [
+              1,
+              -1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "ok": true
+        },
+        "32": {
+          "formula_bound": 2,
+          "wide_bound": 70,
+          "wide": [
+            [
+              -3,
+              -1
+            ],
+            [
+              -3,
+              1
+            ],
+            [
+              3,
+              -1
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "narrow": [
+            [
+              -3,
+              -1
+            ],
+            [
+              -3,
+              1
+            ],
+            [
+              3,
+              -1
+            ],
+            [
+              3,
+              1
+            ]
+          ],
+          "ok": true
+        },
+        "4": {
+          "formula_bound": 1,
+          "wide_bound": 60,
+          "wide": [
+            [
+              -2,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          "narrow": [
+            [
+              -2,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          "ok": true
+        },
+        "100": {
+          "formula_bound": 3,
+          "wide_bound": 80,
+          "wide": [
+            [
+              -10,
+              0
+            ],
+            [
+              10,
+              0
+            ]
+          ],
+          "narrow": [
+            [
+              -10,
+              0
+            ],
+            [
+              10,
+              0
+            ]
+          ],
+          "ok": true
+        },
+        "1000": {
+          "formula_bound": 7,
+          "wide_bound": 120,
+          "wide": [],
+          "narrow": [],
+          "ok": true
+        },
+        "8000": {
+          "formula_bound": 19,
+          "wide_bound": 240,
+          "wide": [],
+          "narrow": [],
+          "ok": true
+        }
+      }
+    },
+    "parity_filter_live": {
+      "ok": true,
+      "record": {
+        "target8_parity": [],
+        "target32_raw": [
+          [
+            3,
+            -1
+          ],
+          [
+            -3,
+            -1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            -3,
+            1
+          ]
+        ],
+        "target32_parity": [
+          [
+            3,
+            -1
+          ],
+          [
+            -3,
+            -1
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            -3,
+            1
+          ]
+        ],
+        "filter_can_accept": true
+      }
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true
+}

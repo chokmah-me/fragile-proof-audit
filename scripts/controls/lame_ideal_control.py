@@ -45,7 +45,10 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, OSError):
         pass
 
+sys.path.insert(0, str(ROOT / "scripts" / "controls"))
+
 from lame_ideal_neg23 import norm_equation_solutions  # noqa: E402
+from receipt import write_receipt  # noqa: E402
 
 BAR = "=" * 74
 
@@ -152,6 +155,15 @@ def main() -> int:
     print(f"  [1] positive existence:    {ok1}")
     print(f"  [2] bound not truncating:  {ok2}")
     print(f"  [3] parity filter live:    {ok3}")
+    write_receipt(
+        control="lame_ideal_control",
+        gate="lame_ideal_neg23",
+        verdict=verdict,
+        checks={"positive_existence": {"ok": ok1, "record": rec1},
+                "bound_not_truncating": {"ok": ok2, "record": rec2},
+                "parity_filter_live": {"ok": ok3, "record": rec3}},
+        ok=all_ok,
+    )
     return 0 if all_ok else 1
 
 

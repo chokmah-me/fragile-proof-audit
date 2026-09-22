@@ -24,6 +24,7 @@ scripts/gates/check.py.
 
 from __future__ import annotations
 
+import json
 import sys
 from fractions import Fraction
 from pathlib import Path
@@ -32,6 +33,7 @@ import mpmath as mp
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "gates"))
+sys.path.insert(0, str(ROOT / "scripts" / "controls"))
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -40,6 +42,7 @@ for _s in (sys.stdout, sys.stderr):
         pass
 
 import salez_youssef_logsobolev as SY  # noqa: E402
+from receipt import write_receipt  # noqa: E402
 
 BAR = "=" * 74
 
@@ -109,14 +112,76 @@ def discrimination_check() -> dict:
     return {"ok": ok, "ratios": ratios}
 
 
+def algebraic_self_consistency_check() -> dict:
+    """(3) The gate's curvature claim is an EXACT rational identity
+    (kappa = 1/(4n^2) at every edge), and its stationary distribution is
+    computed in 80-digit mpmath. Confirm the gate recorded that exactness
+    rather than an approximation, and that pi(1) > 1/2 -- the hypothesis
+    Theorem 2.1 needs for A = {1}, without which the capacitary bound does
+    not apply at all.
+    """
+    print("\n[3] Algebraic self-consistency (exact curvature, Theorem 2.1 hypothesis)")
+    meta_path = ROOT / "results" / "salez_youssef_gate_meta.json"
+    if not meta_path.exists():
+        print("    unavailable -- run scripts/gates/salez_youssef_logsobolev.py first")
+        return {"ok": None, "note": "gate meta not found"}
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    exact = meta.get("all_kappa_matches_1_over_4n2_exactly")
+    pi_ok = meta.get("all_pi1_over_half")
+    print(f"    curvature equals 1/(4n^2) exactly at every tested n: {exact}")
+    print(f"    pi(1) > 1/2 at every tested n (Theorem 2.1 needs pi(A)>=1/2): {pi_ok}")
+    ok = bool(exact) and bool(pi_ok)
+    return {"ok": ok, "kappa_exact": exact, "pi1_over_half": pi_ok}
+
+
+def independent_corroboration_check() -> dict:
+    """(4) The paper states the detailed-balance ratio pi(k)/pi(k+1) = n+k+2
+    for 1 <= k <= n-1. That closed form is derived from the transition rates
+    alone and shares nothing with the capacity / log-Sobolev machinery that
+    produces the BREAK, so reproducing it independently checks the chain
+    itself rather than the diagnostic applied to it.
+    """
+    print("\n[4] Independent corroboration: paper's closed-form stationary ratio")
+    rows = []
+    for n in (4, 10, 30, 100):
+        states, up, down = SY.build_chain(n)
+        pi, _z = SY.stationary(states, up, down)
+        worst = mp.mpf(0)
+        for k in range(1, n):
+            ratio = pi[k] / pi[k + 1]
+            expected = mp.mpf(n + k + 2)
+            worst = max(worst, abs(ratio - expected))
+        matches = worst < mp.mpf(10) ** -30
+        rows.append({"n": n, "max_abs_deviation": mp.nstr(worst, 6),
+                     "matches_closed_form": matches})
+        print(f"    n={n:4d}: max |pi(k)/pi(k+1) - (n+k+2)| = "
+              f"{mp.nstr(worst, 6)} -> matches: {matches}")
+    ok = all(r["matches_closed_form"] for r in rows)
+    print(f"    -> chain reproduces the paper's own closed form: {ok}")
+    return {"ok": ok, "rows": rows}
+
+
 def main() -> int:
     print(BAR)
     print("salez_youssef_break_control")
     print(BAR)
     t = transcription_check()
     d = discrimination_check()
-    ok = t["ok"] and d["ok"]
-    print(f"\n{BAR}\nVERDICT: {'NO FALSE POSITIVE' if ok else 'CONTROL FAILED'}\n{BAR}")
+    a = algebraic_self_consistency_check()
+    c = independent_corroboration_check()
+    ok = t["ok"] and d["ok"] and bool(a["ok"]) and c["ok"]
+    verdict = "NO FALSE POSITIVE" if ok else "CONTROL FAILED"
+    print(f"\n{BAR}\nVERDICT: {verdict}\n{BAR}")
+    write_receipt(
+        control="salez_youssef_break_control",
+        gate="salez_youssef_logsobolev",
+        verdict=verdict,
+        checks={"transcription": t, "discrimination": d,
+                "algebraic_self_consistency": a,
+                "independent_corroboration": c},
+        ok=ok,
+        extra={"local_pdf": "incoming/salez-youssef-munch-2504.08055.pdf"},
+    )
     return 0 if ok else 1
 
 

@@ -1,0 +1,287 @@
+{
+  "timestamp": "2026-09-22T03:02:49.951330+00:00",
+  "control": "sarkozy_break_control",
+  "gate": "sarkozy_sum_product",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "transcription": {
+      "pdf_pinned": true,
+      "delta_matches_legendre_symbol": true,
+      "six_cycle_count_matches_formula": true,
+      "components_are_chordless_6_cycles": true,
+      "constructed_set_has_size_p_minus_1_over_2": true,
+      "ok": true,
+      "rows": [
+        {
+          "p": 5,
+          "delta": 0,
+          "expected_delta_from_legendre": 0,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 7,
+          "delta": 2,
+          "expected_delta_from_legendre": 2,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 11,
+          "delta": 0,
+          "expected_delta_from_legendre": 0,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 13,
+          "delta": 2,
+          "expected_delta_from_legendre": 2,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 17,
+          "delta": 0,
+          "expected_delta_from_legendre": 0,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 19,
+          "delta": 2,
+          "expected_delta_from_legendre": 2,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 23,
+          "delta": 0,
+          "expected_delta_from_legendre": 0,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 31,
+          "delta": 2,
+          "expected_delta_from_legendre": 2,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 101,
+          "delta": 0,
+          "expected_delta_from_legendre": 0,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 401,
+          "delta": 0,
+          "expected_delta_from_legendre": 0,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        },
+        {
+          "p": 1009,
+          "delta": 2,
+          "expected_delta_from_legendre": 2,
+          "delta_matches": true,
+          "cycle_count_matches": true,
+          "A_size_matches": true,
+          "cycles_clean": true
+        }
+      ],
+      "provenance": "pinned PDF, structure re-derived not paraphrased"
+    },
+    "discrimination": {
+      "all_full_sets_fail": true,
+      "density_rows": [
+        {
+          "p": 5,
+          "k_actual": 2,
+          "hits_at_k": 3,
+          "k_over": 4,
+          "hits_over": 0,
+          "trials": 40
+        },
+        {
+          "p": 7,
+          "k_actual": 3,
+          "hits_at_k": 2,
+          "k_over": 5,
+          "hits_over": 0,
+          "trials": 40
+        },
+        {
+          "p": 11,
+          "k_actual": 5,
+          "hits_at_k": 0,
+          "k_over": 7,
+          "hits_over": 0,
+          "trials": 40
+        },
+        {
+          "p": 13,
+          "k_actual": 6,
+          "hits_at_k": 0,
+          "k_over": 8,
+          "hits_over": 0,
+          "trials": 40
+        },
+        {
+          "p": 17,
+          "k_actual": 8,
+          "hits_at_k": 0,
+          "k_over": 10,
+          "hits_over": 0,
+          "trials": 40
+        },
+        {
+          "p": 19,
+          "k_actual": 9,
+          "hits_at_k": 0,
+          "k_over": 11,
+          "hits_over": 0,
+          "trials": 40
+        }
+      ],
+      "density_sensitive": true,
+      "not_tautological": true
+    },
+    "algebraic_self_consistency": {
+      "ok": true,
+      "per_prime_cross_check_ok": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    "independent_corroboration": {
+      "rows": [
+        {
+          "p": 5,
+          "k_over_half": 3,
+          "proposition_2_1_holds": true,
+          "k_boundary": 3,
+          "any_set_of_boundary_size_avoids_one": false
+        },
+        {
+          "p": 7,
+          "k_over_half": 4,
+          "proposition_2_1_holds": true,
+          "k_boundary": 4,
+          "any_set_of_boundary_size_avoids_one": false
+        },
+        {
+          "p": 11,
+          "k_over_half": 6,
+          "proposition_2_1_holds": true,
+          "k_boundary": 6,
+          "any_set_of_boundary_size_avoids_one": false
+        },
+        {
+          "p": 13,
+          "k_over_half": 7,
+          "proposition_2_1_holds": true,
+          "k_boundary": 7,
+          "any_set_of_boundary_size_avoids_one": false
+        },
+        {
+          "p": 17,
+          "k_over_half": 9,
+          "proposition_2_1_holds": true,
+          "k_boundary": 9,
+          "any_set_of_boundary_size_avoids_one": false
+        },
+        {
+          "p": 19,
+          "k_over_half": 10,
+          "proposition_2_1_holds": true,
+          "k_boundary": 10,
+          "any_set_of_boundary_size_avoids_one": false
+        },
+        {
+          "p": 23,
+          "k_over_half": 12,
+          "proposition_2_1_holds": true,
+          "k_boundary": 12,
+          "any_set_of_boundary_size_avoids_one": null
+        },
+        {
+          "p": 29,
+          "k_over_half": 15,
+          "proposition_2_1_holds": true,
+          "k_boundary": 15,
+          "any_set_of_boundary_size_avoids_one": null
+        },
+        {
+          "p": 31,
+          "k_over_half": 16,
+          "proposition_2_1_holds": true,
+          "k_boundary": 16,
+          "any_set_of_boundary_size_avoids_one": null
+        },
+        {
+          "p": 37,
+          "k_over_half": 19,
+          "proposition_2_1_holds": true,
+          "k_boundary": 19,
+          "any_set_of_boundary_size_avoids_one": null
+        },
+        {
+          "p": 41,
+          "k_over_half": 21,
+          "proposition_2_1_holds": true,
+          "k_boundary": 21,
+          "any_set_of_boundary_size_avoids_one": null
+        },
+        {
+          "p": 43,
+          "k_over_half": 22,
+          "proposition_2_1_holds": true,
+          "k_boundary": 22,
+          "any_set_of_boundary_size_avoids_one": null
+        },
+        {
+          "p": 47,
+          "k_over_half": 24,
+          "proposition_2_1_holds": true,
+          "k_boundary": 24,
+          "any_set_of_boundary_size_avoids_one": null
+        }
+      ],
+      "proposition_2_1_holds": true,
+      "boundary_is_sharp": true,
+      "ok": true,
+      "note": "the sharpness half of Tang's paper, structurally independent of the counterexample construction"
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "local_pdf": "incoming/sarkozy-tang-2603.29992.pdf"
+}

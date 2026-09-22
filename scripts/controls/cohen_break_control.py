@@ -1,11 +1,16 @@
 """False-positive control for the cohen_subadditivity BREAK gate.
 
 Same four questions as `break_control.py` (suman_eq48, odd_zeta_1609), applied
-to `scripts/gates/cohen_subadditivity.py`. Kept in its own file rather than
-folded into `break_control.py` because there is no local PDF pin for
-arXiv:2607.09793 under `incoming/` -- transcription/corroboration here rest on
-a live arXiv abstract fetch (recorded verbatim below, dated), not a pinned
-PDF, and that provenance gap must stay visible rather than silently reused.
+to `scripts/gates/cohen_subadditivity.py`.
+
+PROVENANCE UPGRADE (2026-09-21 re-audit). This control used to match
+substrings inside a prose summary the campaign had itself written down -- a
+check that compared a string against itself and therefore could not fail. The
+PDF is now pinned at incoming/cohen-ibarra-2607.09793.pdf, and transcription
+fidelity is tested the only way that bites: by running the gate's OWN
+predicate against concrete values Ibarra states, including Cohen's tabulated
+C_sigma(598) = 120 and the paper's worked example at 3929. If the gate's
+notion of "cyclic" or "Sophie Germain cyclic" were wrong, these disagree.
 
 Run:  python scripts/controls/cohen_break_control.py
 Audit instrument, not a gate: issues no campaign verdict, not registered in
@@ -26,50 +31,60 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, OSError):
         pass
 
+sys.path.insert(0, str(ROOT / "scripts" / "controls"))
+
 import cohen_subadditivity as CS  # noqa: E402
+from receipt import write_receipt  # noqa: E402
 
 BAR = "=" * 74
 
-# Fetched live from https://arxiv.org/abs/2607.09793 on 2026-09-20 (WebFetch,
-# small-model abstract summary, not the full PDF -- no local pin exists).
-# Recorded verbatim for the transcription-fidelity check below.
-ABSTRACT_SUMMARY = (
-    "The paper disproves Cohen's Conjecture 66 regarding Sophie Germain "
-    "cyclic numbers. An integer qualifies as cyclic when gcd(n,phi(n))=1, "
-    "and as Sophie Germain cyclic when both n and 2n+1 are cyclic. Cohen had "
-    "conjectured that the counting function C_sigma for such numbers "
-    "satisfies subadditivity -- meaning C_sigma(m+n) <= C_sigma(m)+C_sigma(n). "
-    "The author provides a counterexample: at m=31, n=3928, "
-    "C_sigma(3959)=697 > 696 = C_sigma(31)+C_sigma(3928). The proof is "
-    "formally verified using Lean 4."
-)
+PINNED_PDF = ROOT / "incoming" / "cohen-ibarra-2607.09793.pdf"
+
+# Values stated in the pinned PDF, transcribed here independently of the gate.
+# Section 1: the Sophie Germain cyclic numbers (OEIS A397387) begin as below,
+# "so C_sigma(31) = 10". Section 2: the window (3928, 3959] contains eleven.
+# Section 3: "checked the definition against Cohen's tabulated value
+# C_sigma(598) = 120".
+PAPER_SG_CYCLIC_UP_TO_31 = [1, 2, 3, 5, 7, 11, 15, 17, 23, 29]
+PAPER_WINDOW_3928_3959 = [3929, 3931, 3935, 3941, 3943, 3945, 3947, 3949,
+                          3953, 3957, 3959]
+PAPER_C_SIGMA_598 = 120
+PAPER_C_SIGMA_31 = 10
+PAPER_C_SIGMA_3959 = 697
+# Section 2's worked example for 3929.
+PAPER_PHI_3929 = 3928
+PAPER_PHI_7859 = 7560
 
 
 def transcription_check() -> dict:
-    """(1) Is the refuted claim -- and the specific witness -- the one the
-    abstract states, not a strawman built from the corpus doc's narrative?
+    """(1) Does the gate's own predicate reproduce the concrete values the
+    paper states? This tests the definition, which is what the whole BREAK
+    rests on -- a wrong `cyclic` predicate still yields *a* counting
+    function, just not Cohen's.
     """
-    print("\n[1] Transcription fidelity (arXiv:2607.09793 abstract, live-fetched)")
+    print("\n[1] Transcription fidelity (pinned PDF, arXiv:2607.09793v1)")
+    sg_up_to_31 = [n for n in range(1, 32) if CS.is_sophie_germain_cyclic(n)]
+    window = [n for n in range(3929, 3960) if CS.is_sophie_germain_cyclic(n)]
     checks = {
-        "definition_cyclic_matches": "gcd(n,phi(n))=1" in ABSTRACT_SUMMARY,
-        "definition_sophie_germain_matches": (
-            "both n and 2n+1 are cyclic" in ABSTRACT_SUMMARY
+        "pdf_pinned": PINNED_PDF.exists(),
+        "sg_cyclic_list_up_to_31_matches": sg_up_to_31 == PAPER_SG_CYCLIC_UP_TO_31,
+        "C_sigma_31_matches": CS.c_sigma(31) == PAPER_C_SIGMA_31,
+        "cohen_tabulated_C_sigma_598_matches": (
+            CS.c_sigma(598) == PAPER_C_SIGMA_598
         ),
-        "conjecture_statement_matches": (
-            "C_sigma(m+n) <= C_sigma(m)+C_sigma(n)" in ABSTRACT_SUMMARY
-        ),
-        "witness_m_n_matches": "m=31, n=3928" in ABSTRACT_SUMMARY,
-        "witness_counts_match": (
-            "C_sigma(3959)=697 > 696 = C_sigma(31)+C_sigma(3928)"
-            in ABSTRACT_SUMMARY
-        ),
+        "window_3928_3959_matches": window == PAPER_WINDOW_3928_3959,
+        "window_has_eleven_members": len(window) == 11,
+        "C_sigma_3959_matches": CS.c_sigma(3959) == PAPER_C_SIGMA_3959,
+        "worked_example_phi_3929": CS.totient_sympy(3929) == PAPER_PHI_3929,
+        "worked_example_phi_7859": CS.totient_sympy(7859) == PAPER_PHI_7859,
+        "worked_example_3929_is_sg_cyclic": CS.is_sophie_germain_cyclic(3929),
     }
     for k, v in checks.items():
         print(f"    [{'ok' if v else 'MISS'}] {k}")
     ok = all(checks.values())
-    print(f"    -> gate's lemma/instance matches the source abstract: {ok}")
+    print(f"    -> gate's definition reproduces the paper's stated values: {ok}")
     checks["ok"] = ok
-    checks["provenance"] = "live abstract fetch, not a pinned PDF"
+    checks["provenance"] = "pinned PDF, gate predicate run against paper values"
     return checks
 
 
@@ -168,7 +183,17 @@ def main() -> int:
     print(f"\n{BAR}")
     print(f"cohen_subadditivity control verdict: {verdict}")
     print(BAR)
-    return 0 if verdict.startswith("NO FALSE POSITIVE") else 1
+    ok = verdict.startswith("NO FALSE POSITIVE")
+    write_receipt(
+        control="cohen_break_control",
+        gate="cohen_subadditivity",
+        verdict=verdict,
+        checks={"transcription": t, "discrimination": d,
+                "algebraic_self_consistency": a},
+        ok=ok,
+        extra={"local_pdf": "incoming/cohen-ibarra-2607.09793.pdf"},
+    )
+    return 0 if ok else 1
 
 
 if __name__ == "__main__":

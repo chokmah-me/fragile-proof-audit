@@ -195,7 +195,10 @@ def main() -> int:
 
     RESULTS.mkdir(parents=True, exist_ok=True)
     # Phase 1(b)+2(d)–2(g)+3(h)+3(i)+3(i)++: prior gates + Lamé ideal witness.
-    # Track D#1: Cohen subadditivity (corpus/live-fragile-proofs-2024-2026.md).
+    # Track D#1–#8: Cohen, Baste, Sárközy, Tang-Zhang, Thakur,
+    # Chung-Graham-Spiro, Salez-Youssef (NCI SKIPPED, see
+    # results/nci_skip_meta.json). Sources: corpus/live-fragile-proofs-2024-2026.md
+    # plus the pinned PDFs under incoming/.
     results = [
         run_harness(),
         run_suman_eq48(),
@@ -219,7 +222,8 @@ def main() -> int:
     drifted = [v for v in verdicts if not v["ok"]]
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "phase": "3i++",
+        "phase": "track-D",
+        "lock_size": len(EXPECTED_VERDICT),
         "gates": [
             {
                 "name": r["name"],

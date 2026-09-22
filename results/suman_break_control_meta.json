@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-09-22T03:04:50.984248+00:00",
+  "control": "suman_break_control",
+  "gate": "suman_eq48",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "machinery_always_fires": true,
+    "interior_range_empty_at_n1": true,
+    "transcription": {
+      "eq48_range_verbatim": true,
+      "eq47_narrower_range": true,
+      "eq49_hypothesis_mentions_zeta": false,
+      "base_case_derives_same_solutions": true,
+      "base_case_uses_integrality": true,
+      "ok": true
+    },
+    "corroboration": {
+      "names a=2b / a=b as valid integer solutions": true,
+      "calls the induction base case invalidated": true,
+      "identifies the zeta-integrality conflation": true,
+      "ok": true
+    },
+    "verdict": "NO FALSE POSITIVE"
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "runner": "scripts/controls/break_control.py"
+}

@@ -1,0 +1,150 @@
+{
+  "timestamp": "2026-09-22T03:05:48.833982+00:00",
+  "control": "es_cover_control",
+  "gate": "es_cover",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "equivalence": {
+      "primes": 27,
+      "disagreements": 0,
+      "ok": true
+    },
+    "union_coverage": {
+      "rows": [
+        {
+          "pairing": "real A or real B",
+          "covered": 27,
+          "of": 27
+        },
+        {
+          "pairing": "m+1 A or m+1 B",
+          "covered": 27,
+          "of": 27
+        },
+        {
+          "pairing": "tgt+1 A or tgt+1 B",
+          "covered": 27,
+          "of": 27
+        },
+        {
+          "pairing": "3dn A or tgt2n B",
+          "covered": 27,
+          "of": 27
+        }
+      ],
+      "coverage_uninformative": true,
+      "decides_nothing": true
+    },
+    "egyptian3_discrimination": {
+      "real_variants_100_percent_valid": true,
+      "perturbed_variants_0_percent_valid": true,
+      "variant_rows": [
+        {
+          "label": "A  real   (4dn-1)|(p+4d)",
+          "cov": 26,
+          "n": 27,
+          "wmean": 5.269230769230769,
+          "wmed": 5.0,
+          "dmed": 2.0,
+          "egypt": 100.0,
+          "egypt_tot": 137
+        },
+        {
+          "label": "A  m+1    (4dn+1)|(p+4d)",
+          "cov": 27,
+          "n": 27,
+          "wmean": 26.074074074074073,
+          "wmed": 25,
+          "dmed": 1,
+          "egypt": 0.0,
+          "egypt_tot": 704
+        },
+        {
+          "label": "A  m-3    (4dn-3)|(p+4d)",
+          "cov": 27,
+          "n": 27,
+          "wmean": 9.25925925925926,
+          "wmed": 9,
+          "dmed": 1,
+          "egypt": 0.0,
+          "egypt_tot": 250
+        },
+        {
+          "label": "A  3dn    (3dn-1)|(p+4d)",
+          "cov": 27,
+          "n": 27,
+          "wmean": 9.777777777777779,
+          "wmed": 10,
+          "dmed": 1,
+          "egypt": 0.0,
+          "egypt_tot": 264
+        },
+        {
+          "label": "A  tgt+1  (4dn-1)|(p+4d+1)",
+          "cov": 27,
+          "n": 27,
+          "wmean": 9.88888888888889,
+          "wmed": 9,
+          "dmed": 1,
+          "egypt": 0.0,
+          "egypt_tot": 267
+        },
+        {
+          "label": "A  tgt3d  (4dn-1)|(p+3d)",
+          "cov": 27,
+          "n": 27,
+          "wmean": 8.407407407407407,
+          "wmed": 8,
+          "dmed": 1,
+          "egypt": 0.0,
+          "egypt_tot": 227
+        },
+        {
+          "label": "B  real   (4dn-1)|(p+n)",
+          "cov": 25,
+          "n": 27,
+          "wmean": 7.52,
+          "wmed": 6,
+          "dmed": 2,
+          "egypt": 100.0,
+          "egypt_tot": 188
+        },
+        {
+          "label": "B  m+1    (4dn+1)|(p+n)",
+          "cov": 27,
+          "n": 27,
+          "wmean": 15.222222222222221,
+          "wmed": 15,
+          "dmed": 1,
+          "egypt": 0.0,
+          "egypt_tot": 411
+        },
+        {
+          "label": "B  tgt2n  (4dn-1)|(p+2n)",
+          "cov": 27,
+          "n": 27,
+          "wmean": 11.814814814814815,
+          "wmed": 12,
+          "dmed": 1,
+          "egypt": 0.0,
+          "egypt_tot": 319
+        },
+        {
+          "label": "B  tgt+1  (4dn-1)|(p+n+1)",
+          "cov": 27,
+          "n": 27,
+          "wmean": 12.148148148148149,
+          "wmed": 12,
+          "dmed": 1,
+          "egypt": 0.0,
+          "egypt_tot": 328
+        }
+      ],
+      "ok": true
+    }
+  },
+  "verdict": "NO FALSE NEGATIVE",
+  "ok": true,
+  "limit": 10000
+}

@@ -27,7 +27,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "gates"))
+sys.path.insert(0, str(ROOT / "scripts" / "controls"))
 import es_cover as ES  # noqa: E402
+from receipt import write_receipt  # noqa: E402
 
 
 def divisors(T):
@@ -185,10 +187,22 @@ if __name__ == "__main__":
     print(f"  disagreements over {len(primes)} primes: {len(bad)}")
     if bad:
         print("  ", bad[:5])
-        print("EQUIVALENCE FAILED - control is not matched"); raise SystemExit(1)
+        print("EQUIVALENCE FAILED - control is not matched")
+        write_receipt(
+            control="es_cover_control",
+            gate="es_cover",
+            verdict="CONTROL NOT MATCHED",
+            checks={"equivalence": {"primes": len(primes),
+                                    "disagreements": len(bad),
+                                    "sample": bad[:5], "ok": False}},
+            ok=False,
+            extra={"limit": LIM},
+        )
+        raise SystemExit(1)
     print("  generic search reproduces the gate exactly -> breadth is matched")
 
-    show(f"matched control, hard-class primes < {LIM}", run(primes, full=True))
+    variant_rows = run(primes, full=True)
+    show(f"matched control, hard-class primes < {LIM}", variant_rows)
 
     # union coverage, real vs each perturbed pairing
     print("\n=== union coverage (Type A or Type B), matched search ===")
@@ -198,9 +212,52 @@ if __name__ == "__main__":
         ("tgt+1 A or tgt+1 B", dict(Mm=4, Mo=-1, Am=4, Ao=1), dict(Mm=4, Mo=-1, Bm=1, Bo=1)),
         ("3dn A or tgt2n B", dict(Mm=3, Mo=-1, Am=4, Ao=0), dict(Mm=4, Mo=-1, Bm=2, Bo=0)),
     ]
+    union_rows = []
     for label, ka, kb in pairs:
         c = sum(
             1 for p in primes
             if searchA(p, first_only=True, **ka) or searchB(p, first_only=True, **kb)
         )
         print(f"  {label:<22} {c:>4}/{len(primes)}")
+        union_rows.append({"pairing": label, "covered": c, "of": len(primes)})
+
+    # Which signal decides. Established 2026-09-20 (commit 3f8a78f) and
+    # recorded in docs/GATE-BEFORE-PROVE.md: COVERAGE IS UNINFORMATIVE here --
+    # every perturbed congruence also finds witnesses for every hard-class
+    # prime, so a coverage comparison cannot discriminate and must not be
+    # dressed up as though it could. What discriminates is `egyptian3`: the
+    # real congruence's witnesses are Egyptian-valid, the perturbed ones' are
+    # not. The receipt records both so the distinction stays visible.
+    real_rows = [r for r in variant_rows if r["label"].split()[1] == "real"]
+    perturbed_rows = [r for r in variant_rows if r["label"].split()[1] != "real"]
+    real_egypt_full = all(r["egypt"] == 100.0 for r in real_rows)
+    perturbed_egypt_zero = all(r["egypt"] == 0.0 for r in perturbed_rows)
+    coverage_uninformative = all(
+        r["covered"] == len(primes) for r in union_rows
+    )
+    ok = real_egypt_full and perturbed_egypt_zero
+    print(f"\n  decisive signal (egyptian3): real variants 100% valid = "
+          f"{real_egypt_full}; perturbed variants 0% valid = "
+          f"{perturbed_egypt_zero}")
+    print(f"  coverage comparison uninformative, as previously established: "
+          f"{coverage_uninformative}")
+    write_receipt(
+        control="es_cover_control",
+        gate="es_cover",
+        verdict="NO FALSE NEGATIVE" if ok else "REVIEW",
+        checks={
+            "equivalence": {"primes": len(primes), "disagreements": 0,
+                            "ok": True},
+            "union_coverage": {"rows": union_rows,
+                               "coverage_uninformative": coverage_uninformative,
+                               "decides_nothing": True},
+            "egyptian3_discrimination": {
+                "real_variants_100_percent_valid": real_egypt_full,
+                "perturbed_variants_0_percent_valid": perturbed_egypt_zero,
+                "variant_rows": variant_rows,
+                "ok": ok,
+            },
+        },
+        ok=ok,
+        extra={"limit": LIM},
+    )

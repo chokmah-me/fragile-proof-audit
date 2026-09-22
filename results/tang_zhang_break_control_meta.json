@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-09-22T03:04:41.903118+00:00",
+  "control": "tang_zhang_break_control",
+  "gate": "tang_zhang_schatten",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "transcription": {
+      "pdf_pinned": true,
+      "theorem_1_1_bound_matches": true,
+      "u_first_coord_matches": true,
+      "v_first_coord_matches": true,
+      "u_second_coord_sq_matches": true,
+      "v_second_coord_sq_matches": true,
+      "ok": true,
+      "provenance": "local PDF pin, read via this campaign's PDF tool"
+    },
+    "discrimination": {
+      "r_witness": 1.0364136587048907,
+      "r_witness_matches_gate": true,
+      "trials": 5000,
+      "exceeds_C_TZ": 55,
+      "exceeds_207_200": 42,
+      "frac_exceeds_207_200": 0.0084,
+      "max_random_R": 1.0364053337889292,
+      "declines_on_most_inputs": true,
+      "not_tautological": true
+    },
+    "algebraic_self_consistency": {
+      "ok": true,
+      "paths_agree": true,
+      "matches_paper_eq_8_9": true
+    },
+    "independent_corroboration": {
+      "rows": [
+        {
+          "m": 2,
+          "C_TZ_2_m": "1.098684113467809966",
+          "known_c2_m": "1.098684113467809966",
+          "matches": true
+        },
+        {
+          "m": 3,
+          "C_TZ_2_m": "1.1687708944803676308",
+          "known_c2_m": "1.1687708944803676308",
+          "matches": true
+        },
+        {
+          "m": 5,
+          "C_TZ_2_m": "1.2720196495140689643",
+          "known_c2_m": "1.2720196495140689643",
+          "matches": true
+        },
+        {
+          "m": 8,
+          "C_TZ_2_m": "1.3835510696656972513",
+          "known_c2_m": "1.3835510696656972513",
+          "matches": true
+        }
+      ],
+      "all_match": true
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "local_pdf": "incoming/tang-zhang-2608.15558.pdf"
+}

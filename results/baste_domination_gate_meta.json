@@ -1,9 +1,10 @@
 {
-  "timestamp": "2026-09-22T02:37:37.704486+00:00",
+  "timestamp": "2026-09-22T03:20:43.989451+00:00",
   "gate": "baste_domination",
   "source_claim": "Baste-Furst-Henning-Mohr-Rautenbach: gamma(G) <= gamma_e(G) for regular G",
-  "source_refutation": "Afrasyab (2026), arXiv:2609.10783",
+  "source_refutation": "Afrasyab, K. (2026), arXiv:2609.10783v1, Theorem 1",
   "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md",
+  "local_pdf": "incoming/baste-afrasyab-2609.10783.pdf",
   "transcription": {
     "occurrence_count": {
       "~x1": 2,
@@ -91,6 +92,6 @@
   "verdict": "BREAK",
   "lemma": "gamma(G) <= gamma_e(G) for every finite regular graph G of positive degree",
   "instance": "50-vertex, 3-regular graph (15 variable-pair gadgets, 20 clause gadgets)",
-  "false_instance": "gamma(G)=16 > 15=gamma_e(G), independently confirmed except (see status) the gamma>=16 lower bound",
+  "false_instance": "gamma(G)=16 > 15=gamma_e(G). Both bounds closed independently in this gate: gamma_e=15 from an explicit maximal matching plus the general cubic ceil(m/5) bound; gamma<=16 from the explicit dominating set; gamma>=16 from this campaign's own exact branch-and-bound -- CONFIRMED (no dominating set of size <= 15)",
   "ok": true
 }

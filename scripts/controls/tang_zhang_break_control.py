@@ -33,7 +33,10 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, OSError):
         pass
 
+sys.path.insert(0, str(ROOT / "scripts" / "controls"))
+
 import tang_zhang_schatten as TZ  # noqa: E402
+from receipt import write_receipt  # noqa: E402
 
 BAR = "=" * 74
 mp.mp.dps = 50
@@ -233,7 +236,18 @@ def main() -> int:
     print(f"\n{BAR}")
     print(f"tang_zhang_schatten control verdict: {verdict}")
     print(BAR)
-    return 0 if verdict.startswith("NO FALSE POSITIVE") else 1
+    ok = verdict.startswith("NO FALSE POSITIVE")
+    write_receipt(
+        control="tang_zhang_break_control",
+        gate="tang_zhang_schatten",
+        verdict=verdict,
+        checks={"transcription": t, "discrimination": d,
+                "algebraic_self_consistency": a,
+                "independent_corroboration": c},
+        ok=ok,
+        extra={"local_pdf": "incoming/tang-zhang-2608.15558.pdf"},
+    )
+    return 0 if ok else 1
 
 
 if __name__ == "__main__":
