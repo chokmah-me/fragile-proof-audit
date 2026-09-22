@@ -4,7 +4,7 @@
   project     : C:\Users\Elke Shayna\Documents\00Dev\fragile-proof-audit
   target      : FragileProofAudit
   toolchain   : leanprover/lean4:v4.32.2
-  timestamp   : 2026-09-22T03:20:51+00:00
+  timestamp   : 2026-09-22T06:30:14+00:00
   files       : 18
   declarations: 150
   allowlist   : Classical.choice, Quot.sound, propext
@@ -21,7 +21,7 @@
 ==========================================================================
 
 --- build output ---
-âš  [3479/3572] Replayed FragileProofAudit.Lame.Maillet
+âš  [3461/3484] Replayed FragileProofAudit.Lame.Maillet
 warning: FragileProofAudit/Lame/Maillet.lean:114:0: Unscoped option maxHeartbeats is not allowed:
 Please scope this to individual declarations, as in
 ```

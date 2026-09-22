@@ -373,7 +373,12 @@ def main() -> int:
         },
         "verdict": "BREAK" if ok else "ABORT_TRANSCRIPTION",
         "lemma": "D_l = U_l for every l >= 1 (Chung-Graham-Spiro gap-set conjecture)",
-        "false_instance": "9 in U_4 \\ D_4 (witnessed by 8,11,14,16,17 in U; absent from all 5-consecutive down-blocks checked up to N=20000)",
+        # N is read from DEPTH_N rather than written out: the two had drifted
+        # apart (the string said 20000 while the scan ran to 50000).
+        "false_instance": (
+            f"9 in U_4 \\ D_4 (witnessed by 8,11,14,16,17 in U; absent from "
+            f"all 5-consecutive down-blocks checked up to N={DEPTH_N})"
+        ),
         "ok": ok,
     }
     out = RESULTS / "chung_graham_spiro_gate_meta.json"

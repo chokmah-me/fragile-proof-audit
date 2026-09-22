@@ -6,6 +6,15 @@
 | `harvest-addendum-analysis.md` | Kimi | **Authoritative** verification ledger |
 | `lean4-attack-harvest.md` | Claude 4.6 | Adopt 7-type taxonomy; Pith verdicts = leads |
 | `historical-collapses-gemini-export.md` | Gemini export (Downloads) | Lead. Two 2026 IDs web-checked; runtimes/citations untrusted |
-| `live-fragile-proofs-2024-2026.md` | AI deep-research export (Downloads, `live2026.md`) | Lead, higher confidence. All 7 arXiv IDs web-checked 2026-09-20, titles/authors match; runtimes/formalization-tractability estimates and inline numeric claims (counterexample values, etc.) still unverified. No overlap with pinned Borsuk-63/Hedetniemi or the Lamé 1847 track. 7 new candidate targets, ranked: Cohen subadditivity, Baste-Furst-Henning domination, Sárközy sum-product, Tang-Zhang Schatten norm, Thakur Carlitz-Wieferich, Salez-Youssef log-Sobolev, NCI lattice |
+| `live-fragile-proofs-2024-2026.md` | AI deep-research export (Downloads, `live2026.md`) | **EXHAUSTED and DOWNGRADED 2026-09-21.** Identifiers and ranking were good; **its descriptions of the mathematics were not.** Of 8 ranked targets: 2 usable as written, 4 image-corrupted, 1 a table-only ghost row, 1 with a **fabricated** "verifiable gate". One defect reached a landed verdict (Sárközy's threshold). All 8 now dispositioned — 7 BREAK, 1 SKIPPED. See the AUDIT NOTEs in the file. **Do not gate from it.** |
 
 Do not treat these as equals. Prefer the addendum on identifiers and fragility truth.
+
+## What a corpus file is for
+
+Finding targets. **Not describing them.** `docs/GATE-BEFORE-PROVE.md` protocol
+step 0 is now explicit: pin and read the real paper before writing any gate.
+The cost of learning this was four defective targets in one session plus one
+wrong conjecture statement that survived a day — because its discrimination
+control checked the gate against the corpus file rather than the paper.
+A control that shares its source with the gate it audits is not evidence.

@@ -65,6 +65,19 @@ Cold re-read of the whole Track D batch. Findings, in order of what they cost:
    The stale worktree is gitignored and was left in place; it is not a
    registered `git worktree` any more.
 
+**Follow-up landed same day (2026-09-22):** the corpus doc is annotated inline
+(a header banner plus AUDIT NOTEs on the Sárközy, NCI and ranking-table
+sections) and downgraded in `corpus/README.md` — its identifiers and ranking
+were good, its descriptions of the mathematics were not, and it is now
+exhausted. All eight Track D targets have bug-report briefs under
+`docs/audits/`, closing the gap where nineteen blueprints had only ten briefs.
+The stale agent worktree is deleted (all 92 of its files verified already in
+the git object store first; its `.lake` symlink into the main build was removed
+before the directory, so nothing could follow it). One more meta/source drift
+fixed: `chung_graham_spiro`'s `false_instance` said the scan reached
+`N=20 000` while `DEPTH_N = 50 000`; the string is now interpolated so it
+cannot drift again.
+
 Two leads this turned up, both worth a session: Ibarra's Cohen paper is
 **verified in Lean 4 over mathlib** (`Nat.Coprime n (Nat.totient n)`,
 axiom-clean, no `native_decide`) and Tang's Sárközy paper marks Proposition 2.1

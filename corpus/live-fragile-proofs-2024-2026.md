@@ -1,3 +1,29 @@
+> ## ⚠ AUDIT NOTE — read before using anything in this file
+>
+> Added 2026-09-21 after all eight ranked targets were dispositioned. This file
+> is an **AI deep-research export**, not a source. Its eight arXiv identifiers
+> are real and were live-checked, and its *ranking* proved useful. Its
+> **descriptions of the mathematics did not survive contact with the papers.**
+>
+> Of the eight ranked targets:
+>
+> | | |
+> |---|---|
+> | usable as written | 2 — Cohen, Salez-Youssef |
+> | image-corrupted (formulas replaced by `![][imageNN]` placeholders) | 4 — Sárközy, Tang-Zhang, Thakur, and pervasively elsewhere |
+> | no body section at all (table-only ghost row, no arXiv ID, name incomplete) | 1 — Chung-Graham**-Spiro** |
+> | **fabricated** — claims an artifact that does not exist in the source | 1 — NCI |
+>
+> One of those defects reached a landed verdict. The Sárközy section's
+> corrupted threshold was read as `\|A\| ≥ c·p`; the real conjecture is
+> `\|A\| > (½ − c)p`. Under the misreading the BREAK was vacuous. It stood for
+> a day because the discrimination control checked the gate against *this
+> file* rather than against the paper. See the AUDIT NOTEs inline below.
+>
+> **Standing rule (`docs/GATE-BEFORE-PROVE.md` protocol step 0): pin and read
+> the real paper before writing any gate. Never gate from this file.** Use it
+> to find targets, never to describe them.
+
 # **Forensic Audit of Historically Significant Mathematical Collapses: A Computational and Formal Verification Perspective**
 
 ## **Introduction and Methodological Framework**
@@ -57,6 +83,33 @@ In graph theory, the domination number ![][image23] is the minimum size of a dom
 * **Feasibility Assessment**: The exact reduction to a finite set-cover problem on 30 vertices, iterating over ![][image29] states, executes in roughly 12 seconds in pure Python utilizing standard library bitwise operations2.
 
 ### **Sárközy's Modulo a Prime Sum-Product Conjecture**
+
+> **⚠ AUDIT NOTE (2026-09-21) — this section's statement of the conjecture is
+> unusable; it caused the campaign's one wrong verdict statement.**
+>
+> Every threshold below is an `![][imageNN]` placeholder, so the section cannot
+> be read literally. An earlier session resolved the corruption as
+> `\|A\| ≥ c·p`. That is **wrong**, and this section contradicts itself about
+> it: the "Core Claimed Theorem" bullet says "a set density slightly **below**
+> ½", which is right, while the reconstructed inequality was not.
+>
+> The real statement, from the pinned PDF
+> (`incoming/sarkozy-tang-2603.29992.pdf`, Tang's Conjecture 1.1, quoting
+> Sárközy's 2001 list **Conjecture 65**):
+>
+> > There exist constants `c > 0` and `p₀` such that, if `p > p₀` is prime and
+> > `A ⊆ 𝔽_p` satisfies `\|A\| > (½ − c)p`, then `𝔽_p^× ⊆ A*`, where
+> > `A* = (A+A) ∪ (AA)`.
+>
+> Under the `c·p` misreading the conjecture falls to any small set and the
+> BREAK is vacuous. Under the true statement a witness of size `(p−1)/2` is
+> exactly decisive, which is Tang's Theorem 2.2.
+>
+> The "Verifiable Gate" bullet is also not usable: it contains a visible
+> self-contradiction ("Wait, if …, that fails") and suggests quadratic
+> **non**-residues. Tang's actual construction is an independent set in the
+> graph `u ~ v ⟺ u+v=1 ∨ uv=1`; it is implemented from the PDF in
+> `scripts/gates/sarkozy_sum_product.py` (Path B).
 
 Sárközy conjectured that there exist constants ![][image30] and ![][image31] such that for every prime ![][image32], any set ![][image33] with cardinality ![][image34] must satisfy the condition ![][image35], where ![][image36]3. In March 2026, Quanyu Tang proved that no such positive constant ![][image37] can exist, destroying the conjecture by proving the sharp threshold is exactly ![][image38]3.
 
@@ -123,6 +176,30 @@ In the field of discrete Ricci curvature, Salez and Youssef proved that the log-
 
 ### **The Non-Cancelling Intersections (NCI) Conjecture**
 
+> **⚠ AUDIT NOTE (2026-09-21) — this section's "Verifiable Gate" bullet is
+> FABRICATED. Target SKIPPED; do not write a gate.**
+>
+> The bullet below claims "a Python script validating the non-existence of
+> admissible sets between sizes … in the specified marked plane
+> configuration". **No such gate exists in the source.** This is a different
+> and worse defect than the image-corruption affecting Sárközy, Tang-Zhang and
+> Thakur: the artifact was invented, not garbled — and this section otherwise
+> looked complete, which is exactly what made it dangerous.
+>
+> The real paper (Wilhelm, arXiv:2608.27416v2,
+> `incoming/nci-wilhelm-2608.27416.pdf`) refutes NCI by a **first-moment
+> existence argument**: Lemma 7.2 bounds an expected admissible-set count
+> `E_p < 1` for `p > 600` and concludes *some* marking works. **It exhibits
+> none.** The paper's own §9 Open Problems item 1 states that even a small-`p`
+> explicit counterexample is unsolved. The only numerically checkable content,
+> the identities in (7.1), holds for every finite point set unconditionally —
+> testing it would be a check that cannot fail.
+>
+> The same document's ranking table (row 7) contradicts this section, listing
+> "Python/CPU Gate Runtime: N/A (Symbolic logic bound)".
+>
+> Disposition: `results/nci_skip_meta.json`, `docs/blueprint/nci-conjecture.md`.
+
 Amarilli, Monet, and Suciu conjectured that the union of a finite family of sets can always be built from its algebraically non-cancelling intersections using only disjoint unions and subset complements. This was disproved for left-linear dot-algebra expressions, but the general conjecture remained. In August 2026, it was disproved entirely7.
 
 #### **\[Target Identifier: NCI Conjecture, 2026 Refutation, arXiv:2608.27416\]**
@@ -144,9 +221,33 @@ By pivoting our focus exclusively to live fragile proofs (2024-2026), we constra
 | **3** | **Sárközy's Sum-Product (2026)** | Type F | Number Theory | High (ZMod Arithmetic) | 0.05s (Modulo Subset Search) |
 | **4** | **Tang-Zhang Norm Ratio (2026)** | Type A | Matrix Algebra | High (Real Matrices) | 0.01s (Exact Rational Eval) |
 | **5** | **Thakur Carlitz-Wieferich (2026)** | Type F | Algebraic NT | Medium (Polynomial Rings) | 4.5s (SymPy Finite Field) |
-| **6** | **Chung-Graham Gap-Set (2026)** | Type F | Combinatorics | High (Fibonacci Walks) | 0.5s (Sequence Generation) |
+| **6** | **Chung-Graham Gap-Set (2026)** ⚠ | Type F | Combinatorics | High (Fibonacci Walks) | 0.5s (Sequence Generation) |
 | **7** | **NCI Lattice Conjecture (2026)** | Type G | Discrete Math | Low (Dot-Algebra Trees) | N/A (Symbolic logic bound) |
 | **8** | **Salez-Youssef Sobolev (2025)** | Type G | Diff. Geometry | Low (Optimal Transport) | 15.0s (SciPy LinProg EM) |
+
+> **⚠ AUDIT NOTE (2026-09-21) — dispositions of this table.**
+>
+> All eight rows are closed. **Row 6 is a ghost**: "Chung-Graham Gap-Set" has
+> no body section anywhere in this document, no arXiv ID, no Works Cited
+> entry, and an incomplete name (it is Chung-Graham-**Spiro**). It was located
+> by live web search — Aliabadi, arXiv:2609.04473 — not from this file.
+> **Row 7 (NCI) is SKIPPED**, its claimed gate fabricated; see the AUDIT NOTE
+> on its section above. **Row 3 (Sárközy) had its conjecture misstated**; see
+> that section's AUDIT NOTE.
+>
+> | row | target | verdict |
+> |---|---|---|
+> | 1 | Cohen subadditivity | BREAK |
+> | 2 | Baste domination | BREAK |
+> | 3 | Sárközy sum-product | BREAK (statement corrected 2026-09-21) |
+> | 4 | Tang-Zhang Schatten norm | BREAK |
+> | 5 | Thakur Carlitz-Wieferich | BREAK |
+> | 6 | Chung-Graham-Spiro gap sets | BREAK (ghost row) |
+> | 7 | NCI lattice | **SKIPPED — no finite gate** |
+> | 8 | Salez-Youssef log-Sobolev | BREAK |
+>
+> The "Python/CPU Gate Runtime" column is an estimate and was not accurate for
+> any target. No further candidates here — this file is exhausted.
 
 I have updated the research report to focus exclusively on live fragile proofs. Let me know if there is anything else you need.
 
