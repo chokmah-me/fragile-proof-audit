@@ -11,7 +11,7 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy / `networkx` (graph gates only) · no Sage / Magma / cluster |
-| **Resume** | Fresh session → cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), Cohen's Lean scaffold (infrastructure confirmed tractable, not yet built — do not retry decide-over-`Nat.totient` at scale without a fast trial-division instance first), per-claim Agoh–Giuga, the 2(d) write-up, or `corpus/fragile-formalizable-proofs-report.md`'s remaining unexploited ranks (Pólya counterexample rank 9 — needs a sieve to ~906M; q-TSPP rank 10 — correct-proof infrastructure); ranks 1–7 are now all gated (Tait–Tutte, Kempe–Fritsch landed 2026-09-22); Gomila Λ-bound (rank 8) **audited clean** — full finite replay PASS 2026-09-22 (verify/audit, not a BREAK, not on the verdict lock) — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Resume** | Resume threads: [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 | **Lock** | 23 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
 
 ---
@@ -50,41 +50,11 @@ separate CAT-G row.
 
 ---
 
-## External kernel check (con-leche)
-
-Beyond `lake build`, every push also runs
-[con-leche](https://github.com/leanprover/con-leche) — an independent Lean
-kernel that re-checks an NDJSON export of the built library, catching bugs
-that exist only in Lean's own kernel and rejecting leftover `sorry`s or
-non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
-[`docs/con-leche.md`](docs/con-leche.md).
+External kernel check (con-leche): see [`docs/con-leche.md`](docs/con-leche.md).
 
 ---
 
-## Layout
-
-| Path | Role |
-|---|---|
-| `FragileProofAudit/` | Lean modules (`AxiomAudit`, `IrrationalityCriterion`, …) |
-| `scripts/harness/` | Exact arithmetic + rising-factorial conventions |
-| `scripts/gates/` | Locked numeric gates (`check.py` = CI). `borsuk63.py` in this folder is an **instrument**, not a lock row |
-| `scripts/controls/` | Discrimination instruments; never in `check.py` |
-| `scripts/forge/` | `axiom_audit.py` + lean-proof-forge verify |
-| `docs/WORKPLAN.md` | **Resume checklist** (start here) |
-| `docs/blueprint/` | Per-target blueprints |
-| `docs/audits/` | Bug-report style write-ups |
-| `corpus/` | Scout reports (graded trust) |
-| `incoming/` | Pinned source PDFs (tracked) + third-party Lean mirrors (gitignored; pin SHA in `results/`) |
-| `results/` | Gate and forge receipts |
-
-### Corpus trust
-
-| File | Trust |
-|---|---|
-| `corpus/fragile-formalizable-proofs-report.md` | Master harvest / ranking |
-| `corpus/harvest-addendum-analysis.md` | **Authoritative** on identifiers & fragility truth |
-| `corpus/lean4-attack-harvest.md` | Adopt 7-type taxonomy; Pith verdicts = leads |
-| `corpus/historical-collapses-gemini-export.md` | Lead. Track C pins (Borsuk-63, quantum Hedetniemi); not the resume |
+Repository layout: see [`docs/repo-layout.md`](docs/repo-layout.md).
 
 ---
 
@@ -102,29 +72,19 @@ non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
 | **2(g)** PDN1 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks capability-limited. [`docs/audits/pdn1.md`](docs/audits/pdn1.md) |
 | **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `oracle_seven`. [`docs/audits/agoh-giuga.md`](docs/audits/agoh-giuga.md) |
 | **3(i)** Lamé 1847 | **PASS** — through 3(i)#+b: `Gal(ℚ(ζ₂₃)/ℚ)` cyclic of order 22. Next Lean step (decomposition-group cardinality) blocked on a mathlib instance diamond; or prove \\(h^+\\). [`docs/audits/lame-1847.md`](docs/audits/lame-1847.md) |
-| **Track D** Live fragile proofs 2024–26 | **7 BREAKs, all gated + controlled** (2026-09-21): [Cohen subadditivity](docs/audits/cohen-subadditivity.md) · [Baste–Fürst–Henning domination](docs/audits/baste-domination.md) · [Sárközy sum-product](docs/audits/sarkozy-sum-product.md) · [Tang–Zhang Schatten norm](docs/audits/tang-zhang-schatten.md) · [Thakur Carlitz–Wieferich](docs/audits/thakur-carlitz.md) · [Chung–Graham–Spiro gap sets](docs/audits/chung-graham-spiro.md) · [Salez–Youssef log-Sobolev](docs/audits/salez-youssef-logsobolev.md). [NCI **SKIPPED**](docs/audits/nci-conjecture.md) — no finite gate. Corpus ranking table fully dispositioned. **Sárközy has a Lean scaffold** (`FragileProofAudit/Sarkozy/UPNT65.lean`, ported from Tang's own public formalization, VERIFIED axiom-clean) — the only Track D target formalized so far; Cohen's is confirmed tractable but not yet built. |
+| **Track D** Live fragile proofs 2024–26 | **7 BREAKs, all gated + controlled** (2026-09-21). |
 | **3** Infrastructure | Agoh–Giuga kit · Lamé pinpoint · Sun batch `2603.29973` |
-| **Dossier II** Harvest sweep (2026-09-22) | **5 BREAKs + 1 PASS, all gated + controlled**: [TPC-AREA](docs/audits/tpc-area.md) (Agama Thm 2.3) · [ES-5](docs/audits/es5-eq35.md) (Ghermoul eq. 35) · [CAT-G](docs/audits/cat-g.md) (Sun, between (2.3)/(2.4)) · [KRR-CL](docs/audits/krr-cl.md) (Gnang \\(Q^{[1]}\\) congruence) · [TPC-GN](docs/audits/tpc-gn.md) (Gnang Prop. 3.4 display) · [JAC-2D](docs/audits/jac-2d.md) (Su's 2D Jacobian conjecture claim — Remark 2.7 / Lemma 2.8 skeleton **survives** replay; PASS, escalate, not a clearance). Source: `corpus/Fragile-Route_Harvest_Dossier_II.md`. |
+| **Dossier II** Harvest sweep (2026-09-22) | **5 BREAKs + 1 PASS, all gated + controlled**. |
 | **Track C** | Operator pins, **not resume, not on the verdict lock.** Borsuk-63 author verifier PASS; quantum Hedetniemi (arXiv:2609.20690) Python certificates + source catalog PASS, kernel UNKNOWN (their Lean 4.19.0). [`docs/audits/borsuk-63.md`](docs/audits/borsuk-63.md) · [`docs/audits/hedetniemi-q.md`](docs/audits/hedetniemi-q.md) |
-| **Tait–Tutte** (2026-09-22) | **BREAK**, gated + controlled — Tier 2 historical pinpoint, `corpus/fragile-formalizable-proofs-report.md` §4.3 (harvest rank 7, first unexploited target in that report once ranks 1–5 were confirmed already covered by existing gates). The Tutte graph (46v/69e, cubic, 3-connected, planar) has no Hamiltonian cycle, refuting Tait's 1884 conjecture. On the verdict lock (22nd entry) — a genuine from-scratch build, not a Track C replay. [`docs/audits/tait-tutte.md`](docs/audits/tait-tutte.md) |
-| **Kempe–Fritsch** (2026-09-22) | **BREAK**, gated + controlled — Tier 2 historical pinpoint, harvest rank 6. Fritsch & Fritsch's 9-vertex counterexample (via Gethner et al. 2009, *Involve* 2:3, Theorem 4) to Kempe's 1879 four-color algorithm: on the Fritsch graph, Gadget 5₂'s two Kempe chain switches do not commute — one order colors vertex 1, the other tangles irrevocably. Graph, pre-coloring, and switch sequences read directly off the primary source's Figure 3 (rendered page image), not reconstructed from memory. 23rd verdict-lock entry. [`docs/audits/kempe-fritsch.md`](docs/audits/kempe-fritsch.md) |
-| **Gomila Λ-bound audit** (2026-09-22) | **VERIFY/AUDIT PASS** — not a BREAK; audit confirmation of Gomila's Λ ≤ 0.1787854 (Jude Gomila, Aug 2026). Full finite replay of all 15 sealed certificate shards: **3,149,013/3,149,013 rows** pass the audit repo's own fail-closed verifier (SHA-256 15/15, gaps=0, overlaps=0, UNCERT=0; error budget 12/12 gates; binding floor 5.57871094787e-7 > 0) at audit-repo commit `a74738d`. Explicitly **not** on the 23/23 BREAK verdict lock. Blueprint: [`docs/blueprint/gomila-lambda.md`](docs/blueprint/gomila-lambda.md) |
+| **Tait–Tutte** (2026-09-22) | **BREAK**, gated + controlled. |
+| **Kempe–Fritsch** (2026-09-22) | **BREAK**, gated + controlled. |
+| **Gomila Λ-bound audit** (2026-09-22) | **VERIFY/AUDIT PASS** — not a BREAK; explicitly **not** on the 23/23 BREAK verdict lock. Blueprint: [`docs/blueprint/gomila-lambda.md`](docs/blueprint/gomila-lambda.md) |
 
-Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md).
+Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md). Per-target detail: [`docs/audits/`](docs/audits/).
 
 ---
 
-## Attack taxonomy (adopted)
-
-| Type | Name |
-|---|---|
-| A | Scalar-gate |
-| B | Base-case kill |
-| C | WZ-certificate audit |
-| D | Finite q-expansion |
-| E | CAS-transcript replay |
-| F | Counterexample search |
-| G | Logical-gap exposure |
+Attack taxonomy (A–G): see [`docs/attack-taxonomy.md`](docs/attack-taxonomy.md).
 
 ---
 
