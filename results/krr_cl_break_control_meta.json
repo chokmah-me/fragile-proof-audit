@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-09-22T08:26:46.373660+00:00",
+  "control": "krr_cl_break_control",
+  "gate": "krr_cl",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "congruence_is_64_against_128": {
+      "left": "64",
+      "right": "128",
+      "unequal": true
+    },
+    "same_page_evaluation_formula_holds": true,
+    "lagrange_factor_is_kronecker": {
+      "values": [
+        "0",
+        "0",
+        "0",
+        "1"
+      ],
+      "is_delta": true
+    },
+    "telescoping_identity": true,
+    "shifted_anchor_is_not_identity": true,
+    "scores_equal_n": true,
+    "normalized_diameter_at_least_3": true
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "why": "The Q^{[1]} sum double-counts a repeated coordinate pair. The Lagrange factor itself, the P_g formula above the congruence, and the telescoping step all match."
+}

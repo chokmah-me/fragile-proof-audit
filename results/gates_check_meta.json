@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-22T08:02:08.752824+00:00",
+  "timestamp": "2026-09-22T08:27:31.199747+00:00",
   "phase": "track-D",
-  "lock_size": 18,
+  "lock_size": 19,
   "gates": [
     {
       "name": "harness_selftest",
@@ -95,6 +95,11 @@
     },
     {
       "name": "cat_g",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "krr_cl",
       "ok": true,
       "exit_code": 0
     }
@@ -239,6 +244,14 @@
     {
       "name": "cat_g",
       "meta": "cat_g_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "krr_cl",
+      "meta": "krr_cl_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
       "ok": true,

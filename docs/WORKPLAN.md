@@ -2,7 +2,19 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 — **CAT-G locked BREAK** on the sentence between
+**Checkpoint:** 2026-09-22 — **KRR-CL locked BREAK** on the \(Q^{[1]}\)
+congruence in the proof of Lemma 25, not on the inequality in the lemma
+statement and not on the Kotzig–Ringel–Rosa conjecture. Edinah K. Gnang,
+arXiv:2202.03178v3. The witness is the normalized path \(f=(0,0,1,2)\),
+diameter 3, partial iterate \(g=(0,0,1,1)\). At \(\sigma=(0,3,1,2)\) the
+printed sum is 128 and \((x_1-x_2)^6\) is 64. Two members of \(\Phi(g)\)
+share the pair \((\sigma(1),\sigma(2))=(3,1)\). The \(P_g\) formula on the
+same page holds, and both scores equal 4. Lock is 19. Control:
+`scripts/controls/krr_cl_break_control.py`. No Lean file. Next harvest row:
+**TPC-GN** (Gnang arXiv:2410.13840), pinned and read on its own; this
+congruence does not transfer by citation.
+
+Prior same day: **CAT-G locked BREAK** on the sentence between
 (2.3) and (2.4), not on `K(-3/2)` and not on the tail recurrence. Zhi-Wei Sun,
 arXiv:2609.04176v1, is a different manuscript from Zenodo 22830611 (Bilar's
 §9 note, `catalan-sun-lean`). `Pi_i` starts at `h = 1`, so the `k = 0`

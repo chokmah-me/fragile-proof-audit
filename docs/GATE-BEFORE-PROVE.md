@@ -103,6 +103,7 @@ differences.
 | `chung_graham_spiro` | BREAK — non-membership by bounded scan | **required** — `controls/chung_graham_break_control.py` |
 | `salez_youssef_logsobolev` | BREAK — asymptotic ratio decay by sampling in `n` | **required** — `controls/salez_youssef_break_control.py` |
 | `cat_g` | BREAK — forward difference of a claimed polynomial | **required** — `controls/cat_g_break_control.py` (Apéry ζ(3) zero-count vanishes) |
+| `krr_cl` | BREAK — exact integer mismatch of a printed congruence | **required** — `controls/krr_cl_break_control.py` (same-page \(P_g\) formula holds; a shifted telescoping anchor does not) |
 | `rr_qexpand` | PASS — exact series equality | ceremony; the classical `(2,3)` anchor already serves |
 | `pdn1` | PASS — exact divisibility, 6 747 points | ceremony; the fast-path/oracle self-test serves |
 | `giuga_oracle` | PASS — decidable predicates on explicit integers | ceremony |

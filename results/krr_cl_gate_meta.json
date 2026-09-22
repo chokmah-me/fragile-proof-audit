@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-09-22T08:27:31.057869+00:00",
+  "target": "krr_cl",
+  "source": "arXiv:2202.03178v3",
+  "local_pdf": "incoming/gnang-krr-2202.03178.pdf",
+  "pdf_identity": {
+    "available": true,
+    "ok": true,
+    "sha256": "72d59ffb72fd8b9baf262212ef66ec6945dc0569066222a27674fd8289adb2ac",
+    "pages": 31,
+    "author": "Edinah K. Gnang",
+    "title": "A proof of the Kotzig-Ringel-Rosa Conjecture",
+    "arxiv": "https://arxiv.org/abs/2202.03178v3"
+  },
+  "lemma": "Proof of Lemma 25, page 27: Q^{[1]}_{f,g} is congruent to the sum over Phi(g) of c (sigma(f^2(n-1)) - sigma(f(n-1)))^m times the two univariate Lagrange factors",
+  "instance": "n=4, f=(0,0,1,2), g=(0,0,1,1), sigma=(0,3,1,2), m=6, c=1",
+  "false_instance": "left = 64, right = 128",
+  "left": "64",
+  "right": "128",
+  "phi_size": 12,
+  "same_pair_count": 2,
+  "diameter": 3,
+  "normalized": true,
+  "evaluation_formula_on_same_page_holds": true,
+  "score_f": 4,
+  "score_g": 4,
+  "inequality_is_the_verdict": false,
+  "graceful_tree_conjecture_is_the_verdict": false,
+  "verdict": "BREAK",
+  "ok": true
+}
