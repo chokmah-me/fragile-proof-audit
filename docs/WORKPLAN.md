@@ -2,7 +2,16 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-21 (late) — **Track D re-audit. All 15 verdicts stand;
+**Checkpoint:** 2026-09-22 — **Harvest dossiers filed as leads. COL-FP closed
+VACUOUS** (Kawasaki arXiv:2502.20642v2). The dossier's `3/2` expansion of the
+accelerated Collatz map is real and is not a lemma of v2. Theorem 3.1's
+weighted sum is `<= 0` on `{1,...,256}²`. Remark 3.1 already drops Theorems
+2.2 and 2.3; recomputed at `λ ≡ 1`, `(x,y)=(1,3)`, the live branch of 2.3(5)
+has ratio `3/2`. No lock row. Instrument: `scripts/gates/col_fp.py`.
+Next harvest row: TPC-AREA (Agama 1707.03265v4). Attack order:
+`docs/audits/kawasaki-collatz.md` and the session plan.
+
+Prior checkpoint: 2026-09-21 (late) — **Track D re-audit. All 15 verdicts stand;
 one conjecture statement was wrong and is fixed.**
 
 Cold re-read of the whole Track D batch. Findings, in order of what they cost:
@@ -553,6 +562,7 @@ Dedekind `c36aa9a`; IdealNormTwo `bc2bd06`; CyclotomicEmbed follows.
 | `catalan-sun-lean` | Own reference campaign; reuse pin, do not re-attack |
 | Force kills on 2(e)–2(g) PASSes | Pass escalates; Ore/notebooks are capability-limited, not BREAKs |
 | Joshi/IUT, Collatz, Goldbach “monitors” | No finite gate |
+| Kawasaki COL-FP contraction (2502.20642v2) | Dossier object is not the printed lemma. v2 Remark 3.1 already withholds Theorems 2.2 and 2.3. Reopen only if a later version claims a Banach contraction of `T`, or a `λ` for which 2.2 or 2.3 applies. See `docs/audits/kawasaki-collatz.md` |
 | NCI Conjecture (arXiv:2608.27416) | No finite gate — refutation is a first-moment existence argument with no exhibited witness, confirmed unsolved by the author's own §9 Open Problems; corpus doc's "Verifiable Gate" claim is fabricated, see `docs/blueprint/nci-conjecture.md` |
 | Fake Mathematica / RISC / Magma replays | Prefer blocked notes over invented cofactors |
 | Unmatched negative controls | The first ES control varied the congruence **and** the search breadth at once; its “weakly discriminating” answer had to be withdrawn. Prove search equivalence before concluding |

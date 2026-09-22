@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-09-22T06:56:27.636400+00:00",
+  "target": "col_fp",
+  "kind": "vacuous dossier lead",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "verdict": "VACUOUS",
+  "ok": true,
+  "source": "arXiv:2502.20642v2",
+  "local_pdf": "incoming/kawasaki-collatz-2502.20642v2.pdf",
+  "dossier_object": {
+    "claim_attacked": "Banach contraction of T under |x-y|",
+    "paper_claims_it": false,
+    "odd_pair_ratios": [
+      {
+        "x": 3,
+        "y": 5,
+        "ratio": "3/2"
+      },
+      {
+        "x": 5,
+        "y": 7,
+        "ratio": "3/2"
+      },
+      {
+        "x": 7,
+        "y": 9,
+        "ratio": "3/2"
+      },
+      {
+        "x": 3,
+        "y": 9,
+        "ratio": "3/2"
+      },
+      {
+        "x": 9,
+        "y": 11,
+        "ratio": "3/2"
+      }
+    ],
+    "halving_map_ratios": [
+      "1/2",
+      "1/2",
+      "1/2",
+      "1/2",
+      "1/2"
+    ]
+  },
+  "theorem_3_1_sweep": {
+    "n": 256,
+    "pairs": 65536,
+    "max_weighted": 0,
+    "max_at": {
+      "x": 1,
+      "y": 1
+    },
+    "positive_samples": []
+  },
+  "theorem_2_3_lambda_one": {
+    "pair": {
+      "x": 1,
+      "y": 3
+    },
+    "branch_at_pair": null,
+    "branch_at_swap": "3/2",
+    "no_A_in_(0,1)": true,
+    "author_remark": "Remark 3.1 already says Theorems 2.2 and 2.3 fail"
+  },
+  "why_no_lock": "v2 does not claim |Tx-Ty| <= c|x-y| with c<1, and Remark 3.1 does not claim the fixed-point hypotheses. Locking BREAK on the 3/2 ratio would refute a lemma the PDF does not assert."
+}
