@@ -2,7 +2,16 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 — **TPC-AREA locked BREAK** (Agama
+**Checkpoint:** 2026-09-22 — **ES-5 locked BREAK** on the printed line, not on
+the whole cover. Ghermoul arXiv:2508.07367v1, equation (35): the `u ≡ 2 (mod 7)`
+case copies equation (34)'s denominators onto `q = 12(7x+2)`. At `x = 0` that
+says `5/121 = 5/61`. The `p4` formula at `y = 1` is a true identity for the
+same `q`, and `q ≡ 0 (mod 252)` stays the author's Conjecture 2 (not gated).
+`es_cover` (`2404.01508`) was not retouched. Lock is 17. Control:
+`scripts/controls/es5_eq35_break_control.py`. Next harvest row: **CAT-G**
+(arXiv:2609.04176), after the ten-minute check that it is not `catalan-sun-lean`.
+
+Prior same day: **TPC-AREA locked BREAK** (Agama
 arXiv:1707.03265v4, Theorem 2.3). The dossier witness `1_{3|n}` has shift-1
 correlation `0` and sits outside the hypothesis; the locked witness is `f=1`
 on `{1,2}∪3ℕ`, correlation identically `2`, and `Q(30)=66>60`. No fixed

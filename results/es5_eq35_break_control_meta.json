@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-09-22T07:24:10.630754+00:00",
+  "control": "es5_eq35_break_control",
+  "gate": "es5_eq35",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "eq34_holds": true,
+    "p4_y1_holds": true,
+    "eq33_holds": true,
+    "eq35_fails": true,
+    "x0": {
+      "lhs": "5/121",
+      "rhs": "5/61",
+      "is_5_121_vs_5_61": true
+    },
+    "pdf_transcription": {
+      "available": true,
+      "hits": {
+        "5[12(7x + 2)] + 1 = 1 84x + 14": true,
+        "does not address the case": true
+      },
+      "ok": true
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "local_pdf": "incoming/es5-2508.07367.pdf"
+}
