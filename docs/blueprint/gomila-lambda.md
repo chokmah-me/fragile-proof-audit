@@ -224,6 +224,17 @@ monotonicity head/tail, independent P11 cell decomposition, and
 3,000,175,332,800 − 6,000,000,185,827/2 = 175,239,886.5, exactly as
 claimed.
 
+Primary-source provenance (confirmed): T_PT = 3,000,175,332,800 is
+Theorem 1 of Platt–Trudgian proper (arXiv:2004.09765, *Bull. LMS* 53
+(2021), 792–797: "true up to height 3 000 175 332 800 ... the lowest
+12,363,153,437,138 non-trivial zeroes"), independently corroborated by a
+separate Lean formalization project's audit doc citing the identical exact
+height. The X/2 reading of criterion hypothesis (i) is confirmed by the
+repo's own CANDIDATE_PARAMETERS.md ("required zeta height X/2 =
+3000000092913.5") and PROOF_NOTE.md (3.1)–(3.3), plus the cross-check that
+the abstract's rounded 3×10¹² falls short of X/2 by exactly 92,913.5
+(consistent only with the X/2 requirement).
+
 Meaning: the y-transfer extending the y₀ floors across the full y-band is
 sealed — gate (ii) is now fully closed, including the transfer step the
 author's adversarial panel had flagged as a real gap.
