@@ -57,6 +57,15 @@ DEFAULT_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 SKIP_DIRS = {
     ".lake", "lake-packages", "build", ".git", ".github", "_target", "results",
     "incoming", "corpus", "docs", "scripts",
+    # Agent worktrees under .claude/worktrees/ are full copies of the Lean
+    # sources. Walking into one yields module names like
+    # ".claude.worktrees.<id>.FragileProofAudit", whose `import` line is a
+    # syntax error -- which aborts the whole generated axiom-audit file and
+    # reports every declaration as unresolved. Found 2026-09-21: a stale
+    # worktree had been silently turning the local axiom audit into
+    # CAPABILITY_LIMITED, while CI stayed green because a fresh checkout has
+    # no .claude/ at all.
+    ".claude", ".vscode", ".idea", "node_modules", ".venv", "venv",
 }
 
 FORBIDDEN_TOKENS = {
@@ -436,6 +445,23 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
             "axiom_audit", "UNKNOWN",
             f"{len(decls)} declaration(s) found but lake is unavailable — axioms "
             "NOT checked. Status is capability-limited, not verified.",
+        ), len(decls)
+
+    # A module name that is not a legal Lean identifier path produces a
+    # syntax error on line 1 and silently zeroes the entire audit. Name the
+    # cause instead of reporting 150 mysteriously "unresolved" declarations.
+    bad_modules = sorted(
+        m for m in set(modules)
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_']*(\.[A-Za-z_][A-Za-z0-9_']*)*", m)
+    )
+    if bad_modules:
+        return Finding(
+            "axiom_audit", "UNKNOWN",
+            f"{len(bad_modules)} module path(s) are not legal Lean identifiers, "
+            f"so the generated audit file would not parse and NOTHING would be "
+            f"checked: {bad_modules[:3]}. This usually means find_sources walked "
+            f"into a directory that should be in SKIP_DIRS (a worktree, a vendor "
+            f"copy). Axioms NOT checked.",
         ), len(decls)
 
     lines = [f"import {m}" for m in sorted(set(modules))]
