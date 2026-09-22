@@ -2,7 +2,33 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 (latest) — **Sárközy sum-product Lean scaffold
+**Checkpoint:** 2026-09-22 (latest) — **Cohen's Lean scaffold attempted,
+blocked on `Nat.totient` decide cost, reverted.** Built the scaffold this
+file's prior checkpoint flagged as "the natural next Lean session":
+`cyclic`/`SGcyclic`/`Csigma` matching Ibarra's own described formalization,
+same `Nat.count_add` window-splitting trick (so `C_σ(3928)` cancels
+algebraically and is never evaluated — the only numeric fact needed is
+`window(31 members, up to 3959) > Csigma(31)`, i.e. `11 > 10`, one
+`decide`). A standalone `lake env lean` check of that one declaration
+succeeded in ~2 minutes. Wired into `FragileProofAudit.lean` and run
+through the full `lake build` + axiom-audit pipeline, it **timed out past
+3600s twice on the operator's own real hardware** (confirmed not a sandbox
+artifact) — `Nat.totient` has no `native_decide`-free fast-eval path in
+mathlib, and kernel-reducing it at the ~63 values this witness needs (up
+to `2·3959+1 = 7919`) is far more expensive under the full pipeline than
+the isolated check suggested. Searched for a cheaper witness first
+(Python, `m, n ≤ 4000`): only two violations exist in that range — `(31,
+3928)` and `(32, 3927)` — both need the same expensive window, so there is
+no smaller substitute. Reverted (`FragileProofAudit.lean` import and
+`FragileProofAudit/Cohen/` deleted) rather than invest unbounded time in a
+from-scratch kernel-cheap totient. Evidence and the full account:
+`docs/audits/cohen-subadditivity.md`. **Do not retry the
+decide-over-`Nat.totient` approach at this scale** without first building
+and timing a fast trial-division Decidable instance standalone. The
+Python gate's BREAK verdict is unaffected (verdict lock still 21/21); this
+just stays "confirmed tractable in principle, not built."
+
+Prior checkpoint, same day (earlier): **Sárközy sum-product Lean scaffold
 landed, ported not built.** Asked which of the 17 scaffold-free gates was
 *actually* tractable, not "likely" — checked two. Cohen: wrote a throwaway
 probe (`isCyclic`/`Csigma` on `Nat.Coprime`/`Nat.totient`/`Nat.count`), ran

@@ -79,9 +79,36 @@ formal argument splits `C_σ(3959)` at `3928` and evaluates only the eleven
 window members, never the full count. That is a scaffold this campaign could
 reproduce directly.
 
+**Attempted 2026-09-22, blocked, reverted.** Built the scaffold: `cyclic`/
+`SGcyclic`/`Csigma` matching the source above, the same `Nat.count_add`
+window-splitting cancellation Ibarra describes (so `C_σ(3928)` is never
+evaluated — only `Nat.count (fun k => SGcyclic (3929+k)) 31 > Csigma 31`,
+i.e. `11 > 10`, needs a `decide`). A standalone `lake env lean` check of
+just that one declaration succeeded in ~2 minutes (`maxRecDepth 200000`,
+`maxHeartbeats 0`, still kernel-checked, no `native_decide`). Wired into
+`FragileProofAudit.lean` and run through the full `lake build` +
+axiom-audit pipeline, it timed out past 3600s twice on real hardware (not
+a sandbox artifact — reproduced on the operator's own machine). Root
+cause: `Nat.totient` in mathlib is defined via `Finset.filter (Finset.range
+n)` (list/quotient-heavy), has no `@[implemented_by]` fast-eval path, and
+kernel-reducing it at the ~63 values this witness needs (up to `2·3959+1 =
+7919`) is far more expensive under the full build+axiom-audit pipeline
+than the isolated single-declaration check suggested. Searched for a
+cheaper witness first (Python, `m, n ≤ 4000`): only two violations exist
+in that range, `(31, 3928)` and `(32, 3927)`, both needing the same
+expensive window — no smaller witness to substitute. Reverted rather than
+invest in a from-scratch kernel-cheap totient (trial-division Decidable
+instance + a correctness lemma against `Nat.totient`) without a clearer
+sense it would land. **Do not retry the `decide`-over-`Nat.totient`
+approach at this scale** — a future session should build the fast-totient
+alternative first and time it standalone before wiring it into the build,
+or accept this stays a "confirmed tractable in principle, not built"
+target.
+
 ## Not done, on purpose
 
-Did not attempt to characterise *how many* counterexamples exist, or to search
-below `10⁶` for others. Ibarra notes such counterexamples "are not rare"; what
-makes this one notable is that it lies inside the range Cohen reported
-searching. Refuting the route needs one.
+Did not attempt to characterise *how many* counterexamples exist beyond
+confirming (via the search above) that none is smaller than Ibarra's own
+witness for `m, n ≤ 4000`. Ibarra notes such counterexamples "are not
+rare"; what makes this one notable is that it lies inside the range Cohen
+reported searching. Refuting the route needs one.
