@@ -2,7 +2,37 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 — **TPC-GN locked BREAK** on the evaluation
+**Checkpoint:** 2026-09-22 (later) — **JAC-2D gated, verdict PASS
+(escalate)**. Yucai Su, arXiv:1603.01867v43 (43 versions, 2016-2024,
+"FINAL"), claimed proof of the 2D Jacobian conjecture. Dossier II's
+"Earliest pin" was Remark 2.7 + the coefficient-comparison chain to Lemma
+2.8 (eq. 2.41). Read the real paper first, per this campaign's standing
+discipline: the dossier's framing of Remark 2.7 as "deferring a key
+identity to 'a symbolic computation'" does not hold up — the pinned PDF
+gives an inline hand proof (a weight-counting argument) right after that
+phrase, not a deferral. Replayed the actual identities instead: Remark 2.7
+parts (i)/(ii) on generic tight-degree symbolic coefficients, and eq.
+(2.41)'s four clauses on two from-scratch, unconditionally invertible
+Keller pairs (\(m{=}4,n{=}2\) via \(F=(y^2{+}x)^2{+}y\), \(G=y^2{+}x\); and
+\(m{=}6,n{=}3\) one level up). All checks hold exactly, including the exact
+linear coefficient \(c_{(-m+1)/m}=-J_0/m\cdot x\) on both instances. Control
+(`scripts/controls/jac_2d_break_control.py`) perturbs \(F\) by one monomial
+to break the constant-Jacobian hypothesis and shows three of the four
+clauses then fail on the same machinery — **DISCRIMINATES**, not a
+tautology. Gate: `scripts/gates/jac_2d.py`. Local PDF pinned
+(`incoming/jac2d-su-1603.01867v43.pdf`, sha256
+`65634fc...ec4224`, 55 pages). Registered in `scripts/gates/check.py`;
+**verdict lock now 21/21**; no Lean scaffold (mathlib has no Keller-map
+coverage). Evidence: `docs/blueprint/jac-2d.md`, `docs/audits/jac-2d.md`.
+Per Governing discipline #3, a PASS here escalates — it does **not** clear
+the paper's 55 pages; the dossier's own Fr=8 fragility score (43 versions,
+still unaccepted) stands regardless. This was Dossier II's last
+ranked-table candidate flagged for this session (see prior checkpoint
+below); next session should return to `corpus/fragile-formalizable-proofs-report.md`
+/ `corpus/historical-collapses-gemini-export.md` for unexploited targets, or
+pivot to Resume (A)/(B) below.
+
+Prior checkpoint, same day (earlier): **TPC-GN locked BREAK** on the evaluation
 display in Proposition 3.4, not on Lemma 3.10 and not on the
 Gyárfás–Lehel conjecture. Parikshit Chalise, Antwan Clark, and Edinah K.
 Gnang, arXiv:2410.13840v2. The live record's v3 (1 Sep 2026) withdraws the
@@ -565,7 +595,9 @@ Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
 PASS, `lame_ideal_neg23` PASS, `cohen_subadditivity` BREAK,
 `baste_domination` BREAK, `sarkozy_sum_product` BREAK,
 `tang_zhang_schatten` BREAK, `thakur_carlitz` BREAK, `chung_graham_spiro`
-BREAK, `salez_youssef_logsobolev` BREAK, **verdict lock 15/15 ok**, lake + forge VERIFIED
+BREAK, `salez_youssef_logsobolev` BREAK, `tpc_area` BREAK, `es5_eq35` BREAK,
+`cat_g` BREAK, `krr_cl` BREAK, `tpc_gn` BREAK, `jac_2d` PASS,
+**verdict lock 21/21 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
 `Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
 `Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois`; axiom-clean, 150
@@ -584,6 +616,7 @@ python scripts/controls/tang_zhang_break_control.py    # ~3 s
 python scripts/controls/thakur_break_control.py        # ~25 s
 python scripts/controls/chung_graham_break_control.py  # ~5 s
 python scripts/controls/salez_youssef_break_control.py # ~30 s
+python scripts/controls/jac_2d_break_control.py        # ~10 s
 python scripts/gates/borsuk63.py                       # Track C; not on the verdict lock
 ```
 

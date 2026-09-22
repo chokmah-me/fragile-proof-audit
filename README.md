@@ -11,8 +11,8 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
-| **Resume** | Fresh session → Track D next corpus (`fragile-formalizable-proofs-report.md`, `historical-collapses-gemini-export.md`), cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), per-claim Agoh–Giuga, or the 2(d) write-up — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
-| **Lock** | 20 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
+| **Resume** | Fresh session → cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), per-claim Agoh–Giuga, the 2(d) write-up, or open `corpus/fragile-formalizable-proofs-report.md` / `corpus/historical-collapses-gemini-export.md` for unexploited targets — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Lock** | 21 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
 
 ---
 
@@ -104,6 +104,7 @@ non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
 | **3(i)** Lamé 1847 | **PASS** — through 3(i)#+b: `Gal(ℚ(ζ₂₃)/ℚ)` cyclic of order 22. Next Lean step (decomposition-group cardinality) blocked on a mathlib instance diamond; or prove \(h^+\). [`docs/audits/lame-1847.md`](docs/audits/lame-1847.md) |
 | **Track D** Live fragile proofs 2024–26 | **7 BREAKs, all gated + controlled** (2026-09-21): [Cohen subadditivity](docs/audits/cohen-subadditivity.md) · [Baste–Fürst–Henning domination](docs/audits/baste-domination.md) · [Sárközy sum-product](docs/audits/sarkozy-sum-product.md) · [Tang–Zhang Schatten norm](docs/audits/tang-zhang-schatten.md) · [Thakur Carlitz–Wieferich](docs/audits/thakur-carlitz.md) · [Chung–Graham–Spiro gap sets](docs/audits/chung-graham-spiro.md) · [Salez–Youssef log-Sobolev](docs/audits/salez-youssef-logsobolev.md). [NCI **SKIPPED**](docs/audits/nci-conjecture.md) — no finite gate. Corpus ranking table fully dispositioned; no Lean scaffolds yet (Cohen and Sárközy are the tractable ones). |
 | **3** Infrastructure | Agoh–Giuga kit · Lamé pinpoint · Sun batch `2603.29973` |
+| **Dossier II** Harvest sweep (2026-09-22) | **5 BREAKs + 1 PASS, all gated + controlled**: [TPC-AREA](docs/audits/tpc-area.md) (Agama Thm 2.3) · [ES-5](docs/audits/es5-eq35.md) (Ghermoul eq. 35) · [CAT-G](docs/audits/cat-g.md) (Sun, between (2.3)/(2.4)) · [KRR-CL](docs/audits/krr-cl.md) (Gnang \(Q^{[1]}\) congruence) · [TPC-GN](docs/audits/tpc-gn.md) (Gnang Prop. 3.4 display) · [JAC-2D](docs/audits/jac-2d.md) (Su's 2D Jacobian conjecture claim — Remark 2.7 / Lemma 2.8 skeleton **survives** replay; PASS, escalate, not a clearance). Source: `corpus/Fragile-Route_Harvest_Dossier_II.md`. |
 | **Track C** | Operator pins, **not resume, not on the verdict lock.** Borsuk-63 author verifier PASS; quantum Hedetniemi (arXiv:2609.20690) Python certificates + source catalog PASS, kernel UNKNOWN (their Lean 4.19.0). [`docs/audits/borsuk-63.md`](docs/audits/borsuk-63.md) · [`docs/audits/hedetniemi-q.md`](docs/audits/hedetniemi-q.md) |
 
 Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md).

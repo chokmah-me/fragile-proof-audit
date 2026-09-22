@@ -36,6 +36,7 @@ ES5_EQ35 = ROOT / "scripts" / "gates" / "es5_eq35.py"
 CAT_G = ROOT / "scripts" / "gates" / "cat_g.py"
 KRR_CL = ROOT / "scripts" / "gates" / "krr_cl.py"
 TPC_GN = ROOT / "scripts" / "gates" / "tpc_gn.py"
+JAC_2D = ROOT / "scripts" / "gates" / "jac_2d.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -71,6 +72,7 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "cat_g": ("cat_g_gate_meta.json", "BREAK"),
     "krr_cl": ("krr_cl_gate_meta.json", "BREAK"),
     "tpc_gn": ("tpc_gn_gate_meta.json", "BREAK"),
+    "jac_2d": ("jac_2d_gate_meta.json", "PASS"),
 }
 
 
@@ -214,6 +216,10 @@ def run_tpc_gn() -> dict:
     return run_script("tpc_gn", TPC_GN)
 
 
+def run_jac_2d() -> dict:
+    return run_script("jac_2d", JAC_2D)
+
+
 def main() -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
@@ -251,6 +257,7 @@ def main() -> int:
         run_cat_g(),
         run_krr_cl(),
         run_tpc_gn(),
+        run_jac_2d(),
     ]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()

@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-22T11:13:48.346280+00:00",
+  "timestamp": "2026-09-22T11:32:54.691342+00:00",
   "phase": "track-D",
-  "lock_size": 20,
+  "lock_size": 21,
   "gates": [
     {
       "name": "harness_selftest",
@@ -105,6 +105,11 @@
     },
     {
       "name": "tpc_gn",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "jac_2d",
       "ok": true,
       "exit_code": 0
     }
@@ -267,6 +272,14 @@
       "meta": "tpc_gn_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "jac_2d",
+      "meta": "jac_2d_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
       "ok": true,
       "note": ""
     }

@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-09-22T11:30:12.818200+00:00",
+  "control": "jac_2d_break_control",
+  "gate": "jac_2d",
+  "positive_control": {
+    "instance": "F=(y^2+x)^2+y, G=y^2+x (genuine Keller pair, J0=-1)",
+    "all_pass": true,
+    "checks": {
+      "c_minus1_is_zero": true,
+      "c_boundary_affine_in_x": true,
+      "c_boundary_linear_coeff_matches_negJ0overM": true,
+      "constants_above_boundary_i": true,
+      "degree_bound_2_41_iii": true
+    }
+  },
+  "negative_control": {
+    "instance": "F=(y^2+x)^2+y+xy, G=y^2+x (J0=-x+2y^2-1, NOT constant)",
+    "J0": "-x + 2*y**2 - 1",
+    "J0_is_constant": false,
+    "all_pass": false,
+    "checks": {
+      "c_minus1_is_zero": true,
+      "c_boundary_affine_in_x": false,
+      "c_boundary_linear_coeff_matches_negJ0overM": false,
+      "constants_above_boundary_i": false,
+      "degree_bound_2_41_iii": false
+    }
+  },
+  "verdict": "DISCRIMINATES",
+  "ok": true
+}

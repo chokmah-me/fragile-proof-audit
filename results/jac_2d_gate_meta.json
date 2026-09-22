@@ -1,0 +1,188 @@
+{
+  "timestamp": "2026-09-22T11:32:54.432356+00:00",
+  "gate": "jac_2d",
+  "source_claim": "Yucai Su, 'Generalizations of local bijectivity of Keller maps and a proof of 2-dimensional Jacobian conjecture', arXiv:1603.01867v43 (43 versions, 2016-2024, FINAL)",
+  "corpus_pointer": "corpus/Fragile-Route_Harvest_Dossier_II.md, Hit JAC-2D",
+  "local_pdf": "incoming/jac2d-su-1603.01867v43.pdf",
+  "local_pdf_sha256": "65634fc3a56a8d380b9ecf020e23667f5cb8d798b11ab2c7bfe1df2b83ec4224",
+  "provenance_note": "Dossier describes Remark 2.7 as deferring a key identity to 'a symbolic computation'. The pinned PDF shows Remark 2.7 has an inline hand proof (weight-counting argument) immediately after that phrase -- not a deferral. This gate replays the identities themselves (Remark 2.7 and Lemma 2.8 / eq. 2.41), not a claimed-but-absent CAS shortcut.",
+  "instance_1": {
+    "F": "x**2 + 2*x*y**2 + y**4 + y",
+    "G": "x + y**2",
+    "m": 4,
+    "n": 2,
+    "J0": "-1",
+    "J0_is_constant": true,
+    "c_minus1": "0",
+    "c_boundary": "x/4",
+    "degree_bound_detail": [
+      {
+        "j": 0,
+        "i": 5,
+        "deg_x": 1,
+        "bound": 1
+      },
+      {
+        "j": 1,
+        "i": 6,
+        "deg_x": 0,
+        "bound": 2
+      },
+      {
+        "j": 2,
+        "i": 7,
+        "deg_x": 2,
+        "bound": 3
+      },
+      {
+        "j": 3,
+        "i": 8,
+        "deg_x": 1,
+        "bound": 4
+      },
+      {
+        "j": 4,
+        "i": 9,
+        "deg_x": 3,
+        "bound": 5
+      }
+    ],
+    "checks": {
+      "c_minus1_is_zero": true,
+      "c_boundary_affine_in_x": true,
+      "c_boundary_linear_coeff_matches_negJ0overM": true,
+      "constants_above_boundary_i": true,
+      "degree_bound_2_41_iii": true
+    },
+    "all_pass": true
+  },
+  "instance_2": {
+    "F": "x**2 + 2*x*y**3 + y**6 + y",
+    "G": "x + y**3",
+    "m": 6,
+    "n": 3,
+    "J0": "-1",
+    "J0_is_constant": true,
+    "c_minus1": "0",
+    "c_boundary": "x/6",
+    "degree_bound_detail": [
+      {
+        "j": 0,
+        "i": 8,
+        "deg_x": 1,
+        "bound": 1
+      },
+      {
+        "j": 1,
+        "i": 9,
+        "deg_x": 0,
+        "bound": 2
+      }
+    ],
+    "checks": {
+      "c_minus1_is_zero": true,
+      "c_boundary_affine_in_x": true,
+      "c_boundary_linear_coeff_matches_negJ0overM": true,
+      "constants_above_boundary_i": true,
+      "degree_bound_2_41_iii": true
+    },
+    "all_pass": true
+  },
+  "remark_2_7_part_i": {
+    "beta": "1/3",
+    "strict": false,
+    "detail": [
+      {
+        "i": 1,
+        "deg_x": 1,
+        "bound": 1
+      },
+      {
+        "i": 2,
+        "deg_x": 2,
+        "bound": 2
+      },
+      {
+        "i": 3,
+        "deg_x": 3,
+        "bound": 3
+      },
+      {
+        "i": 4,
+        "deg_x": 4,
+        "bound": 4
+      },
+      {
+        "i": 5,
+        "deg_x": 5,
+        "bound": 5
+      },
+      {
+        "i": 6,
+        "deg_x": 6,
+        "bound": 6
+      },
+      {
+        "i": 7,
+        "deg_x": 7,
+        "bound": 7
+      },
+      {
+        "i": 8,
+        "deg_x": 8,
+        "bound": 8
+      }
+    ],
+    "ok": true
+  },
+  "remark_2_7_part_ii": {
+    "beta": "2/5",
+    "strict": true,
+    "detail": [
+      {
+        "i": 1,
+        "deg_x": 0,
+        "bound": 0
+      },
+      {
+        "i": 2,
+        "deg_x": 1,
+        "bound": 1
+      },
+      {
+        "i": 3,
+        "deg_x": 2,
+        "bound": 2
+      },
+      {
+        "i": 4,
+        "deg_x": 3,
+        "bound": 3
+      },
+      {
+        "i": 5,
+        "deg_x": 4,
+        "bound": 4
+      },
+      {
+        "i": 6,
+        "deg_x": 5,
+        "bound": 5
+      },
+      {
+        "i": 7,
+        "deg_x": 6,
+        "bound": 6
+      },
+      {
+        "i": 8,
+        "deg_x": 7,
+        "bound": 7
+      }
+    ],
+    "ok": true
+  },
+  "lemma": "Remark 2.7 and Lemma 2.8 (eq. 2.41), the route's earliest checkable skeleton",
+  "verdict": "PASS",
+  "ok": true
+}
