@@ -12,7 +12,7 @@ consequential but structurally fragile proofs.
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
 | **Resume** | Fresh session → Track D next corpus (`fragile-formalizable-proofs-report.md`, `historical-collapses-gemini-export.md`), cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), per-claim Agoh–Giuga, or the 2(d) write-up — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
-| **Lock** | 19 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
+| **Lock** | 20 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
 
 ---
 

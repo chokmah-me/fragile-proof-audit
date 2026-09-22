@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-09-22T11:12:20.108977+00:00",
+  "control": "tpc_gn_break_control",
+  "gate": "tpc_gn",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "both_labelings_are_in_phi": {
+      "sigma_a": true,
+      "sigma_b": true
+    },
+    "factorial_factor_matches_vandermonde": {
+      "printed": 8,
+      "abs_v_a": 8,
+      "abs_v_b": 8
+    },
+    "cross_tree_polynomials_differ_by_more_than_sign": true,
+    "both_polynomials_nonzero": true,
+    "all_pairs_product_ignores_the_partition": true,
+    "y3_coefficients": {
+      "sigma_a": -3072,
+      "sigma_b": 6144
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "note": "The display's factorial factor and the full edge-set product agree on these two labelings. The cross-tree factor does not. A nonzero test would accept both."
+}

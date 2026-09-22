@@ -104,6 +104,7 @@ differences.
 | `salez_youssef_logsobolev` | BREAK — asymptotic ratio decay by sampling in `n` | **required** — `controls/salez_youssef_break_control.py` |
 | `cat_g` | BREAK — forward difference of a claimed polynomial | **required** — `controls/cat_g_break_control.py` (Apéry ζ(3) zero-count vanishes) |
 | `krr_cl` | BREAK — exact integer mismatch of a printed congruence | **required** — `controls/krr_cl_break_control.py` (same-page \(P_g\) formula holds; a shifted telescoping anchor does not) |
+| `tpc_gn` | BREAK — one displayed polynomial against two values in \(\Phi\) | **required** — `controls/tpc_gn_break_control.py` (factorial factor and the full edge-set product agree; the cross-tree factor does not) |
 | `rr_qexpand` | PASS — exact series equality | ceremony; the classical `(2,3)` anchor already serves |
 | `pdn1` | PASS — exact divisibility, 6 747 points | ceremony; the fast-path/oracle self-test serves |
 | `giuga_oracle` | PASS — decidable predicates on explicit integers | ceremony |

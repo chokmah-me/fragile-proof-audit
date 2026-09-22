@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-09-22T11:13:48.195932+00:00",
+  "target": "tpc_gn",
+  "source": "arXiv:2410.13840v2",
+  "local_pdf": "incoming/gnang-tpc-2410.13840v2.pdf",
+  "pdf_identity": {
+    "available": true,
+    "ok": true,
+    "sha256": "943968bc54e737bb10b79f2bbafa97a0866733960d1fbfe732b0357d13eaf378",
+    "pages": 15,
+    "authors": "Parikshit Chalise, Antwan Clark, Edinah K. Gnang",
+    "title": "A Proof of the Tree Packing Conjecture",
+    "arxiv": "https://arxiv.org/abs/2410.13840v2"
+  },
+  "lemma": "Proposition 3.4, page 7: for every sigma in Phi(g), P_g(sigma, y) equals one displayed polynomial in y, up to sign",
+  "instance": "n=3, g=((0,1,2),(0,0,2),(0,0,0)), sigma_A=((0,1,2),(1,0,2),(2,0,1)), sigma_B=((0,1,2),(2,0,1),(1,0,2))",
+  "false_instance": "coefficient of y^3 is -3072 at sigma_A and 6144 at sigma_B",
+  "coeff_y3_sigma_a": -3072,
+  "coeff_y3_sigma_b": 6144,
+  "vandermonde_a": -8,
+  "vandermonde_b": -8,
+  "factorial_product": 8,
+  "both_in_phi": true,
+  "polynomials_differ_by_more_than_sign": true,
+  "both_nonzero": true,
+  "same_undirected_edges": true,
+  "lemma_3_10_is_the_verdict": false,
+  "tree_packing_conjecture_is_the_verdict": false,
+  "verdict": "BREAK",
+  "ok": true
+}

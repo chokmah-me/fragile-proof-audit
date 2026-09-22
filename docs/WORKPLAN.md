@@ -2,7 +2,22 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 — **KRR-CL locked BREAK** on the \(Q^{[1]}\)
+**Checkpoint:** 2026-09-22 — **TPC-GN locked BREAK** on the evaluation
+display in Proposition 3.4, not on Lemma 3.10 and not on the
+Gyárfás–Lehel conjecture. Parikshit Chalise, Antwan Clark, and Edinah K.
+Gnang, arXiv:2410.13840v2. The live record's v3 (1 Sep 2026) withdraws the
+paper because of an error in Lemma 3.10 and cites arXiv:2202.03178v2; that
+notice is not the witness, and the KRR-CL congruence does not transfer.
+On the augmented stars \(g=((0,1,2),(0,0,2),(0,0,0))\), both
+\(\sigma_A=((0,1,2),(1,0,2),(2,0,1))\) and
+\(\sigma_B=((0,1,2),(2,0,1),(1,0,2))\) are complete labelings. The display
+gives one polynomial in \(y\), up to sign. The coefficient of \(y^3\) is
+\(-3072\) at \(\sigma_A\) and \(6144\) at \(\sigma_B\). Both Vandermonde
+factors equal \(-8\), and \(\prod_k(k!)^3=8\). Lock is 20. Control:
+`scripts/controls/tpc_gn_break_control.py`. No Lean file. Next harvest row:
+**JAC-2D** (arXiv:1603.01867v43), pinned and read on its own.
+
+Prior same day: **KRR-CL locked BREAK** on the \(Q^{[1]}\)
 congruence in the proof of Lemma 25, not on the inequality in the lemma
 statement and not on the Kotzig–Ringel–Rosa conjecture. Edinah K. Gnang,
 arXiv:2202.03178v3. The witness is the normalized path \(f=(0,0,1,2)\),
