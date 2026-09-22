@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-22T19:34:16.257627+00:00",
+  "timestamp": "2026-09-22T20:02:13.482243+00:00",
   "phase": "track-D",
-  "lock_size": 22,
+  "lock_size": 23,
   "gates": [
     {
       "name": "harness_selftest",
@@ -115,6 +115,11 @@
     },
     {
       "name": "tait_tutte",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "kempe_fritsch",
       "ok": true,
       "exit_code": 0
     }
@@ -291,6 +296,14 @@
     {
       "name": "tait_tutte",
       "meta": "tait_tutte_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "kempe_fritsch",
+      "meta": "kempe_fritsch_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
       "ok": true,

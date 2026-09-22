@@ -2,7 +2,46 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 (latest) — **Tait–Tutte gated + controlled,
+**Checkpoint:** 2026-09-22 (latest) — **Kempe–Fritsch gated + controlled,
+verdict BREAK.** Continued down the same harvest report's ranked list after
+Tait–Tutte (prior checkpoint): harvest rank 6, Kempe's 1879 four-color
+algorithm, refuted by Fritsch & Fritsch's (1998) 9-vertex counterexample.
+Unlike Tait–Tutte, this target's decisive content (the exact graph, the
+exact pre-coloring, the exact two Kempe-chain-switch sequences) exists only
+as a rendered diagram inside the primary source
+(Gethner, Kallichanda, Mentis et al., *Involve* 2:3 (2009), Theorem 4,
+Figure 3) — two WebFetch attempts on the PDF returned corrupted binary
+content, so the body text was extracted with `pdfplumber` instead (clean),
+and Figure 3 itself (still an image) was rendered to a 300 DPI PNG and read
+directly via multiple zoomed crops, not reconstructed from memory or a
+qualitative Wikipedia description (which was tried first and found
+insufficient — this session explicitly declined to fabricate a plausible-
+looking coloring instead, per user steer). The resulting 9-vertex, 21-edge
+graph's degree sequence (three degree-4, six degree-5 vertices) matches the
+Fritsch graph's independently documented invariants exactly, cross-checking
+the transcription before trusting it. `scripts/gates/kempe_fritsch.py`
+implements the paper's own Definitions 1-2 (Kempe chain = maximal two-color
+connected component; Kempe chain switch = swap those two colors on it) as
+plain BFS, replays both switch orders from the transcribed pre-coloring, and
+reproduces the paper's own chain components and outcome exactly: order A
+(`(2,G,Y)` then `(3,G,B)`) leaves vertex 1 colorable; order B (`(4,G,B)`
+then `(2,G,Y)`) reintroduces `G` at vertex 8, tangling vertex 1 — Gadget 5₂
+does not commute. Discrimination control
+(`scripts/controls/kempe_fritsch_break_control.py`) independently re-checks
+properness after every switch, and confirms via a matched near-miss (a bare
+5-wheel graph with the same color pattern but no long-range chords, where
+both Kempe chains are trivially isolated single vertices) that the same
+unmodified machinery correctly finds no tangle when the graph's extra edges
+aren't present: **NO FALSE POSITIVE**. Registered in `check.py`'s
+`EXPECTED_VERDICT`; **verdict lock now 23/23**; Lean forge still VERIFIED.
+Evidence: `docs/blueprint/kempe-fritsch.md`, `docs/audits/kempe-fritsch.md`.
+Remaining unexploited candidates from the same report: Gomila's Λ-bound
+(rank 8, verify/audit not refutation, needs replaying ~3M certificates),
+Pólya's counterexample (rank 9, needs a sieve to ~906M, real engineering
+risk), q-TSPP (rank 10, correct-proof infrastructure, 6-10 weeks) — none
+attempted this session.
+
+Prior checkpoint, same day (earlier): **Tait–Tutte gated + controlled,
 verdict BREAK.** Reopened `corpus/fragile-formalizable-proofs-report.md`'s
 harvest table per this session's own resume note ("next session should
 open... for unexploited targets"): ranks 1–5 (odd-zeta, Erdős–Straus,
@@ -708,8 +747,8 @@ PASS, `lame_ideal_neg23` PASS, `cohen_subadditivity` BREAK,
 `tang_zhang_schatten` BREAK, `thakur_carlitz` BREAK, `chung_graham_spiro`
 BREAK, `salez_youssef_logsobolev` BREAK, `tpc_area` BREAK, `es5_eq35` BREAK,
 `cat_g` BREAK, `krr_cl` BREAK, `tpc_gn` BREAK, `jac_2d` PASS,
-`tait_tutte` BREAK,
-**verdict lock 22/22 ok**, lake + forge VERIFIED
+`tait_tutte` BREAK, `kempe_fritsch` BREAK,
+**verdict lock 23/23 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
 `Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
 `Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois` + `Sarkozy.UPNT65`;
@@ -730,11 +769,12 @@ python scripts/controls/chung_graham_break_control.py  # ~5 s
 python scripts/controls/salez_youssef_break_control.py # ~30 s
 python scripts/controls/jac_2d_break_control.py        # ~10 s
 python scripts/controls/tait_tutte_break_control.py    # <1 s
+python scripts/controls/kempe_fritsch_break_control.py # <1 s
 python scripts/gates/borsuk63.py                       # Track C; not on the verdict lock
 ```
 
-All exit 0. Each writes `results/<control>_meta.json` (twelve receipts from
-eleven scripts — `break_control.py` covers two targets and writes one receipt
+All exit 0. Each writes `results/<control>_meta.json` (thirteen receipts from
+twelve scripts — `break_control.py` covers two targets and writes one receipt
 each). A receipt is **not** a lock row: nothing fails CI when one changes, and
 controls are still never registered in `check.py`.
 

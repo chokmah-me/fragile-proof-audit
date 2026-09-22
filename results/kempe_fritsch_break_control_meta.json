@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-09-22T19:56:03.146823+00:00",
+  "control": "kempe_fritsch_break_control",
+  "gate": "kempe_fritsch",
+  "properness_recheck": {
+    "branch_a": {
+      "proper_after_switch_1": true,
+      "proper_after_switch_2": true
+    },
+    "branch_b": {
+      "proper_after_switch_1": true,
+      "proper_after_switch_2": true
+    }
+  },
+  "properness_ok": true,
+  "wheel_near_miss": {
+    "order_1": {
+      "chain1": [
+        2
+      ],
+      "chain2": [
+        4
+      ],
+      "final": {
+        "2": "Y",
+        "3": "R",
+        "4": "B",
+        "5": "Y",
+        "6": "B"
+      },
+      "tangled": false
+    },
+    "order_2": {
+      "chain1": [
+        4
+      ],
+      "chain2": [
+        2
+      ],
+      "final": {
+        "2": "Y",
+        "3": "R",
+        "4": "B",
+        "5": "Y",
+        "6": "B"
+      },
+      "tangled": false
+    },
+    "chains_isolated_single_vertex": true,
+    "orders_agree_no_tangle": true
+  },
+  "wheel_ok": true,
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true
+}

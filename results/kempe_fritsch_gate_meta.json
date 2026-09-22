@@ -1,0 +1,119 @@
+{
+  "timestamp": "2026-09-22T20:02:13.199808+00:00",
+  "gate": "kempe_fritsch",
+  "source_claim": "Kempe (1879): Algorithm Kempe (including Gadget 5_2's two successive Kempe chain switches) properly 4-colors any plane graph",
+  "source_refutation": "Fritsch & Fritsch (1998) via Gethner, Kallichanda, Mentis et al. (2009), Theorem 4: Gadget 5_2 does not commute -- the two switch orders disagree on the 9-vertex Fritsch graph",
+  "corpus_pointer": "corpus/fragile-formalizable-proofs-report.md Section 4.2, harvest rank 6 -- Tier 2 historical pinpoint job",
+  "local_pdf": "incoming/kempe-fritsch-gethner-involve-2009.pdf",
+  "local_pdf_sha256": "5aee2bc4c64f0bb71272f797f2bb5705e59adaff9d77339e6208755cb237cc0c",
+  "transcription_source": "Figure 3, page 258 (PDF page index 10)",
+  "structural_checks": {
+    "n_nodes": 9,
+    "n_edges": 21,
+    "degree_sequence": [
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+    ],
+    "expected_degree_4_count": 3,
+    "expected_degree_5_count": 6,
+    "structural_ok": true
+  },
+  "initial_coloring": {
+    "coloring": {
+      "9": "R",
+      "6": "B",
+      "3": "Y",
+      "2": "G",
+      "5": "R",
+      "4": "G",
+      "8": "Y",
+      "7": "B"
+    },
+    "proper": true,
+    "v1_neighbor_colors": {
+      "2": "G",
+      "4": "G",
+      "5": "R",
+      "6": "B",
+      "8": "Y"
+    },
+    "matches_configuration_2_pattern": true
+  },
+  "branch_a_no_tangle": {
+    "chain1_component": [
+      2,
+      3
+    ],
+    "chain2_component": [
+      3,
+      4,
+      7
+    ],
+    "proper_after_switch_1": true,
+    "proper_after_switch_2": true,
+    "final_coloring": {
+      "9": "R",
+      "6": "B",
+      "3": "B",
+      "2": "Y",
+      "5": "R",
+      "4": "B",
+      "8": "Y",
+      "7": "G"
+    },
+    "v1_neighbor_colors": {
+      "2": "Y",
+      "4": "B",
+      "5": "R",
+      "6": "B",
+      "8": "Y"
+    },
+    "g_reintroduced_at_v1_neighbor": false,
+    "tangled": false
+  },
+  "branch_b_tangled": {
+    "chain1_component": [
+      4,
+      7
+    ],
+    "chain2_component": [
+      2,
+      3,
+      7,
+      8
+    ],
+    "proper_after_switch_1": true,
+    "proper_after_switch_2": true,
+    "final_coloring": {
+      "9": "R",
+      "6": "B",
+      "3": "G",
+      "2": "Y",
+      "5": "R",
+      "4": "B",
+      "8": "G",
+      "7": "Y"
+    },
+    "v1_neighbor_colors": {
+      "2": "Y",
+      "4": "B",
+      "5": "R",
+      "6": "B",
+      "8": "G"
+    },
+    "g_reintroduced_at_v1_neighbor": true,
+    "tangled": true
+  },
+  "matches_paper_figure_3": true,
+  "verdict": "BREAK",
+  "lemma": "Gadget 5_2 (two successive Kempe chain switches) commutes -- the switch order does not affect Algorithm Kempe's outcome",
+  "false_instance": "on the Fritsch graph with the pinned pre-coloring, switch order A (chain(2,G,Y) then chain(3,G,B)) succeeds while switch order B (chain(4,G,B) then chain(2,G,Y)) reintroduces G at vertex 8, tangling vertex 1 irrevocably",
+  "ok": true
+}
