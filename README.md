@@ -11,8 +11,8 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy / `networkx` (graph gates only) · no Sage / Magma / cluster |
-| **Resume** | Fresh session → cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), Cohen's Lean scaffold (infrastructure confirmed tractable, not yet built), per-claim Agoh–Giuga, the 2(d) write-up, or open `corpus/fragile-formalizable-proofs-report.md` / `corpus/historical-collapses-gemini-export.md` for unexploited targets — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
-| **Lock** | 21 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
+| **Resume** | Fresh session → cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), Cohen's Lean scaffold (infrastructure confirmed tractable, not yet built — do not retry decide-over-`Nat.totient` at scale without a fast trial-division instance first), per-claim Agoh–Giuga, the 2(d) write-up, or `corpus/fragile-formalizable-proofs-report.md`'s remaining unexploited ranks (Gomila Λ-bound rank 8 — huge certificate replay; Pólya counterexample rank 9 — needs a sieve to ~906M; q-TSPP rank 10 — correct-proof infrastructure); ranks 1–7 are now all gated (Tait–Tutte, Kempe–Fritsch landed 2026-09-22) — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Lock** | 23 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
 
 ---
 

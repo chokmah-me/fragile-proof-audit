@@ -2,7 +2,7 @@
 
 | File | Author | Trust |
 |---|---|---|
-| `fragile-formalizable-proofs-report.md` | Kimi | Master harvest / ranking |
+| `fragile-formalizable-proofs-report.md` | Kimi | Master harvest / ranking. **Ranks 1–7 of 14 now gated** (2026-09-22): odd-zeta, Erdős–Straus, Agoh–Giuga, Suman, Lamé (already covered by pre-existing gates), Kempe–Fritsch, Tait–Tutte (landed this session). Ranks 8–10 (Gomila Λ-bound, Pólya, q-TSPP) are open but each carries a real cost flag — see `docs/WORKPLAN.md`'s latest checkpoint. |
 | `harvest-addendum-analysis.md` | Kimi | **Authoritative** verification ledger |
 | `lean4-attack-harvest.md` | Claude 4.6 | Adopt 7-type taxonomy; Pith verdicts = leads |
 | `historical-collapses-gemini-export.md` | Gemini export (Downloads) | Lead. Two 2026 IDs web-checked; runtimes/citations untrusted |
