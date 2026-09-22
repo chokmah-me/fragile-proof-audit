@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-22T07:26:13.029778+00:00",
+  "timestamp": "2026-09-22T08:02:08.752824+00:00",
   "phase": "track-D",
-  "lock_size": 17,
+  "lock_size": 18,
   "gates": [
     {
       "name": "harness_selftest",
@@ -90,6 +90,11 @@
     },
     {
       "name": "es5_eq35",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "cat_g",
       "ok": true,
       "exit_code": 0
     }
@@ -226,6 +231,14 @@
     {
       "name": "es5_eq35",
       "meta": "es5_eq35_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "cat_g",
+      "meta": "cat_g_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
       "ok": true,

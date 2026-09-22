@@ -33,6 +33,7 @@ CHUNG_GRAHAM_SPIRO = ROOT / "scripts" / "gates" / "chung_graham_spiro.py"
 SALEZ_YOUSSEF_LOGSOBOLEV = ROOT / "scripts" / "gates" / "salez_youssef_logsobolev.py"
 TPC_AREA = ROOT / "scripts" / "gates" / "tpc_area.py"
 ES5_EQ35 = ROOT / "scripts" / "gates" / "es5_eq35.py"
+CAT_G = ROOT / "scripts" / "gates" / "cat_g.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -65,6 +66,7 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "salez_youssef_logsobolev": ("salez_youssef_gate_meta.json", "BREAK"),
     "tpc_area": ("tpc_area_gate_meta.json", "BREAK"),
     "es5_eq35": ("es5_eq35_gate_meta.json", "BREAK"),
+    "cat_g": ("cat_g_gate_meta.json", "BREAK"),
 }
 
 
@@ -196,6 +198,10 @@ def run_es5_eq35() -> dict:
     return run_script("es5_eq35", ES5_EQ35)
 
 
+def run_cat_g() -> dict:
+    return run_script("cat_g", CAT_G)
+
+
 def main() -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
@@ -230,6 +236,7 @@ def main() -> int:
         run_salez_youssef_logsobolev(),
         run_tpc_area(),
         run_es5_eq35(),
+        run_cat_g(),
     ]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()

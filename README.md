@@ -12,7 +12,7 @@ consequential but structurally fragile proofs.
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
 | **Resume** | Fresh session → Track D next corpus (`fragile-formalizable-proofs-report.md`, `historical-collapses-gemini-export.md`), cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), per-claim Agoh–Giuga, or the 2(d) write-up — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
-| **Lock** | 17 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
+| **Lock** | 18 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
 
 ---
 
@@ -43,9 +43,10 @@ classical three).
 `(a)_{-n} = (-1)^n/(1-a)_n`; that convention is enforced in
 `scripts/harness/pochhammer.py`.
 
-**Not an external kill:** Sun Catalan / Zenodo 22830611 is this shop’s own
-`catalan-sun-lean` reference campaign — reuse its pin and gate style; do not
-re-attack it.
+**Not an external kill:** Zenodo 22830611 is this shop’s own
+`catalan-sun-lean` note on Sun’s §9 — reuse its pin and gate style; do not
+re-attack that manuscript. Sun’s preprint itself, arXiv:2609.04176v1, is the
+separate CAT-G row.
 
 ---
 

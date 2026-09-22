@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-09-22T07:46:02.556664+00:00",
+  "control": "cat_g_break_control",
+  "gate": "cat_g",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "sun_difference_is_3596288_99225": true,
+    "pole_numerator_nonzero": true,
+    "printed_T_i_plus_1_is_not_T_i": true,
+    "catalan_recurrence_survives_and_is_not_the_verdict": true,
+    "apery_zeta3_zero_count": [
+      {
+        "degree": 4,
+        "difference_at_degree": "24",
+        "difference_above_degree": "0",
+        "matches_leading": true,
+        "vanishes_above_degree": true,
+        "does_not_vanish_at_degree": true
+      },
+      {
+        "degree": 8,
+        "difference_at_degree": "2520",
+        "difference_above_degree": "0",
+        "matches_leading": true,
+        "vanishes_above_degree": true,
+        "does_not_vanish_at_degree": true
+      }
+    ],
+    "apery_recurrence_residual_zero_n_1_to_12": true,
+    "apery_coefficient_18_residual_nonzero": true,
+    "pdf_transcription": {
+      "available": true,
+      "hits": {
+        "is a polynomial iniof degree at most 2B": true,
+        "Ti+1": true,
+        "(2.3)": true,
+        "(2.4)": true,
+        "(2.13)": true,
+        "(2.16)": true,
+        "arXiv:2609.04176v1": true
+      },
+      "absent": {
+        "22830611": true,
+        "Numerical Test of the Quadratic": true
+      },
+      "author_title": true,
+      "ok": true
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "local_pdf": "incoming/sun-catalan-2609.04176.pdf",
+  "control_fact": "Ap\u00e9ry weight of degree 4n has forward difference 0 at order 4n+1 and (4n)!/(n!)^4 at order 4n"
+}

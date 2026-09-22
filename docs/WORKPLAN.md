@@ -2,14 +2,26 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 — **ES-5 locked BREAK** on the printed line, not on
+**Checkpoint:** 2026-09-22 — **CAT-G locked BREAK** on the sentence between
+(2.3) and (2.4), not on `K(-3/2)` and not on the tail recurrence. Zhi-Wei Sun,
+arXiv:2609.04176v1, is a different manuscript from Zenodo 22830611 (Bilar's
+§9 note, `catalan-sun-lean`). `Pi_i` starts at `h = 1`, so the `k = 0`
+denominator `(2i+1)^2` is not cancelled. At `B = 2`, `S = 1`, `j = 1`,
+`a = 0` the order-4 difference is `3596288/99225`. The next display writes
+`T_{i+1}` where (2.3) has `T_i`, and `T_0 > 8/9 > T_1`. `D(-3/2) = 0`, so
+(2.16) is not the witness; (2.13) fails later at the same off-by-one.
+(1.4) holds and is not the verdict. Lock is 18. Control:
+`scripts/controls/cat_g_break_control.py` (Apéry's ζ(3) weight of degree
+`4n` has difference 0 at order `4n+1`). Next harvest row: **KRR-CL**
+(Gnang arXiv:2202.03178).
+
+Prior same day: **ES-5 locked BREAK** on the printed line, not on
 the whole cover. Ghermoul arXiv:2508.07367v1, equation (35): the `u ≡ 2 (mod 7)`
 case copies equation (34)'s denominators onto `q = 12(7x+2)`. At `x = 0` that
 says `5/121 = 5/61`. The `p4` formula at `y = 1` is a true identity for the
 same `q`, and `q ≡ 0 (mod 252)` stays the author's Conjecture 2 (not gated).
 `es_cover` (`2404.01508`) was not retouched. Lock is 17. Control:
-`scripts/controls/es5_eq35_break_control.py`. Next harvest row: **CAT-G**
-(arXiv:2609.04176), after the ten-minute check that it is not `catalan-sun-lean`.
+`scripts/controls/es5_eq35_break_control.py`.
 
 Prior same day: **TPC-AREA locked BREAK** (Agama
 arXiv:1707.03265v4, Theorem 2.3). The dossier witness `1_{3|n}` has shift-1

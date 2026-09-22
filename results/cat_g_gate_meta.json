@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-09-22T08:02:08.556126+00:00",
+  "target": "cat_g",
+  "source": "arXiv:2609.04176v1",
+  "local_pdf": "incoming/sun-catalan-2609.04176.pdf",
+  "not_this_manuscript": "Zenodo 22830611 is Bilar, A Numerical Test of the Quadratic Estimate in arXiv:2609.04176v1 (catalan-sun-lean). Section 9 is not this gate.",
+  "pdf_identity": {
+    "available": true,
+    "ok": true,
+    "sha256": "0aa3bc7e80be3658630fa5d82cb773cba7ec8692d9855a70e71e47f235d2819f",
+    "author": "Zhi-Wei Sun",
+    "title": "Catalan's constant is irrational",
+    "arxiv": "https://arxiv.org/abs/2609.04176v1",
+    "pages": 20,
+    "is_zenodo_22830611": false
+  },
+  "lemma": "Between (2.3) and (2.4): Q_j(i) is a polynomial in i of degree at most 2B-3, so its forward difference of order a+2B vanishes",
+  "instance": "B=2, S=1, j=1, a=0",
+  "false_instance": "order-4 difference = 3596288/99225",
+  "delta": "3596288/99225",
+  "further_differences": {
+    "B3_j1_a0": "19415564288/15030015",
+    "B3_j2_a0": "-10445799424/15030015"
+  },
+  "pole_numerator_at_-1/2": "32",
+  "index": {
+    "from_equation_2_3": "T_i",
+    "displayed_before_2_4": "T_{i+1}",
+    "group_identity": true,
+    "first_group": "8/9",
+    "second_group": "24/1225",
+    "T0_exceeds_T1": true
+  },
+  "recurrence_1_4_partial_exact": true,
+  "recurrence_is_the_verdict": false,
+  "downstream_2_13": {
+    "D0": "-75",
+    "D1": "-245",
+    "D_at_-3/2": "0",
+    "factor_at_0": "8",
+    "K0": "147000",
+    "integer_zero_fails": true,
+    "extra_zero_of_D": true
+  },
+  "dossier_line_2_16_is_not_the_witness": true,
+  "verdict": "BREAK",
+  "ok": true
+}
