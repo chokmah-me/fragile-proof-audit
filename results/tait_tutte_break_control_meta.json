@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-09-22T19:30:37.311914+00:00",
+  "control": "tait_tutte_break_control",
+  "gate": "tait_tutte",
+  "cases": {
+    "cube_Q3": {
+      "n_nodes": 8,
+      "n_edges": 12,
+      "hypothesis_ok": true,
+      "expect_hypothesis_ok": true,
+      "hamiltonian_found": true,
+      "expect_hamiltonian": true,
+      "matches_expectation": true,
+      "recursive_calls": 11,
+      "elapsed_s": 0.004
+    },
+    "truncated_tetrahedron": {
+      "n_nodes": 12,
+      "n_edges": 18,
+      "hypothesis_ok": true,
+      "expect_hypothesis_ok": true,
+      "hamiltonian_found": true,
+      "expect_hamiltonian": true,
+      "matches_expectation": true,
+      "recursive_calls": 69,
+      "elapsed_s": 0.003
+    },
+    "petersen": {
+      "n_nodes": 10,
+      "n_edges": 15,
+      "hypothesis_ok": false,
+      "expect_hypothesis_ok": false,
+      "hamiltonian_found": false,
+      "expect_hamiltonian": false,
+      "matches_expectation": true,
+      "recursive_calls": 274,
+      "elapsed_s": 0.002
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true
+}

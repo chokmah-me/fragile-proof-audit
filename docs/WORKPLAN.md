@@ -2,7 +2,43 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 (latest) — **Cohen's Lean scaffold attempted,
+**Checkpoint:** 2026-09-22 (latest) — **Tait–Tutte gated + controlled,
+verdict BREAK.** Reopened `corpus/fragile-formalizable-proofs-report.md`'s
+harvest table per this session's own resume note ("next session should
+open... for unexploited targets"): ranks 1–5 (odd-zeta, Erdős–Straus,
+Agoh–Giuga, Suman, Lamé) were already covered by existing gates; the
+historical-collapses export had nothing new (all dispositioned or Track C
+pins). Rank 6 (Kempe 4CT) needs planarity + Kempe-chain machinery beyond this
+session's budget; rank 7 (**Tait's 1884 conjecture / Tutte's 1946
+counterexample**) is a clean finite decidable proposition. Built
+`scripts/gates/tait_tutte.py`: the 46-vertex, 69-edge Tutte graph (adjacency
+from `networkx.tutte_graph()`'s reference construction, itself cited to
+Wikipedia, reproduced inline for diffability) is confirmed 3-connected,
+planar, and cubic by `networkx`'s connectivity/planarity routines, then a
+from-scratch DFS backtracking search (not any library Hamiltonian-cycle
+routine) confirms exhaustively that no Hamiltonian cycle exists
+(38,698,468 calls, ~22s) — refuting Tait's conjecture that every
+3-connected planar cubic graph is Hamiltonian. Discrimination control
+(`scripts/controls/tait_tutte_break_control.py`) reuses the same search
+unmodified against the cube graph and truncated tetrahedron (both
+Hamiltonian, confirming the search finds cycles when present) and the
+Petersen graph (cubic, 3-connected, non-Hamiltonian, but **not planar** —
+confirms the gate's planarity hypothesis check is load-bearing, not
+decorative): **NO FALSE POSITIVE**. This is a from-scratch build, not a
+Track C replay of an external verifier (compare `lame_h23`), so it is
+registered in `scripts/gates/check.py`'s `EXPECTED_VERDICT`; **verdict lock
+now 22/22**. `networkx==3.6.1` added to `requirements.txt` (first non-
+mpmath/SymPy dependency this campaign has needed). No Lean scaffold — the
+corpus report's own effort estimate for a planar-graph + Kempe-chain-style
+formalization is 2–4 weeks, beyond this session. Evidence:
+`docs/blueprint/tait-tutte.md`, `docs/audits/tait-tutte.md`. Remaining
+unexploited candidates from the same report, in order: Kempe 4CT (rank 6,
+needs planarity + Kempe-chain machinery), Gomila Λ-bound (rank 8, a
+verify/audit not a refutation), Pólya counterexample (rank 9, canonize a
+certificate), q-TSPP (rank 10, correct-proof infrastructure build) — none
+attempted this session.
+
+Prior checkpoint, same day (earlier): **Cohen's Lean scaffold attempted,
 blocked on `Nat.totient` decide cost, reverted.** Built the scaffold this
 file's prior checkpoint flagged as "the natural next Lean session":
 `cyclic`/`SGcyclic`/`Csigma` matching Ibarra's own described formalization,
@@ -672,7 +708,8 @@ PASS, `lame_ideal_neg23` PASS, `cohen_subadditivity` BREAK,
 `tang_zhang_schatten` BREAK, `thakur_carlitz` BREAK, `chung_graham_spiro`
 BREAK, `salez_youssef_logsobolev` BREAK, `tpc_area` BREAK, `es5_eq35` BREAK,
 `cat_g` BREAK, `krr_cl` BREAK, `tpc_gn` BREAK, `jac_2d` PASS,
-**verdict lock 21/21 ok**, lake + forge VERIFIED
+`tait_tutte` BREAK,
+**verdict lock 22/22 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
 `Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
 `Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois` + `Sarkozy.UPNT65`;
@@ -692,11 +729,12 @@ python scripts/controls/thakur_break_control.py        # ~25 s
 python scripts/controls/chung_graham_break_control.py  # ~5 s
 python scripts/controls/salez_youssef_break_control.py # ~30 s
 python scripts/controls/jac_2d_break_control.py        # ~10 s
+python scripts/controls/tait_tutte_break_control.py    # <1 s
 python scripts/gates/borsuk63.py                       # Track C; not on the verdict lock
 ```
 
-All exit 0. Each writes `results/<control>_meta.json` (eleven receipts from
-ten scripts — `break_control.py` covers two targets and writes one receipt
+All exit 0. Each writes `results/<control>_meta.json` (twelve receipts from
+eleven scripts — `break_control.py` covers two targets and writes one receipt
 each). A receipt is **not** a lock row: nothing fails CI when one changes, and
 controls are still never registered in `check.py`.
 
