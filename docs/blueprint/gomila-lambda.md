@@ -196,6 +196,38 @@ Run on a fresh download of all 15 shards at pinned audit-repo commit
 This is an **audit confirmation, not a BREAK** — explicitly **not** on the
 23/23 verdict lock.
 
+## Dini y-transfer (2026-09-22) — VERIFIED PASS
+
+Fresh fetch of `logs/` at pinned audit-repo commit
+`a74738deb6d5e0f76887cb36901da08b68dca705` (Python 3.12.3).
+**9/9 log SHA-256 checksums** match the repo's `SHA256SUMS` pins:
+`triangle_y_dini_180` / `triangle_y_dini_256`,
+`triangle_normalizer_corr_180` / `triangle_normalizer_corr_256`,
+`triangle_y_monotonicity_independent_head_120` /
+`triangle_y_monotonicity_independent_tail_120`,
+`p11_triangle_tail_cells_independent`,
+`tail_1787854_160` / `tail_1787854_256`.
+
+`verifiers/verify_triangle_y_dini_logs.py` — **RESULT PASS**: 4/4 legs at
+both 180- and 256-bit precision; worst ratio_ub = 0.99999860767275095 < 1
+(slack 1.39232724905e-6); both precisions bit-identical on the worst
+ratio; fixed-domain Arb Dini source present with fail-closed gates. The
+worst (thinnest-margin) leg is P=235711, N=690988..728999 — the same leg
+that holds the finite scan's argmin floor.
+
+`verifiers/verify_stored_logs.py` — **RESULT PASS**: Dini logs (four legs
++ strict ratio), normalizer/corr gates, independent corrected Python
+monotonicity head/tail, independent P11 cell decomposition, and
+`tail_1787854` 93/93 at both 160 and 256.
+
+**Platt–Trudgian margin independently confirmed**:
+3,000,175,332,800 − 6,000,000,185,827/2 = 175,239,886.5, exactly as
+claimed.
+
+Meaning: the y-transfer extending the y₀ floors across the full y-band is
+sealed — gate (ii) is now fully closed, including the transfer step the
+author's adversarial panel had flagged as a real gap.
+
 ## Audit plan (verify/audit, not refutation)
 
 1. ~~Shard row check + full finite replay~~ — **DONE 2026-09-22**: sample
@@ -203,16 +235,21 @@ This is an **audit confirmation, not a BREAK** — explicitly **not** on the
    **3,149,013/3,149,013 rows PASS** (see above).
 2. ~~Sample wider strata~~ — **DONE 2026-09-22** via the full replay (all
    15 shards, all four mollifier legs).
-3. Barrier + tail replay scope (read-only): `barrier_target_closed.log`
+3. ~~Dini y-transfer (y₀ floors → full y-band)~~ — **DONE 2026-09-22**:
+   9/9 log checksums PASS; `verify_triangle_y_dini_logs.py` PASS (4/4
+   legs, worst ratio_ub 0.99999860767275095 < 1);
+   `verify_stored_logs.py` PASS; Platt–Trudgian margin confirmed
+   (see above).
+4. Barrier + tail replay scope (read-only): `barrier_target_closed.log`
    under the 54-check parser, `verify_prop410_arb.c` at both precisions,
    tail contraction D<0.999721. Do not rebuild the producer unless a
    shard fails to parse.
-4. State the three gate lemmas (verified height, final-time clearance,
+5. State the three gate lemmas (verified height, final-time clearance,
    barrier) in Lean against the campaign's axiom-clean forge; cross-reference
    Gomila's own `lean/aristotle` (seven Lean 4 projects, 223 theorems,
    axioms ⊆ {propext, Classical.choice, Quot.sound}) — state natively,
    do not import their aristotlelib setup.
-5. Discipline: a clean pass confirms the audit trail (valuable — a
+6. Discipline: a clean pass confirms the audit trail (valuable — a
    machine-checked confirmation of a live bound). A failed row is a
    finding about the certificate chain, never an indictment of the
    claimant.
