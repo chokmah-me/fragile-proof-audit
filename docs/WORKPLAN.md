@@ -2,7 +2,22 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-20 — Phase 3(i)#+b **`Gal(ℚ(ζ₂₃)/ℚ)` cyclic of order
+**Checkpoint:** 2026-09-21 — Track D#3 **`sarkozy_sum_product` gated +
+controlled, verdict BREAK**. Sarkozy's mod-`p` sum-product conjecture
+(`|A| >= c*p` implies `1 in A+A union A*A`) refuted independently:
+exhaustive search over `Z/pZ` for `p in {5,7,11,13,17,19}` (CI, `--deep`
+adds `23`) finds an explicit size-`(p-1)/2` witness avoiding `1` in both
+sumset and productset for **every** tested prime, without transcribing
+Tang's (arXiv:2603.29992) actual construction — the corpus doc's own
+description of it is internally inconsistent. Discrimination control
+(`scripts/controls/sarkozy_break_control.py`) verdict **NO FALSE
+POSITIVE**, with one honest caveat: item-4 independent corroboration
+(plain quadratic residues as an unrelated witness family) came back
+negative at every tested prime. Registered in `scripts/gates/check.py`;
+**verdict lock now 11/11**; no Lean scaffold yet. Evidence:
+`docs/blueprint/sarkozy-sum-product.md`.
+
+Prior checkpoint (2026-09-20): Phase 3(i)#+b **`Gal(ℚ(ζ₂₃)/ℚ)` cyclic of order
 22, VERIFIED** (`CyclotomicGalois.lean`, axiom-clean, 150 declarations). The
 attempt to go further and pin the decomposition-group cardinality (`Nat.card
 (stabilizer G P) = 11` via `Ideal.card_stabilizer_eq`) hit a genuine mathlib
@@ -23,21 +38,23 @@ targets from an AI deep-research export; distinct from the Gemini export,
 all 7 IDs live-checked). Two targets gated + controlled same day:
 `cohen_subadditivity` (BREAK) and `baste_domination` (BREAK, closed both
 bounds independently including an exact branch-and-bound search this
-campaign wrote for γ(G)≥16). Both registered in `scripts/gates/check.py`;
-neither has a Lean scaffold yet.
+campaign wrote for γ(G)≥16). A third, `sarkozy_sum_product`, landed
+2026-09-21 (BREAK). All three registered in `scripts/gates/check.py`; none
+has a Lean scaffold yet.
 
 **Resume at any of:** *(A)* the decomposition-group identification needed to
 finish the pushed-forward non-principal ideal in `𝓞(ℚ(ζ₂₃))` — `Gal(ℚ(ζ₂₃)/ℚ)`
 is now pinned cyclic of order 22, but `Ideal.card_stabilizer_eq` is blocked on
 an `Algebra ℤ Cyclotomic23` / `Algebra ℚ Cyclotomic23` instance diamond (see
 **Blocked**), or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d) write-up
-decision (Track B item 2) — *(C)* Track D: next candidate is Sárközy's
-sum-product conjecture (`docs/blueprint/cohen-subadditivity.md` and
-`docs/blueprint/baste-domination.md` are the templates to follow; corpus
-doc's own ranking has Sárközy next, then Tang-Zhang, Thakur,
-Chung-Graham gap-set — this last one is **not yet cross-checked** against
+decision (Track B item 2) — *(C)* Track D: Cohen, Baste, and Sárközy are
+now all gated + controlled (BREAK, BREAK, BREAK); next candidate per the
+corpus doc's own ranking is Tang-Zhang, then Thakur, then Chung-Graham
+gap-set — this last one is **not yet cross-checked** against
 the corpus doc's Section headers, verify before starting — then NCI, then
-Salez-Youssef).
+Salez-Youssef. `docs/blueprint/cohen-subadditivity.md`,
+`docs/blueprint/baste-domination.md`, and
+`docs/blueprint/sarkozy-sum-product.md` are the templates to follow.
 
 (2(d) write-up was declined — **worth revisiting**: after the false-positive
 control it is the campaign's only sendable artifact. See Track B item 2.)
@@ -243,7 +260,9 @@ pwsh ./scripts/verify.ps1
 ```
 
 Expect: harness 6/6, prior gates as before, `giuga_oracle` PASS, `lame_h23`
-PASS, `lame_ideal_neg23` PASS, **verdict lock 8/8 ok**, lake + forge VERIFIED
+PASS, `lame_ideal_neg23` PASS, `cohen_subadditivity` BREAK,
+`baste_domination` BREAK, `sarkozy_sum_product` BREAK, **verdict lock
+11/11 ok**, lake + forge VERIFIED
 (includes `Lame.IdealWitness` + `Lame.IdealPrincipal` + `Lame.DedekindField` +
 `Lame.IdealNormTwo` + `Lame.CyclotomicEmbed` + `Lame.CyclotomicIdeal` +
 `Lame.CyclotomicPrimeTwo` + `Lame.CyclotomicGalois`; axiom-clean, 150

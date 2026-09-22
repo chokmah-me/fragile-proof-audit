@@ -26,6 +26,7 @@ LAME_H23 = ROOT / "scripts" / "gates" / "lame_h23.py"
 LAME_IDEAL_NEG23 = ROOT / "scripts" / "gates" / "lame_ideal_neg23.py"
 COHEN_SUBADDITIVITY = ROOT / "scripts" / "gates" / "cohen_subadditivity.py"
 BASTE_DOMINATION = ROOT / "scripts" / "gates" / "baste_domination.py"
+SARKOZY_SUM_PRODUCT = ROOT / "scripts" / "gates" / "sarkozy_sum_product.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -51,6 +52,7 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "lame_ideal_neg23": ("lame_ideal_neg23_gate_meta.json", "PASS"),
     "cohen_subadditivity": ("cohen_subadditivity_gate_meta.json", "BREAK"),
     "baste_domination": ("baste_domination_gate_meta.json", "BREAK"),
+    "sarkozy_sum_product": ("sarkozy_sum_product_gate_meta.json", "BREAK"),
 }
 
 
@@ -154,6 +156,10 @@ def run_baste_domination() -> dict:
     return run_script("baste_domination", BASTE_DOMINATION)
 
 
+def run_sarkozy_sum_product() -> dict:
+    return run_script("sarkozy_sum_product", SARKOZY_SUM_PRODUCT)
+
+
 def main() -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
@@ -178,6 +184,7 @@ def main() -> int:
         run_lame_ideal_neg23(),
         run_cohen_subadditivity(),
         run_baste_domination(),
+        run_sarkozy_sum_product(),
     ]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()

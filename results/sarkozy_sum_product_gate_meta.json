@@ -1,0 +1,128 @@
+{
+  "timestamp": "2026-09-22T01:24:36.349524+00:00",
+  "gate": "sarkozy_sum_product",
+  "source_claim": "Sarkozy's sum-product conjecture: exists c>0 s.t. any A subset Z/pZ with |A| >= c*p forces 1 in (A+A) union (A*A)",
+  "source_refutation": "Tang, Q. (2026), arXiv:2603.29992",
+  "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md",
+  "deep": false,
+  "primes_tested": [
+    5,
+    7,
+    11,
+    13,
+    17,
+    19
+  ],
+  "per_prime": [
+    {
+      "p": 5,
+      "k": 2,
+      "witness_count": 1,
+      "first_witness": [
+        0,
+        2
+      ],
+      "cross_check_ok": true,
+      "elapsed_s": 0.0,
+      "has_witness": true
+    },
+    {
+      "p": 7,
+      "k": 3,
+      "witness_count": 2,
+      "first_witness": [
+        0,
+        2,
+        3
+      ],
+      "cross_check_ok": true,
+      "elapsed_s": 0.0001,
+      "has_witness": true
+    },
+    {
+      "p": 11,
+      "k": 5,
+      "witness_count": 2,
+      "first_witness": [
+        0,
+        2,
+        3,
+        5,
+        8
+      ],
+      "cross_check_ok": true,
+      "elapsed_s": 0.0052,
+      "has_witness": true
+    },
+    {
+      "p": 13,
+      "k": 6,
+      "witness_count": 4,
+      "first_witness": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "cross_check_ok": true,
+      "elapsed_s": 0.0263,
+      "has_witness": true
+    },
+    {
+      "p": 17,
+      "k": 8,
+      "witness_count": 4,
+      "first_witness": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        8,
+        11,
+        12
+      ],
+      "cross_check_ok": true,
+      "elapsed_s": 0.4795,
+      "has_witness": true
+    },
+    {
+      "p": 19,
+      "k": 9,
+      "witness_count": 8,
+      "first_witness": [
+        0,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        15
+      ],
+      "cross_check_ok": true,
+      "elapsed_s": 2.0496,
+      "has_witness": true
+    }
+  ],
+  "all_have_witness": true,
+  "all_cross_check_ok": true,
+  "densities": [
+    0.4,
+    0.4286,
+    0.4545,
+    0.4615,
+    0.4706,
+    0.4737
+  ],
+  "density_below_half": true,
+  "density_increasing": true,
+  "verdict": "BREAK",
+  "lemma": "for all c < 1/2 there is p and A, |A| >= c*p, 1 notin (A+A) union (A*A)",
+  "instance": "p in [5, 7, 11, 13, 17, 19], |A| = (p-1)/2 for each",
+  "false_instance": "explicit witness A found by exhaustive search for every tested prime, each of density (p-1)/(2p) -> 1/2",
+  "ok": true
+}

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22T01:17:21.036308+00:00",
+  "timestamp": "2026-09-22T01:24:36.534137+00:00",
   "phase": "3i++",
   "gates": [
     {
@@ -54,6 +54,11 @@
     },
     {
       "name": "baste_domination",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "sarkozy_sum_product",
       "ok": true,
       "exit_code": 0
     }
@@ -134,6 +139,14 @@
     {
       "name": "baste_domination",
       "meta": "baste_domination_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "sarkozy_sum_product",
+      "meta": "sarkozy_sum_product_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
       "ok": true,
