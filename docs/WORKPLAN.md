@@ -2,7 +2,36 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-21 — Track D#6 **`chung_graham_spiro` gated +
+**Checkpoint:** 2026-09-21 — Track D#7 **NCI Conjecture (arXiv:2608.27416)
+SKIPPED, no finite gate** (not a BREAK/PASS — a scope decision). Went to
+gate the corpus doc's next-ranked target (NCI has a full "Target Identifier"
+block, unlike Chung-Graham's ghost entry, so it looked trustworthy). Fetched
+and read the real paper (Wilhelm, TU Ilmenau, `incoming/nci-wilhelm-2608.27416.pdf`,
+live-checked via WebFetch first) and found the corpus doc's claimed
+"Verifiable Gate / Counterexample: Python script validating the non-existence
+of admissible sets..." does not exist in the source — **fabricated**, not
+merely corrupted-by-image-transcription like the last three targets. The
+actual refutation (Theorem 8.1 / Corollary 8.2) is a first-moment
+(probabilistic-existence) argument: Lemma 7.2 proves *some* marking `m` on
+`F_p²` (`p ≥ 10^5`) makes the lattice `P_{p,m}` admit no winning dot-algebra
+tree, via a union-bound expectation `E_p < 1`, but **exhibits no marking** —
+confirmed by the paper's own §9 Open Problems item 1, which states verbatim
+that even a small-`p` explicit counterexample is unsolved. The only
+numerically checkable content in the paper (the double-counting identities in
+`(7.1)`) is true of every finite point set unconditionally — testing it would
+be exactly the check-that-cannot-fail ceremony Governing discipline #7
+forbids. No script to write that would *reproduce* the paper's witness,
+because it has none. Filed under **Do not reopen** alongside Joshi/IUT,
+Collatz, Goldbach "monitors" — no finite gate. **Verdict lock stays 14/14**
+(nothing added/changed in `scripts/gates/check.py`). Evidence:
+`docs/blueprint/nci-conjecture.md`. **Next candidate per the corpus doc's own
+ranking: Salez-Youssef Log-Sobolev Conjecture** (arXiv:2504.08055) — appears
+to have an actual concrete algorithm (birth-death Markov chains, Ollivier
+curvature via `scipy.optimize.linprog`, spectral-gap log-Sobolev estimate),
+but **re-verify against the real paper before trusting the corpus doc's
+description**, per this session's and Chung-Graham's lesson.
+
+Prior Track D checkpoint (2026-09-21): Track D#6 **`chung_graham_spiro` gated +
 controlled, verdict BREAK**. Cross-checked the "Chung-Graham Gap-Set" row
 against the corpus doc's own Section headers first, per the resume-note flag
 — found it is a **ghost entry**: Sections 1-3 cover exactly seven other
@@ -126,10 +155,11 @@ is now pinned cyclic of order 22, but `Ideal.card_stabilizer_eq` is blocked on
 an `Algebra ℤ Cyclotomic23` / `Algebra ℚ Cyclotomic23` instance diamond (see
 **Blocked**), or proved h⁺, or per-claim Agoh–Giuga — *(B)* the 2(d) write-up
 decision (Track B item 2) — *(C)* Track D: Cohen, Baste, Sárközy, Tang-Zhang,
-Thakur, and Chung-Graham-Spiro are now all gated + controlled (BREAK ×6);
-next candidate per the corpus doc's own ranking is NCI (its "Target
-Identifier" block exists, unlike Chung-Graham's — but re-verify before
-starting, given this session's ghost-entry discovery), then Salez-Youssef.
+Thakur, and Chung-Graham-Spiro are now all gated + controlled (BREAK ×6); NCI
+is SKIPPED (no finite gate — its "Target Identifier" block existed, unlike
+Chung-Graham's, but its "Verifiable Gate" claim turned out to be fabricated,
+not just image-corrupted); next candidate per the corpus doc's own ranking is
+Salez-Youssef (re-verify against the real paper first, as always now).
 `docs/blueprint/cohen-subadditivity.md`, `docs/blueprint/baste-domination.md`,
 `docs/blueprint/sarkozy-sum-product.md`, `docs/blueprint/tang-zhang-schatten.md`,
 `docs/blueprint/thakur-carlitz.md`, and `docs/blueprint/chung-graham-spiro.md`
@@ -384,6 +414,7 @@ Dedekind `c36aa9a`; IdealNormTwo `bc2bd06`; CyclotomicEmbed follows.
 | `catalan-sun-lean` | Own reference campaign; reuse pin, do not re-attack |
 | Force kills on 2(e)–2(g) PASSes | Pass escalates; Ore/notebooks are capability-limited, not BREAKs |
 | Joshi/IUT, Collatz, Goldbach “monitors” | No finite gate |
+| NCI Conjecture (arXiv:2608.27416) | No finite gate — refutation is a first-moment existence argument with no exhibited witness, confirmed unsolved by the author's own §9 Open Problems; corpus doc's "Verifiable Gate" claim is fabricated, see `docs/blueprint/nci-conjecture.md` |
 | Fake Mathematica / RISC / Magma replays | Prefer blocked notes over invented cofactors |
 | Unmatched negative controls | The first ES control varied the congruence **and** the search breadth at once; its “weakly discriminating” answer had to be withdrawn. Prove search equivalence before concluding |
 | Suman base case as a “false positive” | The paper does derive `a=2b`/`a=b` itself, but (49) is stated with **no** ζ(5), so the base case owes an *algebraic* claim. Chen et al. concur. Settled 2026-09-20 |
