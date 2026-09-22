@@ -15,7 +15,7 @@
 This is a **claimed disproof of a false conjecture**, already equipped with
 Lean and exact-integer certificates. The campaign audit is statement
 fidelity + replay of the author’s finite checks. It does **not** add a
-campaign BREAK/PASS to the eight-gate lock.
+campaign BREAK/PASS to the verdict lock.
 
 Quantum Hedetniemi remains a theorem-of-the-paper claim until an independent
 kernel check of *their* lake project is recorded. Source scan and Python

@@ -1,6 +1,6 @@
 # Blueprint — Track C: quantum Hedetniemi (Zeiss 2609.20690)
 
-**Status:** pinned incoming artifact; **not** on the eight-gate lock  
+**Status:** pinned incoming artifact; **not** on the verdict lock  
 **Genre:** claimed Lean 4 disproof of a false conjecture (certificate + forge)  
 **Attack type:** Type F (finite certificates) + forge catalog (γ-pattern)  
 **Sources:** arXiv:2609.20690v1; GitHub

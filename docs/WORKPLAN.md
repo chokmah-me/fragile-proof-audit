@@ -2,7 +2,76 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-21 — Track D#8 **`salez_youssef_logsobolev` gated +
+**Checkpoint:** 2026-09-21 (late) — **Track D re-audit. All 15 verdicts stand;
+one conjecture statement was wrong and is fixed.**
+
+Cold re-read of the whole Track D batch. Findings, in order of what they cost:
+
+1. **`sarkozy_sum_product` had the conjecture itself wrong.** The corpus doc
+   stated the threshold as `|A| ≥ c·p`; Sárközy's Conjecture 65, as quoted in
+   Tang's Conjecture 1.1, reads `|A| > (½ − c)p`. Under the corpus doc's
+   version the claim falls to any small set and the BREAK was vacuous. The
+   control did not catch it because the control checked the gate against the
+   *same* corpus paraphrase — an echo, not an instrument. Both fixed; the gate
+   now also implements Tang's real construction (Section 2: the graph
+   `u~v ⟺ u+v=1 ∨ uv=1`, components `{0,1}`, `{2,½,−1}`, the roots of
+   `X²−X+1`, and `(p−5−δ)/6` six-cycles), verified across 29 primes up to
+   2003. It refutes every `c > 0.00025` by explicit witness. **The verdict is
+   unchanged and now actually supported.**
+2. **The "read the real paper" lesson was never retrofitted.** Targets #1–#3
+   (Cohen, Baste, Sárközy) had no PDF pinned — gated from the corpus doc plus
+   an abstract fetch, the exact provenance that failed four times later in the
+   same session. All three PDFs are now pinned and read. **Cohen and Baste
+   verify exactly**: Cohen's definitions and `C_σ(3959)=697 > 696` match
+   character for character, and Baste's twenty clauses *and* its dominating set
+   `D₀ = {0,2,5,7,8,13,15,30,31,32,33,35,37,42,46,48}` match the paper verbatim
+   — the gate's independently-found witness is the paper's own.
+3. **Three controls were checking strings against themselves.** `cohen` and
+   `baste` "verified transcription" by substring-matching prose the campaign
+   had written down. Replaced with real matched checks: Cohen now runs the
+   gate's own predicate against Ibarra's stated values (including Cohen's
+   tabulated `C_σ(598)=120` and the eleven window members), Baste compares the
+   gate's clause list and `D₀` against an independent second transcription.
+4. **Two gates reintroduced the check-that-cannot-fail defect** the campaign
+   fixed in `es_cover`: `sarkozy`'s `density_below_half` (its own comment said
+   it could not fail) and `thakur`'s literal `degree_is_5 = True`. Both removed
+   from the `ok` conjunction; Thakur's degree is now read off `POLY_P`, making
+   it a genuine transcription check.
+5. **Controls left almost no evidence.** Eight of ten wrote no receipt at all.
+   All now write `results/<control>_meta.json` via
+   `scripts/controls/receipt.py`; `salez_youssef`'s two-check control grew the
+   two missing categories. Controls remain instruments — never in `check.py`.
+6. **NCI's SKIP had no artifact**; it now has `results/nci_skip_meta.json` so a
+   later session cannot silently re-open it.
+7. Docs resynced: README had **no Track D row at all**, and the control runbook
+   here listed 3 of 11 receipts.
+8. **The local Lean axiom audit had been silently dead, and the committed
+   VERIFIED receipt did not come from the documented command.** Running
+   `verify.ps1` in the repo root produced `CAPABILITY_LIMITED`: all 150
+   declarations "unresolved". Cause — a stale agent worktree at
+   `.claude/worktrees/agent-af80866ecd1aa0e9f/` holds a full copy of the Lean
+   sources, `.claude` was not in the forge's `SKIP_DIRS`, so `find_sources`
+   emitted module names like `.claude.worktrees.<id>.FragileProofAudit`. The
+   generated audit file's first `import` is then a syntax error, the whole file
+   fails to parse, and every declaration comes back unaudited. The committed
+   `results/lean_verify_meta.json` recorded `VERIFIED` because that run had
+   `"project"` pointing *inside* the worktree, where the walk was clean. CI
+   stayed green throughout because a fresh checkout has no `.claude/` at all —
+   so nothing anywhere pointed at the gap. Fixed: `.claude` (and the usual
+   editor/vendor directories) added to `SKIP_DIRS`, plus a guard that names an
+   illegal module path instead of reporting mysteriously unresolved
+   declarations. `verify.ps1` from the repo root now reports **VERIFIED, 150
+   declarations, axioms ⊆ {propext, Classical.choice, Quot.sound}**.
+   The stale worktree is gitignored and was left in place; it is not a
+   registered `git worktree` any more.
+
+Two leads this turned up, both worth a session: Ibarra's Cohen paper is
+**verified in Lean 4 over mathlib** (`Nat.Coprime n (Nat.totient n)`,
+axiom-clean, no `native_decide`) and Tang's Sárközy paper marks Proposition 2.1
+and Theorem 2.2 as **formalized in Lean 4**. The standing claim that no Track D
+target has a tractable Lean scaffold is wrong for at least these two.
+
+Prior checkpoint: Track D#8 **`salez_youssef_logsobolev` gated +
 controlled, verdict BREAK**. Per this session's own standing lesson (NCI's
 corpus entry claimed a gate that turned out fabricated), fetched and read
 the real paper first (Münch, Leipzig University, arXiv:2504.08055,
@@ -158,7 +227,7 @@ Phase 3(i)#a Gauss-sum embed `gauss23² = −23` in `ℚ(ζ₂₃)` VERIFIED; Ph
 3(i)+++++ concrete ideal `(2, θ)` with `absNorm = 2` non-principal VERIFIED;
 Phase 3(i)++++ `IsDedekindDomain OKNeg23` VERIFIED; Phase 2(d) odd-zeta
 202601.1609 RE-BROKEN at Lemma 5.1; **audit-integrity pass landed 2026-09-20**
-— verdict lock + discrimination controls; **all eight verdicts unchanged**,
+— verdict lock + discrimination controls; **all eight verdicts of the day unchanged**,
 but what several of them *mean* changed (see **Track B**). **Track B item 1
 landed same day** — `lame_ideal_neg23` discrimination control built, NO FALSE
 POSITIVE. **Track D opened 2026-09-21** — ingested
@@ -323,7 +392,7 @@ Do **not** claim the Agoh–Giuga conjecture. Do **not** confuse Kummer-regular
 
 **Landed 2026-09-20** — commits `f399b26`, `3f8a78f`, `73782e0`, `5752140`.
 
-- **Verdict lock** (`scripts/gates/check.py`) — all eight gates pinned in
+- **Verdict lock** (`scripts/gates/check.py`) — every gate pinned in
   `EXPECTED_VERDICT`; drift in *either* direction fails the run. Gates still
   exit 0 on a BREAK by design (a BREAK is a finding, not a build failure); the
   lock is what notices a flip. Changing a pin is a deliberate act and belongs
@@ -397,7 +466,7 @@ Do **not** claim the Agoh–Giuga conjecture. Do **not** confuse Kummer-regular
 | Quantum Hedetniemi arXiv:2609.20690 | `95c0ac05e9b7ea50b827ec491661eed2ed0147b4` | author Python certificates PASS; `axiom_audit.py` 382 files, no `sorry`/`axiom`; kernel `UNKNOWN` (their Lean 4.19.0) | off |
 | Borsuk-63 Grinsztajn | `cdcdbeac2e692b8641218c70ce9f414522e125e5` | `scripts/gates/borsuk63.py` wraps author `verify_borsuk63.py` | off |
 
-Do **not** promote either into the eight-gate lock. Do **not** bump the
+Do **not** promote either into the verdict lock. Do **not** bump the
 campaign Lean pin to 4.19.0 to compile Zeiss. Operator commands:
 
 ```powershell
@@ -430,15 +499,27 @@ declarations).
 Controls are **not** run by `verify.ps1` — they are operator instruments:
 
 ```powershell
-python scripts/controls/es_cover_control.py 10000   # ~3 s
-python scripts/controls/break_control.py            # ~7 s
-python scripts/controls/lame_ideal_control.py       # <1 s
-python scripts/gates/borsuk63.py                    # Track C; not in the 8-lock
+python scripts/controls/es_cover_control.py 10000      # ~3 s
+python scripts/controls/break_control.py               # ~7 s  (suman + odd_zeta)
+python scripts/controls/lame_ideal_control.py          # <1 s
+python scripts/controls/cohen_break_control.py         # ~20 s
+python scripts/controls/baste_break_control.py         # ~2 s
+python scripts/controls/sarkozy_break_control.py       # ~6 s
+python scripts/controls/tang_zhang_break_control.py    # ~3 s
+python scripts/controls/thakur_break_control.py        # ~25 s
+python scripts/controls/chung_graham_break_control.py  # ~5 s
+python scripts/controls/salez_youssef_break_control.py # ~30 s
+python scripts/gates/borsuk63.py                       # Track C; not on the verdict lock
 ```
 
-Both exit 0. `break_control` needs the pinned PDFs under `incoming/`
-(gitignored); without them its transcription and corroboration checks report
-`unavailable` rather than passing silently.
+All exit 0. Each writes `results/<control>_meta.json` (eleven receipts from
+ten scripts — `break_control.py` covers two targets and writes one receipt
+each). A receipt is **not** a lock row: nothing fails CI when one changes, and
+controls are still never registered in `check.py`.
+
+Every control that has a pinned PDF checks it. `break_control` needs the pinned
+PDFs under `incoming/`; without them its transcription and corroboration checks
+report `unavailable` rather than passing silently.
 
 **3(i) landing:** gate `76521e6`; Premise/QuadraticWitness `9ae01da`; Maillet
 Bareiss `7a8da40`; IdealWitness `9e7d8f2`; IdealPrincipal `4444ea9`;

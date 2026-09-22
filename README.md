@@ -11,7 +11,8 @@ consequential but structurally fragile proofs.
 |---|---|
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy · no Sage / Magma / cluster |
-| **Resume** | Fresh session → cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), per-claim Agoh–Giuga, or the 2(d) write-up — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Resume** | Fresh session → Track D next corpus (`fragile-formalizable-proofs-report.md`, `historical-collapses-gemini-export.md`), cyclotomic **decomposition group / h⁺** (Gal order 22 pinned; instance diamond blocks the next Lean step), per-claim Agoh–Giuga, or the 2(d) write-up — [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
+| **Lock** | 15 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
 
 ---
 
@@ -72,7 +73,7 @@ non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
 | `docs/blueprint/` | Per-target blueprints |
 | `docs/audits/` | Bug-report style write-ups |
 | `corpus/` | Scout reports (graded trust) |
-| `incoming/` | Third-party Lean mirrors (gitignored; pin SHA in `results/`) |
+| `incoming/` | Pinned source PDFs (tracked) + third-party Lean mirrors (gitignored; pin SHA in `results/`) |
 | `results/` | Gate and forge receipts |
 
 ### Corpus trust
@@ -100,8 +101,9 @@ non-standard axioms. Same pins and pipeline as `catalan-sun-lean`. Details:
 | **2(g)** PDN1 | **PASS** — GF + Thm 1.1/1.2 + (3.13); notebooks capability-limited. [`docs/audits/pdn1.md`](docs/audits/pdn1.md) |
 | **3(h)** Agoh–Giuga kit | **PASS** — oracle + Lean `oracle_seven`. [`docs/audits/agoh-giuga.md`](docs/audits/agoh-giuga.md) |
 | **3(i)** Lamé 1847 | **PASS** — through 3(i)#+b: `Gal(ℚ(ζ₂₃)/ℚ)` cyclic of order 22. Next Lean step (decomposition-group cardinality) blocked on a mathlib instance diamond; or prove \(h^+\). [`docs/audits/lame-1847.md`](docs/audits/lame-1847.md) |
+| **Track D** Live fragile proofs 2024–26 | **7 BREAKs, all gated + controlled** (2026-09-21): Cohen subadditivity · Baste–Fürst–Henning domination · Sárközy sum-product · Tang–Zhang Schatten norm · Thakur Carlitz–Wieferich · Chung–Graham–Spiro gap sets · Salez–Youssef log-Sobolev. NCI **SKIPPED** — no finite gate ([`results/nci_skip_meta.json`](results/nci_skip_meta.json)). Corpus ranking table fully dispositioned; no Lean scaffolds yet. Blueprints under [`docs/blueprint/`](docs/blueprint/) |
 | **3** Infrastructure | Agoh–Giuga kit · Lamé pinpoint · Sun batch `2603.29973` |
-| **Track C** | Operator pins, **not resume, not the 8-lock.** Borsuk-63 author verifier PASS; quantum Hedetniemi (arXiv:2609.20690) Python certificates + source catalog PASS, kernel UNKNOWN (their Lean 4.19.0). [`docs/audits/borsuk-63.md`](docs/audits/borsuk-63.md) · [`docs/audits/hedetniemi-q.md`](docs/audits/hedetniemi-q.md) |
+| **Track C** | Operator pins, **not resume, not on the verdict lock.** Borsuk-63 author verifier PASS; quantum Hedetniemi (arXiv:2609.20690) Python certificates + source catalog PASS, kernel UNKNOWN (their Lean 4.19.0). [`docs/audits/borsuk-63.md`](docs/audits/borsuk-63.md) · [`docs/audits/hedetniemi-q.md`](docs/audits/hedetniemi-q.md) |
 
 Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md).
 
@@ -124,6 +126,9 @@ Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md).
 ## License / visibility
 
 Private Chokmah LLC artifact. No public deposit until an explicit release
-decision. Third-party mirrors under `incoming/` retain their upstream licenses;
-we do not republish them in this repo (directories are gitignored; commit SHAs
-are recorded under `results/`).
+decision. Third-party material under `incoming/` retains its upstream license.
+Lean mirrors are **not** republished here (their directories are gitignored;
+commit SHAs are recorded under `results/`). Source **PDFs are tracked** — they
+are the pinned provenance every gate is checked against, and a gate whose paper
+is not in the repo cannot be re-audited. Any public release must revisit
+whether those PDFs ship.

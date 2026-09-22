@@ -1,6 +1,6 @@
 # Blueprint — Track C: Borsuk dimension 63 (Grinsztajn 2026)
 
-**Status:** pinned incoming artifact; **not** on the eight-gate lock  
+**Status:** pinned incoming artifact; **not** on the verdict lock  
 **Genre:** Type F certificate of a known (2026) counterexample  
 **Gate (instrument):** `scripts/gates/borsuk63.py` — wraps the author’s
 `verify_borsuk63.py`; never registered in `check.py`  
