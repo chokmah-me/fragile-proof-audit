@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22T01:24:36.534137+00:00",
+  "timestamp": "2026-09-22T01:44:23.526541+00:00",
   "phase": "3i++",
   "gates": [
     {
@@ -59,6 +59,11 @@
     },
     {
       "name": "sarkozy_sum_product",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "tang_zhang_schatten",
       "ok": true,
       "exit_code": 0
     }
@@ -147,6 +152,14 @@
     {
       "name": "sarkozy_sum_product",
       "meta": "sarkozy_sum_product_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "tang_zhang_schatten",
+      "meta": "tang_zhang_schatten_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
       "ok": true,

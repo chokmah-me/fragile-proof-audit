@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-09-22T01:44:23.476971+00:00",
+  "gate": "tang_zhang_schatten",
+  "source_claim": "Tang-Zhang conjecture: C^TZ_{p,m} = sqrt(x(x+m-1))/(x^p+m-1)^(1/p), x>1 solving x^p-2x-(m-1)=0, is the dimension-free best constant in ||sum A_k||_p <= c(m) |||sum |A_k|||_p for all finite p>1",
+  "source_refutation": "Zeng, Liu, Ratnavelu (2026), arXiv:2608.15558, Theorem 1.1",
+  "corpus_pointer": "corpus/live-fragile-proofs-2024-2026.md",
+  "local_pdf": "incoming/tang-zhang-2608.15558.pdf",
+  "instance": "p=3/2, m=2",
+  "path_a_exact_rational": {
+    "u_unit": true,
+    "v_unit": true,
+    "disc_is_perfect_square": true,
+    "sigma1_sq": "1027/320",
+    "sigma2_sq": "3/320",
+    "lam1": "13/8",
+    "lam2": "3/8",
+    "matches_paper_eq_8_9": true
+  },
+  "path_b_mpmath_direct": {
+    "u_unit_err": "0.0",
+    "v_unit_err": "0.0",
+    "sigma1_sq": "3.209375",
+    "sigma2_sq": "0.009375",
+    "lam1": "1.625",
+    "lam2": "0.375"
+  },
+  "R_from_path_a": "1.03641365870489047775698768736",
+  "R_from_path_b": "1.03641365870489047775698768736",
+  "paths_agree_to_1e-40": true,
+  "bound_207_200": "207/200",
+  "R_exceeds_bound": true,
+  "margin_R_minus_bound": "0.001413658705",
+  "x_3_2_2": "4.86453651231758439104880377457",
+  "C_TZ_3_2_2": "1.03465395185143416116557913589",
+  "C_below_bound": true,
+  "margin_bound_minus_C": "0.0003460481486",
+  "margins_safe": true,
+  "verdict": "BREAK",
+  "lemma": "R_{3/2,2} <= C^TZ_{3/2,2} (Tang-Zhang conjectured formula holds)",
+  "false_instance": "R=1.03641365870489 > 207/200 > C^TZ_3/2,2=1.03465395185143",
+  "ok": true
+}
