@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-22T06:30:13.824159+00:00",
+  "timestamp": "2026-09-22T07:07:41.180132+00:00",
   "phase": "track-D",
-  "lock_size": 15,
+  "lock_size": 16,
   "gates": [
     {
       "name": "harness_selftest",
@@ -80,6 +80,11 @@
     },
     {
       "name": "salez_youssef_logsobolev",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "tpc_area",
       "ok": true,
       "exit_code": 0
     }
@@ -200,6 +205,14 @@
     {
       "name": "salez_youssef_logsobolev",
       "meta": "salez_youssef_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "tpc_area",
+      "meta": "tpc_area_gate_meta.json",
       "expected": "BREAK",
       "actual": "BREAK",
       "ok": true,

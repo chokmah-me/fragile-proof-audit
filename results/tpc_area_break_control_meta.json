@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-09-22T07:05:47.880412+00:00",
+  "control": "tpc_area_break_control",
+  "gate": "tpc_area",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "ones_C1_holds": [
+      {
+        "x": 2,
+        "S": 2,
+        "Q": 1,
+        "C1_holds": true
+      },
+      {
+        "x": 12,
+        "S": 12,
+        "Q": 66,
+        "C1_holds": true
+      },
+      {
+        "x": 100,
+        "S": 100,
+        "Q": 4950,
+        "C1_holds": true
+      },
+      {
+        "x": 1000,
+        "S": 1000,
+        "Q": 499500,
+        "C1_holds": true
+      }
+    ],
+    "dossier_outside_hypothesis": {
+      "S": 0,
+      "Q": 6,
+      "not_used_as_break": true
+    },
+    "repaired_breaks_uniform_C": {
+      "x30": {
+        "S": 2,
+        "Q": 66
+      },
+      "x300_ratio": 8.585,
+      "ok": true
+    },
+    "corollary_identity_at_30": true,
+    "pdf_transcription": {
+      "available": true,
+      "hits": {
+        "Theorem 2.3.Let": true,
+        "constantC:=C(l 0)>0fixed": true,
+        "By inverting this inequality, the result follows immediately.": true
+      },
+      "ok": true
+    }
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "local_pdf": "incoming/agama-twin-1707.03265v4.pdf"
+}

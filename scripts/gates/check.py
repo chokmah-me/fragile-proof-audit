@@ -31,6 +31,7 @@ TANG_ZHANG_SCHATTEN = ROOT / "scripts" / "gates" / "tang_zhang_schatten.py"
 THAKUR_CARLITZ = ROOT / "scripts" / "gates" / "thakur_carlitz.py"
 CHUNG_GRAHAM_SPIRO = ROOT / "scripts" / "gates" / "chung_graham_spiro.py"
 SALEZ_YOUSSEF_LOGSOBOLEV = ROOT / "scripts" / "gates" / "salez_youssef_logsobolev.py"
+TPC_AREA = ROOT / "scripts" / "gates" / "tpc_area.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -61,6 +62,7 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "thakur_carlitz": ("thakur_carlitz_gate_meta.json", "BREAK"),
     "chung_graham_spiro": ("chung_graham_spiro_gate_meta.json", "BREAK"),
     "salez_youssef_logsobolev": ("salez_youssef_gate_meta.json", "BREAK"),
+    "tpc_area": ("tpc_area_gate_meta.json", "BREAK"),
 }
 
 
@@ -184,6 +186,10 @@ def run_salez_youssef_logsobolev() -> dict:
     return run_script("salez_youssef_logsobolev", SALEZ_YOUSSEF_LOGSOBOLEV)
 
 
+def run_tpc_area() -> dict:
+    return run_script("tpc_area", TPC_AREA)
+
+
 def main() -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
@@ -216,6 +222,7 @@ def main() -> int:
         run_thakur_carlitz(),
         run_chung_graham_spiro(),
         run_salez_youssef_logsobolev(),
+        run_tpc_area(),
     ]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()

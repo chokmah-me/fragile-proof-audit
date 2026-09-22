@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-09-22T07:07:41.134740+00:00",
+  "target": "tpc_area",
+  "source": "arXiv:1707.03265v4",
+  "local_pdf": "incoming/agama-twin-1707.03265v4.pdf",
+  "lemma": "Theorem 2.3: for f: N->R+ and l_0 fixed, one C(l_0) independent of x satisfies S(x,l_0) >= Q(x)/(C x) whenever S(x,l_0)>0",
+  "instance": "f = 1 on {1,2} union 3N, l_0 = 1, S(x,1) = 2 for x >= 2",
+  "false_instance": "Q(x) = 1 + T(T+3)/2, T=floor(x/3). At x=30, Q=66 > 60 = x*S, so C=1 fails; ratio ~ x/36 is unbounded, so no finite fixed C works",
+  "dossier_witness_outside_hypothesis": {
+    "f": "1 on multiples of 3",
+    "x": 12,
+    "l0": 1,
+    "S": 0,
+    "Q": 6,
+    "used_as_break": false
+  },
+  "identity_corollary_2_2": {
+    "x": [
+      4,
+      7,
+      10,
+      12,
+      30
+    ],
+    "matches": true
+  },
+  "repaired_rows": [
+    {
+      "x": 12,
+      "S": 2,
+      "Q": 15,
+      "Q_closed": 15,
+      "ratio_Q_over_xS": 0.625
+    },
+    {
+      "x": 30,
+      "S": 2,
+      "Q": 66,
+      "Q_closed": 66,
+      "ratio_Q_over_xS": 1.1
+    },
+    {
+      "x": 36,
+      "S": 2,
+      "Q": 91,
+      "Q_closed": 91,
+      "ratio_Q_over_xS": 1.2638888888888888
+    },
+    {
+      "x": 300,
+      "S": 2,
+      "Q": 5151,
+      "Q_closed": 5151,
+      "ratio_Q_over_xS": 8.585
+    },
+    {
+      "x": 3000,
+      "S": 2,
+      "Q": 501501,
+      "Q_closed": 501501,
+      "ratio_Q_over_xS": 83.5835
+    }
+  ],
+  "ones_control_embedded": {
+    "x": 1000,
+    "S": 1000,
+    "Q": 499500,
+    "C1_holds": true
+  },
+  "verdict": "BREAK",
+  "ok": true
+}

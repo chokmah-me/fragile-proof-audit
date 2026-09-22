@@ -2,14 +2,19 @@
 
 **Operator:** dyb / Chokmah LLC  
 **Repo:** private — https://github.com/chokmah-me/fragile-proof-audit  
-**Checkpoint:** 2026-09-22 — **Harvest dossiers filed as leads. COL-FP closed
-VACUOUS** (Kawasaki arXiv:2502.20642v2). The dossier's `3/2` expansion of the
-accelerated Collatz map is real and is not a lemma of v2. Theorem 3.1's
+**Checkpoint:** 2026-09-22 — **TPC-AREA locked BREAK** (Agama
+arXiv:1707.03265v4, Theorem 2.3). The dossier witness `1_{3|n}` has shift-1
+correlation `0` and sits outside the hypothesis; the locked witness is `f=1`
+on `{1,2}∪3ℕ`, correlation identically `2`, and `Q(30)=66>60`. No fixed
+`C(1)` works. `f≡1` keeps `C=1`. Lock is 16. Control:
+`scripts/controls/tpc_area_break_control.py`. Next harvest row: **ES-5**
+(arXiv:2508.07367), abort if the paper already concedes an uncovered class.
+
+Same day, earlier: **COL-FP closed VACUOUS** (Kawasaki arXiv:2502.20642v2).
+The dossier's `3/2` expansion is real and is not a lemma of v2. Theorem 3.1's
 weighted sum is `<= 0` on `{1,...,256}²`. Remark 3.1 already drops Theorems
 2.2 and 2.3; recomputed at `λ ≡ 1`, `(x,y)=(1,3)`, the live branch of 2.3(5)
 has ratio `3/2`. No lock row. Instrument: `scripts/gates/col_fp.py`.
-Next harvest row: TPC-AREA (Agama 1707.03265v4). Attack order:
-`docs/audits/kawasaki-collatz.md` and the session plan.
 
 Prior checkpoint: 2026-09-21 (late) — **Track D re-audit. All 15 verdicts stand;
 one conjecture statement was wrong and is fixed.**
