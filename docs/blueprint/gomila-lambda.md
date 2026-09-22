@@ -165,16 +165,44 @@ audit repo at the pinned commit
 
 **No anomalies. Sample check PASSES (8/8 rows).**
 
+## Full finite replay (2026-09-22) — VERIFIED PASS
+
+Run on a fresh download of all 15 shards at pinned audit-repo commit
+`a74738deb6d5e0f76887cb36901da08b68dca705`, using the repo's own
+`verifiers/verify_finite_and_binding.py` (Python 3.12.3 + mpmath 1.2.1,
+220-bit interval arithmetic), exit code 0.
+
+- **15/15 shard SHA-256 checksums** match the repo's `SHA256SUMS` pins.
+- **leg p235711** ({2,3,5,7,11}): 4 files, 12 runs, N=690988..728999,
+  38,012 rows, min floor 0.000000791366 @690988, UNCERT=0.
+- **leg p2357** ({2,3,5,7}): 1 file, 1 run, N=729000..818999,
+  90,000 rows, min 0.000315112459 @729000, UNCERT=0.
+- **leg p235** ({2,3,5}): 1 file, 1 run, N=819000..1027999,
+  209,000 rows, min 0.000305788807 @819000, UNCERT=0.
+- **leg p23** ({2,3}): 9 files, 9 runs, N=1028000..3840000,
+  2,812,001 rows, min 0.000309285478 @1028000, UNCERT=0.
+- **Global**: 3,149,013 rows, N=690988..3840000, gaps=0, overlaps=0,
+  UNCERT=0.
+- **Error budget** 12/12 gates: eAB ≤ 2.057023688667e-12,
+  eC0 ≤ 2.33492848188649183e-7, Emax ≤ 2.33494905212337849e-7
+  (within the claimed 2.33495e-7).
+- **Normalizer/corr monotonicity** 6/6 gates:
+  Xi_ub = −1.363112154757640042 < 0.
+- **Binding floor** = 7.91366e-7 − 2.33494905212337849e-7
+  = 5.57871094787e-7 > 0.
+
+**RESULT PASS: full finite Triangle weld B=893927/5000000 rows=3149013.**
+
+This is an **audit confirmation, not a BREAK** — explicitly **not** on the
+23/23 verdict lock.
+
 ## Audit plan (verify/audit, not refutation)
 
-1. ~~Shard row check~~ — **DONE 2026-09-22**: 8/8 rows of
-   `p235711_690988_690995.log.gz` pass the audit repo's fail-closed parser
-   (contiguous N, UNCERT=0, TBOX=16125/100000, format match); the shard
-   holds the leg's argmin floor 791366/10^12 = 7.91366e-7 at N=690988.
-2. Sample wider strata: one shard per mollifier leg (e.g.
-   `p2357_729000_818999`, `p235_819000_1027999`, `p23_2200001_2800000`) —
-   row-format consistency, and confirm the thinnest margin
-   (7.91366×10⁻⁷ vs 2.33495×10⁻⁷ at N=690988) still clears.
+1. ~~Shard row check + full finite replay~~ — **DONE 2026-09-22**: sample
+   shard 8/8 rows PASS; full replay of all 15 shards
+   **3,149,013/3,149,013 rows PASS** (see above).
+2. ~~Sample wider strata~~ — **DONE 2026-09-22** via the full replay (all
+   15 shards, all four mollifier legs).
 3. Barrier + tail replay scope (read-only): `barrier_target_closed.log`
    under the 54-check parser, `verify_prop410_arb.c` at both precisions,
    tail contraction D<0.999721. Do not rebuild the producer unless a
@@ -191,8 +219,9 @@ audit repo at the pinned commit
 
 ## Do not claim
 
-- Do not claim this audits Gomila's proof — only one shard has been
-  row-checked so far; this file is a blueprint, not a verdict.
+- Do not claim this audits Gomila's proof in full — the finite lane is
+  fully replayed and PASS, but the barrier and tail legs are not yet
+  replayed; this file is a blueprint, not a verdict.
 - Do not claim the corpus description was wrong — the key identifiers
   cross-checked (rank 8, 3,149,013 rows, 883 prisms, 0.1787854, Romik,
   hash-pinned) even though the corpus doc was downgraded on math
