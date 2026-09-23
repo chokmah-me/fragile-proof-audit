@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-23T16:33:53.505026+00:00",
+  "timestamp": "2026-09-23T19:46:08.509129+00:00",
   "gate": "kempe_fritsch",
   "source_claim": "Kempe (1879): Algorithm Kempe (including Gadget 5_2's two successive Kempe chain switches) properly 4-colors any plane graph",
   "source_refutation": "Fritsch & Fritsch (1998) via Gethner, Kallichanda, Mentis et al. (2009), Theorem 4: Gadget 5_2 does not commute -- the two switch orders disagree on the 9-vertex Fritsch graph",
