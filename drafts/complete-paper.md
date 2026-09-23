@@ -819,7 +819,7 @@ differently.
 **The computational bound as a genre: Polymath15.** The closest
 existing precedent for the *target* of a replay audit is
 Polymath's de Bruijn--Newman project (arXiv:1904.12438; Res. Math.
-Sci. 6 (2019)): a published, computer-assisted bound ($\Lambda \le 0.22)
+Sci. 6 (2019)): a published, computer-assisted bound ($\Lambda \le 0.22$)
 whose verification story is "the estimates are proved, the numerics
 were run by the authors." Its
 Table 1 is the archetypal replay-audit artifact: a conversion table
