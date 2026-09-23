@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-23T16:01:53.070614+00:00",
+  "timestamp": "2026-09-23T16:33:59.174220+00:00",
   "target": "gb_sce",
   "source": "arXiv:1909.13230v5",
   "local_pdf": "incoming/gb-sce-1909.13230v5.pdf",
@@ -30,7 +30,7 @@
   "teeter_18_19_ok": true,
   "n_teeter_tested": 1000,
   "dusart_control_ok": true,
-  "elapsed_s": 5.7,
+  "elapsed_s": 5.6,
   "not_this_gate": "Goldbach's conjecture itself; the 74-structure relative claim",
   "verdict": "BREAK",
   "ok": true

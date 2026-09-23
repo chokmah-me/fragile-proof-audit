@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22T20:30:12.733311+00:00",
+  "timestamp": "2026-09-23T16:33:34.633564+00:00",
   "phase": "2g",
   "source": "arXiv:2503.00004",
   "pdf": "incoming/pdn1-2503.00004.pdf",
@@ -210,8 +210,8 @@
     "status": "capability-limited",
     "reason": "Authors' supplements are Mathematica notebooks (github.com/tztgm1/PDN1-congruences-modulo-5 and -modulo-7). Campaign stack has no Mathematica; full CAS transcript replay and seventh-order equation (4.8) are not executed here.",
     "pinned": {
-      "mod5_dir": "incoming\\pdn1\\mod5",
-      "mod7_dir": "incoming\\pdn1\\mod7",
+      "mod5_dir": "incoming/pdn1/mod5",
+      "mod7_dir": "incoming/pdn1/mod7",
       "mod5_nb": true,
       "mod7_nb": true
     },

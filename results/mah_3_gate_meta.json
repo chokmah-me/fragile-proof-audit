@@ -1,0 +1,92 @@
+{
+  "timestamp": "2026-09-23T16:33:59.251950+00:00",
+  "gate": "mah_3",
+  "verdict": "PASS",
+  "source_claim": "Shibing Chen, Yuanyuan Li, Dongmeng Xi, Zhe-Feng Xu, 'The Mahler Conjecture in Three Dimensions', arXiv:2605.09334v3 (15 June 2026)",
+  "corpus_pointer": "corpus/Fragile-Route_Harvest_Dossier_II.md, Hit MAH-3",
+  "local_pdf": "incoming/mah-3-2605.09334v3.pdf",
+  "local_pdf_sha256": "cd2b5f801f3015e3b7bfc883103f9fa33e8e20817729ed8072ec50af1ad4405f",
+  "lemma": "Lemma 5.1: dim A_theta(P) >= F(P) - V(P) + Delta(P) + 1",
+  "arithmetic": "exact rational (fractions.Fraction); facet lists hardcoded but verified by the script (supporting-plane check, Euler, vertex-extremality spot checks)",
+  "polytopes": [
+    {
+      "polytope": "square_pyramid",
+      "V": 5,
+      "F": 5,
+      "Delta": 4,
+      "dim_A_theta": 5,
+      "bound": 5,
+      "margin": 0,
+      "ok": true
+    },
+    {
+      "polytope": "octahedron",
+      "V": 6,
+      "F": 8,
+      "Delta": 3,
+      "dim_A_theta": 6,
+      "bound": 6,
+      "margin": 0,
+      "ok": true
+    },
+    {
+      "polytope": "cube",
+      "V": 8,
+      "F": 6,
+      "Delta": 4,
+      "dim_A_theta": 6,
+      "bound": 3,
+      "margin": 3,
+      "ok": true
+    },
+    {
+      "polytope": "triangular_prism",
+      "V": 6,
+      "F": 5,
+      "Delta": 4,
+      "dim_A_theta": 4,
+      "bound": 4,
+      "margin": 0,
+      "ok": true
+    },
+    {
+      "polytope": "pentagonal_pyramid",
+      "V": 6,
+      "F": 6,
+      "Delta": 5,
+      "dim_A_theta": 6,
+      "bound": 6,
+      "margin": 0,
+      "ok": true
+    },
+    {
+      "polytope": "truncated_cube_corner",
+      "V": 10,
+      "F": 7,
+      "Delta": 5,
+      "dim_A_theta": 7,
+      "bound": 3,
+      "margin": 4,
+      "ok": true
+    },
+    {
+      "polytope": "elongated_square_pyramid",
+      "V": 9,
+      "F": 9,
+      "Delta": 4,
+      "dim_A_theta": 7,
+      "bound": 5,
+      "margin": 2,
+      "ok": true
+    }
+  ],
+  "control": {
+    "description": "same computation with deliberately wrong theta (not parallel to G0); must break the bound somewhere",
+    "discriminates": true,
+    "broken_on": [
+      "square_pyramid",
+      "pentagonal_pyramid"
+    ]
+  },
+  "scope_note": "Gates Lemma 5.1 (the finite counting layer) only. Proposition 6.4 (connectedness) is topological and was audited by prose + floating-point stress probes in scripts/analysis/mah_3_stress_5b.py; see docs/audits/mah-3.md. Overall audit disposition: WATCH, not full PASS."
+}

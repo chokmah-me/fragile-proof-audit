@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-22T20:31:16.239816+00:00",
+  "timestamp": "2026-09-23T16:33:59.262408+00:00",
   "phase": "track-D",
-  "lock_size": 23,
+  "lock_size": 25,
   "gates": [
     {
       "name": "harness_selftest",
@@ -15,8 +15,8 @@
     },
     {
       "name": "odd_zeta_1609",
-      "ok": true,
-      "exit_code": 0
+      "ok": false,
+      "exit_code": 1
     },
     {
       "name": "es_cover",
@@ -115,11 +115,21 @@
     },
     {
       "name": "tait_tutte",
+      "ok": false,
+      "exit_code": 1
+    },
+    {
+      "name": "kempe_fritsch",
       "ok": true,
       "exit_code": 0
     },
     {
-      "name": "kempe_fritsch",
+      "name": "gb_sce",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "mah_3",
       "ok": true,
       "exit_code": 0
     }
@@ -308,8 +318,24 @@
       "actual": "BREAK",
       "ok": true,
       "note": ""
+    },
+    {
+      "name": "gb_sce",
+      "meta": "gb_sce_gate_meta.json",
+      "expected": "BREAK",
+      "actual": "BREAK",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "mah_3",
+      "meta": "mah_3_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
     }
   ],
   "verdict_drift": [],
-  "all_ok": true
+  "all_ok": false
 }
