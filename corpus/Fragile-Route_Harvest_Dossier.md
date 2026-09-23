@@ -86,6 +86,8 @@ Gates refute routes, not theorems. Every gate below names an object, parameters,
 
 ## Hit 4 — Legendre's conjecture via Newman-type exponential sums
 
+**STALE (2026-09-23): paper is now v4 (7 May 2026), not v2 — decisive step is Prop. 2.18, and the residue was not finite: audited as a prose type-G GAP, not a numeric gate. See `docs/audits/leg-ns.md`.**
+
 **ID:** LEG-NS · **Title:** *Real exponential sums over primes and prime gaps* · **arXiv:** [2307.08725v2](https://arxiv.org/html/2307.08725v2) (v2, 2025).
 
 **Still-believed statement.** Legendre's conjecture: a prime between n² and (n+1)² for every n. Open. Note the paper claims more: Proposition 4.6 asserts Legendre "for all n sufficiently large" via π(x + √x) − π(x) ~ √x/log x — itself an unproven short-interval asymptotic far beyond current knowledge.
