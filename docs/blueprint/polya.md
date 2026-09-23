@@ -145,11 +145,28 @@ Pinned inputs: `certs/manifest.json`
 
 ## 8. Deferred (stretch goals, clearly out of v1 scope)
 
-- **Lean formally-checked sieve slice.** The corpus's long pole (its 4–8 wk
-  estimate bundles this); the certificate artifact stands without it.
 - **Extended positive-region certs.** Sieve to 906,488,079 to certify the
   full positive interval and the max 829 at 906,316,571 as pinned chunks
   (adds seconds of compute; anchors already confirm the values).
+
+## 8a. Lean formally-checked sieve slice — DONE 2026-09-23
+
+The corpus's long pole (its 4–8 wk estimate bundled this) is now a
+kernel-checked artifact: `FragileProofAudit/Polya/Liouville.lean` +
+`FragileProofAudit/Polya/SieveCheck.lean`, wired into `FragileProofAudit.lean`.
+
+- `Liouville.lean`: `L`, `liouville` (from mathlib `ArithmeticFunction`),
+  bridge `cardFactors n = #{prime powers q ≤ n : q ∣ n}` for `n ≠ 0`.
+- `SieveCheck.lean`: pinned prime-power table (35 entries ≤ 100),
+  transparent sieve `omegaSieve`/`lambdaSieve`/`Lck`, bridges to `Ω`/`λ`/`L`,
+  then kernel-checked by `decide`:
+  - `check_L100 : Lck 100 = -2`,
+  - `check_polya_range : ∀ n ∈ [2,100], Lck n ≤ 0`,
+  - `polya_holds_to_100 : ∀ n ∈ [2,100], L n ≤ 0`.
+- Strict: no `sorry`/`admit`/`native_decide`/local axioms; `#print axioms`
+  gives only `[propext, Classical.choice, Quot.sound]`.
+- This is a checked slice through 100, **not** a verification of the full
+  906,150,257 prefix — the chunk certificates remain the evidence there.
 
 ## 9. What this is not
 
