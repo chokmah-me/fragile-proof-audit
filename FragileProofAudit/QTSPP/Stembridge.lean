@@ -79,7 +79,7 @@ theorem recurrence_unique {m : ℕ} {p : ℕ → ℕ → ℚ} {f g : ℕ → ℚ
             omega
           rw [ih _ hlt]
         have e : p m (n - m) * f n = p m (n - m) * g n := by linarith
-        exact mul_right_cancel₀ (hlead (n - m)) e
+        exact mul_left_cancel₀ (hlead (n - m)) e
   funext n
   exact key n
 
