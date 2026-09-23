@@ -60,33 +60,34 @@ in the map; they live in `docs/audits/` (§3).
 Gate → verdict → attack type(s), from `EXPECTED_VERDICT`
 (`scripts/gates/check.py`). Types per the dossiers
 (`corpus/Fragile-Route_Harvest_Dossier*.md`,
-`corpus/lean4-attack-harvest.md`) and the §4 worked examples;
-unmarked cells are completed from `docs/audits/` before submission.
+`corpus/lean4-attack-harvest.md`), the §4 worked examples, and the
+audit notes (`es_cover` is D per its own note's "only Type-D-style
+instance checking"; `giuga_oracle` is infrastructure, see note).
 
 | Gate | Verdict | Type |
 |---|---|---|
 | suman_eq48 | BREAK | B |
-| odd_zeta_1609 | BREAK | — |
-| es_cover | PASS | — |
+| odd_zeta_1609 | BREAK | B |
+| es_cover | PASS | D |
 | rr_qexpand | PASS | D |
 | pdn1 | PASS | D |
-| giuga_oracle | PASS | — |
+| giuga_oracle | PASS | infra¹ |
 | lame_h23 | PASS | G |
 | lame_ideal_neg23 | PASS | G |
 | cohen_subadditivity | BREAK | F |
 | baste_domination | BREAK | F |
-| sarkozy_sum_product | BREAK | — |
+| sarkozy_sum_product | BREAK | F |
 | tang_zhang_schatten | BREAK | A |
-| thakur_carlitz | BREAK | — |
+| thakur_carlitz | BREAK | F |
 | chung_graham_spiro | BREAK | F |
-| salez_youssef_logsobolev | BREAK | — |
+| salez_youssef_logsobolev | BREAK | G |
 | tpc_area | BREAK | F |
 | es5_eq35 | BREAK | A |
 | cat_g | BREAK | E |
-| krr_cl | BREAK | — |
+| krr_cl | BREAK | F |
 | tpc_gn | BREAK | A |
 | jac_2d | PASS | D+E |
-| tait_tutte | BREAK | — |
+| tait_tutte | BREAK | F |
 | kempe_fritsch | BREAK | B/F |
 | gb_sce | BREAK | A |
 | mah_3 | PASS | A+G |
@@ -96,3 +97,7 @@ LEG-NS (GAP, G), Erdős–Straus Thm-10 (GAP, G, repairable),
 JAC-2D type-G (PASS, G), NCI (SKIP), quantum Hedetniemi
 (UNKNOWN). Off-lock confirmations/canonizations: Gomila Λ-bound
 (audit PASS), Pólya (BANKED).
+
+¹ `giuga_oracle` is a standing verification oracle (known Giuga
+composites checked against Korselt), not an attack on a route; it
+carries no A–G letter.
