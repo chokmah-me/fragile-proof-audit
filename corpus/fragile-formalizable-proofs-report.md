@@ -134,7 +134,7 @@ Scores are the author's calibrated judgment against the §2 rubric; F = formaliz
 
 | Rank | Candidate | Claim (year) | F | Fr | R | Est. effort | Verdict |
 |---|---|---|---|---|---|---|---|
-| 1 | Odd zeta values ([Preprints.org 2026.01.1609](https://www.preprints.org/manuscript/202601.1609)) | All ζ(2n+1) irrational (2026) | 8 | 9 | 8 | 1–2 wk gate; 3–6 wk Lean slice | **Attack now** |
+| 1 | Odd zeta values ([Preprints.org 2026.01.1609](https://www.preprints.org/manuscript/202601.1609)) | All ζ(2n+1) irrational (2026) | 8 | 9 | 8 | 1–2 wk gate; 3–6 wk Lean slice | **BREAK** — Lemma 5.1 never fires (audited 2026-09-20, re-verified 2026-09-23; `docs/audits/odd-zeta-202601.md`) |
 | 2 | Erdős–Straus system ([arXiv:2404.01508](https://arxiv.org/html/2404.01508v3)) | Complete congruence system (2024) | 8 | 8 | 8 | 2–4 wk | **Attack now** |
 | 3 | Agoh–Giuga genre ([ProofAtlas](https://proofatlas.ai/collaboration/agoh-giuga-conjecture/)) | Primality ⟺ congruence (recurring claims) | 7 | 8 | 9 | 1–2 wk per claim after setup | **Attack now (genre kit)** |
 | 4 | Suman ζ(5) ([2407.07121](https://arxiv.org/html/2411.16774v3)) | ζ(5) irrational (2024) — **refuted 2025** | 9 | 9 | 10 | days | Training kill — build the refutation object |
