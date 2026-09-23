@@ -6,6 +6,8 @@
 
 *Chokmah LLC*, [ORCID 0000-0002-9040-6914](https://orcid.org/0000-0002-9040-6914), chokmah-dyb@pm.me
 
+*DOI: [10.5281/zenodo.22926996](https://doi.org/10.5281/zenodo.22926996)*
+
 *Draft manuscript - companion methods paper to the fragile-proof-audit campaign. Exported 2026-09-23.*
 
 <p class="hebrew-date" dir="rtl" lang="he">י״ב תִּשְׁרֵי תשפ״ז</p>
@@ -16,7 +18,7 @@
 
 Published mathematics is trusted far more than it is independently replayed. Peer review checks reasoning, not computation - and increasingly, part of the proof *is* a computation. This paper describes a short, intensive audit campaign (six calendar days, 2026-09-18 through 2026-09-23) that replays published mathematical claims from scratch under a hostile prior: every locked gate is built to produce the opposite verdict where the opposite is correct (the four exact-equality gates are exempt - Sec. 4.2), and a CI-enforced verdict lock fails loudly on drift in either direction. The contribution is the playbook, not the verdicts: a five-disposition taxonomy (BREAK, GAP, PASS, SKIP, UNKNOWN) with a polarity rule separating gate verdicts from claim-level dispositions; seven attack types classified by mechanism, each with a worked example; and the evidentiary disciplines - paper-first gating, discrimination controls, gate-before-prove, fail-closed replay, independent anchors - together with the record of where those disciplines were violated and what caught the violations. The 25 locked gates (17 BREAK / 8 PASS) fall into three strata with very different evidentiary weight: four historical calibrations, twelve live-literature targets, and eight low-stakes preprints, plus one infrastructure oracle. Case studies include a refutation replay, an execution-verified confirmation, a canonization, and an unfinished formalization line; the limitations section states what no discipline closes. The campaign repository is private at the time of writing; at
 submission it will be mirrored publicly, with the submitted version
-citing its exact commit SHA and an archival DOI. Gates refute routes,
+citing its exact commit SHA and archival DOI 10.5281/zenodo.22926996. Gates refute routes,
 not theorems.
 
 ## 1. Introduction: the verification gap
