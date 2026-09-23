@@ -269,6 +269,35 @@ budget at 256 & 512 bits.** Gate (iii) of the Triangle weld is now
 closed on this audit's evidence. Still an audit confirmation, not a
 BREAK; not on the 23/23 verdict lock.
 
+## Tail replay (2026-09-22) — VERIFIED PASS
+
+Fresh clone of the audit repo at pinned commit
+`a74738deb6d5e0f76887cb36901da08b68dca705`; read-only scope. Same
+environment as the barrier replay (Linux, Python 3.12.3 + mpmath 1.2.1,
+gcc, FLINT 3.0.1).
+
+- **5/5 sealed tail certificate SHA-256 checksums** match the repo's
+  `SHA256SUMS` pins: `logs/tail_1787854_160.log`,
+  `logs/tail_1787854_256.log`, `logs/tail_arb_256.log`,
+  `logs/tail_arb_512.log`, `logs/p11_triangle_tail_cells_independent.log`.
+- `verifiers/verify_tail_arb.c` compiled clean against FLINT 3.0.1 and
+  run fresh at both precisions — **36/36 checks PASS at 256 bits**
+  (exit 0) and **36/36 checks PASS at 512 bits** (exit 0), including the
+  decisive contraction gate D < 1 (N ≥ N1 = 3840000, M = 153814).
+- `verifiers/verify_tail_arb_logs.py` on the sealed logs —
+  **RESULT PASS, exit 0**: 36/36, D < 1, flow > error, certified margin
+  > 0.000173520937333783227135809831470514 (i.e. |f| ≥ 1.734×10⁻⁴
+  holds with margin).
+- Independent Python interval tail verifiers —
+  `verify_tail_1787854_160.py` **ALL PASS** (exit 0, 35.4 s) and
+  `verify_tail_1787854_256.py` **ALL PASS** (exit 0, 40.0 s).
+
+**RESULT PASS: tail lemma (N≥3840000 contraction ⟹ |f|≥1.734×10⁻⁴).**
+The finite and tail lanes overlap on the complete window N=3840000, so
+the weld is continuous. All four Gomila audit lanes — finite, Dini
+y-transfer, barrier, tail — now replayed PASS on this audit's evidence.
+Audit confirmation, not a BREAK; not on the 23/23 verdict lock.
+
 ## Audit plan (verify/audit, not refutation)
 
 1. ~~Shard row check + full finite replay~~ — **DONE 2026-09-22**: sample
@@ -281,12 +310,13 @@ BREAK; not on the 23/23 verdict lock.
    legs, worst ratio_ub 0.99999860767275095 < 1);
    `verify_stored_logs.py` PASS; Platt–Trudgian margin confirmed
    (see above).
-4. ~~Barrier replay~~ — **DONE 2026-09-22**: 5/5 sealed barrier
-   certificate checksums PASS; `verify_barrier_binding.py` PASS
-   (54/54 checks, 883/883 prisms, exit 0);
-   `verify_prop410_arb.c` PASS at 256 and 512 bits (31/31 checks
-   each, exit 0, FLINT 3.0.1). Tail replay scope (read-only): tail
-   contraction D<0.999721 — **PENDING**.
+4. ~~Barrier + tail replay~~ — **DONE 2026-09-22**: barrier 5/5
+   checksums PASS, `verify_barrier_binding.py` PASS (54/54, 883/883,
+   exit 0), `verify_prop410_arb.c` PASS at 256+512 bits (31/31 each);
+   tail 5/5 checksums PASS, `verify_tail_arb.c` PASS at 256+512 bits
+   (36/36 each, D<1), `verify_tail_arb_logs.py` PASS (margin
+   >1.7352e-4), Python tail verifiers ALL PASS at 160+256 bits.
+   All four Gomila lanes now replayed PASS.
 5. State the three gate lemmas (verified height, final-time clearance,
    barrier) in Lean against the campaign's axiom-clean forge; cross-reference
    Gomila's own `lean/aristotle` (seven Lean 4 projects, 223 theorems,
