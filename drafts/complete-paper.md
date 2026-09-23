@@ -719,6 +719,23 @@ results are not a survey. The q-TSPP certificate-rot episode (§2,
 certificate archives are typical is a question for a larger sample,
 not a claim of this paper.
 
+## 7.6 No pre-publication author notification
+
+The campaign does not notify authors before publishing a verdict,
+and has no plan to adopt notification as a regular policy. The reason
+is throughput, not hostility: at twenty-five gates in five days,
+individualized pre-publication correspondence is infeasible, and a
+notification rule honored selectively would be worse than none. The
+substitute is the public record itself. Every BREAK names the lemma,
+exhibits the false instance, and pins the inputs; every audit note is
+a document an author can answer point by point, and the repository is
+the correction channel — a verdict met with a correct
+counter-argument is superseded in the open, under the append-only
+rule (§3). What the campaign does not do is litigate verdicts
+privately before publishing them. (The q-TSPP author was contacted,
+but to request missing coefficients for a formalization built on the
+authors' work, not to disclose a finding.)
+
 ## 8. Related work
 
 This paper's contribution is a playbook and its audit log, not a new
