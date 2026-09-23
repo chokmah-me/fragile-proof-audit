@@ -109,7 +109,7 @@ conjectures are therefore unproved by this route.
 **Explicitly NOT a BREAK:** no lemma *statement* was falsified — whether
 τ(s)−1/s in fact extends analytically is a hard open analytic question,
 not settled here. Legendre's conjecture itself is unaffected. The 24/24
-BREAK lock is untouched.
+verdict lock is untouched.
 
 ## Reproduction
 

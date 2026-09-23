@@ -87,7 +87,7 @@ argument does not establish Theorem 5, hence not Theorem 1.
 
 **Explicitly NOT a BREAK:** no lemma statement was falsified
 (Theorem 5 holds on every family checked), and Frankl's conjecture itself
-is unaffected by this finding. The 23/23 BREAK lock is untouched.
+is unaffected by this finding. The 23/23 verdict lock is untouched.
 
 ## Reproduction
 

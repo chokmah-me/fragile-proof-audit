@@ -12,7 +12,7 @@ consequential but structurally fragile proofs.
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy / `networkx` (graph gates only) · no Sage / Magma / cluster |
 | **Resume** | Resume threads: [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
-| **Lock** | 23 gates pinned in `EXPECTED_VERDICT` (`scripts/gates/check.py`); drift in either direction fails CI |
+| **Lock** | 24 gates pinned in `EXPECTED_VERDICT` (17 BREAK / 7 PASS, 2026-09-23) (`scripts/gates/check.py`); drift in either direction fails CI |
 
 ---
 
@@ -78,8 +78,14 @@ Repository layout: see [`docs/repo-layout.md`](docs/repo-layout.md).
 | **Track C** | Operator pins, **not resume, not on the verdict lock.** Borsuk-63 author verifier PASS; quantum Hedetniemi (arXiv:2609.20690) Python certificates + source catalog PASS, kernel UNKNOWN (their Lean 4.19.0). [`docs/audits/borsuk-63.md`](docs/audits/borsuk-63.md) · [`docs/audits/hedetniemi-q.md`](docs/audits/hedetniemi-q.md) |
 | **Tait–Tutte** (2026-09-22) | **BREAK**, gated + controlled. |
 | **Kempe–Fritsch** (2026-09-22) | **BREAK**, gated + controlled. |
-| **Gomila Λ-bound audit** (2026-09-22) | **VERIFY/AUDIT PASS** — not a BREAK; explicitly **not** on the 23/23 BREAK verdict lock. Blueprint: [`docs/blueprint/gomila-lambda.md`](docs/blueprint/gomila-lambda.md) |
-| **Pólya counterexample canonization** (2026-09-23) | **v1 BANKED** — Tanaka L(906150257)=+1 recomputed by two independent sieves; 91 chunk certs, verifier 370/370; Lean slice to n=100. Not a BREAK; 23/23 lock untouched. [`docs/audits/polya.md`](docs/audits/polya.md) | verdict lock. Blueprint: [`docs/blueprint/gomila-lambda.md`](docs/blueprint/gomila-lambda.md) |
+| **Gomila Λ-bound audit** (2026-09-22) | **VERIFY/AUDIT PASS** — not a BREAK; explicitly **not** on the verdict lock. Blueprint: [`docs/blueprint/gomila-lambda.md`](docs/blueprint/gomila-lambda.md) |
+| **Pólya counterexample canonization** (2026-09-23) | **v1 BANKED** — Tanaka L(906150257)=+1 recomputed by two independent sieves; 91 chunk certs, verifier 370/370; Lean slice to n=100. Not a BREAK; not on the verdict lock. [`docs/audits/polya.md`](docs/audits/polya.md) |
+| **Erdős–Straus gate** (2026-09-23) | Conjecture 1 **PASS** (273/273); Thm-10 interval **proof GAP** at n=6, k=718 — structural, repairable. Not on the verdict lock. [`docs/audits/erdos-straus-gate.md`](docs/audits/erdos-straus-gate.md) |
+| **FRK-UC** Demontis union-closed (2026-09-23) | **proof GAP** (type G) — broken decisive inference in Thms 4–5; not finitely gateable (control probe: zero violations n≤5). Not a BREAK. [`docs/audits/frankl-uc-gap.md`](docs/audits/frankl-uc-gap.md) |
+| **GB-SCE** Goldbach semi-continuous model (2026-09-23) | **BREAK (route)** at v5, gated + controlled; lock extended to 24. [`docs/audits/gb-sce.md`](docs/audits/gb-sce.md) |
+| **LEG-NS** Legendre via Newman sums (2026-09-23) | **proof GAP** (type G) at v4 — prose audit, no finite gate applies. Not a BREAK. [`docs/audits/leg-ns.md`](docs/audits/leg-ns.md) |
+| **JAC-2D type G** (2026-09-23) | **PASS** — Su v43 decisive inferences re-derived and sound; complements the D/E gate PASS. [`docs/audits/jac-2d-typeg.md`](docs/audits/jac-2d-typeg.md) |
+| **q-TSPP** (2026-09-23) | Correct-proof infrastructure, not a BREAK — milestone 2 closed parametrically (kernel-checked); milestone 3 (coefficient recovery) awaiting author reply. [`docs/blueprint/qtspp.md`](docs/blueprint/qtspp.md) |
 
 Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md). Per-target detail: [`docs/audits/`](docs/audits/).
 

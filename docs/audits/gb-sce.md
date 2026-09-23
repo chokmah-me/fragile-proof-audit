@@ -137,4 +137,4 @@ proof is refuted — (i) is false for all E ≥ 4 by sign, (iii) is false
 systematically for large E (numerically to 10⁸), and (ii) fails as stated
 at small E. Per campaign doctrine this refutes only the paper's route; the
 72 directly-settled structures and the Goldbach conjecture itself are
-untouched. The 23/23 BREAK lock is extended to 24/24.
+untouched. The 23/23 verdict lock is extended to 24/24.
