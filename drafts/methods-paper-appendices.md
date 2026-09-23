@@ -91,6 +91,7 @@ instance checking"; `giuga_oracle` is infrastructure, see note).
 | kempe_fritsch | BREAK | B/F |
 | gb_sce | BREAK | A |
 | mah_3 | PASS | A+G |
+| **Total: 25 gates** | **17 BREAK / 8 PASS** | **machine-checked against `EXPECTED_VERDICT` in `scripts/gates/check.py`** |
 
 Prose dispositions (not on the lock): FRK-UC (GAP, G),
 LEG-NS (GAP, G), Erdős–Straus Thm-10 (GAP, G, repairable),

@@ -39,6 +39,14 @@ the tail lane held 36/36 at both 256 and 512 bits. Every lane is
 fail-closed (§5.4): any mismatch would have failed the lane, and the
 sealed logs are re-verifiable.
 
+The claim's lineage: Polymath15's Theorem 1.2 gave the method and the
+then-best bound Λ ≤ 0.22; Platt–Trudgian (2020) pushed it to 0.2;
+Gomila's 0.1787854 — exactly 129/800 + 87677/5,000,000 — is a claimed
+further improvement instantiating Polymath15's machinery at an exact
+rational parameter row. The audit's question was never whether the
+lineage is respectable; it was whether this instantiation's ~3.15
+million certificates check out. They do.
+
 This case study exists to prove the campaign is not a
 refutation machine. The same instruments, the same controls, the same
 hostile posture — and the verdict is PASS, recorded with the same
@@ -79,7 +87,6 @@ The author has been contacted; the line waits on his reply.
 It belongs in this paper for one reason: it is what "gate before
 prove" (§5.3) looks like as a multi-month project rather than a
 slogan. The numeric gates came first, the formalization builds on
-them, and the blocker is stated plainly instead of being worked
-around. If the coefficients arrive before submission, this note
-becomes a fifth case study; if not, it stands as the honest boundary
-of what the campaign could do alone.
+them, and the blocker — the unrecovered recurrence coefficients — is
+stated plainly instead of being worked around. It stands as the
+honest boundary of what the campaign could do alone.

@@ -31,7 +31,13 @@ unfinished line); §7 states the limitations, including the ones no
 discipline closes.
 
 The repository — every gate, control, certificate, and audit note —
-is released alongside this paper. The standing doctrine throughout:
+is released alongside this paper
+(`https://github.com/chokmah-me/fragile-proof-audit`).
+This draft corresponds to commit `__ARTIFACT_SHA__`; the submitted
+version will cite its exact commit SHA and an archival snapshot
+(Zenodo/Software Heritage DOI). A paper whose thesis is *don't trust
+prose, trust the re-run* must pin its artifact in the text.
+The standing doctrine throughout:
 gates refute routes, not theorems.
 
 
@@ -235,7 +241,10 @@ neighborhood.
 
 **Worked example.** Tang–Zhang Schatten-norm constant
 (`docs/audits/tang-zhang-schatten.md`; refutation artifact Zeng–Liu–Ratnavelu,
-arXiv:2608.15558, Theorem 1.1). The conjectured best constant
+arXiv:2608.15558, Theorem 1.1). To be explicit about provenance: this BREAK is
+an *independent confirmation* of Zeng–Liu–Ratnavelu's refutation, not a de novo
+discovery — the campaign's gate re-derives the violation from scratch along two
+independent computation paths rather than replaying their argument. The conjectured best constant
 `C^TZ_{p,m} = √(x(x+m−1)) / (x^p + m − 1)^{1/p}` is exceeded by an explicit
 rank-one pair at `p = 3/2`, `m = 2`:
 `R = 1.03641365870489… > 207/200 > C^TZ_{3/2,2} = 1.03465395185143…`.
@@ -565,6 +574,14 @@ the tail lane held 36/36 at both 256 and 512 bits. Every lane is
 fail-closed (§5.4): any mismatch would have failed the lane, and the
 sealed logs are re-verifiable.
 
+The claim's lineage: Polymath15's Theorem 1.2 gave the method and the
+then-best bound Λ ≤ 0.22; Platt–Trudgian (2020) pushed it to 0.2;
+Gomila's 0.1787854 — exactly 129/800 + 87677/5,000,000 — is a claimed
+further improvement instantiating Polymath15's machinery at an exact
+rational parameter row. The audit's question was never whether the
+lineage is respectable; it was whether this instantiation's ~3.15
+million certificates check out. They do.
+
 This case study exists to prove the campaign is not a
 refutation machine. The same instruments, the same controls, the same
 hostile posture — and the verdict is PASS, recorded with the same
@@ -605,10 +622,9 @@ The author has been contacted; the line waits on his reply.
 It belongs in this paper for one reason: it is what "gate before
 prove" (§5.3) looks like as a multi-month project rather than a
 slogan. The numeric gates came first, the formalization builds on
-them, and the blocker is stated plainly instead of being worked
-around. If the coefficients arrive before submission, this note
-becomes a fifth case study; if not, it stands as the honest boundary
-of what the campaign could do alone.
+them, and the blocker — the unrecovered recurrence coefficients — is
+stated plainly instead of being worked around. It stands as the
+honest boundary of what the campaign could do alone.
 
 
 ## 7. Limitations
@@ -846,6 +862,7 @@ instance checking"; `giuga_oracle` is infrastructure, see note).
 | kempe_fritsch | BREAK | B/F |
 | gb_sce | BREAK | A |
 | mah_3 | PASS | A+G |
+| **Total: 25 gates** | **17 BREAK / 8 PASS** | **machine-checked against `EXPECTED_VERDICT` in `scripts/gates/check.py`** |
 
 Prose dispositions (not on the lock): FRK-UC (GAP, G),
 LEG-NS (GAP, G), Erdős–Straus Thm-10 (GAP, G, repairable),

@@ -29,7 +29,10 @@ neighborhood.
 
 **Worked example.** Tang–Zhang Schatten-norm constant
 (`docs/audits/tang-zhang-schatten.md`; refutation artifact Zeng–Liu–Ratnavelu,
-arXiv:2608.15558, Theorem 1.1). The conjectured best constant
+arXiv:2608.15558, Theorem 1.1). To be explicit about provenance: this BREAK is
+an *independent confirmation* of Zeng–Liu–Ratnavelu's refutation, not a de novo
+discovery — the campaign's gate re-derives the violation from scratch along two
+independent computation paths rather than replaying their argument. The conjectured best constant
 `C^TZ_{p,m} = √(x(x+m−1)) / (x^p + m − 1)^{1/p}` is exceeded by an explicit
 rank-one pair at `p = 3/2`, `m = 2`:
 `R = 1.03641365870489… > 207/200 > C^TZ_{3/2,2} = 1.03465395185143…`.
