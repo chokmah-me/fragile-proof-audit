@@ -50,10 +50,10 @@ inference quoted verbatim with its location; (2) the gap re-derived
 independently of the audit note; (3) repairability judged explicitly,
 with the repair exhibited or the obstruction named; (4) the evidence
 pinned (paper version, script paths, replay exit codes). Independence
-in (2) is operational, not honorific: the re-deriver is given the
-paper and the quoted sentence but not the audit note's diagnosis, and
-is a different model or a human — a fresh instance of the same
-pipeline re-deriving the same error is correlation, not confirmation.
+in (2) is operational, not honorific: the re-deriver — a different
+model or a human — receives the paper and the quoted sentence but not
+the audit note's diagnosis. A fresh instance of the same pipeline
+re-deriving the same error is correlation, not confirmation.
 FRK-UC and LEG-NS were re-examined under this standard on 2026-09-23
 and both survived; the Erdős–Straus GAP already met it — and the
 standard caught a real error in its own note, the false "every other

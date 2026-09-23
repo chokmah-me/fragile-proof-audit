@@ -38,12 +38,13 @@ with the failures of the method itself recorded alongside (§5.7).
 
 Third, the labor. The throughput above — 25 gates, four replay lanes,
 a 91-chunk canonization, a two-milestone Lean formalization, and a
-dozen prose audits in five days — AI agents working under human
-direction wrote the gates, ran the computations, drafted the audit
-notes, and assembled this paper; the human set the targets, reviewed
-the verdicts, and owns every disposition. Target curation used the same division of labor:
-the human wrote deep-research prompts and ran them on Kimi 3 and
-Grok 3.1 deep research to assemble the candidate harvest list, then
+dozen prose audits in five days — was produced by AI agents working
+under human direction: they wrote the gates, ran the computations,
+drafted the audit notes, and assembled this paper; the human set the
+targets, reviewed the verdicts, and owns every disposition. Target
+curation used the same division of labor: the human wrote
+deep-research prompts and ran them on the Kimi 3 and Grok 3.1
+deep-research tools to assemble the candidate harvest list, then
 shortlisted it by hand. Nothing else predates the repository's
 2026-09-18 root commit. This is stated plainly because it is load-bearing,
 not confessional. An agent pipeline fails in characteristic ways (§5.6–§5.7), and
@@ -56,14 +57,15 @@ drift; every failure of the method is published beside its successes.
 Trust the replay, not the résumé — including ours.
 
 That review was a full re-execution, not a skim. The author directed
-a clean re-run of the twenty-five-gate verdict lock — 25/25 `[ok]`,
-zero drift — then read every gate's source code and every audit note
-and prose disposition, checking each verdict against the evidence
-rather than the pin. The re-run caught two missing Python dependencies
-in the review environment (`pypdf`, `networkx`); three gates aborted
-fail-closed on their PDF-identity controls until the dependencies were
-installed, then went green. No verdict discrepancies were found in
-approximately two hours of review. The
+a clean re-run of the twenty-five-gate verdict lock (executed by an AI
+agent at the author's direction) — 25/25 `[ok]`, zero drift — then
+read every gate's source code, every audit note, and every prose
+disposition, checking each verdict against the underlying evidence
+rather than the recorded pin. The re-run caught two missing Python
+dependencies in the review environment (`pypdf`, `networkx`); three
+gates aborted fail-closed on their PDF-identity controls until the
+dependencies were installed, then went green. Approximately two hours
+of review found no verdict discrepancies. The
 re-run log is pinned in the repository.
 
 The rest of the paper is the playbook. §3 defines the disposition

@@ -9,12 +9,13 @@ a reader who disagrees with every verdict in the audit catalog should
 still be able to run every gate, check every control, and re-derive
 every disposition from the pinned artifacts.
 
-What the campaign found, in brief: most fragile-looking routes are
-fragile. Eight of the twelve live-literature gates refuted their
-target; three more routes fell to prose audit where no gate could
-reach; four live targets survived everything thrown at them, recorded
-as PASS with the same weight as a BREAK — as are Su's low-stakes
-2D-Jacobian route and the off-lock Gomila confirmation. The method's own failures — abstract
+What the campaign found, in brief: eight of the twelve
+live-literature gates refuted their target; three more routes fell to
+prose audits that no gate could reach; four live targets survived
+everything thrown at them, recorded as PASS with the same weight as a
+BREAK. Su's low-stakes 2D-Jacobian route also survived its gate, and
+the off-lock Gomila confirmation was recorded under the same
+disciplines. The method's own failures — abstract
 fetches gated as papers, ghost corpus entries, a corrected verdict,
 harness bugs caught by controls — are part of the record, because a
 methodology that hides its failures cannot be trusted about its

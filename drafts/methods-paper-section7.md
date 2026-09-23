@@ -65,8 +65,8 @@ not a claim of this paper.
 ## 7.6 No pre-publication author notification
 
 The campaign does not notify authors before publishing a verdict,
-and has no plan to adopt notification as a regular policy. The reason
-is throughput, not hostility: at twenty-five gates in five days,
+and does not intend to adopt notification as a regular policy. The
+reason is throughput, not hostility: at twenty-five gates in five days,
 individualized pre-publication correspondence is infeasible, and a
 notification rule honored selectively would be worse than none. The
 substitute is the public record itself. Every BREAK names the lemma,

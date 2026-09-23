@@ -39,9 +39,8 @@ This draft corresponds to commit `f441d14`; the submitted
 version will cite its exact commit SHA and an archival snapshot
 (Zenodo/Software Heritage DOI). A paper whose thesis is *don't trust
 prose, trust the replay* must pin its artifact in the text.
-The standing doctrine throughout:
-gates refute routes, not theorems. Trust the replay, not the résumé —
-including ours.
+The standing doctrine throughout is that gates refute routes, not
+theorems. Trust the replay, not the résumé — including ours.
 
 ## 2. Introduction: the verification gap
 
@@ -83,12 +82,13 @@ with the failures of the method itself recorded alongside (§5.7).
 
 Third, the labor. The throughput above — 25 gates, four replay lanes,
 a 91-chunk canonization, a two-milestone Lean formalization, and a
-dozen prose audits in five days — AI agents working under human
-direction wrote the gates, ran the computations, drafted the audit
-notes, and assembled this paper; the human set the targets, reviewed
-the verdicts, and owns every disposition. Target curation used the same division of labor:
-the human wrote deep-research prompts and ran them on Kimi 3 and
-Grok 3.1 deep research to assemble the candidate harvest list, then
+dozen prose audits in five days — was produced by AI agents working
+under human direction: they wrote the gates, ran the computations,
+drafted the audit notes, and assembled this paper; the human set the
+targets, reviewed the verdicts, and owns every disposition. Target
+curation used the same division of labor: the human wrote
+deep-research prompts and ran them on the Kimi 3 and Grok 3.1
+deep-research tools to assemble the candidate harvest list, then
 shortlisted it by hand. Nothing else predates the repository's
 2026-09-18 root commit. This is stated plainly because it is load-bearing,
 not confessional. An agent pipeline fails in characteristic ways (§5.6–§5.7), and
@@ -101,14 +101,15 @@ drift; every failure of the method is published beside its successes.
 Trust the replay, not the résumé — including ours.
 
 That review was a full re-execution, not a skim. The author directed
-a clean re-run of the twenty-five-gate verdict lock — 25/25 `[ok]`,
-zero drift — then read every gate's source code and every audit note
-and prose disposition, checking each verdict against the evidence
-rather than the pin. The re-run caught two missing Python dependencies
-in the review environment (`pypdf`, `networkx`); three gates aborted
-fail-closed on their PDF-identity controls until the dependencies were
-installed, then went green. No verdict discrepancies were found in
-approximately two hours of review. The
+a clean re-run of the twenty-five-gate verdict lock (executed by an AI
+agent at the author's direction) — 25/25 `[ok]`, zero drift — then
+read every gate's source code, every audit note, and every prose
+disposition, checking each verdict against the underlying evidence
+rather than the recorded pin. The re-run caught two missing Python
+dependencies in the review environment (`pypdf`, `networkx`); three
+gates aborted fail-closed on their PDF-identity controls until the
+dependencies were installed, then went green. Approximately two hours
+of review found no verdict discrepancies. The
 re-run log is pinned in the repository.
 
 The rest of the paper is the playbook. §3 defines the disposition
@@ -168,10 +169,10 @@ inference quoted verbatim with its location; (2) the gap re-derived
 independently of the audit note; (3) repairability judged explicitly,
 with the repair exhibited or the obstruction named; (4) the evidence
 pinned (paper version, script paths, replay exit codes). Independence
-in (2) is operational, not honorific: the re-deriver is given the
-paper and the quoted sentence but not the audit note's diagnosis, and
-is a different model or a human — a fresh instance of the same
-pipeline re-deriving the same error is correlation, not confirmation.
+in (2) is operational, not honorific: the re-deriver — a different
+model or a human — receives the paper and the quoted sentence but not
+the audit note's diagnosis. A fresh instance of the same pipeline
+re-deriving the same error is correlation, not confirmation.
 FRK-UC and LEG-NS were re-examined under this standard on 2026-09-23
 and both survived; the Erdős–Straus GAP already met it — and the
 standard caught a real error in its own note, the false "every other
@@ -566,7 +567,11 @@ checkpoints).
 - **Fabricated or garbled identifiers.** A "Reed/Zenodo γ" and a
   "Sun/Zenodo Catalan" entry turned out to reference nothing
   retrievable. Identifiers are now resolved to a fetchable artifact
-  before a target is accepted.
+  before a target is accepted. The rejected "Sun/Zenodo Catalan" entry
+  is not the Sun preprint the catalog later gated: the live type-E
+  BREAK target is Sun's arXiv:2609.04176v1, fetched from arXiv and
+  pinned by SHA-256 — a different artifact from the unresolvable
+  Zenodo handle.
 - **The odd-zeta verdict correction (2026-09-20).** An early "Λ_m
   unevaluable" verdict was superseded by the Lemma 5.1 BREAK; both
   remain visible, the prior marked superseded, not deleted.
@@ -733,8 +738,8 @@ not a claim of this paper.
 ## 7.6 No pre-publication author notification
 
 The campaign does not notify authors before publishing a verdict,
-and has no plan to adopt notification as a regular policy. The reason
-is throughput, not hostility: at twenty-five gates in five days,
+and does not intend to adopt notification as a regular policy. The
+reason is throughput, not hostility: at twenty-five gates in five days,
 individualized pre-publication correspondence is infeasible, and a
 notification rule honored selectively would be worse than none. The
 substitute is the public record itself. Every BREAK names the lemma,
@@ -859,12 +864,13 @@ a reader who disagrees with every verdict in the audit catalog should
 still be able to run every gate, check every control, and re-derive
 every disposition from the pinned artifacts.
 
-What the campaign found, in brief: most fragile-looking routes are
-fragile. Eight of the twelve live-literature gates refuted their
-target; three more routes fell to prose audit where no gate could
-reach; four live targets survived everything thrown at them, recorded
-as PASS with the same weight as a BREAK — as are Su's low-stakes
-2D-Jacobian route and the off-lock Gomila confirmation. The method's own failures — abstract
+What the campaign found, in brief: eight of the twelve
+live-literature gates refuted their target; three more routes fell to
+prose audits that no gate could reach; four live targets survived
+everything thrown at them, recorded as PASS with the same weight as a
+BREAK. Su's low-stakes 2D-Jacobian route also survived its gate, and
+the off-lock Gomila confirmation was recorded under the same
+disciplines. The method's own failures — abstract
 fetches gated as papers, ghost corpus entries, a corrected verdict,
 harness bugs caught by controls — are part of the record, because a
 methodology that hides its failures cannot be trusted about its

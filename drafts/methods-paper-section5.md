@@ -120,7 +120,11 @@ checkpoints).
 - **Fabricated or garbled identifiers.** A "Reed/Zenodo γ" and a
   "Sun/Zenodo Catalan" entry turned out to reference nothing
   retrievable. Identifiers are now resolved to a fetchable artifact
-  before a target is accepted.
+  before a target is accepted. The rejected "Sun/Zenodo Catalan" entry
+  is not the Sun preprint the catalog later gated: the live type-E
+  BREAK target is Sun's arXiv:2609.04176v1, fetched from arXiv and
+  pinned by SHA-256 — a different artifact from the unresolvable
+  Zenodo handle.
 - **The odd-zeta verdict correction (2026-09-20).** An early "Λ_m
   unevaluable" verdict was superseded by the Lemma 5.1 BREAK; both
   remain visible, the prior marked superseded, not deleted.
