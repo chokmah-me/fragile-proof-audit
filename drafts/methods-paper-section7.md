@@ -61,4 +61,7 @@ Stated in §2 and repeated here because it belongs with the other
 limitations: the targets were harvested for fragility, not sampled,
 and the campaign window is weeks. Nothing in this paper estimates the
 base rate of defective proofs. The method is reproducible; the
-results are not a survey.
+results are not a survey. The q-TSPP certificate-rot episode (§2,
+§6.4) is reported as a single instance; whether disappearing
+certificate archives are typical is a question for a larger sample,
+not a claim of this paper.

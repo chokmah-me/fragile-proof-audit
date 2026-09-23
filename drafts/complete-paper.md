@@ -81,6 +81,26 @@ of defective proofs in the literature. It claims only that *these*
 routes were tested, *this* is how, and *these* are the dispositions —
 with the failures of the method itself recorded alongside (§5.7).
 
+Third, the labor. The throughput above — 25 gates, four replay lanes,
+a 91-chunk canonization, a two-milestone Lean formalization, and a
+dozen prose audits in five days — was not produced by hand. It was
+produced by AI agents working under human direction: agents wrote the
+gates, ran the computations, drafted the audit notes, and assembled
+this paper; the human set the targets, reviewed the verdicts, and owns
+every disposition. This is stated plainly because it is load-bearing,
+not confessional. An agent pipeline fails in characteristic ways — it
+gates from an abstract instead of the paper (four times before the
+rule was retrofitted, §5.7), it writes dossier rows about claims with
+nothing behind them (ghost corpus entries), it fabricates identifiers
+("Reed/Zenodo γ"), it lets a background job die silently and reports
+nothing (§5.6) — and §5's disciplines are, in large part, the scar
+tissue from those failures. The verification-of-verification question,
+*who audited the auditors*, is answered the same way this paper
+answers everything else: by the artifact. Every gate is a script a
+reader can run; every verdict is pinned in a lock that fails loudly on
+drift; every failure of the method is published beside its successes.
+Trust the re-run, not the résumé — including ours.
+
 The rest of the paper is the playbook. §3 defines the disposition
 taxonomy — the five verdicts and the rules that keep them from
 drifting. §4 classifies the attacks by mechanism, with one worked
@@ -140,6 +160,23 @@ written fails" and "the route cannot be repaired" are different claims.
 
 GAPs are not on the verdict lock: there is no gate to pin, only the
 audit note and its verbatim quotations.
+
+**The GAP evidentiary standard.** A GAP is a prose verdict with no
+executable gate and no kernel, so it carries a fixed standard,
+adopted 2026-09-23: (1) the exact failing sentence, equation, or
+inference is quoted verbatim with its location; (2) the gap is
+re-derived independently of the audit note — a second reading that
+does not defer to the first; (3) repairability is judged explicitly
+(repairable, patchable, or fatal to the route), with the repair
+exhibited or the obstruction named; (4) the evidence is pinned
+(paper version, script paths, re-run exit codes). FRK-UC and LEG-NS
+were re-examined under this standard on 2026-09-23; both GAPs
+survived, and the re-examination is recorded in the audit notes.
+The Erdős–Straus interval GAP already met the standard — and the
+standard caught a real error in its own note: the claim that "every
+other even k fails" was false (n=18, f=2 works with the paper's
+parameters), and was narrowed to the checked cases. A standard that
+catches errors in our own notes is doing its job.
 
 ## PASS — the gate's claim is independently confirmed
 
@@ -208,6 +245,47 @@ verdict was superseded by the Lemma 5.1 BREAK on 2026-09-20; both
 remain visible, with the correction dated. Summary tables show the
 current verdict with a "superseded" note. A taxonomy that rewrites its
 past cannot be trusted about its present.
+
+## What the catalog represents: stratification by community standing
+
+The lock's 25 gates are not 25 draws from "published mathematics."
+They were selected for fragility (§2), and they fall into three strata
+with very different evidentiary weight. Pooled, they invite exactly
+the base-rate misreading this paper disclaims; stratified, each says
+what it says and no more:
+
+- **Historical calibration (4 gates: 2 BREAK / 2 PASS).**
+  Kempe–Fritsch, Tait–Tutte, and Lamé's 1847 cyclotomic route (two
+  gates). Famous, long-settled failures replayed to validate the
+  instruments, not to discover. A BREAK here confirms the gate can hit
+  a known target; it says nothing about the literature.
+- **Live literature (12 gates: 8 BREAK / 4 PASS).** Claims from the
+  active research literature: the Tang–Zhang conjecture,
+  Chung–Graham–Spiro (2020), Baste et al. (2019/2020), Sárközy's
+  Conjecture 65, Thakur (2015), Salez–Youssef's Conjecture 1, Cohen's
+  Conjecture 66, Sun (arXiv:2609.04176), the Chen–Li–Xi–Xu 3D-Mahler
+  claim, Lopez's Erdős–Straus system, Du–Yao, Lau–Ono and
+  Huang–Lau–Ono–Paule. Each BREAK has a gated, controlled witness;
+  several confirm independent prior refutations. This stratum is where
+  a BREAK is evidence about published mathematics — and where the four
+  PASSes show the instruments confirm as well as refute.
+- **Low-stakes preprints (8 gates: 7 BREAK / 1 PASS).** Withdrawn,
+  crank-adjacent, or never-trusted claims: Suman's ζ(5) (withdrawn),
+  the Preprints.org odd-zeta manuscript, the Goldbach semi-continuous
+  model, Agama's twin-prime area method, two Gnang preprints,
+  Ghermoul's Erdős–Straus equation, and Su's 43-version 2D-Jacobian
+  claim (PASS — the route survived the G-type check). BREAKs here are
+  training kills: they exercise the machinery on targets nobody relied
+  on.
+
+(`giuga_oracle`, a standing PASS, is infrastructure — the
+known-Giuga-number oracle other gates consult — not a claim audit.)
+
+The honest reading: the campaign's weight as evidence about the
+literature rests on the middle stratum — eight BREAKs against live
+claims, four PASSes. The low-stakes stratum proves the machinery runs;
+the historical stratum proves it aims true. Neither is presented as
+more than that.
 
 
 ## 4. The attack types (A–G)
@@ -690,48 +768,113 @@ Stated in §2 and repeated here because it belongs with the other
 limitations: the targets were harvested for fragility, not sampled,
 and the campaign window is weeks. Nothing in this paper estimates the
 base rate of defective proofs. The method is reproducible; the
-results are not a survey.
+results are not a survey. The q-TSPP certificate-rot episode (§2,
+§6.4) is reported as a single instance; whether disappearing
+certificate archives are typical is a question for a larger sample,
+not a claim of this paper.
 
 
 ## 8. Related work
 
 This paper's contribution is a playbook and its audit log, not a new
-formalism. It stands in three existing currents, and differs from
-each in one specific way.
+formalism. The pieces it assembles exist in several literatures; what
+follows is where each piece comes from and what this paper does
+differently.
 
-**Proof assistants and formalization.** Large-scale formalization
-projects have shown that deep mathematics can be checked by kernel —
-the trend this campaign depends on for its "gate before prove"
-discipline (§5.3). The difference is direction: formalization
-typically starts from a proof believed correct and renders it
-checkable. This campaign starts from a proof under suspicion and
-tries to break it. The two meet at the boundary the q-TSPP line
-currently occupies: formalization of a route whose correctness is
-still being established.
+**The computational bound as a genre: Polymath15.** The closest
+existing precedent for the *target* of a replay audit is D. H. J.
+Polymath's de Bruijn–Newman project (arXiv:1904.12438; Res. Math.
+Sci. 6 (2019)): a published, computer-assisted bound (Λ ≤ 0.22)
+whose decisive content is a computation — effective analytic
+estimates plus numerics — and whose verification story is "the
+estimates are proved, the numerics were run by the authors." Its
+Table 1 is the archetypal replay-audit artifact: a conversion table
+from "RH verified to height H" into a Λ upper bound, i.e., a
+published claim whose truth depends on someone else's computation.
+The difference is posture: Polymath15 *produced* the computation; a
+replay audit re-executes someone else's under a hostile prior.
+Platt and Trudgian (arXiv:2004.09765) then demonstrated, in the
+wild, that computational claims compose: their verified RH height
+(3,000,175,332,800) turns Polymath15's table into Λ ≤ 0.2 — the bound
+is only as strong as someone else's re-run of the underlying
+computation. They also model the honest-boundary behavior §7
+advocates: the next table entry would give Λ < 0.19, which their
+height does not reach — "We have not pursued this." The Gomila case
+study (§6.2) sits directly in this lineage.
 
-**The scientific replication movement.** Empirical science learned —
+**Verification institutions: mathlib review.** The strongest existing
+institution for the thing this paper says is missing is Lean's
+mathlib — except that it verifies a different object. Mathlib's PR
+review is post-kernel human review: the kernel guarantees logical
+correctness, and human reviewers check fitness (naming, generality,
+placement, faithfulness to the intended statement). A replay audit is
+the mirror image: for computational claims in ordinary published
+prose there is no kernel, so the audit must supply *both* the
+correctness check (re-running the computation) and the fitness check
+(is this the claim the paper actually makes?). Citing mathlib lets
+this paper say precisely what it is not proposing — another formal
+library with a review queue — and what gap remains: the computational
+half of published proofs has no kernel and no review queue.
+
+**Proof repair: the mechanized cousin of GAP.** Ringer et al.
+("Proof Repair across Type Equivalences," PLDI 2021) study what
+happens *after* a formal proof breaks: tools that repair proof terms
+across type changes, with the kernel re-checking the repaired
+artifact. That literature shows exactly what "repairable" means when
+verification is mechanized — and throws the informal case into
+relief. This paper's GAPs are prose verdicts about informal arguments
+with no kernel to confirm a repair, which is why the GAP
+dispositions carry their own evidentiary standard (verbatim
+quotation, independent re-reading, explicit repairability judgment)
+rather than inheriting one from a type checker.
+
+**Post-publication scrutiny that does not dispose.** PubPeer-style
+commenting finds problems at scale: Ortega and Delgado-Quirós (EPI,
+2023) report that of 17,244 PubPeer-commented articles, only 21.5%
+of those deserving an editorial notice were ever corrected by the
+journal. Scrutiny detects; it does not *dispose* — findings sit in
+comment threads without verdicts. The disposition taxonomy (§3) is
+the move from "someone commented" to "a gate fired and the lock
+recorded it," with PASS carrying the same weight as BREAK so the
+system cannot become a pure refutation machine.
+
+**The hostile-witness analogue in security.** Institutionalized
+adversarial scrutiny exists — in industry practice, not in a theory
+paper. Competitive audit contests (Code4rena, Sherlock) run many
+hostile strangers over a code snapshot with multi-stage judging,
+deduplication, and fix review; professional cryptographic reviews
+(e.g., NCC Group's) inspect source against a pinned commit and
+publish findings with severity and exploitability. The judging and
+fix-review stages are the analogue of this paper's controls and
+verdict-lock discipline, and the pinned-commit report header is the
+model for the artifact pinning §1 demands of itself. The difference:
+security audits judge code against a threat model, while replay
+audits judge a proof against its own claims — and a BREAK must name
+the lemma and exhibit the false instance, not merely assign a
+severity.
+
+**The replication movement.** Empirical science learned —
 expensively — that published results often do not survive
 re-execution, and built preregistration, replication studies, and
 adversarial collaboration in response. Mathematics has largely
-exempted itself from that reckoning on the grounds that proofs are
-self-verifying. They are, where the proof *is* the reasoning. The
-verification gap (§2) is the observation that, increasingly, part of
-the proof is a computation — and computations are empirical claims
-about what a machine did. This paper ports the replication movement's
-core insight (trust the re-run, not the report) to the part of
-mathematics that is actually software.
+exempted itself on the grounds that proofs are self-verifying. They
+are, where the proof *is* the reasoning. The verification gap (§2) is
+the observation that, increasingly, part of the proof is a
+computation — and computations are empirical claims about what a
+machine did. This paper ports the replication movement's core
+insight (trust the re-run, not the report) to the part of mathematics
+that is actually software.
 
-**Prior proof-audit and verification projects.** Independent
-verification of claimed results has a long history — from Heawood's
-map against Kempe (§6.1) to modern computer-assisted proof checking
-(Flyspeck, the four-color formalizations). What this campaign adds is
-the *routine* form: small, fast, disposable gates aimed at the single
-load-bearing step, run before anyone decides the claim deserves deep
-attention. The audit catalog is the evidence that the routine form
-catches real defects at low cost — most gates here ran in seconds to
-hours, not months.
+**Machine-checked proofs and the verification filter.** Tao (Simons
+Foundation "Machine-Assisted Proof" lecture, Feb. 2025) has argued
+the point that bounds this paper's claims: verifiability is the
+filter that makes powerful but unreliable tools safe to use, and
+tools whose outputs cannot be independently verified should not be
+trusted. A PASS from a replay audit is that filter applied to
+someone else's computation; it is not an endorsement of the claim's
+importance, just as a BREAK is not a contribution to the field.
 
-What none of the three currents supply, to our knowledge, is the
+What none of these currents supply, to our knowledge, is the
 combination this paper documents: a fixed disposition taxonomy with a
 CI-enforced verdict lock (§3), a mechanism-classified attack
 repertoire (§4), and a published log of the method's own failures

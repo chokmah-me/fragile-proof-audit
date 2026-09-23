@@ -38,6 +38,26 @@ of defective proofs in the literature. It claims only that *these*
 routes were tested, *this* is how, and *these* are the dispositions —
 with the failures of the method itself recorded alongside (§5.7).
 
+Third, the labor. The throughput above — 25 gates, four replay lanes,
+a 91-chunk canonization, a two-milestone Lean formalization, and a
+dozen prose audits in five days — was not produced by hand. It was
+produced by AI agents working under human direction: agents wrote the
+gates, ran the computations, drafted the audit notes, and assembled
+this paper; the human set the targets, reviewed the verdicts, and owns
+every disposition. This is stated plainly because it is load-bearing,
+not confessional. An agent pipeline fails in characteristic ways — it
+gates from an abstract instead of the paper (four times before the
+rule was retrofitted, §5.7), it writes dossier rows about claims with
+nothing behind them (ghost corpus entries), it fabricates identifiers
+("Reed/Zenodo γ"), it lets a background job die silently and reports
+nothing (§5.6) — and §5's disciplines are, in large part, the scar
+tissue from those failures. The verification-of-verification question,
+*who audited the auditors*, is answered the same way this paper
+answers everything else: by the artifact. Every gate is a script a
+reader can run; every verdict is pinned in a lock that fails loudly on
+drift; every failure of the method is published beside its successes.
+Trust the re-run, not the résumé — including ours.
+
 The rest of the paper is the playbook. §3 defines the disposition
 taxonomy — the five verdicts and the rules that keep them from
 drifting. §4 classifies the attacks by mechanism, with one worked

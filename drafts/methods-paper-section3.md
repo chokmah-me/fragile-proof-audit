@@ -49,6 +49,23 @@ written fails" and "the route cannot be repaired" are different claims.
 GAPs are not on the verdict lock: there is no gate to pin, only the
 audit note and its verbatim quotations.
 
+**The GAP evidentiary standard.** A GAP is a prose verdict with no
+executable gate and no kernel, so it carries a fixed standard,
+adopted 2026-09-23: (1) the exact failing sentence, equation, or
+inference is quoted verbatim with its location; (2) the gap is
+re-derived independently of the audit note — a second reading that
+does not defer to the first; (3) repairability is judged explicitly
+(repairable, patchable, or fatal to the route), with the repair
+exhibited or the obstruction named; (4) the evidence is pinned
+(paper version, script paths, re-run exit codes). FRK-UC and LEG-NS
+were re-examined under this standard on 2026-09-23; both GAPs
+survived, and the re-examination is recorded in the audit notes.
+The Erdős–Straus interval GAP already met the standard — and the
+standard caught a real error in its own note: the claim that "every
+other even k fails" was false (n=18, f=2 works with the paper's
+parameters), and was narrowed to the checked cases. A standard that
+catches errors in our own notes is doing its job.
+
 ## PASS — the gate's claim is independently confirmed
 
 A PASS means the instrument confirmed what it was built to test — and
@@ -116,3 +133,44 @@ verdict was superseded by the Lemma 5.1 BREAK on 2026-09-20; both
 remain visible, with the correction dated. Summary tables show the
 current verdict with a "superseded" note. A taxonomy that rewrites its
 past cannot be trusted about its present.
+
+## What the catalog represents: stratification by community standing
+
+The lock's 25 gates are not 25 draws from "published mathematics."
+They were selected for fragility (§2), and they fall into three strata
+with very different evidentiary weight. Pooled, they invite exactly
+the base-rate misreading this paper disclaims; stratified, each says
+what it says and no more:
+
+- **Historical calibration (4 gates: 2 BREAK / 2 PASS).**
+  Kempe–Fritsch, Tait–Tutte, and Lamé's 1847 cyclotomic route (two
+  gates). Famous, long-settled failures replayed to validate the
+  instruments, not to discover. A BREAK here confirms the gate can hit
+  a known target; it says nothing about the literature.
+- **Live literature (12 gates: 8 BREAK / 4 PASS).** Claims from the
+  active research literature: the Tang–Zhang conjecture,
+  Chung–Graham–Spiro (2020), Baste et al. (2019/2020), Sárközy's
+  Conjecture 65, Thakur (2015), Salez–Youssef's Conjecture 1, Cohen's
+  Conjecture 66, Sun (arXiv:2609.04176), the Chen–Li–Xi–Xu 3D-Mahler
+  claim, Lopez's Erdős–Straus system, Du–Yao, Lau–Ono and
+  Huang–Lau–Ono–Paule. Each BREAK has a gated, controlled witness;
+  several confirm independent prior refutations. This stratum is where
+  a BREAK is evidence about published mathematics — and where the four
+  PASSes show the instruments confirm as well as refute.
+- **Low-stakes preprints (8 gates: 7 BREAK / 1 PASS).** Withdrawn,
+  crank-adjacent, or never-trusted claims: Suman's ζ(5) (withdrawn),
+  the Preprints.org odd-zeta manuscript, the Goldbach semi-continuous
+  model, Agama's twin-prime area method, two Gnang preprints,
+  Ghermoul's Erdős–Straus equation, and Su's 43-version 2D-Jacobian
+  claim (PASS — the route survived the G-type check). BREAKs here are
+  training kills: they exercise the machinery on targets nobody relied
+  on.
+
+(`giuga_oracle`, a standing PASS, is infrastructure — the
+known-Giuga-number oracle other gates consult — not a claim audit.)
+
+The honest reading: the campaign's weight as evidence about the
+literature rests on the middle stratum — eight BREAKs against live
+claims, four PASSes. The low-stakes stratum proves the machinery runs;
+the historical stratum proves it aims true. Neither is presented as
+more than that.

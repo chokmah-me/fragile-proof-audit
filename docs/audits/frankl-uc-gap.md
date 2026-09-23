@@ -98,3 +98,18 @@ is unaffected by this finding. The 23/23 verdict lock is untouched.
 3. `python3 scripts/analysis/frankl_uc_thm5_probe.py` — expect 0
    violations (this is the control, confirming the finding is scoped to
    the inference, not the statement).
+
+## Re-examination under the GAP evidentiary standard (2026-09-23)
+
+Independent second reading (verbatim against arXiv HTML 2405.03731v1):
+GAP confirmed real. Two defects — (a) Theorem 4's quantifier confusion
+(delivers ∃i[(∃Y Q)→C] at best; Theorem 5 uses ∃i[Q∧C] for a specific
+Y₀, an unlicensed upgrade) and (b) a type error against the paper's own
+Definition 9 (quasiminimality requires Y ⊂ F; the invocation's
+{X_t,X_{t+1}} ⊂ D) — plus an unjustified "2|D^j|=2|D^i|" step and a
+failed Case-1 induction in Theorem 4's proof. **Repairability: fatal to
+the route as written** — no patch within the paper's machinery works;
+a uniform strengthening of Theorem 4 would be ≈ as hard as Theorem 5
+itself. Frankl's conjecture untouched (statement holds on all checked
+families). Existing note assessed accurate; no material overstatement.
+Full memo: `drafts/gap-rework-memo.md`.

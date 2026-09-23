@@ -93,10 +93,13 @@ construction (same exact-`Fraction` identity check as the gate):
 | 6 | [717, 719] | **718** | none — salvaged via `d=1,u=1,v=719` |
 | 8 | [40316, 40319] | **40318** | none — salvaged via `d=1,u=1,v=23` |
 
-The failure is structural, not a one-off: the exhibited `(u,v) = (n, n−1)`
-satisfies `4d−1 | u+v` only at the single endpoint `d = n/2`
-(`2n−1 | 2n−1`); every other even `k` in the interval fails with those
-parameters. But the conclusion is always repairable within the same
+The failure is structural, not a one-off: the paper's argument gives no
+reason for the exhibited `(u,v) = (n, n−1)` to satisfy `4d−1 | u+v` at any
+`d < n/2` — the "Equaling" step pins `d = n/2`, a single endpoint, and the
+jump to all smaller `d` is unjustified. Whether the parameters happen to
+work elsewhere is luck, not proof (e.g. n=18, f=2 works since 7 | 35).
+Corrected 2026-09-23 under the GAP evidentiary standard; the gap itself
+is unaffected. But the conclusion is always repairable within the same
 construction family — e.g. the uniform choice `d=1, u=1`, `v | k+1` with
 `v ≡ 2 (mod 3)` (then `4d−1 = 3 | 1+v`), which exists for the failing cases
 above (`719 | 719`, `23 | 40319`).
@@ -126,9 +129,10 @@ Conjecture 1 or the Erdős–Straus conjecture.
 - **Theorem 10 "automatic" step: PASS** — correct as stated, 12,500/12,500.
 - **Theorem 10 interval argument: GAP, fully characterized and repairable**
   (`scripts/analysis/erdos_straus_salvage.py`) — the paper's exhibited
-  `(u,v) = (n, n−1)` satisfies `4d−1 | u+v` only at the single endpoint
-  `d = n/2`; every other even `k` in `[n!−n/2, n!−1]` fails with those
-  parameters (n=6: k=718; n=8: k=40318). Exhaustive search over the paper's
+  `(u,v) = (n, n−1)` is justified by the text only at the single endpoint
+  `d = n/2`; the endpoint→interval jump is unproved (checked failures:
+  n=6: k=718; n=8: k=40318; isolated coincidences such as n=18, f=2 do not
+  constitute proof). Exhaustive search over the paper's
   `d`-range shows every such `k` is salvageable within the same construction
   family (e.g. uniform `d=1, u=1`, `v | k+1`, `v ≡ 2 mod 3`). Conclusion
   stands; proof as written does not establish it. Logical gap (route, not

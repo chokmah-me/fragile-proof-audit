@@ -119,3 +119,23 @@ verdict lock is untouched.
 3. `python3 scripts/analysis/leg_ns_contour_probe.py` — exhibits the
    decay/marginal/blowup trichotomy along C (needs mpmath).
 4. Verify Defect B by hand: 3 − e^{−s}/s − 1/s vs (e^{−s}−1)/s at s=1.
+
+## Re-examination under the GAP evidentiary standard (2026-09-23)
+
+Independent second reading (verbatim against pinned PDF
+`incoming/leg-ns-2307.08725v4.pdf`): GAP confirmed real. Defect A
+(decisive): differentiation under the integral sign gives holomorphicity
+only on the interior {ℜ(s)>0}, not the claimed open neighborhood of the
+closed half-plane — along the contour, |s^{−z}Γ(z)| decays for ℜ(s)>0,
+exactly balances at ℜ(s)=0 (the paper's own concession), and grows for
+ℜ(s)<0, so the integral cannot deliver the extension Newman's theorem
+needs (contour probe re-ran, exit 0: 5.6e−13 / 4.7e−06 / 3.96e+01 at
+t=160 for s=0.1+i, i, −0.1+i). Defect B (independently damaging): the
+printed algebra τ(s)−1/s = (e^{−s}−1)/s − X is false (at s=1: 2−1/e vs
+1/e−1); corrected, the paper's own formula gives a pole of residue −2
+at the origin, contradicting the proposition's conclusion — not a
+harmless typo. **Repairability: not patch-repairable** — Defect A needs
+genuinely new analytic input; Defect B's correction destroys the
+conclusion on the paper's own formula. Legendre's (and Sierpiński's,
+Andrica's, Brocard's, Oppermann's) conjectures untouched. Existing note
+assessed accurate; scoping fair. Full memo: `drafts/gap-rework-memo.md`.
