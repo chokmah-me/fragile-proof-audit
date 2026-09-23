@@ -1,0 +1,14 @@
+{
+  "chunk": 8,
+  "lo": 80000002,
+  "hi": 90000001,
+  "count": 10000000,
+  "L_before": -7131,
+  "sum_lambda": 4954,
+  "max_prefix": 5044,
+  "argmax_prefix": 89988675,
+  "first_cross": 0,
+  "L_at_first_cross": null,
+  "max_prefix_before_first": null,
+  "L_convention": "L(n)=sum_{k=1}^{n} lambda(k); L(1)=+1; sieve covers n>=2"
+}

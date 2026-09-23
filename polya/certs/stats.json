@@ -1,0 +1,12 @@
+{
+  "N": 906150257,
+  "L_N": 1,
+  "first_cross": 906150257,
+  "max_L": 1,
+  "argmax_L": 1,
+  "n_chunks": 91,
+  "chunk_size": 10000000,
+  "domain": "n>=2; L(1)=+1; L(n)=sum_{k=1}^{n} lambda(k)",
+  "generator": "polya/src/liouville_sieve.c",
+  "compiler": "13.3.0"
+}
