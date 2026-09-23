@@ -187,3 +187,41 @@ EXIT 0, 8,656/8,656 jobs, zero errors, no `sorry`/`admit`/`native_decide`
 (log `~/workspace/qtspp-m2-build.log`). Milestone 2 closed as
 "parametric proof of (3.2) modulo coefficient recovery"; the numeric
 coefficient recovery stays open as milestone-3-blocker work.
+
+## 8. Milestone 3 — coefficient recovery attempt (2026-09-23)
+
+**Target:** explicit polynomials `p_0..p_7`, `q_0..q_6` for the
+`DiagonalCertificate` (q=1 diagonal recurrence, order 7, right factor
+`(S_n−1)`).
+
+**Avenue 1 — q-case diagonal recurrence via q→1 limit: BLOCKED.**
+The recovered `qTSPP.nb` notebook (Wayback 2026-05-13, 677 KB) documents the
+q-case diagonal computation: `recDiag` (order 7, ByteCount 13,451,904 ≈
+13 MB) found by `FindRelation` on the annihilating ideal ("requires 3 GB
+of memory"), then `OrePolynomialSubstitute` j↦n, confirmed as a multiple of
+the constant-1 annihilator via `OreReduce`. **But the 13 MB `recDiag`
+output is NOT in the notebook** (output cells contain only timings) **and
+not in any `.m` file** (`ann-qTSPP-deg.m` holds only the 5-ideal generators;
+`ansatz*/denom*/solution*` are the CT certificates for (2)/(3)). Re-running
+`FindRelation` needs the HolonomicFunctions Mathematica package (unavailable)
+or a from-scratch Ore-relation finder (multi-week). The naive q→1 limit of
+the q-case operator would give constant (not polynomial) coefficients anyway;
+the (q−1)-adic leading-term extraction is unexplored.
+
+**Avenue 2 — author contact: DRAFTED, awaiting user approval.**
+Draft email to Christoph Koutschan requesting the q=1 diagonal recurrence
+coefficients (and ideally the q=1 ∂-finite description / Gröbner basis).
+The q=1 operator was computed in "a couple of minutes" per the paper §5.3,
+so re-running it is trivial for the author — this is the highest-probability
+path to the TRUE coefficients.
+
+**Avenue 3 — full re-derivation (guessing + DFiniteSubstitute): SCOPED, not started.**
+Re-guess the q=1 ∂-finite description from determinant data (B(n,j) via exact
+integer-matrix cofactors), then implement substitution j↦n. Requires
+multivariate Ore guessing + noncommutative Gröbner + substitution —
+a multi-week infrastructure project in its own right. Fallback if Avenues 1–2 fail.
+
+**Interim position:** the parametric Lean module (`DiagonalCertificate`)
+is complete and kernel-checked; plugging in numbers is a pure data step once
+Avenue 2 (or 3) delivers. No placeholder/arbitrary certificate will be
+committed — the module must receive the true TSPP operator or none.
