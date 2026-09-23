@@ -70,7 +70,8 @@ evaluation on a dense grid. The known trap is Pochhammer conventions at
 negative indices: `(a)_{-n} = (-1)^n/(1-a)_n` must be enforced, not assumed.
 
 **Worked example.** Jana–Karmakar (arXiv:2501.10109). The claimed WZ pair
-survived 630 + 96 exact checks, so the route stayed off the target list —
+survived 630 + 630 exact telescoping checks (Lemmas 2.1 and 3.1) and 96
+checks of the summed theorems, so the route stayed off the target list —
 the audit produced a PASS, not a kill. The audit still earned its keep: the
 first harness produced 66 false mismatches by omitting the `(a)_{-n}`
 convention above; that convention is now enforced in
@@ -162,4 +163,7 @@ The first prime conductor with class number `> 1` is `p = 23`, where
 `h(ℚ(ζ_23)) = 3` — and `h⁻_p = 1` for every prime `p < 23` (Maillet/OEIS
 determinant formula; gate `scripts/gates/lame_h23.py`), so 23 is exactly the
 point of failure. Kummer knew the factorization theory collapses as soon as
-`h_p > 1`. FLT itself stands; the route dies at `p = 23`. **Verdict: BREAK.**
+`h_p > 1`. FLT itself stands; the route dies at `p = 23`. **Verdict:** the
+gates `lame_h23` and `lame_ideal_neg23` are locked **PASS**: they confirm the
+fact `h(ℚ(ζ_23)) = 3`, and that confirmed fact refutes the route. A verdict
+attaches to the gate's claim, not to the paper's conclusion (§3).
