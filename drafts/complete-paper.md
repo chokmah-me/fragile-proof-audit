@@ -167,7 +167,10 @@ so the target is either correct or fails outside our gates' reach. A
 PASS is a statement about the audit's reach, not a certificate of
 truth.
 
-PASS verdicts are on the verdict lock exactly like BREAKs (see below).
+Gate-level PASS verdicts are on the verdict lock exactly like BREAKs
+(see below). Off-lock prose PASSes - a route judged sound without a
+runnable gate, as in Appendix C's JAC-2D type-G and Jana--Karmakar
+type-C entries - are recorded separately and carry no lock protection.
 
 ## SKIP - not auditable as stated
 
@@ -688,7 +691,9 @@ of the mathematics: no discrimination control is recorded, so the
 verdict is execution-verified at the pinned commit, not
 replay-confirmed. The one fully independent check in the case is the
 Platt--Trudgian margin, recomputed from the primary source
-(arXiv:2004.09765, Theorem 1) at 175,239,886.5 exactly. A methodology
+(arXiv:2004.09765, Theorem 1): the RH verified height 3,000,175,332,800
+minus half the candidate's required height (6,000,000,185,827 / 2 =
+3,000,000,092,913.5) leaves 175,239,886.5 exactly. A methodology
 that cannot confirm is not an audit - but a confirmation must say
 what kind of confirmation it is.
 
@@ -711,24 +716,31 @@ verdict about a route.
 
 ### 5.4 q-TSPP: the unfinished line (in progress)
 
-The q-TSPP audit - formalizing Okada's determinant route to the
-totally symmetric plane partition identities - is the campaign's
-correct-proof infrastructure build, not a BREAK hunt. Milestone 1 -
-the q=1 Stembridge shakedown - closed with a sorry-free,
-kernel-checked recurrence-uniqueness lemma; milestone 2 - the
-parametric diagonal certificate - with a parametric order-7 diagonal
-certificate (8,656/8,656 jobs, zero errors). Milestone 3 is blocked on
-recovering the explicit q=1 recurrence coefficients: the paper does
-not print them, the thesis does not yield them, and the author's site
-survives only on Wayback. The author has been contacted; the line
-waits on his reply.
+The q-TSPP audit - formalizing the totally symmetric plane partition
+identities - is the campaign's correct-proof infrastructure build, not
+a BREAK hunt. The lineage: Okada supplied the determinant reduction
+to guessed normalized cofactors, and Koutschan's q=1 and q-case
+algorithmic proofs and certificates are the formalization targets.
+Milestone 1 - the q=1 Stembridge shakedown - closed with a sorry-free,
+kernel-checked recurrence-uniqueness lemma; milestone 2 closed with a
+parametric order-7 diagonal certificate (8,656/8,656 jobs, zero
+errors). Milestone 3 is blocked on recovering the explicit q=1
+recurrence coefficients: the paper does not print them, the thesis
+does not yield them, and the author's site survives only on Wayback.
+The author has been contacted; the line waits on his reply.
 
-It belongs in this paper as "gate before prove" (Sec. 4.3) at a projected
-6--10-week scale (the blueprint's estimate, not a completed line): no
-q-TSPP gate is on the verdict lock - the formalization builds on the
-recovered certificate archive, and the blocker - the unrecovered
-recurrence coefficients - is stated plainly instead of being worked
-around. It is the honest boundary of what the campaign could do alone.
+It belongs in this paper as "gate before prove" (Sec. 4.3) at a
+projected 6--10-week scale (the blueprint's estimate, not a completed
+line) - with a stated exception. No q-TSPP gate is on the verdict
+lock, and no off-lock numeric gate preceded the Lean work: this line
+formalizes a known-correct proof as infrastructure, so the
+gate-before-prove rule - which exists to stop the campaign
+formalizing a claim that might be false - has nothing to guard
+against. The q=1 shakedown, kernel-checked against the known result,
+is the empirical anchor in place of a gate. The blocker - the
+unrecovered recurrence coefficients - is stated plainly instead of
+being worked around. It is the honest boundary of what the campaign
+could do alone.
 
 ## 6. Limitations
 
@@ -785,7 +797,10 @@ the attack type the campaign is worst equipped for. The tooling
 does not exist at the needed level; building it is a multi-year
 project, not an audit step. The honest response: mark the limitation,
 record what was checked by other means, and do not pretend a partial
-replay is a full one.
+replay is a full one. (The JAC-2D gate's D+E typing in Table C1 does
+not contradict this: its symbolic component re-derived the
+coefficient formulas from scratch with generic coefficients - it did
+not replay a CAS transcript, which is what remains blocked.)
 
 ### 6.5 Selection and window
 
@@ -955,10 +970,19 @@ this playbook obsolete. We would welcome it.
 
 ## References
 
+Agama, T. "A proof of the twin prime conjecture." arXiv:1707.03265v4.
+The twin-prime area-method claim whose Theorem 2.3 fixed constant the
+fringe gate refuted (BREAK, Table C1).
+
 Code4rena. Audit contest reports. https://code4rena.com/reports.
 Competitive, time-boxed audit contests: multiple Wardens review a
 code snapshot; findings are judged, deduplicated into unique
 vulnerabilities, severity-rated, and collected in a final report.
+
+Chattopadhyay, A. "On the Irrationality of the Odd Zeta Values."
+Preprints.org 202601.1609.v1. doi:10.20944/preprints202601.1609.v1.
+The odd-zeta irrationality claim refuted by the type-A gate (BREAK,
+Table C1); the pinned PDF's SHA-256 matches the gate's recorded value.
 
 Du, J. Q. D., and Yao, O. X. M. "Congruences modulo arbitrary powers
 of 5 and 7 for Andrews and Paule's partition diamonds."
@@ -980,7 +1004,8 @@ The WZ-certificate pair audited clean by the type-C gate (Sec. 3).
 
 Koutschan, C. "Eliminating Human Insight: An Algorithmic Proof of
 Stembridge's TSPP Theorem." arXiv:0906.1018 (2009). The q=1 case of
-the q-TSPP proof formalized in the campaign's Lean shakedown (Sec. 5.4).
+the q-TSPP proof formalized in the campaign's Lean shakedown, the
+cited version for the q=1 order-12 recurrence (Sec. 5.4).
 
 Lean Community. "How to contribute to mathlib" and "Reviewing a
 mathlib PR." https://github.com/leanprover-community/leanprover-community.github.io
@@ -1008,14 +1033,14 @@ type-C gate re-verifies (Sec. 3).
 Platt, D., and Trudgian, T. "The Riemann hypothesis is true up to
 $3\cdot 10^{12}$." *Bulletin of the London Mathematical Society* 53 (2021),
 792--797. doi:10.1112/blms.12460. arXiv:2004.09765. Theorem 1: RH
-verified to height 3,000,175,332,800; Sec. 2.4 turns Polymath15's Table 1
+verified to height 3,000,175,332,800; Sec. 3.4 turns Polymath15's Table 1
 into Corollary 2 ($\Lambda \le 0.2$) and declines the $\Lambda < 0.19$ entry: "We have
 not pursued this."
 
 Polymath, D. H. J. "Effective approximation of heat flow evolution
 of the Riemann $\xi$ function, and a new upper bound for the de
 Bruijn--Newman constant." *Research in the Mathematical Sciences* 6
-(2019), 31. arXiv:1904.12438. Establishes $\Lambda \le 0.2$2 via effective
+(2019), 31. arXiv:1904.12438. Establishes $\Lambda \le 0.22$ via effective
 estimates and numerical computation; Table 1 converts "RH verified
 to height H" into $\Lambda$ upper bounds.
 
@@ -1035,7 +1060,9 @@ proof of 2-dimensional Jacobian conjecture." arXiv:1603.01867v43
 campaign's type-G logical-gap audit (PASS, Sec. 2).
 
 Sun, Z.-W. "Catalan's constant is irrational." arXiv:2609.04176v1.
-The type-E target whose numeric gate refuted the route (Sec. 3).
+The type-A target whose numeric gate refuted the route (Sec. 3) - the
+campaign's sole claimed-proof refutation, as distinct from the seven
+conjecture counterexamples.
 
 Tao, T. "Machine-Assisted Proof." *Notices of the American
 Mathematical Society* 72 (1) (Jan. 2025).
@@ -1115,10 +1142,6 @@ the (m, n) = (31, 3928) witness (Sec. 3).
 Kempe, A. B. "On the geographical problem of the four colours."
 *Amer. J. Math.* 2 (1879), 193--200. The original flawed proof;
 background to the Sec. 5.1 gate.
-
-Koutschan, C. "Eliminating Human Insight: An Algorithmic Proof of
-Stembridge's TSPP Theorem." arXiv:0906.1018. The q = 1 shakedown
-target of the q-TSPP line (Sec. 5.4).
 
 Koutschan, C., Kauers, M., and Zeilberger, D. "Proof of George
 Andrews's and David Robbins's q-TSPP Conjecture." arXiv:1002.4384;
@@ -1286,23 +1309,23 @@ survives), infrastructure. Controls are standalone scripts under
 | cohen_subadditivity | Cohen Conjecture 66 | live | BREAK | claim BREAK | F | conjecture counterexample | cohen_break_control.py |
 | baste_domination | Baste et al. 2019/2020 | live | BREAK | claim BREAK | F | conjecture counterexample | baste_break_control.py |
 | sarkozy_sum_product | Sarkozy Conjecture 65 | live | BREAK | claim BREAK | F | conjecture counterexample | sarkozy_break_control.py |
-| tang_zhang_schatten | Tang--Zhang | live | BREAK | claim BREAK | A | recomputation (Zeng--Liu--Ratnavelu) | tang_zhang_break_control.py |
+| tang_zhang_schatten | Tang--Zhang | live | BREAK | claim BREAK | A | conjecture counterexample | tang_zhang_break_control.py |
 | thakur_carlitz | Thakur 2015 | live | BREAK | claim BREAK | F | conjecture counterexample | thakur_break_control.py |
-| chung_graham_spiro | Chung--Graham--Spiro 2020 | live | BREAK | claim BREAK | F | recomputation (Aliabadi) | chung_graham_break_control.py |
+| chung_graham_spiro | Chung--Graham--Spiro 2020 | live | BREAK | claim BREAK | F | conjecture counterexample | chung_graham_break_control.py |
 | salez_youssef_logsobolev | Salez--Youssef Conj. 1 | live | BREAK | claim BREAK | G | conjecture counterexample | salez_youssef_break_control.py |
 | cat_g | Sun Catalan route | live | BREAK | claim BREAK | A | proof-route refutation | cat_g_break_control.py |
 | es_cover | Lopez Erdos--Straus cover | live | PASS | claim PASS | D | confirmation | es_cover_control.py |
 | rr_qexpand | Lau--Ono; Huang--Lau--Ono--Paule | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | pdn1 | Du--Yao | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | mah_3 | Mahler 3D counting lemma | live | PASS | claim SKIP | A+G | confirmation (gate) | inline wrong-$\theta$ control |
-| suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | `suman_break_control` |
-| odd_zeta_1609 | odd-zeta claim (Chattopadhyay) | fringe | BREAK | claim BREAK | B | proof-route refutation | `odd_zeta_break_control` |
+| suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | `scripts/controls/break_control.py` (shared; receipt `suman_break_control_meta.json`) |
+| odd_zeta_1609 | odd-zeta claim (Chattopadhyay) | fringe | BREAK | claim BREAK | B | proof-route refutation | `scripts/controls/break_control.py` (shared; receipt `odd_zeta_break_control_meta.json`) |
 | es5_eq35 | Ghermoul ES eq. 35 | fringe | BREAK | claim BREAK | A | proof-route refutation | es5_eq35_break_control.py |
 | tpc_area | twin-prime area method | fringe | BREAK | claim BREAK | F | proof-route refutation | tpc_area_break_control.py |
 | tpc_gn | Chalise--Clark--Gnang Prop. 3.4 | fringe | BREAK | claim BREAK | A | proof-route refutation | tpc_gn_break_control.py |
 | krr_cl | Gnang Lemma 25 | fringe | BREAK | claim BREAK | F | proof-route refutation | krr_cl_break_control.py |
 | gb_sce | Zadehgol Mohammadi & Kolahdouz | fringe | BREAK | claim BREAK | A | proof-route refutation | audit-note matched control |
-| jac_2d | Su 2D-Jacobian v43 | fringe | PASS | claim PASS | D+E | confirmation | jac_2d_break_control.py |
+| jac_2d | Su 2D-Jacobian v43 | fringe | PASS | claim PASS | D+E | confirmation | `jac_2d_break_control.py` (discrimination control despite the name; PASS gate) |
 | giuga_oracle | standing Giuga oracle | infra | PASS | n/a | --[^1] | infrastructure | not required (exact equality) |
 | **Total: 25 gates** | | **4 / 12 / 8 / 1** | **17 BREAK / 8 PASS** | | | **machine-checked against `EXPECTED_VERDICT`** | |
 

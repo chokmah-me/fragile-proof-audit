@@ -113,23 +113,23 @@ survives), infrastructure. Controls are standalone scripts under
 | cohen_subadditivity | Cohen Conjecture 66 | live | BREAK | claim BREAK | F | conjecture counterexample | cohen_break_control.py |
 | baste_domination | Baste et al. 2019/2020 | live | BREAK | claim BREAK | F | conjecture counterexample | baste_break_control.py |
 | sarkozy_sum_product | Sarkozy Conjecture 65 | live | BREAK | claim BREAK | F | conjecture counterexample | sarkozy_break_control.py |
-| tang_zhang_schatten | Tang--Zhang | live | BREAK | claim BREAK | A | recomputation (Zeng--Liu--Ratnavelu) | tang_zhang_break_control.py |
+| tang_zhang_schatten | Tang--Zhang | live | BREAK | claim BREAK | A | conjecture counterexample | tang_zhang_break_control.py |
 | thakur_carlitz | Thakur 2015 | live | BREAK | claim BREAK | F | conjecture counterexample | thakur_break_control.py |
-| chung_graham_spiro | Chung--Graham--Spiro 2020 | live | BREAK | claim BREAK | F | recomputation (Aliabadi) | chung_graham_break_control.py |
+| chung_graham_spiro | Chung--Graham--Spiro 2020 | live | BREAK | claim BREAK | F | conjecture counterexample | chung_graham_break_control.py |
 | salez_youssef_logsobolev | Salez--Youssef Conj. 1 | live | BREAK | claim BREAK | G | conjecture counterexample | salez_youssef_break_control.py |
 | cat_g | Sun Catalan route | live | BREAK | claim BREAK | A | proof-route refutation | cat_g_break_control.py |
 | es_cover | Lopez Erdos--Straus cover | live | PASS | claim PASS | D | confirmation | es_cover_control.py |
 | rr_qexpand | Lau--Ono; Huang--Lau--Ono--Paule | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | pdn1 | Du--Yao | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | mah_3 | Mahler 3D counting lemma | live | PASS | claim SKIP | A+G | confirmation (gate) | inline wrong-$\theta$ control |
-| suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | `suman_break_control` |
-| odd_zeta_1609 | odd-zeta claim (Chattopadhyay) | fringe | BREAK | claim BREAK | B | proof-route refutation | `odd_zeta_break_control` |
+| suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | `scripts/controls/break_control.py` (shared; receipt `suman_break_control_meta.json`) |
+| odd_zeta_1609 | odd-zeta claim (Chattopadhyay) | fringe | BREAK | claim BREAK | B | proof-route refutation | `scripts/controls/break_control.py` (shared; receipt `odd_zeta_break_control_meta.json`) |
 | es5_eq35 | Ghermoul ES eq. 35 | fringe | BREAK | claim BREAK | A | proof-route refutation | es5_eq35_break_control.py |
 | tpc_area | twin-prime area method | fringe | BREAK | claim BREAK | F | proof-route refutation | tpc_area_break_control.py |
 | tpc_gn | Chalise--Clark--Gnang Prop. 3.4 | fringe | BREAK | claim BREAK | A | proof-route refutation | tpc_gn_break_control.py |
 | krr_cl | Gnang Lemma 25 | fringe | BREAK | claim BREAK | F | proof-route refutation | krr_cl_break_control.py |
 | gb_sce | Zadehgol Mohammadi & Kolahdouz | fringe | BREAK | claim BREAK | A | proof-route refutation | audit-note matched control |
-| jac_2d | Su 2D-Jacobian v43 | fringe | PASS | claim PASS | D+E | confirmation | jac_2d_break_control.py |
+| jac_2d | Su 2D-Jacobian v43 | fringe | PASS | claim PASS | D+E | confirmation | `jac_2d_break_control.py` (discrimination control despite the name; PASS gate) |
 | giuga_oracle | standing Giuga oracle | infra | PASS | n/a | --[^1] | infrastructure | not required (exact equality) |
 | **Total: 25 gates** | | **4 / 12 / 8 / 1** | **17 BREAK / 8 PASS** | | | **machine-checked against `EXPECTED_VERDICT`** | |
 

@@ -65,7 +65,9 @@ of the mathematics: no discrimination control is recorded, so the
 verdict is execution-verified at the pinned commit, not
 replay-confirmed. The one fully independent check in the case is the
 Platt--Trudgian margin, recomputed from the primary source
-(arXiv:2004.09765, Theorem 1) at 175,239,886.5 exactly. A methodology
+(arXiv:2004.09765, Theorem 1): the RH verified height 3,000,175,332,800
+minus half the candidate's required height (6,000,000,185,827 / 2 =
+3,000,000,092,913.5) leaves 175,239,886.5 exactly. A methodology
 that cannot confirm is not an audit - but a confirmation must say
 what kind of confirmation it is.
 
@@ -88,21 +90,28 @@ verdict about a route.
 
 ## 5.4 q-TSPP: the unfinished line (in progress)
 
-The q-TSPP audit - formalizing Okada's determinant route to the
-totally symmetric plane partition identities - is the campaign's
-correct-proof infrastructure build, not a BREAK hunt. Milestone 1 -
-the q=1 Stembridge shakedown - closed with a sorry-free,
-kernel-checked recurrence-uniqueness lemma; milestone 2 - the
-parametric diagonal certificate - with a parametric order-7 diagonal
-certificate (8,656/8,656 jobs, zero errors). Milestone 3 is blocked on
-recovering the explicit q=1 recurrence coefficients: the paper does
-not print them, the thesis does not yield them, and the author's site
-survives only on Wayback. The author has been contacted; the line
-waits on his reply.
+The q-TSPP audit - formalizing the totally symmetric plane partition
+identities - is the campaign's correct-proof infrastructure build, not
+a BREAK hunt. The lineage: Okada supplied the determinant reduction
+to guessed normalized cofactors, and Koutschan's q=1 and q-case
+algorithmic proofs and certificates are the formalization targets.
+Milestone 1 - the q=1 Stembridge shakedown - closed with a sorry-free,
+kernel-checked recurrence-uniqueness lemma; milestone 2 closed with a
+parametric order-7 diagonal certificate (8,656/8,656 jobs, zero
+errors). Milestone 3 is blocked on recovering the explicit q=1
+recurrence coefficients: the paper does not print them, the thesis
+does not yield them, and the author's site survives only on Wayback.
+The author has been contacted; the line waits on his reply.
 
-It belongs in this paper as "gate before prove" (Sec. 4.3) at a projected
-6--10-week scale (the blueprint's estimate, not a completed line): no
-q-TSPP gate is on the verdict lock - the formalization builds on the
-recovered certificate archive, and the blocker - the unrecovered
-recurrence coefficients - is stated plainly instead of being worked
-around. It is the honest boundary of what the campaign could do alone.
+It belongs in this paper as "gate before prove" (Sec. 4.3) at a
+projected 6--10-week scale (the blueprint's estimate, not a completed
+line) - with a stated exception. No q-TSPP gate is on the verdict
+lock, and no off-lock numeric gate preceded the Lean work: this line
+formalizes a known-correct proof as infrastructure, so the
+gate-before-prove rule - which exists to stop the campaign
+formalizing a claim that might be false - has nothing to guard
+against. The q=1 shakedown, kernel-checked against the known result,
+is the empirical anchor in place of a gate. The blocker - the
+unrecovered recurrence coefficients - is stated plainly instead of
+being worked around. It is the honest boundary of what the campaign
+could do alone.

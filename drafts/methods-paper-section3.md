@@ -71,7 +71,10 @@ so the target is either correct or fails outside our gates' reach. A
 PASS is a statement about the audit's reach, not a certificate of
 truth.
 
-PASS verdicts are on the verdict lock exactly like BREAKs (see below).
+Gate-level PASS verdicts are on the verdict lock exactly like BREAKs
+(see below). Off-lock prose PASSes - a route judged sound without a
+runnable gate, as in Appendix C's JAC-2D type-G and Jana--Karmakar
+type-C entries - are recorded separately and carry no lock protection.
 
 ## SKIP - not auditable as stated
 

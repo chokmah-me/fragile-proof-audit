@@ -33,7 +33,7 @@ done
 {
 echo "## References"
 echo
-awk 'BEGIN{skip=1} /^Code4rena\./{skip=0} skip==0{print}' "$D/methods-paper-references.md"
+awk 'BEGIN{skip=1} /^[A-Z][A-Za-z-]*, |^Code4rena\./{skip=0} skip==0{print}' "$D/methods-paper-references.md"
 }
 echo
 # Appendices: rewrite H1 draft heading to "## Appendices"

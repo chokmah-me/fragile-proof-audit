@@ -5,10 +5,19 @@ the citation fact-check pass were verified against primary sources; a
 few pre-existing entries (notably the mathlib documentation guide)
 were not. Sec. 7 cites these by name inline.
 
+Agama, T. "A proof of the twin prime conjecture." arXiv:1707.03265v4.
+The twin-prime area-method claim whose Theorem 2.3 fixed constant the
+fringe gate refuted (BREAK, Table C1).
+
 Code4rena. Audit contest reports. https://code4rena.com/reports.
 Competitive, time-boxed audit contests: multiple Wardens review a
 code snapshot; findings are judged, deduplicated into unique
 vulnerabilities, severity-rated, and collected in a final report.
+
+Chattopadhyay, A. "On the Irrationality of the Odd Zeta Values."
+Preprints.org 202601.1609.v1. doi:10.20944/preprints202601.1609.v1.
+The odd-zeta irrationality claim refuted by the type-A gate (BREAK,
+Table C1); the pinned PDF's SHA-256 matches the gate's recorded value.
 
 Du, J. Q. D., and Yao, O. X. M. "Congruences modulo arbitrary powers
 of 5 and 7 for Andrews and Paule's partition diamonds."
@@ -30,7 +39,8 @@ The WZ-certificate pair audited clean by the type-C gate (Sec. 3).
 
 Koutschan, C. "Eliminating Human Insight: An Algorithmic Proof of
 Stembridge's TSPP Theorem." arXiv:0906.1018 (2009). The q=1 case of
-the q-TSPP proof formalized in the campaign's Lean shakedown (Sec. 5.4).
+the q-TSPP proof formalized in the campaign's Lean shakedown, the
+cited version for the q=1 order-12 recurrence (Sec. 5.4).
 
 Lean Community. "How to contribute to mathlib" and "Reviewing a
 mathlib PR." https://github.com/leanprover-community/leanprover-community.github.io
@@ -58,14 +68,14 @@ type-C gate re-verifies (Sec. 3).
 Platt, D., and Trudgian, T. "The Riemann hypothesis is true up to
 $3\cdot 10^{12}$." *Bulletin of the London Mathematical Society* 53 (2021),
 792--797. doi:10.1112/blms.12460. arXiv:2004.09765. Theorem 1: RH
-verified to height 3,000,175,332,800; Sec. 2.4 turns Polymath15's Table 1
+verified to height 3,000,175,332,800; Sec. 3.4 turns Polymath15's Table 1
 into Corollary 2 ($\Lambda \le 0.2$) and declines the $\Lambda < 0.19$ entry: "We have
 not pursued this."
 
 Polymath, D. H. J. "Effective approximation of heat flow evolution
 of the Riemann $\xi$ function, and a new upper bound for the de
 Bruijn--Newman constant." *Research in the Mathematical Sciences* 6
-(2019), 31. arXiv:1904.12438. Establishes $\Lambda \le 0.2$2 via effective
+(2019), 31. arXiv:1904.12438. Establishes $\Lambda \le 0.22$ via effective
 estimates and numerical computation; Table 1 converts "RH verified
 to height H" into $\Lambda$ upper bounds.
 
@@ -85,7 +95,9 @@ proof of 2-dimensional Jacobian conjecture." arXiv:1603.01867v43
 campaign's type-G logical-gap audit (PASS, Sec. 2).
 
 Sun, Z.-W. "Catalan's constant is irrational." arXiv:2609.04176v1.
-The type-E target whose numeric gate refuted the route (Sec. 3).
+The type-A target whose numeric gate refuted the route (Sec. 3) - the
+campaign's sole claimed-proof refutation, as distinct from the seven
+conjecture counterexamples.
 
 Tao, T. "Machine-Assisted Proof." *Notices of the American
 Mathematical Society* 72 (1) (Jan. 2025).
@@ -165,10 +177,6 @@ the (m, n) = (31, 3928) witness (Sec. 3).
 Kempe, A. B. "On the geographical problem of the four colours."
 *Amer. J. Math.* 2 (1879), 193--200. The original flawed proof;
 background to the Sec. 5.1 gate.
-
-Koutschan, C. "Eliminating Human Insight: An Algorithmic Proof of
-Stembridge's TSPP Theorem." arXiv:0906.1018. The q = 1 shakedown
-target of the q-TSPP line (Sec. 5.4).
 
 Koutschan, C., Kauers, M., and Zeilberger, D. "Proof of George
 Andrews's and David Robbins's q-TSPP Conjecture." arXiv:1002.4384;

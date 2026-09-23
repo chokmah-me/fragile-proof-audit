@@ -53,7 +53,10 @@ the attack type the campaign is worst equipped for. The tooling
 does not exist at the needed level; building it is a multi-year
 project, not an audit step. The honest response: mark the limitation,
 record what was checked by other means, and do not pretend a partial
-replay is a full one.
+replay is a full one. (The JAC-2D gate's D+E typing in Table C1 does
+not contradict this: its symbolic component re-derived the
+coefficient formulas from scratch with generic coefficients - it did
+not replay a CAS transcript, which is what remains blocked.)
 
 ## 6.5 Selection and window
 
