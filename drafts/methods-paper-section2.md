@@ -44,7 +44,11 @@ dozen prose audits in five days — was not produced by hand. It was
 produced by AI agents working under human direction: agents wrote the
 gates, ran the computations, drafted the audit notes, and assembled
 this paper; the human set the targets, reviewed the verdicts, and owns
-every disposition. This is stated plainly because it is load-bearing,
+every disposition. Target curation used the same division of labor:
+the human wrote deep-research prompts and ran them on Kimi 3 and
+Grok 3.1 deep research to assemble the candidate harvest list, then
+shortlisted it by hand. Nothing else predates the repository's
+2026-09-18 root commit. This is stated plainly because it is load-bearing,
 not confessional. An agent pipeline fails in characteristic ways — it
 gates from an abstract instead of the paper (four times before the
 rule was retrofitted, §5.7), it writes dossier rows about claims with
