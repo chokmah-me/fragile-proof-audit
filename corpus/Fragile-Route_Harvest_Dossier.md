@@ -110,6 +110,8 @@ Gates refute routes, not theorems. Every gate below names an object, parameters,
 
 ## Hit 5 — Goldbach via a "semi-continuous model of even numbers"
 
+**STALE (2026-09-23): paper is now v5 (19 May 2026), not v2 — claim shifted to a "relative proof" (74/75 structures; dominant structure needs admitted-unproven inequalities). Gated and BROKEN (route) as v5: see `docs/audits/gb-sce.md`. This entry's v2-era equation numbers no longer apply.**
+
 **ID:** GB-SCE · **Title:** *Proof of the Goldbach's strong Conjecture by Using Semi-continuous Model of Even Numbers* · **arXiv:** [1909.13230v2](https://arxiv.org/html/1909.13230v2) (v2, October 2024 — in horizon by version).
 
 **Still-believed statement.** Goldbach: every even n ≥ 4 is a sum of two primes. Open; verified to 4×10¹⁸ by others.

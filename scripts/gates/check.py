@@ -39,6 +39,7 @@ TPC_GN = ROOT / "scripts" / "gates" / "tpc_gn.py"
 JAC_2D = ROOT / "scripts" / "gates" / "jac_2d.py"
 TAIT_TUTTE = ROOT / "scripts" / "gates" / "tait_tutte.py"
 KEMPE_FRITSCH = ROOT / "scripts" / "gates" / "kempe_fritsch.py"
+GB_SCE = ROOT / "scripts" / "gates" / "gb_sce.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -77,6 +78,7 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "jac_2d": ("jac_2d_gate_meta.json", "PASS"),
     "tait_tutte": ("tait_tutte_gate_meta.json", "BREAK"),
     "kempe_fritsch": ("kempe_fritsch_gate_meta.json", "BREAK"),
+    "gb_sce": ("gb_sce_gate_meta.json", "BREAK"),
 }
 
 
@@ -232,6 +234,10 @@ def run_kempe_fritsch() -> dict:
     return run_script("kempe_fritsch", KEMPE_FRITSCH)
 
 
+def run_gb_sce() -> dict:
+    return run_script("gb_sce", GB_SCE)
+
+
 def main() -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
@@ -272,6 +278,7 @@ def main() -> int:
         run_jac_2d(),
         run_tait_tutte(),
         run_kempe_fritsch(),
+        run_gb_sce(),
     ]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()
