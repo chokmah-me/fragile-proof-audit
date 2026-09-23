@@ -33,7 +33,7 @@ discipline closes.
 The repository — every gate, control, certificate, and audit note —
 is released alongside this paper
 (`https://github.com/chokmah-me/fragile-proof-audit`).
-This draft corresponds to commit `__ARTIFACT_SHA__`; the submitted
+This draft corresponds to commit `f441d14`; the submitted
 version will cite its exact commit SHA and an archival snapshot
 (Zenodo/Software Heritage DOI). A paper whose thesis is *don't trust
 prose, trust the re-run* must pin its artifact in the text.
