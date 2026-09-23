@@ -1,0 +1,165 @@
+# §4. The attack types (A–G) — draft (2026-09-23)
+
+The campaign's gates are classified by *mechanism*, not by subject area. Each
+type below names a route a proof can take to its conclusion, the instrument
+built to test that route, and one worked example from the audit catalog
+(`docs/audits/`, `docs/blueprint/`). The standing doctrine throughout:
+
+> **Gates refute routes, not theorems.** ζ(5) is probably irrational; FLT is
+> true; the four-color theorem is true. What dies is a specific lemma chain,
+> recorded as lemma · instance · false instance.
+
+A gate that cannot produce the opposite verdict where the opposite is correct
+is not evidence (`docs/GATE-BEFORE-PROVE.md`); each type's construction notes
+where the discrimination check bites. The taxonomy is append-only: a new
+mechanism earns a new letter.
+
+## A — Scalar gate
+
+**Route attacked.** Claims whose decisive content is a numerical statement
+about a specific constant — typically "best constant" conjectures, where the
+entire proof stands or falls on one inequality.
+
+**Gate construction.** Compute the constant, or an explicit witness violating
+it, by two independent arithmetics (exact rational algebra and high-precision
+floating point), with the violation margin far above any arithmetic noise
+floor. The discrimination question here is not "does it fire on everything"
+but "is the witness typical or extremal" — answered by sampling the
+neighborhood.
+
+**Worked example.** Tang–Zhang Schatten-norm constant
+(`docs/audits/tang-zhang-schatten.md`; refutation artifact Zeng–Liu–Ratnavelu,
+arXiv:2608.15558, Theorem 1.1). The conjectured best constant
+`C^TZ_{p,m} = √(x(x+m−1)) / (x^p + m − 1)^{1/p}` is exceeded by an explicit
+rank-one pair at `p = 3/2`, `m = 2`:
+`R = 1.03641365870489… > 207/200 > C^TZ_{3/2,2} = 1.03465395185143…`.
+Path 1: exact rational Gram-matrix algebra
+(`λ₁ = 13/8`, `λ₂ = 3/8`, `σ₁² = 1027/320`, `σ₂² = 3/320`);
+Path 2: 60-digit mpmath construction. Agreement to `1e-40`; margins
+`~1.4e-3` above and `~3.5e-4` below against a `1e-20` safety floor.
+Control: 5,000 random rank-one pairs at the same `(p, m)` — only ~1% exceed
+the conjectured constant and the witness sits near the true extremum, so the
+gate is not reporting a violation any input would produce. **Verdict: BREAK.**
+
+## B — Base-case kill
+
+**Route attacked.** Induction or irrationality arguments whose load-bearing
+step is a finiteness / non-existence claim at the base — the step the rest of
+the proof assumes without exhibiting.
+
+**Gate construction.** Instantiate the base case exactly, with all
+constraints, and solve it. If solutions exist, the induction never starts and
+nothing downstream matters.
+
+**Worked example.** Suman ζ(5) (`docs/audits/suman-zeta5.md`). Eq. (48) is
+claimed to have no integer solutions; it is the induction base for Theorem 1.
+At `n = 1`, `d_1 = lcm(1) = 1`, constraints `0 ≤ k ≤ d_1` and `d_1 ∣ kb`:
+solutions `(a,b,k) = (2,1,0)` (`a = 2b`) and `(1,1,1)` (`a = b`) exist.
+Suman dismisses these because they "would force ζ(5) ∈ {1,2}" — but
+solvability of Eq. (48) is independent of whether ζ(5) is an integer.
+**Verdict: BREAK.**
+
+## C — WZ-certificate audit
+
+**Route attacked.** Claims resting on a Wilf–Zeilberger certificate pair — the
+"a rational function proves the identity" genre, where the decisive object is
+a machine-produced certificate the reader is expected to trust.
+
+**Gate construction.** Independently re-verify the certificate pair by exact
+evaluation on a dense grid. The known trap is Pochhammer conventions at
+negative indices: `(a)_{-n} = (-1)^n/(1-a)_n` must be enforced, not assumed.
+
+**Worked example.** Jana–Karmakar (arXiv:2501.10109). The claimed WZ pair
+survived 630 + 96 exact checks, so the route stayed off the target list —
+the audit produced a PASS, not a kill. The audit still earned its keep: the
+first harness produced 66 false mismatches by omitting the `(a)_{-n}`
+convention above; that convention is now enforced in
+`scripts/harness/pochhammer.py`. A type-C gate that declines to fire is the
+discipline working as designed: a pass escalates, never forced.
+
+## D — Finite q-expansion
+
+**Route attacked.** Partition congruences and modular-equation claims whose
+decisive content is exact identities between q-series — checkable term by
+term, but only to the depth actually computed.
+
+**Gate construction.** Compute the generating function exactly to a fixed
+depth, verify the congruence predictions on their arithmetic progressions and
+the modular equation coefficient-by-coefficient. Depth is the open question
+for D-gates: 81 points carried no information; 6,747 did
+(`docs/GATE-BEFORE-PROVE.md`).
+
+**Worked example.** PDN1 congruences, Du–Yao, arXiv:2503.00004
+(`docs/audits/pdn1.md`). Exact series of `J_2^2/J_1^5` through `q^500`
+(`PDN1(2) = 18`); Theorems 1.1–1.2 congruence predictions on stated APs mod
+`5^α`, `7^α`; modular equation (3.13) with the paper's `σ_i` polynomials
+through degree 80 — maximum absolute difference 0 across 6,747 divisibility
+points. **Verdict: PASS (escalate)** on the type-D route; type G not
+attempted. The authors' Mathematica supplements were cloned under
+`incoming/pdn1/` for provenance.
+
+## E — CAS-transcript replay
+
+**Route attacked.** Computer-assisted proofs whose decisive steps live inside
+a CAS session: guessed recurrences, Ore-algebra Gröbner bases, creative
+telescoping certificates. The transcript *is* the proof, and it is usually
+unpublished.
+
+**Gate construction.** Re-run the transcript. When the tooling is not
+available on the campaign stack, record blocked — do not invent operators.
+("Same stance as 2(f) OreReduce: record blocked, do not invent operators,"
+`docs/audits/pdn1.md`.)
+
+**Worked example.** q-TSPP, the q=1 case of Koutschan's proof
+(arXiv:0906.1018; `docs/blueprint/qtspp-q1.md`). The paper's §5.3 prints only
+a factorization of the leading coefficient of the order-7 diagonal
+recurrence, not the operator; the ∂-finite description (65 guessed
+recurrences, 5 MB) was never published. The recovered q-case notebook
+documents a 13 MB diagonal operator requiring 3 GB RAM and the
+HolonomicFunctions package — unavailable. The campaign's answer is a
+parametric Lean formalization of the closing argument (`DiagonalCertificate`;
+`diagonal_identity_of_certificate` kernel-checked, sorry-free) modulo
+coefficient recovery, plus author contact for the true coefficients. Type E
+is the one attack type the campaign currently documents as tooling-limited:
+the route exists before the infrastructure does.
+
+## F — Counterexample search
+
+**Route attacked.** Universal claims over finite combinatorial objects. The
+classic BREAK engine: one witness ends the argument.
+
+**Gate construction.** Exhibit the witness explicitly; close both sides —
+the upper bound by construction, the lower bound by exact (branch-and-bound
+or exhaustive) search. The control runs the same solver on graphs where the
+answer is known both ways, proving it is not an always-fire detector.
+
+**Worked example.** Baste domination (`docs/audits/baste-domination.md`).
+Claim: every finite regular graph of positive degree satisfies
+`γ(G) ≤ γ_e(G)`. False already at `Δ = 3`: a 50-vertex witness with
+`γ(G) = 16 > 15 = γ_e(G)`; `γ_e(G) = 15` closed on both sides,
+`γ(G) ≥ 16` by the campaign's own exact branch-and-bound dominating-set
+solver. Control: the solver finds small dominating sets when they exist (K4
+at budget 1; Petersen at budget 3) and correctly declines when they don't
+(Petersen at budget 2) — and the control caught a real bug (`n =
+NUM_VERTICES` hardcoded instead of `n = len(adj)`) the moment it tried a
+non-target graph. **Verdict: BREAK.** (Same mechanism: Chung–Graham–Spiro;
+Cohen subadditivity, witness `(31, 3928)` with 500 random pairs showing zero
+violations elsewhere.)
+
+## G — Logical-gap exposure
+
+**Route attacked.** Proofs whose key step is a structural premise about an
+algebraic object — no computation on the claim itself, just the exact lemma
+the route needs, falsified at the precise failure point.
+
+**Gate construction.** Isolate the premise; exhibit the smallest instance
+where it fails; name the failure point. The blueprint header for G-audits
+reads "Claim (route, not the theorem)."
+
+**Worked example.** Lamé 1847 (`docs/blueprint/lame-1847.md`). The route
+needs `ℤ[ζ_p]` to be a unique factorization domain for the prime at hand.
+The first prime conductor with class number `> 1` is `p = 23`, where
+`h(ℚ(ζ_23)) = 3` — and `h⁻_p = 1` for every prime `p < 23` (Maillet/OEIS
+determinant formula; gate `scripts/gates/lame_h23.py`), so 23 is exactly the
+point of failure. Kummer knew the factorization theory collapses as soon as
+`h_p > 1`. FLT itself stands; the route dies at `p = 23`. **Verdict: BREAK.**
