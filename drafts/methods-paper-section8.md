@@ -17,7 +17,8 @@ from "RH verified to height H" into a Λ upper bound, i.e., a
 published claim whose truth depends on someone else's computation.
 The difference is posture: Polymath15 *produced* the computation; a
 replay audit re-executes someone else's under a hostile prior.
-Platt and Trudgian (arXiv:2004.09765) then demonstrated, in the
+Platt and Trudgian (arXiv:2004.09765; Bull. London Math. Soc. 53
+(2021), 792–797) then demonstrated, in the
 wild, that computational claims compose: their verified RH height
 (3,000,175,332,800) turns Polymath15's table into Λ ≤ 0.2 — the bound
 is only as strong as someone else's re-run of the underlying
@@ -89,12 +90,13 @@ machine did. This paper ports the replication movement's core
 insight (trust the re-run, not the report) to the part of mathematics
 that is actually software.
 
-**Machine-checked proofs and the verification filter.** Tao (Simons
-Foundation "Machine-Assisted Proof" lecture, Feb. 2025) has argued
-the point that bounds this paper's claims: verifiability is the
-filter that makes powerful but unreliable tools safe to use, and
-tools whose outputs cannot be independently verified should not be
-trusted. A PASS from a replay audit is that filter applied to
+**Machine-checked proofs and the verification filter.** Tao
+(Simons Foundation "Machine-Assisted Proof" lecture, Feb. 19, 2025;
+published version, *Notices of the AMS* 72 (1), Jan. 2025) makes
+explicit the principle that bounds this paper's claims: powerful but
+unreliable tools are safe to use when their outputs can be
+independently verified, and should be treated with suspicion
+otherwise. A PASS from a replay audit is that filter applied to
 someone else's computation; it is not an endorsement of the claim's
 importance, just as a BREAK is not a contribution to the field.
 
