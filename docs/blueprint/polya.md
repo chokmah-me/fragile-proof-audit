@@ -4,9 +4,11 @@
 Ranking table: L(906150257) = +1 | F=6, Fr=7*, R=8 | est. effort 4–8 wk.
 Corpus verdict: **"Canonize the certificate."**
 
-**Status:** v1 complete 2026-09-23 — sieve + 91 chunk certs + manifest +
+**Status:** v1 BANKED 2026-09-23 — sieve + 91 chunk certs + manifest +
 independent verifier + **second independent implementation**, all
-cross-validated. This is a trust-anchor artifact in the Gomila mold
+cross-validated, plus a kernel-checked Lean slice through n=100
+(`polya_holds_to_100`, axioms only [propext, Classical.choice, Quot.sound]).
+This is a trust-anchor artifact in the Gomila mold
 (audit PASS); it is **not a BREAK** and does not extend the 23/23 verdict lock.
 
 ## 1. The claim and its history

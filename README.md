@@ -79,6 +79,7 @@ Repository layout: see [`docs/repo-layout.md`](docs/repo-layout.md).
 | **Tait–Tutte** (2026-09-22) | **BREAK**, gated + controlled. |
 | **Kempe–Fritsch** (2026-09-22) | **BREAK**, gated + controlled. |
 | **Gomila Λ-bound audit** (2026-09-22) | **VERIFY/AUDIT PASS** — not a BREAK; explicitly **not** on the 23/23 BREAK verdict lock. Blueprint: [`docs/blueprint/gomila-lambda.md`](docs/blueprint/gomila-lambda.md) |
+| **Pólya counterexample canonization** (2026-09-23) | **v1 BANKED** — Tanaka L(906150257)=+1 recomputed by two independent sieves; 91 chunk certs, verifier 370/370; Lean slice to n=100. Not a BREAK; 23/23 lock untouched. [`docs/audits/polya.md`](docs/audits/polya.md) | verdict lock. Blueprint: [`docs/blueprint/gomila-lambda.md`](docs/blueprint/gomila-lambda.md) |
 
 Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md). Per-target detail: [`docs/audits/`](docs/audits/).
 
