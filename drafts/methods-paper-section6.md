@@ -1,12 +1,12 @@
-# §6. Case studies -- draft (2026-09-23)
+# §5. Case studies -- draft (2026-09-23)
 
 The playbook is only as good as its hardest cases. Four studies, one
 each for a refutation, a confirmation, a canonization, and an
-unfinished line -- each mapped to the §4 attack type and the §5
+unfinished line -- each mapped to the §3 attack type and the §4
 disciplines it leans on. Full records live in `docs/audits/`; what
 follows is one page each.
 
-## 6.1 Kempe--Fritsch: the refutation case (BREAK)
+## 5.1 Kempe--Fritsch: the refutation case (BREAK)
 
 In 1879 Alfred Kempe published a proof of the four-color theorem; in
 1890 Heawood found a map that broke it. The campaign's gate does not
@@ -38,13 +38,13 @@ fragility signature, not a proof. It exercises paper-first at its
 most literal: the gate pins the modern telling (Fritsch & Fritsch
 1998; Gethner et al., *Involve* 2009), not anyone's summary of them.
 
-## 6.2 Gomila $\Lambda$-bound: the confirmation case (audit PASS)
+## 5.2 Gomila $\Lambda$-bound: the confirmation case (audit PASS)
 
 Jude Gomila's $\Lambda$ $\le$ 0.1787854 claim was replayed in four lanes and
 passed all four: 3,149,013/3,149,013 finite rows across 15 checksummed
 shards; 4/4 Dini legs sealed; 883/883 barrier prisms closed; 36/36
 tail checks at 256 and 512 bits (`docs/blueprint/gomila-lambda.md`). Every lane is
-fail-closed (§5.4): any mismatch would have failed the lane, and the
+fail-closed (§4.4): any mismatch would have failed the lane, and the
 sealed logs are re-verifiable.
 
 Lineage: Polymath15's Theorem 1.2 gave the method and the then-best
@@ -69,7 +69,7 @@ Platt--Trudgian margin, recomputed from the primary source
 that cannot confirm is not an audit -- but a confirmation must say
 what kind of confirmation it is.
 
-## 6.3 Pólya's conjecture: the canonization case (BANKED, off the lock)
+## 5.3 Pólya's conjecture: the canonization case (BANKED, off the lock)
 
 Pólya's conjecture ($L(n) \le 0$ for all n, L the Liouville summatory
 function) was disproved by Haselgrove in 1958, but no *checkable*
@@ -79,14 +79,14 @@ recomputed by two independent sieves -- with 91 SHA-256-pinned chunk
 certificates, a 370/370 verifier, and a Lean formalization of the
 finite slice through 100 (`docs/audits/polya.md`).
 
-Pólya is the case study for §5.5: the p=2 sieve bug was caught by
+Pólya is the case study for §4.5: the p=2 sieve bug was caught by
 brute-force anchors before the dual implementation existed, which then
 agreed on 91/91 chunks. Neither layer alone is evidence; together they
 are why the banked counterexample can be cited. It sits off the
 verdict lock deliberately: canonization is infrastructure, not a
 verdict about a route.
 
-## 6.4 q-TSPP: the unfinished line (in progress)
+## 5.4 q-TSPP: the unfinished line (in progress)
 
 The q-TSPP audit -- formalizing Okada's determinant route to the
 totally symmetric plane partition identities -- is the campaign's
@@ -100,7 +100,7 @@ not print them, the thesis does not yield them, and the author's site
 survives only on Wayback. The author has been contacted; the line
 waits on his reply.
 
-It belongs in this paper as "gate before prove" (§5.3) at a projected
+It belongs in this paper as "gate before prove" (§4.3) at a projected
 6--10-week scale (the blueprint's estimate, not a completed line): no
 q-TSPP gate is on the verdict lock -- the formalization builds on the
 recovered certificate archive, and the blocker -- the unrecovered

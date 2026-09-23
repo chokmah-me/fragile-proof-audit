@@ -1,6 +1,6 @@
-# §9. Conclusion -- draft (2026-09-23)
+# §8. Conclusion -- draft (2026-09-23)
 
-The playbook is the product. Every pattern in §§3--5 -- the five
+The playbook is the product. Every pattern in §§2--5 -- the five
 dispositions and the rules that keep them from drifting, the
 mechanism-classified attack types, the evidentiary disciplines and the log
 of their violations -- is reusable against the next claim, by anyone,
@@ -29,7 +29,7 @@ harness bugs caught by controls -- are part of the record, because a
 methodology that hides its failures cannot be trusted about its
 successes.
 
-The open problems are stated in §7 and not repeated here, except the
+The open problems are stated in §6 and not repeated here, except the
 one that matters most: the certificate cost curve. Until large
 computational certificates can be checked inside a proof kernel at
 reasonable cost, the strongest computer-assisted proofs will rest on

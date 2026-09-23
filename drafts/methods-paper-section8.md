@@ -1,4 +1,4 @@
-# §8. Related work -- draft (2026-09-23)
+# §7. Related work -- draft (2026-09-23)
 
 This paper claims a playbook and an audit log, not a new formalism.
 Every piece it assembles exists in several literatures; what follows
@@ -20,7 +20,7 @@ Platt and Trudgian (arXiv:2004.09765; Bull. London Math. Soc. 53
 (2021), 792--797) then demonstrated that computational claims compose: their verified RH height
 (3,000,175,332,800) turns Polymath15's table into $\Lambda \le 0.2$ -- the bound
 is only as strong as someone else's replay of the underlying
-computation. They also model the honest-boundary behavior §7
+computation. They also model the honest-boundary behavior §6
 advocates: the next table entry would give $\Lambda < 0.19$, which their
 height does not reach -- "We have not pursued this."
 
@@ -53,7 +53,7 @@ commenting finds problems at scale: Ortega and Delgado-Quirós (EPI,
 2023) report that of 17,244 PubPeer-commented articles, only 21.5%
 of those deserving an editorial notice were ever corrected by the
 journal. Scrutiny detects; it does not *dispose* -- findings sit in
-comment threads without verdicts. The disposition taxonomy (§3) is
+comment threads without verdicts. The disposition taxonomy (§2) is
 the move from "someone commented" to "a gate fired and the lock
 recorded it," with PASS carrying the same weight as BREAK so the
 system cannot become a pure refutation machine.
@@ -77,7 +77,7 @@ expensively -- that published results often do not survive
 replay, and built preregistration, replication studies, and
 adversarial collaboration in response. Mathematics has largely
 exempted itself on the grounds that proofs are self-verifying. They
-are, where the proof *is* the reasoning. The verification gap (§2) is
+are, where the proof *is* the reasoning. The verification gap (§1) is
 the observation that, increasingly, part of the proof is a
 computation -- and computations are empirical claims about what a
 machine did. This paper ports the replication movement's core
@@ -94,6 +94,6 @@ importance, just as a BREAK is not a contribution to the field.
 
 What none of these currents supply, to our knowledge, is the
 combination this paper documents: a fixed disposition taxonomy with a
-CI-enforced verdict lock (§3), a mechanism-classified attack-type repertoire (§4), and a published log of the method's own failures
-(§5.7). If that combination exists elsewhere, we would like to cite
+CI-enforced verdict lock (§2), a mechanism-classified attack-type repertoire (§3), and a published log of the method's own failures
+(§4.7). If that combination exists elsewhere, we would like to cite
 it.

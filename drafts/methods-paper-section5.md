@@ -1,13 +1,13 @@
-# §5. The evidentiary disciplines -- draft (2026-09-23)
+# §4. The evidentiary disciplines -- draft (2026-09-23)
 
-§4's attack types are only as honest as the gates that implement
+§3's attack types are only as honest as the gates that implement
 them. A gate is a piece of software written by people who already
 believe the target is fragile; every discipline below exists because
 the campaign caught itself -- or was caught -- cutting a corner it had
 sworn not to cut. Each is stated as a rule, with the failure mode it
 guards and the incident that earned it.
 
-## 5.1 Paper-first: pin and read the actual paper
+## 4.1 Paper-first: pin and read the actual paper
 
 No gate is built from a secondary summary. The procedure is mechanical:
 fetch the version of record, record its SHA-256 and byte count, extract
@@ -31,7 +31,7 @@ the conjecture as stated reads $|A| > (1/2-c)p$ -- under the paraphrase the
 claim fell to any small set and the BREAK was vacuous. The retrofit
 caught it.
 
-## 5.2 Discrimination control: a check that cannot fail is not evidence
+## 4.2 Discrimination control: a check that cannot fail is not evidence
 
 A discrimination control is required where it bites: whenever the
 verdict is an existence or non-existence claim resolved by search or
@@ -54,12 +54,14 @@ the exact oracle? see `pdn1`'s fast-path self-test) and depth (is the
 sample large enough to carry information? `pdn1` at 81 points was not;
 at 6,747 it is).
 
-Every control outcome is recorded in its gate's own meta JSON, under
-the `controls` key -- control name, verdict, ok, receipt path, receipt
-SHA-256, and receipt timestamp -- embedded by
-`scripts/gates/record_controls.py` on every aggregate run. A gate
-whose meta carries `"controls": []` has no discrimination control
-recorded, and the paper says so wherever the verdict is cited.
+Every control outcome recorded in a receipt JSON is embedded in its
+gate's own meta JSON, under the `controls` key -- control name,
+verdict, ok, receipt path, receipt SHA-256, and receipt timestamp --
+by `scripts/gates/record_controls.py` on every aggregate run. A gate
+whose meta carries `"controls": []` has no *separate* control receipt:
+that is the honest record for the four exact-equality exemptions and
+for the two inline controls (`gb_sce`, documented in its audit note;
+`mah_3`, inside the gate).
 
 The controls have caught real bugs, not hypothetical ones. The Baste
 counterexample gate's control exposed a hardcoded `n = NUM_VERTICES`
@@ -75,7 +77,7 @@ asymptotic rather than a displayed inequality, the honest move was a
 prose audit, not a forced numeric gate -- a gate that cannot be
 calibrated is not run.
 
-## 5.3 Gate before prove: no formalization without a numeric gate
+## 4.3 Gate before prove: no formalization without a numeric gate
 
 No Lean formalization begins until the claim it targets has survived a
 numeric gate, and formalization targets carry a no-sorry,
@@ -92,7 +94,7 @@ discipline also sets the boundary of what formalization is *for* here:
 it is not applied to BREAK verdicts at all -- a refuted route needs no
 formalization of its false lemma.
 
-## 5.4 Fail-closed replay: hash-pinned inputs, any mismatch fails the lane
+## 4.4 Fail-closed replay: hash-pinned inputs, any mismatch fails the lane
 
 Replay lanes recompute from pinned inputs in shards; any checksum
 mismatch, row disagreement, or unreproducible step fails the lane --
@@ -102,10 +104,10 @@ upstream commit; the Dini, barrier, and tail lanes each carry their own
 sealed logs. Fail-closed is what makes a PASS verdict mean something: it is the
 reason the Jacobian-2D computational PASS and the Mahler
 counting-lemma gate PASS can be cited without hedging. (The Mahler
-*claim* is a different matter -- §7.2: the gate passed, the claim as a
+*claim* is a different matter -- §6.2: the gate passed, the claim as a
 whole is SKIP.)
 
-## 5.5 Independent anchors and dual implementation: two layers, not one
+## 4.5 Independent anchors and dual implementation: two layers, not one
 
 A single implementation can be wrong in ways its own tests cannot see.
 The campaign therefore uses two distinct layers. First, **brute-force
@@ -120,7 +122,7 @@ catches the bug class "wrong algorithm, confidently executed"; the
 dual implementation catches the class "right algorithm, wrong code".
 One layer is a precaution; two is evidence.
 
-## 5.6 Durable job discipline: log to disk, mark the exit, verify by hand
+## 4.6 Durable job discipline: log to disk, mark the exit, verify by hand
 
 Long-running jobs write their output to a durable log under the
 workspace, append an explicit exit marker, and are verified by reading
@@ -130,7 +132,7 @@ an hour before anyone noticed the build directory was empty. Every
 multi-hour sieve, Lean build, and replay lane in the campaign follows
 it.
 
-## 5.7 Where the method failed, and what caught it
+## 4.7 Where the method failed, and what caught it
 
 The credibility backbone of this paper is not the disciplines but
 the record of their violations (sources: `docs/WORKPLAN.md`
@@ -141,7 +143,7 @@ checkpoints).
   `baste_domination`, `sarkozy_sum_product` -- were gated from the
   corpus doc plus an abstract fetch, no PDF pinned; all three were
   retrofitted with the real PDFs on 2026-09-21, and the retrofit
-  caught Sárközy's misstated threshold (§5.1). The same day, four more
+  caught Sárközy's misstated threshold (§4.1). The same day, four more
   provenance failures in one session: `tang_zhang_schatten` and
   `thakur_carlitz` (corpus text image-corrupted -> real PDF fetch),
   `chung_graham_spiro` (ghost entry -- table row, no body section, no
@@ -171,7 +173,7 @@ checkpoints).
 - **Harness bugs caught by controls and anchors**, summarized here
   because each one justifies a discipline above: the Pochhammer
   negative-index convention (type C), the hardcoded
-  `n = NUM_VERTICES` (type F), the p=2 sieve inverse (§5.5).
+  `n = NUM_VERTICES` (type F), the p=2 sieve inverse (§4.5).
 
 None of these were caught by peer review, because none of them were
 visible to peer review. They were caught by replaying things -- which

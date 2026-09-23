@@ -4,7 +4,7 @@
 
 **Daniyel Yaacov Bilar**
 
-*Chokmah LLC* ,  [ORCID 0000-0002-9040-6914](https://orcid.org/0000-0002-9040-6914)
+*Chokmah LLC*, [ORCID 0000-0002-9040-6914](https://orcid.org/0000-0002-9040-6914)
 
 *Draft manuscript -- companion methods paper to the fragile-proof-audit campaign. Exported 2026-09-23. Licensed CC-BY 4.0.*
 
@@ -14,9 +14,9 @@
 
 ## Abstract
 
-Published mathematics is trusted far more than it is independently replayed. Peer review checks reasoning, not computation -- and increasingly, part of the proof *is* a computation. This paper describes a short, intensive audit campaign (six calendar days, 2026-09-18 through 2026-09-23) that replays published mathematical claims from scratch under a hostile prior: every locked gate is built to produce the opposite verdict where the opposite is correct, and a CI-enforced verdict lock fails loudly on drift in either direction. The contribution is the playbook, not the verdicts: a five-disposition taxonomy (BREAK, GAP, PASS, SKIP, UNKNOWN) with a polarity rule separating gate verdicts from claim-level dispositions; seven attack types classified by mechanism, each with a worked example; and the evidentiary disciplines -- paper-first gating, discrimination controls, gate-before-prove, fail-closed replay, independent anchors -- together with the record of where those disciplines were violated and what caught the violations. The 25 locked gates (17 BREAK / 8 PASS) fall into three strata with very different evidentiary weight: four historical calibrations, twelve live-literature targets, and eight low-stakes preprints, plus one infrastructure oracle. Case studies include a refutation replay, an execution-verified confirmation, a canonization, and an unfinished formalization line; the limitations section states what no discipline closes. The campaign repository is private at the time of writing; the submitted version will cite its exact commit SHA and an archival snapshot. Gates refute routes, not theorems.
+Published mathematics is trusted far more than it is independently replayed. Peer review checks reasoning, not computation -- and increasingly, part of the proof *is* a computation. This paper describes a short, intensive audit campaign (six calendar days, 2026-09-18 through 2026-09-23) that replays published mathematical claims from scratch under a hostile prior: every locked gate is built to produce the opposite verdict where the opposite is correct (the four exact-equality gates are exempt -- §4.2), and a CI-enforced verdict lock fails loudly on drift in either direction. The contribution is the playbook, not the verdicts: a five-disposition taxonomy (BREAK, GAP, PASS, SKIP, UNKNOWN) with a polarity rule separating gate verdicts from claim-level dispositions; seven attack types classified by mechanism, each with a worked example; and the evidentiary disciplines -- paper-first gating, discrimination controls, gate-before-prove, fail-closed replay, independent anchors -- together with the record of where those disciplines were violated and what caught the violations. The 25 locked gates (17 BREAK / 8 PASS) fall into three strata with very different evidentiary weight: four historical calibrations, twelve live-literature targets, and eight low-stakes preprints, plus one infrastructure oracle. Case studies include a refutation replay, an execution-verified confirmation, a canonization, and an unfinished formalization line; the limitations section states what no discipline closes. The campaign repository is private at the time of writing; the submitted version will cite its exact commit SHA and an archival snapshot. Gates refute routes, not theorems.
 
-## 2. Introduction: the verification gap
+## 1. Introduction: the verification gap
 
 Peer review checks reasoning, not computation. A referee reads the
 argument, follows the lemmas, and judges whether the inferences hold.
@@ -40,7 +40,7 @@ here are mistakes, not misconduct -- but because trust is not a
 verification method. Every locked gate was replayed from pinned
 inputs by a script built to produce the opposite verdict where the
 opposite was correct; GAP, SKIP, and UNKNOWN dispositions have no
-executable gate by definition (section 3). Where the claim survived,
+executable gate by definition (section 2). Where the claim survived,
 that is recorded as a PASS with the same weight as a BREAK: the method
 does not grade on a curve.
 
@@ -48,12 +48,12 @@ Two scoping admissions, then a word on the labor. First, the timeline is short -
 commit is 2026-09-18. The claim of this paper is the reproducibility
 of the *method*, not the longevity of the results: every gate,
 control, and certificate in the repository can be replayed by a reader,
-and the verdict lock (§3) fails loudly if any of them drifts.
+and the verdict lock (§2) fails loudly if any of them drifts.
 Second, the targets were selected for fragility by harvest dossiers,
 not sampled at random. This paper makes no claim about the base rate
 of defective proofs in the literature. It claims only that *these*
 routes were tested, *this* is how, and *these* are the dispositions --
-with the failures of the method itself recorded alongside (§5.7).
+with the failures of the method itself recorded alongside (§4.7).
 
 Third, the labor. The throughput above -- 25 gates, four replay lanes,
 a 91-chunk canonization, a two-milestone Lean formalization, and eight
@@ -67,8 +67,8 @@ deep-research prompts and ran them on the Kimi 3 and Grok 3.1
 deep-research tools to assemble the candidate harvest list, then
 shortlisted it by hand. Nothing else predates the repository's
 2026-09-18 root commit. This is stated plainly because it is load-bearing,
-not confessional. An agent pipeline fails in characteristic ways (§5.6--§5.7), and
-§5's disciplines are in large part the scar tissue from those
+not confessional. An agent pipeline fails in characteristic ways (§4.6--§4.7), and
+§4's disciplines are in large part the scar tissue from those
 failures. The verification-of-verification question,
 *who audited the auditors*, is answered the same way this paper
 answers everything else: by the artifact. Every gate is a script a
@@ -89,12 +89,12 @@ went green. Approximately two hours of review found no verdict
 discrepancies. The
 replay log is pinned in the repository.
 
-The rest of the paper is the playbook. §3 defines the disposition
-taxonomy, §4 the attack types by mechanism with one worked example
-each, §5 the evidentiary disciplines and the record of their
-violations, §6 the case studies, §7 the limitations.
+The rest of the paper is the playbook. §2 defines the disposition
+taxonomy, §3 the attack types by mechanism with one worked example
+each, §4 the evidentiary disciplines and the record of their
+violations, §5 the case studies, §6 the limitations.
 
-## 3. The disposition taxonomy
+## 2. The disposition taxonomy
 
 Every audit in the campaign ends in exactly one disposition. The
 taxonomy exists for one reason: verdicts drift. Without fixed
@@ -110,9 +110,9 @@ The five dispositions: **BREAK**, **GAP**, **PASS**, **SKIP**,
 ## BREAK -- the route is refuted by a gated, controlled witness
 
 A BREAK means: a specific lemma, as the paper states it, is false --
-exhibited by a gate with a passing discrimination control (§5.2). The
+exhibited by a gate with a passing discrimination control (§4.2). The
 record is always lemma, instance, false instance. "Gates refute
-routes, not theorems" (§4): $\zeta(5)$ is probably irrational, and
+routes, not theorems" (§3): $\zeta(5)$ is probably irrational, and
 Goldbach's conjecture is untouched by the S.C.E. audit -- what died in
 each case is a specific chain of lemmas, and the audit note names them.
 
@@ -160,7 +160,7 @@ catches errors in our own notes is doing its job.
 
 A PASS means the gate confirmed what it was built to test, within
 the scope its audit note records. PASS escalates (a confirmed lemma can be built on);
-it is never forced (a gate that cannot fail is not run, §5.2). The
+it is never forced (a gate that cannot fail is not run, §4.2). The
 Jacobian-2D campaign is the example: the coefficient identities passed
 their computational gates *and* the proof text passed its prose audit,
 so the target is either correct or fails outside our gates' reach. A
@@ -224,7 +224,7 @@ past cannot be trusted about its present.
 ## What the catalog represents: stratification by community standing
 
 The lock's 25 gates are not 25 draws from "published mathematics":
-selected for fragility (§2), they fall into three strata with very
+selected for fragility (§1), they fall into three strata with very
 different evidentiary weight. Pooled, they invite the base-rate
 misreading this paper disclaims; stratified, each stratum carries only
 its own evidentiary weight:
@@ -248,7 +248,7 @@ its own evidentiary weight:
   for Salez--Youssef, Ibarra for Cohen, Afrasyab for Baste); the gates
   compute their witnesses from the pinned claim artifact rather than
   replaying the refutation's argument. The four PASS gates are
-  `mah_3` (claim-level SKIP -- §7.2), `es_cover` (Lopez),
+  `mah_3` (claim-level SKIP -- §6.2), `es_cover` (Lopez),
   `rr_qexpand`, and `pdn1` (Du--Yao). This stratum is where a BREAK is
   evidence about published mathematics -- and where the PASSes show
   the gates confirm as well as refute.
@@ -271,7 +271,7 @@ three live claims fully surviving their gates. The low-stakes stratum proves the
 the historical stratum proves it aims true. Neither is presented as
 more than that.
 
-## 4. The attack types (A--G)
+## 3. The attack types (A--G)
 
 The campaign's gates are classified by *mechanism*, not by subject area. Each
 type below names a route a proof can take, the gate built to test it,
@@ -381,7 +381,7 @@ unpublished.
 available on the campaign stack, record blocked -- do not invent operators.
 
 **Worked example.** q-TSPP, the q=1 case of Koutschan's proof
-(arXiv:0906.1018; `docs/blueprint/qtspp-q1.md`). The paper's §5.3 prints only
+(arXiv:0906.1018; `docs/blueprint/qtspp-q1.md`). The paper's §4.3 prints only
 a factorization of the order-7 recurrence's leading coefficient, not
 the operator; the $\partial$-finite description (65 guessed recurrences, 5 MB)
 was never published, and the recovered notebook's 13 MB diagonal
@@ -435,18 +435,18 @@ the gate -- the gate's meta records `"h_plus_cited": 1` at `p = 23` and
 sets $h = h^{-}\cdot h^{+}$. So 23 is exactly the point of failure. FLT itself
 stands; the route dies at `p = 23`. **Verdict:** locked **PASS** on
 $h(\mathbb{Q}(\zeta_{23})) = 3$ -- the confirmed fact that refutes the route
-(§3 polarity rule).
+(§2 polarity rule).
 
-## 5. The evidentiary disciplines
+## 4. The evidentiary disciplines
 
-§4's attack types are only as honest as the gates that implement
+§3's attack types are only as honest as the gates that implement
 them. A gate is a piece of software written by people who already
 believe the target is fragile; every discipline below exists because
 the campaign caught itself -- or was caught -- cutting a corner it had
 sworn not to cut. Each is stated as a rule, with the failure mode it
 guards and the incident that earned it.
 
-### 5.1 Paper-first: pin and read the actual paper
+### 4.1 Paper-first: pin and read the actual paper
 
 No gate is built from a secondary summary. The procedure is mechanical:
 fetch the version of record, record its SHA-256 and byte count, extract
@@ -470,7 +470,7 @@ the conjecture as stated reads $|A| > (1/2-c)p$ -- under the paraphrase the
 claim fell to any small set and the BREAK was vacuous. The retrofit
 caught it.
 
-### 5.2 Discrimination control: a check that cannot fail is not evidence
+### 4.2 Discrimination control: a check that cannot fail is not evidence
 
 A discrimination control is required where it bites: whenever the
 verdict is an existence or non-existence claim resolved by search or
@@ -493,12 +493,14 @@ the exact oracle? see `pdn1`'s fast-path self-test) and depth (is the
 sample large enough to carry information? `pdn1` at 81 points was not;
 at 6,747 it is).
 
-Every control outcome is recorded in its gate's own meta JSON, under
-the `controls` key -- control name, verdict, ok, receipt path, receipt
-SHA-256, and receipt timestamp -- embedded by
-`scripts/gates/record_controls.py` on every aggregate run. A gate
-whose meta carries `"controls": []` has no discrimination control
-recorded, and the paper says so wherever the verdict is cited.
+Every control outcome recorded in a receipt JSON is embedded in its
+gate's own meta JSON, under the `controls` key -- control name,
+verdict, ok, receipt path, receipt SHA-256, and receipt timestamp --
+by `scripts/gates/record_controls.py` on every aggregate run. A gate
+whose meta carries `"controls": []` has no *separate* control receipt:
+that is the honest record for the four exact-equality exemptions and
+for the two inline controls (`gb_sce`, documented in its audit note;
+`mah_3`, inside the gate).
 
 The controls have caught real bugs, not hypothetical ones. The Baste
 counterexample gate's control exposed a hardcoded `n = NUM_VERTICES`
@@ -514,7 +516,7 @@ asymptotic rather than a displayed inequality, the honest move was a
 prose audit, not a forced numeric gate -- a gate that cannot be
 calibrated is not run.
 
-### 5.3 Gate before prove: no formalization without a numeric gate
+### 4.3 Gate before prove: no formalization without a numeric gate
 
 No Lean formalization begins until the claim it targets has survived a
 numeric gate, and formalization targets carry a no-sorry,
@@ -531,7 +533,7 @@ discipline also sets the boundary of what formalization is *for* here:
 it is not applied to BREAK verdicts at all -- a refuted route needs no
 formalization of its false lemma.
 
-### 5.4 Fail-closed replay: hash-pinned inputs, any mismatch fails the lane
+### 4.4 Fail-closed replay: hash-pinned inputs, any mismatch fails the lane
 
 Replay lanes recompute from pinned inputs in shards; any checksum
 mismatch, row disagreement, or unreproducible step fails the lane --
@@ -541,10 +543,10 @@ upstream commit; the Dini, barrier, and tail lanes each carry their own
 sealed logs. Fail-closed is what makes a PASS verdict mean something: it is the
 reason the Jacobian-2D computational PASS and the Mahler
 counting-lemma gate PASS can be cited without hedging. (The Mahler
-*claim* is a different matter -- §7.2: the gate passed, the claim as a
+*claim* is a different matter -- §6.2: the gate passed, the claim as a
 whole is SKIP.)
 
-### 5.5 Independent anchors and dual implementation: two layers, not one
+### 4.5 Independent anchors and dual implementation: two layers, not one
 
 A single implementation can be wrong in ways its own tests cannot see.
 The campaign therefore uses two distinct layers. First, **brute-force
@@ -559,7 +561,7 @@ catches the bug class "wrong algorithm, confidently executed"; the
 dual implementation catches the class "right algorithm, wrong code".
 One layer is a precaution; two is evidence.
 
-### 5.6 Durable job discipline: log to disk, mark the exit, verify by hand
+### 4.6 Durable job discipline: log to disk, mark the exit, verify by hand
 
 Long-running jobs write their output to a durable log under the
 workspace, append an explicit exit marker, and are verified by reading
@@ -569,7 +571,7 @@ an hour before anyone noticed the build directory was empty. Every
 multi-hour sieve, Lean build, and replay lane in the campaign follows
 it.
 
-### 5.7 Where the method failed, and what caught it
+### 4.7 Where the method failed, and what caught it
 
 The credibility backbone of this paper is not the disciplines but
 the record of their violations (sources: `docs/WORKPLAN.md`
@@ -580,7 +582,7 @@ checkpoints).
   `baste_domination`, `sarkozy_sum_product` -- were gated from the
   corpus doc plus an abstract fetch, no PDF pinned; all three were
   retrofitted with the real PDFs on 2026-09-21, and the retrofit
-  caught Sárközy's misstated threshold (§5.1). The same day, four more
+  caught Sárközy's misstated threshold (§4.1). The same day, four more
   provenance failures in one session: `tang_zhang_schatten` and
   `thakur_carlitz` (corpus text image-corrupted -> real PDF fetch),
   `chung_graham_spiro` (ghost entry -- table row, no body section, no
@@ -610,21 +612,21 @@ checkpoints).
 - **Harness bugs caught by controls and anchors**, summarized here
   because each one justifies a discipline above: the Pochhammer
   negative-index convention (type C), the hardcoded
-  `n = NUM_VERTICES` (type F), the p=2 sieve inverse (§5.5).
+  `n = NUM_VERTICES` (type F), the p=2 sieve inverse (§4.5).
 
 None of these were caught by peer review, because none of them were
 visible to peer review. They were caught by replaying things -- which
 is the entire argument of this paper.
 
-## 6. Case studies
+## 5. Case studies
 
 The playbook is only as good as its hardest cases. Four studies, one
 each for a refutation, a confirmation, a canonization, and an
-unfinished line -- each mapped to the §4 attack type and the §5
+unfinished line -- each mapped to the §3 attack type and the §4
 disciplines it leans on. Full records live in `docs/audits/`; what
 follows is one page each.
 
-### 6.1 Kempe--Fritsch: the refutation case (BREAK)
+### 5.1 Kempe--Fritsch: the refutation case (BREAK)
 
 In 1879 Alfred Kempe published a proof of the four-color theorem; in
 1890 Heawood found a map that broke it. The campaign's gate does not
@@ -656,13 +658,13 @@ fragility signature, not a proof. It exercises paper-first at its
 most literal: the gate pins the modern telling (Fritsch & Fritsch
 1998; Gethner et al., *Involve* 2009), not anyone's summary of them.
 
-### 6.2 Gomila $\Lambda$-bound: the confirmation case (audit PASS)
+### 5.2 Gomila $\Lambda$-bound: the confirmation case (audit PASS)
 
 Jude Gomila's $\Lambda$ $\le$ 0.1787854 claim was replayed in four lanes and
 passed all four: 3,149,013/3,149,013 finite rows across 15 checksummed
 shards; 4/4 Dini legs sealed; 883/883 barrier prisms closed; 36/36
 tail checks at 256 and 512 bits (`docs/blueprint/gomila-lambda.md`). Every lane is
-fail-closed (§5.4): any mismatch would have failed the lane, and the
+fail-closed (§4.4): any mismatch would have failed the lane, and the
 sealed logs are re-verifiable.
 
 Lineage: Polymath15's Theorem 1.2 gave the method and the then-best
@@ -687,7 +689,7 @@ Platt--Trudgian margin, recomputed from the primary source
 that cannot confirm is not an audit -- but a confirmation must say
 what kind of confirmation it is.
 
-### 6.3 Pólya's conjecture: the canonization case (BANKED, off the lock)
+### 5.3 Pólya's conjecture: the canonization case (BANKED, off the lock)
 
 Pólya's conjecture ($L(n) \le 0$ for all n, L the Liouville summatory
 function) was disproved by Haselgrove in 1958, but no *checkable*
@@ -697,14 +699,14 @@ recomputed by two independent sieves -- with 91 SHA-256-pinned chunk
 certificates, a 370/370 verifier, and a Lean formalization of the
 finite slice through 100 (`docs/audits/polya.md`).
 
-Pólya is the case study for §5.5: the p=2 sieve bug was caught by
+Pólya is the case study for §4.5: the p=2 sieve bug was caught by
 brute-force anchors before the dual implementation existed, which then
 agreed on 91/91 chunks. Neither layer alone is evidence; together they
 are why the banked counterexample can be cited. It sits off the
 verdict lock deliberately: canonization is infrastructure, not a
 verdict about a route.
 
-### 6.4 q-TSPP: the unfinished line (in progress)
+### 5.4 q-TSPP: the unfinished line (in progress)
 
 The q-TSPP audit -- formalizing Okada's determinant route to the
 totally symmetric plane partition identities -- is the campaign's
@@ -718,19 +720,19 @@ not print them, the thesis does not yield them, and the author's site
 survives only on Wayback. The author has been contacted; the line
 waits on his reply.
 
-It belongs in this paper as "gate before prove" (§5.3) at a projected
+It belongs in this paper as "gate before prove" (§4.3) at a projected
 6--10-week scale (the blueprint's estimate, not a completed line): no
 q-TSPP gate is on the verdict lock -- the formalization builds on the
 recovered certificate archive, and the blocker -- the unrecovered
 recurrence coefficients -- is stated plainly instead of being worked
 around. It is the honest boundary of what the campaign could do alone.
 
-## 7. Limitations
+## 6. Limitations
 
 This section states what the playbook cannot do. Each limitation is
 one the campaign actually hit, not a hypothetical.
 
-### 7.1 Replay cannot catch specification errors on its own
+### 6.1 Replay cannot catch specification errors on its own
 
 A gate replays the computation the paper describes. If the paper
 describes the *wrong computation* -- proves a statement adjacent to
@@ -745,12 +747,12 @@ says -- is a partial remedy. It is not a closed gap: fidelity audits
 are manual, unglamorous, and easy to skip, which is exactly why the
 error class survives.
 
-### 7.2 Nonconstructive arguments force SKIP
+### 6.2 Nonconstructive arguments force SKIP
 
 Where there is no witness to exhibit and no computation to replay,
 there is no gate. Nonconstructive existence proofs, pure compactness
 arguments with no extractable bound, and routes whose decisive step
-cannot be instantiated at any parameters end in SKIP (§3) -- honestly,
+cannot be instantiated at any parameters end in SKIP (§2) -- honestly,
 but unavoidably. The Mahler 3D audit is the boundary case: every
 finitely checkable layer passed, the prose audit found no defect, and
 the connectedness step that carries the conclusion has no finite
@@ -760,7 +762,7 @@ SKIP: the decisive step cannot be instantiated at any parameters, so
 there is nothing to promote. The target is set aside -- the correct
 output of the method, and its admission of reach.
 
-### 7.3 The certificate cost curve is unsolved
+### 6.3 The certificate cost curve is unsolved
 
 GB-scale certificates against kernel checking remain an unsolved
 tradeoff. The q-TSPP certificates are hundreds of megabytes --
@@ -772,7 +774,7 @@ should be distrusted. Verified meta-level checkers are the open
 problem; until they exist, large-certificate proofs get a weaker
 standard, stated plainly.
 
-### 7.4 Type E remains tooling-blocked
+### 6.4 Type E remains tooling-blocked
 
 Type E -- replaying a paper's "by symbolic computation" steps -- is
 the attack type the campaign is worst equipped for. The tooling
@@ -782,17 +784,17 @@ project, not an audit step. The honest response: mark the limitation,
 record what was checked by other means, and do not pretend a partial
 replay is a full one.
 
-### 7.5 Selection and window
+### 6.5 Selection and window
 
 The targets were harvested for fragility, not sampled, and the
-campaign window is six calendar days, 2026-09-18 to 2026-09-23 (§2). Nothing in this paper estimates the
+campaign window is six calendar days, 2026-09-18 to 2026-09-23 (§1). Nothing in this paper estimates the
 base rate of defective proofs. The method is reproducible; the
-results are not a survey. The q-TSPP certificate-rot episode (§2,
-§6.4) is reported as a single instance; whether disappearing
+results are not a survey. The q-TSPP certificate-rot episode (§1,
+§5.4) is reported as a single instance; whether disappearing
 certificate archives are typical is a question for a larger sample,
 not a claim of this paper.
 
-### 7.6 No pre-publication author notification
+### 6.6 No pre-publication author notification
 
 The campaign does not notify authors before publishing a verdict,
 and does not intend to adopt notification as a regular policy. The
@@ -804,12 +806,12 @@ exhibits the false instance, and pins the inputs; every audit note is
 a document an author can answer point by point, and the repository is
 the correction channel -- a verdict met with a correct
 counter-argument is superseded in the open, under the append-only
-rule (§3). What the campaign does not do is litigate verdicts
+rule (§2). What the campaign does not do is litigate verdicts
 privately before publishing them. (The q-TSPP author was contacted,
 but to request missing coefficients for a formalization built on the
 authors' work, not to disclose a finding.)
 
-## 8. Related work
+## 7. Related work
 
 This paper claims a playbook and an audit log, not a new formalism.
 Every piece it assembles exists in several literatures; what follows
@@ -831,7 +833,7 @@ Platt and Trudgian (arXiv:2004.09765; Bull. London Math. Soc. 53
 (2021), 792--797) then demonstrated that computational claims compose: their verified RH height
 (3,000,175,332,800) turns Polymath15's table into $\Lambda \le 0.2$ -- the bound
 is only as strong as someone else's replay of the underlying
-computation. They also model the honest-boundary behavior §7
+computation. They also model the honest-boundary behavior §6
 advocates: the next table entry would give $\Lambda < 0.19$, which their
 height does not reach -- "We have not pursued this."
 
@@ -864,7 +866,7 @@ commenting finds problems at scale: Ortega and Delgado-Quirós (EPI,
 2023) report that of 17,244 PubPeer-commented articles, only 21.5%
 of those deserving an editorial notice were ever corrected by the
 journal. Scrutiny detects; it does not *dispose* -- findings sit in
-comment threads without verdicts. The disposition taxonomy (§3) is
+comment threads without verdicts. The disposition taxonomy (§2) is
 the move from "someone commented" to "a gate fired and the lock
 recorded it," with PASS carrying the same weight as BREAK so the
 system cannot become a pure refutation machine.
@@ -888,7 +890,7 @@ expensively -- that published results often do not survive
 replay, and built preregistration, replication studies, and
 adversarial collaboration in response. Mathematics has largely
 exempted itself on the grounds that proofs are self-verifying. They
-are, where the proof *is* the reasoning. The verification gap (§2) is
+are, where the proof *is* the reasoning. The verification gap (§1) is
 the observation that, increasingly, part of the proof is a
 computation -- and computations are empirical claims about what a
 machine did. This paper ports the replication movement's core
@@ -905,13 +907,13 @@ importance, just as a BREAK is not a contribution to the field.
 
 What none of these currents supply, to our knowledge, is the
 combination this paper documents: a fixed disposition taxonomy with a
-CI-enforced verdict lock (§3), a mechanism-classified attack-type repertoire (§4), and a published log of the method's own failures
-(§5.7). If that combination exists elsewhere, we would like to cite
+CI-enforced verdict lock (§2), a mechanism-classified attack-type repertoire (§3), and a published log of the method's own failures
+(§4.7). If that combination exists elsewhere, we would like to cite
 it.
 
-## 9. Conclusion
+## 8. Conclusion
 
-The playbook is the product. Every pattern in §§3--5 -- the five
+The playbook is the product. Every pattern in §§2--5 -- the five
 dispositions and the rules that keep them from drifting, the
 mechanism-classified attack types, the evidentiary disciplines and the log
 of their violations -- is reusable against the next claim, by anyone,
@@ -940,7 +942,7 @@ harness bugs caught by controls -- are part of the record, because a
 methodology that hides its failures cannot be trusted about its
 successes.
 
-The open problems are stated in §7 and not repeated here, except the
+The open problems are stated in §6 and not repeated here, except the
 one that matters most: the certificate cost curve. Until large
 computational certificates can be checked inside a proof kernel at
 reasonable cost, the strongest computer-assisted proofs will rest on
@@ -958,12 +960,12 @@ vulnerabilities, severity-rated, and collected in a final report.
 Du, J. Q. D., and Yao, O. X. M. "Congruences modulo arbitrary powers
 of 5 and 7 for Andrews and Paule's partition diamonds."
 arXiv:2503.00004. Source of the PDN1 congruences and modular equation
-replayed by the type-D gate (§4).
+replayed by the type-D gate (§3).
 
 Gethner, E., Kallichanda, B., Mentis, A. S., et al. "How false is
 Kempe's proof of the Four Color Theorem? Part II." *Involve* 2(3)
 (2009), 249–265. doi:10.2140/involve.2009.2.249. The modern telling of
-Kempe's argument and Heawood's refutation pinned by the §6.1 gate.
+Kempe's argument and Heawood's refutation pinned by the §5.1 gate.
 
 Heawood, P. J. "Map-Colour Theorem." *Quart. J. Pure Appl. Math.* 24
 (1890), 332–338. The original refutation of Kempe's 1879 proof: a
@@ -971,11 +973,11 @@ single map on which simultaneous Kempe-chain interchanges conflict.
 
 Jana, A., and Karmakar, L. "Generalizations of two hypergeometric
 sums related to conjectures of Guo." arXiv:2501.10109 [math.NT].
-The WZ-certificate pair audited clean by the type-C gate (§4).
+The WZ-certificate pair audited clean by the type-C gate (§3).
 
 Koutschan, C. "Eliminating Human Insight: An Algorithmic Proof of
 Stembridge's TSPP Theorem." arXiv:0906.1018 (2009). The q=1 case of
-the q-TSPP proof formalized in the campaign's Lean shakedown (§6.4).
+the q-TSPP proof formalized in the campaign's Lean shakedown (§5.4).
 
 Lean Community. "How to contribute to mathlib" and "Reviewing a
 mathlib PR." https://github.com/leanprover-community/leanprover-community.github.io
@@ -998,12 +1000,12 @@ notice were corrected by the journal.
 Petkovšek, M., Wilf, H. S., and Zeilberger, D. *A = B.* A K Peters,
 Wellesley, 1996. The Wilf–Zeilberger certificate method: a rational
 function R(n,k) certifying a hypergeometric identity, the object the
-type-C gate re-verifies (§4).
+type-C gate re-verifies (§3).
 
 Platt, D., and Trudgian, T. "The Riemann hypothesis is true up to
 $3\cdot 10^{12}$." *Bulletin of the London Mathematical Society* 53 (2021),
 792–797. doi:10.1112/blms.12460. arXiv:2004.09765. Theorem 1: RH
-verified to height 3,000,175,332,800; §3.4 turns Polymath15's Table 1
+verified to height 3,000,175,332,800; §2.4 turns Polymath15's Table 1
 into Corollary 2 ($\Lambda \le 0.2$) and declines the $\Lambda < 0.19$ entry: "We have
 not pursued this."
 
@@ -1027,10 +1029,10 @@ multi-stage judging, deduplication, and fix review.
 Su, Y. "Generalizations of local bijectivity of Keller maps and a
 proof of 2-dimensional Jacobian conjecture." arXiv:1603.01867v43
 [math.AG]. The 43-version 2D-Jacobian claim that survived the
-campaign's type-G logical-gap audit (PASS, §3).
+campaign's type-G logical-gap audit (PASS, §2).
 
 Sun, Z.-W. "Catalan's constant is irrational." arXiv:2609.04176v1.
-The type-E target whose numeric gate refuted the route (§4).
+The type-E target whose numeric gate refuted the route (§3).
 
 Tao, T. "Machine-Assisted Proof." *Notices of the American
 Mathematical Society* 72 (1) (Jan. 2025).
@@ -1039,132 +1041,132 @@ https://www.ams.org/journals/notices/202501/noti3041/noti3041.html.
 Zeng, Z., Liu, H., and Ratnavelu, K. "A Counterexample to the Tang
 Zhang Schatten Norm Conjecture and Sharp Positive Results."
 arXiv:2608.15558. Theorem 1.1: the exact counterexample (m = n = 2,
-p = 3/2) the type-A gate independently re-derives (§4).
+p = 3/2) the type-A gate independently re-derives (§3).
 
 Afrasyab, K. "A 50-Vertex Cubic Counterexample to the
 Domination-versus-Edge-Domination Conjecture." arXiv:2609.10783. The
 published refutation of Baste et al.'s conjecture (50-vertex cubic
 graph, gamma = 16 > 15 = gamma_e) whose witness the type-F gate
-recomputes from the pinned claim (§4).
+recomputes from the pinned claim (§3).
 
 Aliabadi, M. "A counterexample to the Chung-Graham-Spiro gap-set
 conjecture." arXiv:2609.04473. The published refutation (fails at
-l = 4, 9 in U_4 \\ D_4) recomputed by the type-F gate (§4).
+l = 4, 9 in U_4 \\ D_4) recomputed by the type-F gate (§3).
 
 Baste, J., Furst, M., Henning, M. A., Mohr, E., and Rautenbach, D.
 Domination-versus-edge-domination conjecture (2019/2020), as stated in
 Afrasyab arXiv:2609.10783: every finite regular graph of positive
 degree satisfies gamma(G) <= gamma_e(G). Refuted by Afrasyab; the
-type-F gate recomputes the witness (§4).
+type-F gate recomputes the witness (§3).
 
 Chalise, P., Clark, A., and Gnang, E. K. arXiv:2410.13840v2. The
 displayed evaluation in the proof of Proposition 3.4 broken by the
-type-A gate (§4).
+type-A gate (§3).
 
 Chen, S., Li, Y., Xi, D., and Xu, Z.-F. "The Mahler Conjecture in
 Three Dimensions." arXiv:2605.09334. Target of the MAH-3 gate; the
 gate verdict is PASS on the counting lemma, the claim disposition
-SKIP (§7.2).
+SKIP (§6.2).
 
 Chung, F., Graham, R., and Spiro, S. Gap-set conjecture (2020), as
 stated in Aliabadi arXiv:2609.04473: the l-step gap sets of the
 down-integer/up-integer partition agree for every l >= 1. Refuted by
-Aliabadi; the type-F gate recomputes the witness (§4).
+Aliabadi; the type-F gate recomputes the witness (§3).
 
 Demontis, R. "The union-closed set conjecture is true."
-arXiv:2405.03731v1. Target of the FRK-UC GAP note (§3).
+arXiv:2405.03731v1. Target of the FRK-UC GAP note (§2).
 
 Fritsch, R., and Fritsch, G. *The Four-Color Theorem.* Springer,
 1998. The 9-vertex, 21-edge graph and the switch-order failure
-replayed by the §6.1 gate.
+replayed by the §5.1 gate.
 
 Ghermoul. arXiv:2508.07367v1, equation (35). The Erdős--Straus
-target broken by the type-A gate (§4).
+target broken by the type-A gate (§3).
 
 Giraudin, D. N. "A counterexample to a conjecture of Thakur on
 Carlitz-Wieferich primes." arXiv:2607.15305. The published
 refutation (explicit c-Wieferich prime of degree 5 over F_{19^3})
-recomputed by the type-F gate (§4).
+recomputed by the type-F gate (§3).
 
 Gnang, E. K. arXiv:2202.03178v3. The displayed congruence in the
-proof of Lemma 25 broken by the type-F gate (§4).
+proof of Lemma 25 broken by the type-F gate (§3).
 
 Gomila, J. "Riemann lambda 0.1787854."
 https://www.judegomila.com/posts/riemann-lambda-0.1787854. Audit
 repository: https://github.com/judegomila/dbn-lambda-01787854-candidate-audit.
-The Lambda <= 0.1787854 claim execution-verified in §6.2.
+The Lambda <= 0.1787854 claim execution-verified in §5.2.
 
 Haselgrove, C. B. "A disproof of a conjecture of Pólya."
 *Mathematika* 5 (1958), 141–145. The first disproof of Pólya's
-conjecture; the canonization target of §6.3.
+conjecture; the canonization target of §5.3.
 
 Huang, Y., Lau, K., Ono, K., and Paule, P. "Algebraic geometric
 framework of Rogers--Ramanujan identities." arXiv:2608.15219. One of
-the two type-D PASS targets (§4).
+the two type-D PASS targets (§3).
 
 Ibarra, J. A. "A counterexample to a subadditivity conjecture of
 Cohen for Sophie Germain cyclic numbers." arXiv:2607.09793. Cohen's
 Conjecture 66 (subadditivity of C_sigma); the type-F gate recomputes
-the (m, n) = (31, 3928) witness (§4).
+the (m, n) = (31, 3928) witness (§3).
 
 Kempe, A. B. "On the geographical problem of the four colours."
 *Amer. J. Math.* 2 (1879), 193–200. The original flawed proof;
-background to the §6.1 gate.
+background to the §5.1 gate.
 
 Koutschan, C. "Eliminating Human Insight: An Algorithmic Proof of
 Stembridge's TSPP Theorem." arXiv:0906.1018. The q = 1 shakedown
-target of the q-TSPP line (§6.4).
+target of the q-TSPP line (§5.4).
 
 Koutschan, C., Kauers, M., and Zeilberger, D. "Proof of George
 Andrews's and David Robbins's q-TSPP Conjecture." arXiv:1002.4384;
 *Proc. Natl. Acad. Sci.* 108(6) (2011), 2196–2199. The q-TSPP line's
-target theorem (§6.4).
+target theorem (§5.4).
 
 Lamé, G. Attempted proof of Fermat's Last Theorem by cyclotomic
 unique factorization (1847). The route broken at p = 23 by the
-type-G gates (§4).
+type-G gates (§3).
 
 Lau, K., and Ono, K. "Modularity of Point Counts for the Curves
 X^a=Y^b: New Rogers--Ramanujan Identities." arXiv:2608.05480. The
-other type-D PASS target (§4).
+other type-D PASS target (§3).
 
 Lopez, M. A. "A Complete Congruence System for the Erdos-Straus
 Conjecture." arXiv:2404.01508. Target of the es_cover PASS gate
-(§4).
+(§3).
 
 Münch, F. "A counterexample to a conjecture by Salez and Youssef."
 arXiv:2504.08055. The published refutation (birth--death chains of
-increasing length) recomputed by the type-G gate (§4).
+increasing length) recomputed by the type-G gate (§3).
 
 Okada, S. "On the generating functions for certain classes of plane
 partitions." *J. Combin. Theory Ser. A* 51 (1989), 1–23. The
-determinant reduction the q-TSPP proof builds on (§6.4).
+determinant reduction the q-TSPP proof builds on (§5.4).
 
 Salez, J., and Youssef, P. "Intrinsic regularity in the discrete
 log-Sobolev inequality." arXiv:2503.02793. Conjecture 1, refuted by
-Münch; the type-G gate's target (§4).
+Münch; the type-G gate's target (§3).
 
 Suman, S. "A note on the Irrationality of $\zeta(5)$ and Higher Odd Zeta
 Values." arXiv:2407.07121. The withdrawn irrationality claim broken
-by the type-B gate (§4).
+by the type-B gate (§3).
 
 Tait, P. G. Claimed proof of the four-color theorem (1884), refuted
 by Tutte's 46-vertex counterexample (1946); the gate replays Tutte's
-counterexample (§4).
+counterexample (§3).
 
 Tanaka, M. Computation of the smallest Pólya counterexample,
 L(906,150,257) = +1 (1980), per the campaign's Pólya blueprint
-(§6.3).
+(§5.3).
 
 Tang, Q. "A counterexample to a conjecture of Sárközy on sums and
 products modulo a prime." arXiv:2603.29992. The published refutation
-recomputed by the type-F gate (§4).
+recomputed by the type-F gate (§3).
 
 Zadehgol Mohammadi, A., and Kolahdouz, M. "Introducing and Applying
 S.C.E Model Under Dusart's Inequality to Prove Goldbach's Strong
 Conjecture for 74 Typical Structures out of All 75 Structural Types
 of Even Number." arXiv:1909.13230v5. Target of the gb_sce BREAK
-gate (§5).
+gate (§4).
 
 ## Appendices
 
@@ -1182,12 +1184,10 @@ Every locked gate writes a machine-readable verdict record to
 | `instance` | the parameters the gate instantiated |
 | `false_instance` | the concrete witness (for BREAK) |
 | `verdict` | `BREAK` or `PASS` |
-| `not_this_gate` | what the verdict does *not* cover (polarity rule, §3) |
+| `not_this_gate` | what the verdict does *not* cover (polarity rule, §2) |
 | `timestamp` / `elapsed_s` | when and how long the gate ran |
 | `ok` | whether the gate itself executed cleanly |
-| `controls` | control outcomes recorded in the gate's own meta: list of
-`control` / `verdict` / `ok` / receipt path / receipt SHA-256 /
-receipt timestamp; `[]` where no control receipt exists |
+| `controls` | control outcomes embedded in the gate's own meta: list of `control` / `verdict` / `ok` / receipt path / receipt SHA-256 / receipt timestamp; `[]` where no control receipt exists. `receipt_sha256` hashes the receipt file at embed time only. |
 
 Gate-specific fields (counts tested/violated, margins, control
 references) extend the schema. The lock's verdict check reads exactly
@@ -1211,7 +1211,7 @@ in either direction -- fails the run. Adding a gate means adding its
 entry in the same commit as the gate. Removing or re-pinning a
 verdict requires the re-audit to be recorded first. Prose
 dispositions (GAP, SKIP, UNKNOWN) and off-lock confirmations are not
-in the map; they live in `docs/audits/` (§3).
+in the map; they live in `docs/audits/` (§2).
 
 ## B. Gate harness conventions
 
@@ -1229,24 +1229,35 @@ in the map; they live in `docs/audits/` (§3).
 - **Controls are code, not commentary.** Each gate's discrimination
   control is a standalone runnable script under `scripts/controls/`,
   with its own receipt JSON under `results/` -- and every control
-  outcome is also recorded in its gate's own meta JSON, under the
-  `controls` key (control name, verdict, ok, receipt path, receipt
-  SHA-256, receipt timestamp). The embedding is done by
+  outcome recorded in a receipt is also embedded in its gate's own meta
+  JSON, under the `controls` key (control name, verdict, ok, receipt
+  path, receipt SHA-256, receipt timestamp). The embedding is done by
   `scripts/gates/record_controls.py`, which the aggregate
   (`scripts/gates/check.py`) calls after every gate run; gates with no
   control receipt carry `"controls": []`, an honest empty record rather
-  than an omitted field. Two gates carry their control inline instead
-  of as a script: `gb_sce` (matched control described in its audit
-  note) and `mah_3` (wrong-$\theta$ control inside the gate). Gates in the
-  exact-equality class carry no discrimination control; §5.2 gives the
-  exemption and its substitutes. Appendix C maps every gate to its
-  control.
+  than an omitted field. Two gates are the documented exception to
+  "code, not commentary": they carry their control inline instead of as
+  a script -- `gb_sce` (matched control described in its audit note)
+  and `mah_3` (wrong-$\theta$ control inside the gate) -- and their
+  metas record `"controls": []`, i.e. no *separate* receipt. Gates in the
+  exact-equality class carry no discrimination control; §4.2 gives the
+  exemption and its substitutes. Control failures are report-only: a
+  receipt with `ok: false` is embedded as-is, printed loudly, and
+  recorded in `gates_check_meta.json` as `controls_ok: false`, but it
+  does not fail the aggregate or the verdict lock. Controls are re-run
+  manually, outside the aggregate -- `recorded_at` is the embed time,
+  not the control-run time, so a receipt can predate its gate's last
+  run. `receipt_sha256` binds the receipt file as of embed time; it
+  binds neither the control script nor the gate code. Appendix C maps
+  every gate to its control.
 - **Exit codes mean it.** Exit 0 with `verdict` set: the gate ran
   and decided. Any exception, missing input, or guard failure
   (e.g. paper hash mismatch) is an abort, never a verdict.
 - **Timestamps refresh; verdicts don't.** The aggregate run rewrites
-  `timestamp` fields across meta files; verdict fields change only
-  by re-audit commit.
+  `timestamp` fields across meta files, and reserializes every gate
+  meta (a meta is rewritten only when its embedded controls actually
+  change, so repeat runs produce no diff churn); verdict fields change
+  only by re-audit commit.
 
 ## C. Audit catalog (locked gates)
 
@@ -1261,7 +1272,7 @@ falsified), recomputation (a published refutation's witness is
 recomputed from the pinned claim artifact), confirmation (the claim
 survives), infrastructure. Controls are standalone scripts under
 `scripts/controls/` with receipt JSONs under `results/` (App B);
-"exact-equality" marks the §5.2 exemption.
+"exact-equality" marks the §4.2 exemption.
 
 | Gate | Target | Stratum | Verdict | Claim disposition | Attack | Evidence | Control |
 |---|---|---|---|---|---|---|---|
@@ -1281,8 +1292,8 @@ survives), infrastructure. Controls are standalone scripts under
 | rr_qexpand | Lau--Ono; Huang--Lau--Ono--Paule | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | pdn1 | Du--Yao | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | mah_3 | Mahler 3D counting lemma | live | PASS | claim SKIP | A+G | confirmation (gate) | inline wrong-$\theta$ control |
-| suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | break_control.py (shared) |
-| odd_zeta_1609 | odd-zeta claim | fringe | BREAK | claim BREAK | B | proof-route refutation | break_control.py (shared) |
+| suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | `suman_break_control` |
+| odd_zeta_1609 | odd-zeta claim | fringe | BREAK | claim BREAK | B | proof-route refutation | `odd_zeta_break_control` |
 | es5_eq35 | Ghermoul ES eq. 35 | fringe | BREAK | claim BREAK | A | proof-route refutation | es5_eq35_break_control.py |
 | tpc_area | twin-prime area method | fringe | BREAK | claim BREAK | F | proof-route refutation | tpc_area_break_control.py |
 | tpc_gn | Chalise--Clark--Gnang Prop. 3.4 | fringe | BREAK | claim BREAK | A | proof-route refutation | tpc_gn_break_control.py |
@@ -1299,15 +1310,15 @@ the route targeted mathlib's `EulerMascheroniConstant` rather than the
 paper's claim), Jana--Karmakar type-C (PASS, off-lock: WZ-certificate
 audit of a published proof, not a fragile route), NCI (SKIP), quantum
 Hedetniemi (UNKNOWN). Off-lock confirmations: Gomila $\Lambda$-bound
-(execution-verified at pinned commit, §6.2), Pólya (BANKED).
+(execution-verified at pinned commit, §5.2), Pólya (BANKED).
 
-[^1] `giuga_oracle` is a standing verification oracle (known Giuga
+[^1]: `giuga_oracle` is a standing verification oracle (known Giuga
 composites checked against Korselt), not an attack on a route; it
 carries no A--G letter.
 
 ## D. Glossary
 
-**Attack type.** One of the mechanism classes A--G (§4): the kind of
+**Attack type.** One of the mechanism classes A--G (§3): the kind of
 route a proof takes to its conclusion.
 
 **BANKED / canonization.** An off-lock infrastructure product: a
@@ -1315,12 +1326,13 @@ checkable record banked for the community (e.g., Pólya's smallest
 counterexample), not a verdict about a route.
 
 **BREAK.** Disposition: a specific lemma, as the paper states it, is
-false, exhibited by a gate with a passing discrimination control.
-Recorded as lemma, instance, false instance.
+false, exhibited by a gate. Recorded as lemma, instance, false instance.
 
-**Control (discrimination control).** A runnable check, part of the
-gate, showing it produces the opposite verdict where the opposite is
-correct. A gate that cannot be calibrated is not run.
+**Control (discrimination control).** A standalone runnable check
+(§4.2) showing the gate produces the opposite verdict where the
+opposite is correct; its outcome is recorded in a receipt JSON and
+embedded in the gate's meta. Two gates carry their control inline
+(`gb_sce`, `mah_3`); four exact-equality gates are exempt.
 
 **Corpus / dossier / harvest.** Target selection: the *harvest* is
 the fragility-targeted search; the *dossier* is the document it
@@ -1339,7 +1351,7 @@ unreproducible step fails the lane; no partial passes.
 
 **GAP.** Disposition: the paper's argument does not establish its
 conclusion, but no lemma statement was falsified. Found by prose
-audit; carries its own evidentiary standard (§3).
+audit; carries its own evidentiary standard (§2).
 
 **Gate.** The executable check: a script plus hash-pinned inputs plus
 a machine-readable meta record. A gate records a *verdict*

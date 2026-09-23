@@ -1,4 +1,4 @@
-# §4. The attack types (A--G) -- draft (2026-09-23)
+# §3. The attack types (A--G) -- draft (2026-09-23)
 
 The campaign's gates are classified by *mechanism*, not by subject area. Each
 type below names a route a proof can take, the gate built to test it,
@@ -108,7 +108,7 @@ unpublished.
 available on the campaign stack, record blocked -- do not invent operators.
 
 **Worked example.** q-TSPP, the q=1 case of Koutschan's proof
-(arXiv:0906.1018; `docs/blueprint/qtspp-q1.md`). The paper's §5.3 prints only
+(arXiv:0906.1018; `docs/blueprint/qtspp-q1.md`). The paper's §4.3 prints only
 a factorization of the order-7 recurrence's leading coefficient, not
 the operator; the $\partial$-finite description (65 guessed recurrences, 5 MB)
 was never published, and the recovered notebook's 13 MB diagonal
@@ -162,4 +162,4 @@ the gate -- the gate's meta records `"h_plus_cited": 1` at `p = 23` and
 sets $h = h^{-}\cdot h^{+}$. So 23 is exactly the point of failure. FLT itself
 stands; the route dies at `p = 23`. **Verdict:** locked **PASS** on
 $h(\mathbb{Q}(\zeta_{23})) = 3$ -- the confirmed fact that refutes the route
-(§3 polarity rule).
+(§2 polarity rule).

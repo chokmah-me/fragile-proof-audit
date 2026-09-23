@@ -14,12 +14,10 @@ Every locked gate writes a machine-readable verdict record to
 | `instance` | the parameters the gate instantiated |
 | `false_instance` | the concrete witness (for BREAK) |
 | `verdict` | `BREAK` or `PASS` |
-| `not_this_gate` | what the verdict does *not* cover (polarity rule, §3) |
+| `not_this_gate` | what the verdict does *not* cover (polarity rule, §2) |
 | `timestamp` / `elapsed_s` | when and how long the gate ran |
 | `ok` | whether the gate itself executed cleanly |
-| `controls` | control outcomes recorded in the gate's own meta: list of
-`control` / `verdict` / `ok` / receipt path / receipt SHA-256 /
-receipt timestamp; `[]` where no control receipt exists |
+| `controls` | control outcomes embedded in the gate's own meta: list of `control` / `verdict` / `ok` / receipt path / receipt SHA-256 / receipt timestamp; `[]` where no control receipt exists. `receipt_sha256` hashes the receipt file at embed time only. |
 
 Gate-specific fields (counts tested/violated, margins, control
 references) extend the schema. The lock's verdict check reads exactly
@@ -43,7 +41,7 @@ in either direction -- fails the run. Adding a gate means adding its
 entry in the same commit as the gate. Removing or re-pinning a
 verdict requires the re-audit to be recorded first. Prose
 dispositions (GAP, SKIP, UNKNOWN) and off-lock confirmations are not
-in the map; they live in `docs/audits/` (§3).
+in the map; they live in `docs/audits/` (§2).
 
 ## B. Gate harness conventions
 
@@ -61,24 +59,35 @@ in the map; they live in `docs/audits/` (§3).
 - **Controls are code, not commentary.** Each gate's discrimination
   control is a standalone runnable script under `scripts/controls/`,
   with its own receipt JSON under `results/` -- and every control
-  outcome is also recorded in its gate's own meta JSON, under the
-  `controls` key (control name, verdict, ok, receipt path, receipt
-  SHA-256, receipt timestamp). The embedding is done by
+  outcome recorded in a receipt is also embedded in its gate's own meta
+  JSON, under the `controls` key (control name, verdict, ok, receipt
+  path, receipt SHA-256, receipt timestamp). The embedding is done by
   `scripts/gates/record_controls.py`, which the aggregate
   (`scripts/gates/check.py`) calls after every gate run; gates with no
   control receipt carry `"controls": []`, an honest empty record rather
-  than an omitted field. Two gates carry their control inline instead
-  of as a script: `gb_sce` (matched control described in its audit
-  note) and `mah_3` (wrong-$\theta$ control inside the gate). Gates in the
-  exact-equality class carry no discrimination control; §5.2 gives the
-  exemption and its substitutes. Appendix C maps every gate to its
-  control.
+  than an omitted field. Two gates are the documented exception to
+  "code, not commentary": they carry their control inline instead of as
+  a script -- `gb_sce` (matched control described in its audit note)
+  and `mah_3` (wrong-$\theta$ control inside the gate) -- and their
+  metas record `"controls": []`, i.e. no *separate* receipt. Gates in the
+  exact-equality class carry no discrimination control; §4.2 gives the
+  exemption and its substitutes. Control failures are report-only: a
+  receipt with `ok: false` is embedded as-is, printed loudly, and
+  recorded in `gates_check_meta.json` as `controls_ok: false`, but it
+  does not fail the aggregate or the verdict lock. Controls are re-run
+  manually, outside the aggregate -- `recorded_at` is the embed time,
+  not the control-run time, so a receipt can predate its gate's last
+  run. `receipt_sha256` binds the receipt file as of embed time; it
+  binds neither the control script nor the gate code. Appendix C maps
+  every gate to its control.
 - **Exit codes mean it.** Exit 0 with `verdict` set: the gate ran
   and decided. Any exception, missing input, or guard failure
   (e.g. paper hash mismatch) is an abort, never a verdict.
 - **Timestamps refresh; verdicts don't.** The aggregate run rewrites
-  `timestamp` fields across meta files; verdict fields change only
-  by re-audit commit.
+  `timestamp` fields across meta files, and reserializes every gate
+  meta (a meta is rewritten only when its embedded controls actually
+  change, so repeat runs produce no diff churn); verdict fields change
+  only by re-audit commit.
 
 ## C. Audit catalog (locked gates)
 
@@ -93,7 +102,7 @@ falsified), recomputation (a published refutation's witness is
 recomputed from the pinned claim artifact), confirmation (the claim
 survives), infrastructure. Controls are standalone scripts under
 `scripts/controls/` with receipt JSONs under `results/` (App B);
-"exact-equality" marks the §5.2 exemption.
+"exact-equality" marks the §4.2 exemption.
 
 | Gate | Target | Stratum | Verdict | Claim disposition | Attack | Evidence | Control |
 |---|---|---|---|---|---|---|---|
@@ -113,8 +122,8 @@ survives), infrastructure. Controls are standalone scripts under
 | rr_qexpand | Lau--Ono; Huang--Lau--Ono--Paule | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | pdn1 | Du--Yao | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | mah_3 | Mahler 3D counting lemma | live | PASS | claim SKIP | A+G | confirmation (gate) | inline wrong-$\theta$ control |
-| suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | break_control.py (shared) |
-| odd_zeta_1609 | odd-zeta claim | fringe | BREAK | claim BREAK | B | proof-route refutation | break_control.py (shared) |
+| suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | `suman_break_control` |
+| odd_zeta_1609 | odd-zeta claim | fringe | BREAK | claim BREAK | B | proof-route refutation | `odd_zeta_break_control` |
 | es5_eq35 | Ghermoul ES eq. 35 | fringe | BREAK | claim BREAK | A | proof-route refutation | es5_eq35_break_control.py |
 | tpc_area | twin-prime area method | fringe | BREAK | claim BREAK | F | proof-route refutation | tpc_area_break_control.py |
 | tpc_gn | Chalise--Clark--Gnang Prop. 3.4 | fringe | BREAK | claim BREAK | A | proof-route refutation | tpc_gn_break_control.py |
@@ -131,15 +140,15 @@ the route targeted mathlib's `EulerMascheroniConstant` rather than the
 paper's claim), Jana--Karmakar type-C (PASS, off-lock: WZ-certificate
 audit of a published proof, not a fragile route), NCI (SKIP), quantum
 Hedetniemi (UNKNOWN). Off-lock confirmations: Gomila $\Lambda$-bound
-(execution-verified at pinned commit, §6.2), Pólya (BANKED).
+(execution-verified at pinned commit, §5.2), Pólya (BANKED).
 
-[^1] `giuga_oracle` is a standing verification oracle (known Giuga
+[^1]: `giuga_oracle` is a standing verification oracle (known Giuga
 composites checked against Korselt), not an attack on a route; it
 carries no A--G letter.
 
 ## D. Glossary
 
-**Attack type.** One of the mechanism classes A--G (§4): the kind of
+**Attack type.** One of the mechanism classes A--G (§3): the kind of
 route a proof takes to its conclusion.
 
 **BANKED / canonization.** An off-lock infrastructure product: a
@@ -147,12 +156,13 @@ checkable record banked for the community (e.g., Pólya's smallest
 counterexample), not a verdict about a route.
 
 **BREAK.** Disposition: a specific lemma, as the paper states it, is
-false, exhibited by a gate with a passing discrimination control.
-Recorded as lemma, instance, false instance.
+false, exhibited by a gate. Recorded as lemma, instance, false instance.
 
-**Control (discrimination control).** A runnable check, part of the
-gate, showing it produces the opposite verdict where the opposite is
-correct. A gate that cannot be calibrated is not run.
+**Control (discrimination control).** A standalone runnable check
+(§4.2) showing the gate produces the opposite verdict where the
+opposite is correct; its outcome is recorded in a receipt JSON and
+embedded in the gate's meta. Two gates carry their control inline
+(`gb_sce`, `mah_3`); four exact-equality gates are exempt.
 
 **Corpus / dossier / harvest.** Target selection: the *harvest* is
 the fragility-targeted search; the *dossier* is the document it
@@ -171,7 +181,7 @@ unreproducible step fails the lane; no partial passes.
 
 **GAP.** Disposition: the paper's argument does not establish its
 conclusion, but no lemma statement was falsified. Found by prose
-audit; carries its own evidentiary standard (§3).
+audit; carries its own evidentiary standard (§2).
 
 **Gate.** The executable check: a script plus hash-pinned inputs plus
 a machine-readable meta record. A gate records a *verdict*

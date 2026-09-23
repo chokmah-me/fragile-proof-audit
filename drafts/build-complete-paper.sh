@@ -15,7 +15,7 @@ cat <<'EOF'
 
 **Daniyel Yaacov Bilar**
 
-*Chokmah LLC* ,  [ORCID 0000-0002-9040-6914](https://orcid.org/0000-0002-9040-6914)
+*Chokmah LLC*, [ORCID 0000-0002-9040-6914](https://orcid.org/0000-0002-9040-6914)
 
 *Draft manuscript -- companion methods paper to the fragile-proof-audit campaign. Exported 2026-09-23. Licensed CC-BY 4.0.*
 

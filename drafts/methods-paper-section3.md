@@ -1,4 +1,4 @@
-# §3. The disposition taxonomy -- draft (2026-09-23)
+# §2. The disposition taxonomy -- draft (2026-09-23)
 
 Every audit in the campaign ends in exactly one disposition. The
 taxonomy exists for one reason: verdicts drift. Without fixed
@@ -14,9 +14,9 @@ The five dispositions: **BREAK**, **GAP**, **PASS**, **SKIP**,
 ## BREAK -- the route is refuted by a gated, controlled witness
 
 A BREAK means: a specific lemma, as the paper states it, is false --
-exhibited by a gate with a passing discrimination control (§5.2). The
+exhibited by a gate with a passing discrimination control (§4.2). The
 record is always lemma, instance, false instance. "Gates refute
-routes, not theorems" (§4): $\zeta(5)$ is probably irrational, and
+routes, not theorems" (§3): $\zeta(5)$ is probably irrational, and
 Goldbach's conjecture is untouched by the S.C.E. audit -- what died in
 each case is a specific chain of lemmas, and the audit note names them.
 
@@ -64,7 +64,7 @@ catches errors in our own notes is doing its job.
 
 A PASS means the gate confirmed what it was built to test, within
 the scope its audit note records. PASS escalates (a confirmed lemma can be built on);
-it is never forced (a gate that cannot fail is not run, §5.2). The
+it is never forced (a gate that cannot fail is not run, §4.2). The
 Jacobian-2D campaign is the example: the coefficient identities passed
 their computational gates *and* the proof text passed its prose audit,
 so the target is either correct or fails outside our gates' reach. A
@@ -128,7 +128,7 @@ past cannot be trusted about its present.
 ## What the catalog represents: stratification by community standing
 
 The lock's 25 gates are not 25 draws from "published mathematics":
-selected for fragility (§2), they fall into three strata with very
+selected for fragility (§1), they fall into three strata with very
 different evidentiary weight. Pooled, they invite the base-rate
 misreading this paper disclaims; stratified, each stratum carries only
 its own evidentiary weight:
@@ -152,7 +152,7 @@ its own evidentiary weight:
   for Salez--Youssef, Ibarra for Cohen, Afrasyab for Baste); the gates
   compute their witnesses from the pinned claim artifact rather than
   replaying the refutation's argument. The four PASS gates are
-  `mah_3` (claim-level SKIP -- §7.2), `es_cover` (Lopez),
+  `mah_3` (claim-level SKIP -- §6.2), `es_cover` (Lopez),
   `rr_qexpand`, and `pdn1` (Du--Yao). This stratum is where a BREAK is
   evidence about published mathematics -- and where the PASSes show
   the gates confirm as well as refute.

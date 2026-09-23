@@ -302,6 +302,10 @@ def main() -> int:
     ]
     n_with = sum(1 for g in controls_report["gates"] if g["controls"])
     n_without = sum(1 for g in controls_report["gates"] if not g["controls"])
+    # Keep the standalone report fresh too: it is written on every
+    # aggregate run, not only by record_controls.py --standalone.
+    report_out = RESULTS / "record_controls_report.json"
+    report_out.write_text(json.dumps(controls_report, indent=2) + "\n", encoding="utf-8")
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "phase": "track-D",
@@ -322,6 +326,10 @@ def main() -> int:
             "control_failures": controls_failed,
             "warnings": controls_report["warnings"],
         },
+        # Control outcomes are report-only: a failing control is printed
+        # loudly and recorded here, but does not fail the aggregate or
+        # the verdict lock. See App B ("report-only").
+        "controls_ok": not controls_failed,
         "all_ok": not failed and not drifted,
     }
     out = RESULTS / "gates_check_meta.json"

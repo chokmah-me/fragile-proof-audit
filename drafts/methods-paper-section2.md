@@ -1,4 +1,4 @@
-# §2. Introduction: the verification gap -- draft (2026-09-23)
+# §1. Introduction: the verification gap -- draft (2026-09-23)
 
 Peer review checks reasoning, not computation. A referee reads the
 argument, follows the lemmas, and judges whether the inferences hold.
@@ -22,7 +22,7 @@ here are mistakes, not misconduct -- but because trust is not a
 verification method. Every locked gate was replayed from pinned
 inputs by a script built to produce the opposite verdict where the
 opposite was correct; GAP, SKIP, and UNKNOWN dispositions have no
-executable gate by definition (section 3). Where the claim survived,
+executable gate by definition (section 2). Where the claim survived,
 that is recorded as a PASS with the same weight as a BREAK: the method
 does not grade on a curve.
 
@@ -30,12 +30,12 @@ Two scoping admissions, then a word on the labor. First, the timeline is short -
 commit is 2026-09-18. The claim of this paper is the reproducibility
 of the *method*, not the longevity of the results: every gate,
 control, and certificate in the repository can be replayed by a reader,
-and the verdict lock (§3) fails loudly if any of them drifts.
+and the verdict lock (§2) fails loudly if any of them drifts.
 Second, the targets were selected for fragility by harvest dossiers,
 not sampled at random. This paper makes no claim about the base rate
 of defective proofs in the literature. It claims only that *these*
 routes were tested, *this* is how, and *these* are the dispositions --
-with the failures of the method itself recorded alongside (§5.7).
+with the failures of the method itself recorded alongside (§4.7).
 
 Third, the labor. The throughput above -- 25 gates, four replay lanes,
 a 91-chunk canonization, a two-milestone Lean formalization, and eight
@@ -49,8 +49,8 @@ deep-research prompts and ran them on the Kimi 3 and Grok 3.1
 deep-research tools to assemble the candidate harvest list, then
 shortlisted it by hand. Nothing else predates the repository's
 2026-09-18 root commit. This is stated plainly because it is load-bearing,
-not confessional. An agent pipeline fails in characteristic ways (§5.6--§5.7), and
-§5's disciplines are in large part the scar tissue from those
+not confessional. An agent pipeline fails in characteristic ways (§4.6--§4.7), and
+§4's disciplines are in large part the scar tissue from those
 failures. The verification-of-verification question,
 *who audited the auditors*, is answered the same way this paper
 answers everything else: by the artifact. Every gate is a script a
@@ -71,7 +71,7 @@ went green. Approximately two hours of review found no verdict
 discrepancies. The
 replay log is pinned in the repository.
 
-The rest of the paper is the playbook. §3 defines the disposition
-taxonomy, §4 the attack types by mechanism with one worked example
-each, §5 the evidentiary disciplines and the record of their
-violations, §6 the case studies, §7 the limitations.
+The rest of the paper is the playbook. §2 defines the disposition
+taxonomy, §3 the attack types by mechanism with one worked example
+each, §4 the evidentiary disciplines and the record of their
+violations, §5 the case studies, §6 the limitations.

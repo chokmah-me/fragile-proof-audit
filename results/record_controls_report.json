@@ -1,5 +1,5 @@
 {
-  "recorded_at": "2026-09-23T20:54:47.385067+00:00",
+  "recorded_at": "2026-09-23T21:20:21.239640+00:00",
   "gates": [
     {
       "gate": "suman_eq48",
@@ -9,7 +9,8 @@
           "control": "suman_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "odd_zeta_1609",
@@ -19,7 +20,8 @@
           "control": "odd_zeta_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "es_cover",
@@ -29,31 +31,32 @@
           "control": "es_cover_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "rr_qexpand",
       "meta": "rr_qexpand_gate_meta.json",
       "controls": [],
-      "note": "no control receipt recorded (honest empty list)"
+      "note": "controls unchanged; meta not rewritten; no control receipt (honest empty list)"
     },
     {
       "gate": "pdn1",
       "meta": "pdn1_gate_meta.json",
       "controls": [],
-      "note": "no control receipt recorded (honest empty list)"
+      "note": "controls unchanged; meta not rewritten; no control receipt (honest empty list)"
     },
     {
       "gate": "giuga_oracle",
       "meta": "giuga_oracle_gate_meta.json",
       "controls": [],
-      "note": "no control receipt recorded (honest empty list)"
+      "note": "controls unchanged; meta not rewritten; no control receipt (honest empty list)"
     },
     {
       "gate": "lame_h23",
       "meta": "lame_h23_gate_meta.json",
       "controls": [],
-      "note": "no control receipt recorded (honest empty list)"
+      "note": "controls unchanged; meta not rewritten; no control receipt (honest empty list)"
     },
     {
       "gate": "lame_ideal_neg23",
@@ -63,7 +66,8 @@
           "control": "lame_ideal_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "cohen_subadditivity",
@@ -73,7 +77,8 @@
           "control": "cohen_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "baste_domination",
@@ -83,7 +88,8 @@
           "control": "baste_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "sarkozy_sum_product",
@@ -93,7 +99,8 @@
           "control": "sarkozy_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "tang_zhang_schatten",
@@ -103,7 +110,8 @@
           "control": "tang_zhang_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "thakur_carlitz",
@@ -113,7 +121,8 @@
           "control": "thakur_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "chung_graham_spiro",
@@ -123,7 +132,8 @@
           "control": "chung_graham_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "salez_youssef_logsobolev",
@@ -133,7 +143,8 @@
           "control": "salez_youssef_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "tpc_area",
@@ -143,7 +154,8 @@
           "control": "tpc_area_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "es5_eq35",
@@ -153,7 +165,8 @@
           "control": "es5_eq35_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "cat_g",
@@ -163,7 +176,8 @@
           "control": "cat_g_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "krr_cl",
@@ -173,7 +187,8 @@
           "control": "krr_cl_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "tpc_gn",
@@ -183,7 +198,8 @@
           "control": "tpc_gn_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "jac_2d",
@@ -193,7 +209,8 @@
           "control": "jac_2d_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "tait_tutte",
@@ -203,7 +220,8 @@
           "control": "tait_tutte_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "kempe_fritsch",
@@ -213,19 +231,20 @@
           "control": "kempe_fritsch_break_control",
           "ok": true
         }
-      ]
+      ],
+      "note": "controls unchanged; meta not rewritten"
     },
     {
       "gate": "gb_sce",
       "meta": "gb_sce_gate_meta.json",
       "controls": [],
-      "note": "no control receipt recorded (honest empty list)"
+      "note": "controls unchanged; meta not rewritten; no control receipt (honest empty list)"
     },
     {
       "gate": "mah_3",
       "meta": "mah_3_gate_meta.json",
       "controls": [],
-      "note": "no control receipt recorded (honest empty list)"
+      "note": "controls unchanged; meta not rewritten; no control receipt (honest empty list)"
     }
   ],
   "warnings": []

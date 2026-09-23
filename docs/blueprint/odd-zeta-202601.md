@@ -1,12 +1,23 @@
 # Blueprint — Phase 2(d): odd-zeta preprint 202601.1609
 
-**Status:** extract complete — **BREAK (underspecified Λ_m)**  
+**Status:** PDF pinned — **BREAK (Lemma 5.1 never fires)**  
 **Claim:** Archan Chattopadhyay, *On the Irrationality of the Odd Zeta Values*,
 Preprints.org 202601.1609.v1 (21 Jan 2026), doi:10.20944/preprints202601.1609.v1  
 **Mirrors:** ResearchGate 10.13140/RG.2.2.11481.79203 (11 pages)  
 **Sibling (not this target):** 202601.1390 (π-normalized odd zetas / `I_n`)  
 **Attack type:** A (scalar decay) — *blocked at formula display*  
-**Local PDF:** **not obtained** (preprints.org 403 / Akamai; RG HTML interstitial)
+**Local PDF:** pinned at `incoming/odd-zeta-202601/preprints202601.1609.v1.pdf`
+(SHA-256 `686998ff30f778fba4aa9a3874ccf09637bd76663a4edb7c39fae24b1125aae2`,
+matches the gate's pinned value; downloaded from preprints.org,
+DOI 10.20944/preprints202601.1609.v1, 828 KB, 11 pages)
+
+**Authorship verified 2026-09-23:** the pinned PDF's title page reads
+*On the Irrationality of the Odd Zeta Values* / Archan Chattopadhyay /
+doi:10.20944/preprints202601.1609.v1. The earlier "Maximilian Stein"
+flag was a false alarm — no Stein paper on this topic surfaced in
+search, and "Stein" appears nowhere in the repo's odd-zeta materials.
+The gate, audit note, and gate meta all correctly attribute
+Chattopadhyay.
 
 Provenance of quotes: indexed Preprints.org `download_pub` fulltext + ResearchGate OCR
 of the same v1. That is enough to decide evaluability of `Λ_m`. It is **not** a
@@ -144,5 +155,5 @@ theorem `ζ(2n+1) ∉ ℚ`.
 - [x] Quote Theorem 5.1
 - [x] Attempt `Λ_m` at ζ(5) — **cannot evaluate**
 - [x] Gate meta `results/odd_zeta_gate_meta.json` (verdict BREAK)
-- [ ] Pin official PDF in `incoming/` when a 200 OK exists
+- [x] Pin official PDF in `incoming/` when a 200 OK exists (done 2026-09-23: `incoming/odd-zeta-202601/preprints202601.1609.v1.pdf`, SHA-256 matches gate pin)
 - [ ] Lean: none (gate-before-prove)
