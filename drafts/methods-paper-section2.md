@@ -55,6 +55,16 @@ reader can run; every verdict is pinned in a lock that fails loudly on
 drift; every failure of the method is published beside its successes.
 Trust the replay, not the résumé — including ours.
 
+That review was a full re-execution, not a skim. The author directed
+a clean re-run of the twenty-five-gate verdict lock — 25/25 `[ok]`,
+zero drift — then read every gate's source code and every audit note
+and prose disposition, checking each verdict against the evidence
+rather than the pin. The re-run caught two missing Python dependencies
+in the review environment (`pypdf`, `networkx`); three gates aborted
+fail-closed on their PDF-identity controls until the dependencies were
+installed, then went green. No verdict discrepancies were found. The
+re-run log is pinned in the repository.
+
 The rest of the paper is the playbook. §3 defines the disposition
 taxonomy, §4 the attack types by mechanism with one worked example
 each, §5 the evidentiary disciplines and the record of their
