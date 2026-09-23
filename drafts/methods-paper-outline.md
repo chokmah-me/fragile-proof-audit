@@ -16,7 +16,7 @@ Peer review checks reasoning, not computation. Computational components of proof
 ## 3. The disposition taxonomy
 - **BREAK** (route refuted by a gated, controlled witness), **GAP** (decisive inference broken by proof reading, but not finitely gateable; route refuted, explicitly *not* a BREAK and not on the lock — FRK-UC Demontis, LEG-NS Ferreira, Erdős–Straus Thm-10), **PASS** (gate's claim independently confirmed; escalates, never forced), **SKIP** (not auditable as stated — e.g. nonconstructive arguments, no witness), **UNKNOWN** (artifacts verified, kernel not re-checkable on our toolchain — e.g. quantum Hedetniemi, their Lean 4.19.0).
 - **Polarity rule:** a verdict attaches to the *gate's claim*, not to the paper's conclusion. Lamé: `lame_h23` / `lame_ideal_neg23` are locked **PASS** (h(ℚ(ζ₂₃)) = 3 confirmed); that confirmed fact is what kills the route. §4 must say so explicitly.
-- **The verdict lock:** `scripts/gates/check.py` `EXPECTED_VERDICT` pins 24 gates (17 BREAK / 7 PASS as of 2026-09-23); drift in either direction fails CI. It is *not* an all-BREAK lock. Audit confirmations (Gomila) and canonizations (Pólya) sit off the lock.
+- **The verdict lock:** `scripts/gates/check.py` `EXPECTED_VERDICT` pins 25 gates (17 BREAK / 8 PASS as of 2026-09-23); drift in either direction fails CI. It is *not* an all-BREAK lock. Audit confirmations (Gomila) and canonizations (Pólya) sit off the lock.
 - **Append-only, precisely stated:** history is append-only in git + WORKPLAN checkpoints; summary tables (README) show the current verdict with a "superseded" note (odd-zeta, corrected 2026-09-20).
 
 ## 4. The attack types (A–G) — DRAFTED, see `drafts/methods-paper-section4.md`
