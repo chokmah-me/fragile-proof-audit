@@ -239,6 +239,36 @@ Meaning: the y-transfer extending the y₀ floors across the full y-band is
 sealed — gate (ii) is now fully closed, including the transfer step the
 author's adversarial panel had flagged as a real gap.
 
+## Barrier replay (2026-09-22) — VERIFIED PASS
+
+Fresh clone of the audit repo at pinned commit
+`a74738deb6d5e0f76887cb36901da08b68dca705`; read-only replay scope (no
+producer rebuild), per the audit plan. Environment: Linux, Python 3.12.3
++ mpmath 1.2.1, gcc, FLINT 3.0.1 (libflint-dev, the repo Dockerfile's
+reference version).
+
+- **5/5 sealed barrier certificate SHA-256 checksums** match the repo's
+  `SHA256SUMS` pins: `barrier_target_closed.log` (Linux/FLINT 3.0.1),
+  `barrier_target_closed_macos_arm64_flint36.log`,
+  `storedsum_taylor_tail.log`, `storedsum_provenance.log`,
+  `uniform_error_256.log`.
+- `verifiers/verify_barrier_binding.py` on the sealed log —
+  **RESULT: ALL PASS, exit code 0**: 54/54 checks, 0 failures; prism
+  cover E5 parses 883/883 lines, consecutive identifiers, every prism
+  quantity passes its sign/type gate. Conclusion: H_t is zero-free on
+  the complete closed slab [X,X+1] × [0.1809,1] × [0,0.16125].
+- `verifiers/verify_prop410_arb.c` compiled clean against FLINT 3.0.1
+  and run at both precisions — **31/31 checks PASS at 256 bits**
+  (exit 0) and **31/31 checks PASS at 512 bits** (exit 0): exact
+  candidate identity t₀+y₀²/2 = 893927/5000000, t-box, y₀² identity,
+  floor-vs-budget, all domain gates, and the directed Arb error-budget
+  bounds, with no stored numerical certificate read.
+
+**RESULT PASS: 883-prism barrier certificate + Prop 4.10 Arb error
+budget at 256 & 512 bits.** Gate (iii) of the Triangle weld is now
+closed on this audit's evidence. Still an audit confirmation, not a
+BREAK; not on the 23/23 verdict lock.
+
 ## Audit plan (verify/audit, not refutation)
 
 1. ~~Shard row check + full finite replay~~ — **DONE 2026-09-22**: sample
@@ -251,10 +281,12 @@ author's adversarial panel had flagged as a real gap.
    legs, worst ratio_ub 0.99999860767275095 < 1);
    `verify_stored_logs.py` PASS; Platt–Trudgian margin confirmed
    (see above).
-4. Barrier + tail replay scope (read-only): `barrier_target_closed.log`
-   under the 54-check parser, `verify_prop410_arb.c` at both precisions,
-   tail contraction D<0.999721. Do not rebuild the producer unless a
-   shard fails to parse.
+4. ~~Barrier replay~~ — **DONE 2026-09-22**: 5/5 sealed barrier
+   certificate checksums PASS; `verify_barrier_binding.py` PASS
+   (54/54 checks, 883/883 prisms, exit 0);
+   `verify_prop410_arb.c` PASS at 256 and 512 bits (31/31 checks
+   each, exit 0, FLINT 3.0.1). Tail replay scope (read-only): tail
+   contraction D<0.999721 — **PENDING**.
 5. State the three gate lemmas (verified height, final-time clearance,
    barrier) in Lean against the campaign's axiom-clean forge; cross-reference
    Gomila's own `lean/aristotle` (seven Lean 4 projects, 223 theorems,
