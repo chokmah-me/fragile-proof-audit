@@ -32,4 +32,5 @@ version will cite its exact commit SHA and an archival snapshot
 (Zenodo/Software Heritage DOI). A paper whose thesis is *don't trust
 prose, trust the replay* must pin its artifact in the text.
 The standing doctrine throughout:
-gates refute routes, not theorems.
+gates refute routes, not theorems. Trust the replay, not the résumé —
+including ours.

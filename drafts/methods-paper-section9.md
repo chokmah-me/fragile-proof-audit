@@ -10,10 +10,11 @@ still be able to run every gate, check every control, and re-derive
 every disposition from the pinned artifacts.
 
 What the campaign found, in brief: most fragile-looking routes are
-fragile. Seventeen of twenty-five locked gates refute the lemma they
+fragile. Eight of the twelve live-literature gates refuted their
 target; three more routes fell to prose audit where no gate could
-reach; two targets survived everything thrown at them and are recorded
-as PASS with the same weight. The method's own failures — abstract
+reach; four live targets survived everything thrown at them, recorded
+as PASS with the same weight as a BREAK — as are Su's low-stakes
+2D-Jacobian route and the off-lock Gomila confirmation. The method's own failures — abstract
 fetches gated as papers, ghost corpus entries, a corrected verdict,
 harness bugs caught by controls — are part of the record, because a
 methodology that hides its failures cannot be trusted about its
