@@ -62,7 +62,8 @@ and prose disposition, checking each verdict against the evidence
 rather than the pin. The re-run caught two missing Python dependencies
 in the review environment (`pypdf`, `networkx`); three gates aborted
 fail-closed on their PDF-identity controls until the dependencies were
-installed, then went green. No verdict discrepancies were found. The
+installed, then went green. No verdict discrepancies were found in
+approximately two hours of review. The
 re-run log is pinned in the repository.
 
 The rest of the paper is the playbook. §3 defines the disposition
