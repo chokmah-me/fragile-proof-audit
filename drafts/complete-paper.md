@@ -1,12 +1,14 @@
 # Trust, but Replay: Auditing Published Mathematical Claims
 
+<p class="hebrew-epigraph" dir="rtl" lang="he">אִם יִרְצֶה הַשֵּׁם</p>
+
 **Daniyel Yaacov Bilar**
 
 *Chokmah LLC* ,  [ORCID 0000-0002-9040-6914](https://orcid.org/0000-0002-9040-6914)
 
 *Draft manuscript -- companion methods paper to the fragile-proof-audit campaign. Exported 2026-09-23. Licensed CC-BY 4.0.*
 
-*13 Elul 5787*
+*12 Tishrei 5787*
 
 *AI utilization: the candidate-harvest list was assembled with Kimi 3 and Grok 3.1 deep research; gate execution, audit-note drafting, and manuscript preparation were performed by Muse Spark agents at the author's direction. Human-review protocol: the author directed a clean re-run of all 25 locked gates (25/25 [ok], zero drift) and read every gate script, audit note, and prose disposition before this draft.*
 
