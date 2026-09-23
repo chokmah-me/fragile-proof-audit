@@ -57,5 +57,29 @@ note the files live outside the repo (too large to commit).
 
 ## 3. Formalization plan
 
-*(To be written after recon: which parts are machine-checkable
-certificate + finite check, which are human-sized reduction lemmas.)*
+### 3a. Scope (from recon §7, certificates now recovered)
+
+**Machine-checkable** (certificate + finite check):
+- (a) Identity (1): order-7 diagonal recurrence, `(S_n−1)` right factor, 7 values, `p_7(q,q^n,q^n) ≠ 0`.
+- (b) Identity (2): two CT identities (ideal membership), `P_1,P_2` in RHS-ideal, finite agreement check.
+- (c) Identity (3): order-12 recurrence, `L_12 = Q·L_2` factorization, `L_2` kills RHS, leading coefficient ≠ 0, check n=1..12. **Pilot candidate** — most compact certificate, most explicit closing argument.
+- (d) Dimension-zero / uniqueness: finite initial values determine the sequence.
+
+**Human-sized reduction lemmas** (formalize as mathematics):
+- (e) Okada's reduction: determinant evaluation ⇒ q-TSPP product formula.
+- (f) Holonomic-ansatz induction: (1)+(2)+(3) for guessed `c_{n,j}` ⇒ true cofactors ⇒ det = b_n.
+- (g) Rewritings (2)→(2′), (3)→(3′) (q-binomial algebra).
+- (h) Guessing the `c_{n,j}` system is outside the verified proof (taken as input).
+
+**Infrastructure gaps** (the real 6–10 wk cost):
+- Ore algebras `Q(q,q^n,q^j)[S_n,S_j]` + noncommutative Gröbner bases: essentially absent from mathlib.
+- q-hypergeometric toolkit: q-Pochhammer, q-binomial, q-Zeilberger (ordinary Zeilberger in mathlib is itself nascent).
+- GB-scale terms can't go through Lean's kernel → verified meta-level checker with small trusted certificate format.
+- Discovery algorithms undisclosed → certificates can be CHECKED, not regenerated. (Recovery solved the availability half.)
+
+### 3b. Staging
+
+1. ✅ Recover/archive certificates (Wayback 2026-05-13; SHA-256 pinned).
+2. **Next:** formalize the q=1 case (Stembridge TSPP, arXiv:0906.1018 — fully written up, smaller certificates) as infrastructure shakedown.
+3. Build Ore-algebra + CT checking infrastructure against the small case.
+4. Pilot identity (3) in the q-case.
