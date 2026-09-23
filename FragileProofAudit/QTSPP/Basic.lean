@@ -13,13 +13,13 @@ certificate — "rational-function certificate + finite initial-value
 check", the purest existing model of a Lean gate, still awaiting a full
 formalization.
 
-Status: reconnaissance underway (see `docs/blueprint/qtspp.md`).
-This module is a placeholder until the identity map lands.
+Status: staging — q=1 Stembridge shakedown in `QTSPP.Stembridge`
+(see `docs/blueprint/qtspp-q1.md`); q-case certificates recovered at
+`~/workspace/qtspp-certs/public/` (SHA-256 pinned, too large to commit).
 -/
 
-namespace FragileProofAudit.QTSPP
+import FragileProofAudit.QTSPP.Stembridge
 
-/-- Placeholder: the Andrews–Robbins product formula statement will land here. -/
-def placeholder : Unit := ()
+namespace FragileProofAudit.QTSPP
 
 end FragileProofAudit.QTSPP
