@@ -1,4 +1,4 @@
-# §7. Related work -- draft (2026-09-23)
+# Sec. 7. Related work - draft (2026-09-23)
 
 This paper claims a playbook and an audit log, not a new formalism.
 Every piece it assembles exists in several literatures; what follows
@@ -18,15 +18,15 @@ The difference is posture: Polymath15 *produced* the computation; a
 replay audit replays someone else's under a hostile prior.
 Platt and Trudgian (arXiv:2004.09765; Bull. London Math. Soc. 53
 (2021), 792--797) then demonstrated that computational claims compose: their verified RH height
-(3,000,175,332,800) turns Polymath15's table into $\Lambda \le 0.2$ -- the bound
+(3,000,175,332,800) turns Polymath15's table into $\Lambda \le 0.2$ - the bound
 is only as strong as someone else's replay of the underlying
-computation. They also model the honest-boundary behavior §6
+computation. They also model the honest-boundary behavior Sec. 6
 advocates: the next table entry would give $\Lambda < 0.19$, which their
-height does not reach -- "We have not pursued this."
+height does not reach - "We have not pursued this."
 
 **Verification institutions: mathlib review.** The strongest existing
 institution for the thing this paper says is missing is Lean's
-mathlib -- except that it verifies a different object. Mathlib's PR
+mathlib - except that it verifies a different object. Mathlib's PR
 review is post-kernel human review: the kernel guarantees logical
 correctness, and human reviewers check fitness (naming, generality,
 placement, faithfulness to the intended statement). A replay audit is
@@ -42,18 +42,18 @@ proofs has no kernel and no review queue.
 happens *after* a formal proof breaks: tools that repair proof terms
 across type changes, with the kernel re-checking the repaired
 artifact. That literature shows what "repairable" means when
-verification is mechanized -- and throws the informal case into
+verification is mechanized - and throws the informal case into
 relief. This paper's GAPs are prose verdicts about informal arguments
 with no kernel to confirm a repair, which is why they carry their own
 evidentiary standard (verbatim quotation, independent re-reading,
 explicit repairability judgment).
 
 **Post-publication scrutiny that does not dispose.** PubPeer-style
-commenting finds problems at scale: Ortega and Delgado-Quirós (EPI,
+commenting finds problems at scale: Ortega and Delgado-Quiros (EPI,
 2023) report that of 17,244 PubPeer-commented articles, only 21.5%
 of those deserving an editorial notice were ever corrected by the
-journal. Scrutiny detects; it does not *dispose* -- findings sit in
-comment threads without verdicts. The disposition taxonomy (§2) is
+journal. Scrutiny detects; it does not *dispose* - findings sit in
+comment threads without verdicts. The disposition taxonomy (Sec. 2) is
 the move from "someone commented" to "a gate fired and the lock
 recorded it," with PASS carrying the same weight as BREAK so the
 system cannot become a pure refutation machine.
@@ -66,20 +66,20 @@ deduplication, and fix review; professional cryptographic reviews
 publish findings with severity and exploitability. The judging and
 fix-review stages are the analogue of this paper's controls and
 verdict-lock discipline; the pinned-commit report header is the
-model for the artifact pinning §1 demands of itself. The difference:
+model for the artifact pinning Sec. 1 demands of itself. The difference:
 security audits judge code against a threat model, while replay
-audits judge a proof against its own claims -- and a BREAK must name
+audits judge a proof against its own claims - and a BREAK must name
 the lemma and exhibit the false instance, not merely assign a
 severity.
 
 **The replication movement.** Empirical science learned --
-expensively -- that published results often do not survive
+expensively - that published results often do not survive
 replay, and built preregistration, replication studies, and
 adversarial collaboration in response. Mathematics has largely
 exempted itself on the grounds that proofs are self-verifying. They
-are, where the proof *is* the reasoning. The verification gap (§1) is
+are, where the proof *is* the reasoning. The verification gap (Sec. 1) is
 the observation that, increasingly, part of the proof is a
-computation -- and computations are empirical claims about what a
+computation - and computations are empirical claims about what a
 machine did. This paper ports the replication movement's core
 insight (trust the replay, not the report) to the part of mathematics
 that is actually software.
@@ -94,6 +94,6 @@ importance, just as a BREAK is not a contribution to the field.
 
 What none of these currents supply, to our knowledge, is the
 combination this paper documents: a fixed disposition taxonomy with a
-CI-enforced verdict lock (§2), a mechanism-classified attack-type repertoire (§3), and a published log of the method's own failures
-(§4.7). If that combination exists elsewhere, we would like to cite
+CI-enforced verdict lock (Sec. 2), a mechanism-classified attack-type repertoire (Sec. 3), and a published log of the method's own failures
+(Sec. 4.7). If that combination exists elsewhere, we would like to cite
 it.
