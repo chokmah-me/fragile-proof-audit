@@ -8,7 +8,7 @@ one the campaign actually hit, not a hypothetical.
 A gate replays the computation the paper describes. If the paper
 describes the *wrong computation* - proves a statement adjacent to
 the one it claims - the gate passes and the error survives. The
-campaign's first BREAK is the example
+campaign's first GAP is the example
 (`docs/audits/gamma-aejonanonymous.md`): the audited formalization
 proved `~is_rational_gamma` - a statement about its own predicate,
 not the irrationality of mathlib's $\gamma$. The computation was correct;

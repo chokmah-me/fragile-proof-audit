@@ -14,7 +14,10 @@
 
 ## Abstract
 
-Published mathematics is trusted far more than it is independently replayed. Peer review checks reasoning, not computation - and increasingly, part of the proof *is* a computation. This paper describes a short, intensive audit campaign (six calendar days, 2026-09-18 through 2026-09-23) that replays published mathematical claims from scratch under a hostile prior: every locked gate is built to produce the opposite verdict where the opposite is correct (the four exact-equality gates are exempt - Sec. 4.2), and a CI-enforced verdict lock fails loudly on drift in either direction. The contribution is the playbook, not the verdicts: a five-disposition taxonomy (BREAK, GAP, PASS, SKIP, UNKNOWN) with a polarity rule separating gate verdicts from claim-level dispositions; seven attack types classified by mechanism, each with a worked example; and the evidentiary disciplines - paper-first gating, discrimination controls, gate-before-prove, fail-closed replay, independent anchors - together with the record of where those disciplines were violated and what caught the violations. The 25 locked gates (17 BREAK / 8 PASS) fall into three strata with very different evidentiary weight: four historical calibrations, twelve live-literature targets, and eight low-stakes preprints, plus one infrastructure oracle. Case studies include a refutation replay, an execution-verified confirmation, a canonization, and an unfinished formalization line; the limitations section states what no discipline closes. The campaign repository is private at the time of writing; the submitted version will cite its exact commit SHA and an archival snapshot. Gates refute routes, not theorems.
+Published mathematics is trusted far more than it is independently replayed. Peer review checks reasoning, not computation - and increasingly, part of the proof *is* a computation. This paper describes a short, intensive audit campaign (six calendar days, 2026-09-18 through 2026-09-23) that replays published mathematical claims from scratch under a hostile prior: every locked gate is built to produce the opposite verdict where the opposite is correct (the four exact-equality gates are exempt - Sec. 4.2), and a CI-enforced verdict lock fails loudly on drift in either direction. The contribution is the playbook, not the verdicts: a five-disposition taxonomy (BREAK, GAP, PASS, SKIP, UNKNOWN) with a polarity rule separating gate verdicts from claim-level dispositions; seven attack types classified by mechanism, each with a worked example; and the evidentiary disciplines - paper-first gating, discrimination controls, gate-before-prove, fail-closed replay, independent anchors - together with the record of where those disciplines were violated and what caught the violations. The 25 locked gates (17 BREAK / 8 PASS) fall into three strata with very different evidentiary weight: four historical calibrations, twelve live-literature targets, and eight low-stakes preprints, plus one infrastructure oracle. Case studies include a refutation replay, an execution-verified confirmation, a canonization, and an unfinished formalization line; the limitations section states what no discipline closes. The campaign repository is private at the time of writing; at
+submission it will be mirrored publicly, with the submitted version
+citing its exact commit SHA and an archival DOI. Gates refute routes,
+not theorems.
 
 ## 1. Introduction: the verification gap
 
@@ -752,7 +755,7 @@ one the campaign actually hit, not a hypothetical.
 A gate replays the computation the paper describes. If the paper
 describes the *wrong computation* - proves a statement adjacent to
 the one it claims - the gate passes and the error survives. The
-campaign's first BREAK is the example
+campaign's first GAP is the example
 (`docs/audits/gamma-aejonanonymous.md`): the audited formalization
 proved `~is_rational_gamma` - a statement about its own predicate,
 not the irrationality of mathlib's $\gamma$. The computation was correct;
@@ -1303,7 +1306,7 @@ survives), infrastructure. Controls are standalone scripts under
 | Gate | Target | Stratum | Verdict | Claim disposition | Attack | Evidence | Control |
 |---|---|---|---|---|---|---|---|
 | kempe_fritsch | Fritsch & Fritsch 1998 gadget | hist | BREAK | claim BREAK | B+F | recomputation | kempe_fritsch_break_control.py |
-| tait_tutte | Tait 1884 / Tutte 1946 | hist | BREAK | claim BREAK | A | recomputation | tait_tutte_break_control.py |
+| tait_tutte | Tait 1884 / Tutte 1946 | hist | BREAK | claim BREAK | F | recomputation | tait_tutte_break_control.py |
 | lame_h23 | Lame 1847 cyclotomic route | hist | PASS | claim BREAK (route) | G | proof-route refutation | not required (exact equality) |
 | lame_ideal_neg23 | Lame 1847 ideal variant | hist | PASS | claim BREAK (route) | G | proof-route refutation | lame_ideal_control.py |
 | cohen_subadditivity | Cohen Conjecture 66 | live | BREAK | claim BREAK | F | conjecture counterexample | cohen_break_control.py |
@@ -1312,7 +1315,7 @@ survives), infrastructure. Controls are standalone scripts under
 | tang_zhang_schatten | Tang--Zhang | live | BREAK | claim BREAK | A | conjecture counterexample | tang_zhang_break_control.py |
 | thakur_carlitz | Thakur 2015 | live | BREAK | claim BREAK | F | conjecture counterexample | thakur_break_control.py |
 | chung_graham_spiro | Chung--Graham--Spiro 2020 | live | BREAK | claim BREAK | F | conjecture counterexample | chung_graham_break_control.py |
-| salez_youssef_logsobolev | Salez--Youssef Conj. 1 | live | BREAK | claim BREAK | G | conjecture counterexample | salez_youssef_break_control.py |
+| salez_youssef_logsobolev | Salez--Youssef Conj. 1 | live | BREAK | claim BREAK | A | conjecture counterexample | salez_youssef_break_control.py |
 | cat_g | Sun Catalan route | live | BREAK | claim BREAK | A | proof-route refutation | cat_g_break_control.py |
 | es_cover | Lopez Erdos--Straus cover | live | PASS | claim PASS | D | confirmation | es_cover_control.py |
 | rr_qexpand | Lau--Ono; Huang--Lau--Ono--Paule | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
@@ -1331,9 +1334,9 @@ survives), infrastructure. Controls are standalone scripts under
 
 Off-lock dispositions (prose, not on the verdict lock): FRK-UC (GAP, G),
 LEG-NS (GAP, G), Erdos--Straus Theorem 10 (GAP, G, repairable),
-JAC-2D type-G (PASS, G), $\gamma$ formalization route (FAIL, off-lock:
+JAC-2D type-G (PASS, G), $\gamma$ formalization route (GAP, off-lock:
 the route targeted mathlib's `EulerMascheroniConstant` rather than the
-paper's claim), Jana--Karmakar type-C (PASS, off-lock: WZ-certificate
+paper's claim - a statement-fidelity gap, not a refuted claim), Jana--Karmakar type-C (PASS, off-lock: WZ-certificate
 audit of a published proof, not a fragile route), NCI (SKIP), quantum
 Hedetniemi (UNKNOWN). Off-lock confirmations: Gomila $\Lambda$-bound
 (execution-verified at pinned commit, Sec. 5.2), Polya (BANKED).

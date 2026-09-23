@@ -20,8 +20,8 @@ below by `K > 0` satisfies `α_LSI ≥ c·K/log d` for a **universal** constant
 | **Instance** | Birth-death chains on `{1,…,3n}`, `n = 4, 10, 30, 100, 300, 1000, 3000` |
 | **False instance** | At `n = 3000`: `κ = 1/(4n²)` exactly, and `R(n)/[K/log d]` has fallen below `0.01` and is still shrinking — no fixed `c` survives `n → ∞` |
 
-**Verdict: BREAK.** Attack type **G** (logical gap — a constant claimed
-universal is not).
+**Verdict: BREAK.** Attack type **A** (scalar gate - a best constant
+claimed universal is not).
 
 ## The mechanism, and what the gate does not claim
 
