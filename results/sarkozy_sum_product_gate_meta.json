@@ -1074,5 +1074,16 @@
   "instance": "witness A with |A|=(p-1)/2 and 1 notin A*, exhibited by exhaustive search for p in [5, 7, 11, 13, 17, 19] and by Tang's construction for 29 primes up to 2003",
   "false_instance": "at p=2003, |A|=1001 = (p-1)/2, density 0.499750, and 1 notin (A+A) union (AA) -- refuting every c > 0.00024963; Tang's Theorem 2.2 extends this to every odd prime, killing every c>0",
   "computed_scope_note": "this gate exhibits witnesses only for the primes listed above; 'no c>0 survives' is Tang's theorem, not this computation",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "sarkozy_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/sarkozy_break_control_meta.json",
+      "receipt_sha256": "a6da28008d8f6b6a119b60702e633e392bb79b49e2ec8d9cb05cf2eb22bfda09",
+      "receipt_timestamp": "2026-09-22T03:02:49.951330+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

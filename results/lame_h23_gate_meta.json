@@ -175,5 +175,6 @@
   "ok": true,
   "break_route": false,
   "lean": "Maillet Bareiss mailletAbsDet_23 VERIFIED; Premise/QuadraticWitness VERIFIED; classNumber=3 still gated (h^+ cited)",
-  "claims_flt": false
+  "claims_flt": false,
+  "controls": []
 }

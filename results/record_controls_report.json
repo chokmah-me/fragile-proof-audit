@@ -1,0 +1,232 @@
+{
+  "recorded_at": "2026-09-23T20:54:47.385067+00:00",
+  "gates": [
+    {
+      "gate": "suman_eq48",
+      "meta": "suman_gate_meta.json",
+      "controls": [
+        {
+          "control": "suman_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "odd_zeta_1609",
+      "meta": "odd_zeta_gate_meta.json",
+      "controls": [
+        {
+          "control": "odd_zeta_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "es_cover",
+      "meta": "es_cover_gate_meta.json",
+      "controls": [
+        {
+          "control": "es_cover_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "rr_qexpand",
+      "meta": "rr_qexpand_gate_meta.json",
+      "controls": [],
+      "note": "no control receipt recorded (honest empty list)"
+    },
+    {
+      "gate": "pdn1",
+      "meta": "pdn1_gate_meta.json",
+      "controls": [],
+      "note": "no control receipt recorded (honest empty list)"
+    },
+    {
+      "gate": "giuga_oracle",
+      "meta": "giuga_oracle_gate_meta.json",
+      "controls": [],
+      "note": "no control receipt recorded (honest empty list)"
+    },
+    {
+      "gate": "lame_h23",
+      "meta": "lame_h23_gate_meta.json",
+      "controls": [],
+      "note": "no control receipt recorded (honest empty list)"
+    },
+    {
+      "gate": "lame_ideal_neg23",
+      "meta": "lame_ideal_neg23_gate_meta.json",
+      "controls": [
+        {
+          "control": "lame_ideal_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "cohen_subadditivity",
+      "meta": "cohen_subadditivity_gate_meta.json",
+      "controls": [
+        {
+          "control": "cohen_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "baste_domination",
+      "meta": "baste_domination_gate_meta.json",
+      "controls": [
+        {
+          "control": "baste_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "sarkozy_sum_product",
+      "meta": "sarkozy_sum_product_gate_meta.json",
+      "controls": [
+        {
+          "control": "sarkozy_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "tang_zhang_schatten",
+      "meta": "tang_zhang_schatten_gate_meta.json",
+      "controls": [
+        {
+          "control": "tang_zhang_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "thakur_carlitz",
+      "meta": "thakur_carlitz_gate_meta.json",
+      "controls": [
+        {
+          "control": "thakur_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "chung_graham_spiro",
+      "meta": "chung_graham_spiro_gate_meta.json",
+      "controls": [
+        {
+          "control": "chung_graham_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "salez_youssef_logsobolev",
+      "meta": "salez_youssef_gate_meta.json",
+      "controls": [
+        {
+          "control": "salez_youssef_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "tpc_area",
+      "meta": "tpc_area_gate_meta.json",
+      "controls": [
+        {
+          "control": "tpc_area_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "es5_eq35",
+      "meta": "es5_eq35_gate_meta.json",
+      "controls": [
+        {
+          "control": "es5_eq35_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "cat_g",
+      "meta": "cat_g_gate_meta.json",
+      "controls": [
+        {
+          "control": "cat_g_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "krr_cl",
+      "meta": "krr_cl_gate_meta.json",
+      "controls": [
+        {
+          "control": "krr_cl_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "tpc_gn",
+      "meta": "tpc_gn_gate_meta.json",
+      "controls": [
+        {
+          "control": "tpc_gn_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "jac_2d",
+      "meta": "jac_2d_gate_meta.json",
+      "controls": [
+        {
+          "control": "jac_2d_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "tait_tutte",
+      "meta": "tait_tutte_gate_meta.json",
+      "controls": [
+        {
+          "control": "tait_tutte_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "kempe_fritsch",
+      "meta": "kempe_fritsch_gate_meta.json",
+      "controls": [
+        {
+          "control": "kempe_fritsch_break_control",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "gate": "gb_sce",
+      "meta": "gb_sce_gate_meta.json",
+      "controls": [],
+      "note": "no control receipt recorded (honest empty list)"
+    },
+    {
+      "gate": "mah_3",
+      "meta": "mah_3_gate_meta.json",
+      "controls": [],
+      "note": "no control receipt recorded (honest empty list)"
+    }
+  ],
+  "warnings": []
+}

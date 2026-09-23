@@ -127,5 +127,16 @@
   "lemma": "Eq. (48) has no integer solutions",
   "instance": "n=1, d_1=1, 0 <= k <= 1",
   "false_instance": "solutions a=2b (k=0) and a=b (k=1) exist",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "suman_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/suman_break_control_meta.json",
+      "receipt_sha256": "21267c033d5ebb9725c235d3c7293e9fa4a97e9d829ba77fe5a4b02b4462148b",
+      "receipt_timestamp": "2026-09-22T03:04:50.984248+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

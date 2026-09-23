@@ -333,5 +333,16 @@
     "ok": true
   },
   "verdict": "PASS",
-  "note": "PASS escalates \u2014 does not prove ESC. BREAK is a covering-route kill, not a claim that ESC is false."
+  "note": "PASS escalates \u2014 does not prove ESC. BREAK is a covering-route kill, not a claim that ESC is false.",
+  "controls": [
+    {
+      "control": "es_cover_control",
+      "verdict": "NO FALSE NEGATIVE",
+      "ok": true,
+      "receipt": "results/es_cover_control_meta.json",
+      "receipt_sha256": "6fb813a6da39e1ad4f5d18f945afb2794b9806d8f79470ea66975db0e99a9eb3",
+      "receipt_timestamp": "2026-09-22T03:05:48.833982+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

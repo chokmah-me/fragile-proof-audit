@@ -290,6 +290,18 @@ def main() -> int:
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()
     drifted = [v for v in verdicts if not v["ok"]]
+    # App B: embed every control outcome into its gate's own meta JSON, so
+    # each gate's record carries its calibration evidence, not just a
+    # pointer to a separate receipt. Controls run outside this aggregate;
+    # this embeds whatever the current receipts say.
+    from record_controls import record_controls
+
+    controls_report = record_controls()
+    controls_failed = [
+        w for w in controls_report["warnings"] if "CONTROL REPORTS FAILURE" in w
+    ]
+    n_with = sum(1 for g in controls_report["gates"] if g["controls"])
+    n_without = sum(1 for g in controls_report["gates"] if not g["controls"])
     meta = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "phase": "track-D",
@@ -304,6 +316,12 @@ def main() -> int:
         ],
         "verdict_lock": verdicts,
         "verdict_drift": [v["name"] for v in drifted],
+        "controls": {
+            "gates_with_controls": n_with,
+            "gates_without_controls": n_without,
+            "control_failures": controls_failed,
+            "warnings": controls_report["warnings"],
+        },
         "all_ok": not failed and not drifted,
     }
     out = RESULTS / "gates_check_meta.json"
@@ -329,6 +347,12 @@ def main() -> int:
             "updated. Re-audit the target, then update EXPECTED_VERDICT in the "
             "same commit."
         )
+
+    print("\n=== controls (embedded into gate metas) ===")
+    print(f"{n_with} gates with control outcomes recorded, "
+          f"{n_without} gates with no control receipt (honest empty list)")
+    for w in controls_report["warnings"]:
+        print(f"  WARNING: {w}")
 
     print(f"\nWrote {out}")
     return 1 if (failed or drifted) else 0

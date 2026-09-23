@@ -68,5 +68,16 @@
     "C1_holds": true
   },
   "verdict": "BREAK",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "tpc_area_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/tpc_area_break_control_meta.json",
+      "receipt_sha256": "7266396500ebc1463f2db8608bec9095bca37e82699cdf442e67b02c3536e3e9",
+      "receipt_timestamp": "2026-09-22T07:05:47.880412+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

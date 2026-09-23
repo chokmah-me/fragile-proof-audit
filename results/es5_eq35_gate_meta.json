@@ -17,5 +17,16 @@
   "theorem_split_skips_only_multiples_of_252": true,
   "not_this_gate": "Conjecture 2 (q \u2261 0 mod 252) and es_cover (2404.01508)",
   "verdict": "BREAK",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "es5_eq35_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/es5_eq35_break_control_meta.json",
+      "receipt_sha256": "90ecb277d859ed8f37c074d761ac5cda82f7ce827ff5064e6c848610fc84d6f5",
+      "receipt_timestamp": "2026-09-22T07:24:10.630754+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

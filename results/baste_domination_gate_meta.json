@@ -93,5 +93,16 @@
   "lemma": "gamma(G) <= gamma_e(G) for every finite regular graph G of positive degree",
   "instance": "50-vertex, 3-regular graph (15 variable-pair gadgets, 20 clause gadgets)",
   "false_instance": "gamma(G)=16 > 15=gamma_e(G). Both bounds closed independently in this gate: gamma_e=15 from an explicit maximal matching plus the general cubic ceil(m/5) bound; gamma<=16 from the explicit dominating set; gamma>=16 from this campaign's own exact branch-and-bound -- CONFIRMED (no dominating set of size <= 15)",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "baste_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/baste_break_control_meta.json",
+      "receipt_sha256": "1a59641404b5475e0c3f00627a1ac375583d2bdd7a1035de4d86f94d4461a613",
+      "receipt_timestamp": "2026-09-22T03:00:15.360264+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

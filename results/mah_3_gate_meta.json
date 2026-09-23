@@ -88,5 +88,6 @@
       "pentagonal_pyramid"
     ]
   },
-  "scope_note": "Gates Lemma 5.1 (the finite counting layer) only. Proposition 6.4 (connectedness) is topological and was audited by prose + floating-point stress probes in scripts/analysis/mah_3_stress_5b.py; see docs/audits/mah-3.md. Overall audit disposition: WATCH, not full PASS."
+  "scope_note": "Gates Lemma 5.1 (the finite counting layer) only. Proposition 6.4 (connectedness) is topological and was audited by prose + floating-point stress probes in scripts/analysis/mah_3_stress_5b.py; see docs/audits/mah-3.md. Overall audit disposition: WATCH, not full PASS.",
+  "controls": []
 }

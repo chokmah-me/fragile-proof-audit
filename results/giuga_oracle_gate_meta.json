@@ -598,5 +598,6 @@
   "ok": true,
   "break_route": false,
   "lean": "deferred \u2014 gate before prove; Lean Giuga/Korselt after green gate",
-  "conjecture_claimed": false
+  "conjecture_claimed": false,
+  "controls": []
 }

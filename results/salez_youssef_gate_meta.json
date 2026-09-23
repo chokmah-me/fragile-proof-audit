@@ -98,5 +98,16 @@
   "verdict": "BREAK",
   "lemma": "alpha_LSI >= c*K/log(d) for a universal c, on Munch's birth-death family",
   "false_instance": "n=3000: kappa=1/(4n^2), R(n)/[K/log d]=0.00681721 and shrinking -- no fixed c survives n -> infinity",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "salez_youssef_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/salez_youssef_break_control_meta.json",
+      "receipt_sha256": "b1cae20387b3da470e6e4308f8e12f001c6c666dd23c2aca66fbb2733960a0dc",
+      "receipt_timestamp": "2026-09-22T03:03:29.126837+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

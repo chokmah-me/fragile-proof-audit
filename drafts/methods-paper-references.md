@@ -1,8 +1,9 @@
 # References — draft (2026-09-23)
 
-Conventional bibliography for the methods paper. All entries verified
-against primary sources during the citation fact-check pass; §8 cites
-these by name inline.
+Conventional bibliography for the methods paper. Entries added during
+the citation fact-check pass were verified against primary sources; a
+few pre-existing entries (notably the mathlib documentation guide)
+were not. §8 cites these by name inline.
 
 Code4rena. Audit contest reports. https://code4rena.com/reports.
 Competitive, time-boxed audit contests: multiple Wardens review a
@@ -55,18 +56,18 @@ function R(n,k) certifying a hypergeometric identity, the object the
 type-C gate re-verifies (§4).
 
 Platt, D., and Trudgian, T. "The Riemann hypothesis is true up to
-3·10¹²." *Bulletin of the London Mathematical Society* 53 (2021),
+$3\cdot 10^{12}$." *Bulletin of the London Mathematical Society* 53 (2021),
 792–797. doi:10.1112/blms.12460. arXiv:2004.09765. Theorem 1: RH
 verified to height 3,000,175,332,800; §3.4 turns Polymath15's Table 1
-into Corollary 2 (Λ ≤ 0.2) and declines the Λ < 0.19 entry: "We have
+into Corollary 2 ($\Lambda \le 0.2$) and declines the $\Lambda < 0.19$ entry: "We have
 not pursued this."
 
 Polymath, D. H. J. "Effective approximation of heat flow evolution
-of the Riemann ξ function, and a new upper bound for the de
+of the Riemann $\xi$ function, and a new upper bound for the de
 Bruijn–Newman constant." *Research in the Mathematical Sciences* 6
-(2019), 31. arXiv:1904.12438. Establishes Λ ≤ 0.22 via effective
+(2019), 31. arXiv:1904.12438. Establishes $\Lambda \le 0.2$2 via effective
 estimates and numerical computation; Table 1 converts "RH verified
-to height H" into Λ upper bounds.
+to height H" into $\Lambda$ upper bounds.
 
 Ringer, T., Porter, R., Yazdani, N., Leo, J., and Grossman, D.
 "Proof Repair across Type Equivalences." In *Proc. PLDI 2021*,
@@ -87,10 +88,135 @@ Sun, Z.-W. "Catalan's constant is irrational." arXiv:2609.04176v1.
 The type-E target whose numeric gate refuted the route (§4).
 
 Tao, T. "Machine-Assisted Proof." *Notices of the American
-Mathematical Society* 72 (1) (Jan. 2025). Published version of the
-Simons Foundation lecture "Machine-Assisted Proof" (Feb. 19, 2025).
+Mathematical Society* 72 (1) (Jan. 2025).
+https://www.ams.org/journals/notices/202501/noti3041/noti3041.html.
 
 Zeng, Z., Liu, H., and Ratnavelu, K. "A Counterexample to the Tang
 Zhang Schatten Norm Conjecture and Sharp Positive Results."
 arXiv:2608.15558. Theorem 1.1: the exact counterexample (m = n = 2,
 p = 3/2) the type-A gate independently re-derives (§4).
+
+Afrasyab, K. "A 50-Vertex Cubic Counterexample to the
+Domination-versus-Edge-Domination Conjecture." arXiv:2609.10783. The
+published refutation of Baste et al.'s conjecture (50-vertex cubic
+graph, gamma = 16 > 15 = gamma_e) whose witness the type-F gate
+recomputes from the pinned claim (§4).
+
+Aliabadi, M. "A counterexample to the Chung-Graham-Spiro gap-set
+conjecture." arXiv:2609.04473. The published refutation (fails at
+l = 4, 9 in U_4 \\ D_4) recomputed by the type-F gate (§4).
+
+Baste, J., Furst, M., Henning, M. A., Mohr, E., and Rautenbach, D.
+Domination-versus-edge-domination conjecture (2019/2020), as stated in
+Afrasyab arXiv:2609.10783: every finite regular graph of positive
+degree satisfies gamma(G) <= gamma_e(G). Refuted by Afrasyab; the
+type-F gate recomputes the witness (§4).
+
+Chalise, P., Clark, A., and Gnang, E. K. arXiv:2410.13840v2. The
+displayed evaluation in the proof of Proposition 3.4 broken by the
+type-A gate (§4).
+
+Chen, S., Li, Y., Xi, D., and Xu, Z.-F. "The Mahler Conjecture in
+Three Dimensions." arXiv:2605.09334. Target of the MAH-3 gate; the
+gate verdict is PASS on the counting lemma, the claim disposition
+SKIP (§7.2).
+
+Chung, F., Graham, R., and Spiro, S. Gap-set conjecture (2020), as
+stated in Aliabadi arXiv:2609.04473: the l-step gap sets of the
+down-integer/up-integer partition agree for every l >= 1. Refuted by
+Aliabadi; the type-F gate recomputes the witness (§4).
+
+Demontis, R. "The union-closed set conjecture is true."
+arXiv:2405.03731v1. Target of the FRK-UC GAP note (§3).
+
+Fritsch, R., and Fritsch, G. *The Four-Color Theorem.* Springer,
+1998. The 9-vertex, 21-edge graph and the switch-order failure
+replayed by the §6.1 gate.
+
+Ghermoul. arXiv:2508.07367v1, equation (35). The Erdős--Straus
+target broken by the type-A gate (§4).
+
+Giraudin, D. N. "A counterexample to a conjecture of Thakur on
+Carlitz-Wieferich primes." arXiv:2607.15305. The published
+refutation (explicit c-Wieferich prime of degree 5 over F_{19^3})
+recomputed by the type-F gate (§4).
+
+Gnang, E. K. arXiv:2202.03178v3. The displayed congruence in the
+proof of Lemma 25 broken by the type-F gate (§4).
+
+Gomila, J. "Riemann lambda 0.1787854."
+https://www.judegomila.com/posts/riemann-lambda-0.1787854. Audit
+repository: https://github.com/judegomila/dbn-lambda-01787854-candidate-audit.
+The Lambda <= 0.1787854 claim execution-verified in §6.2.
+
+Haselgrove, C. B. "A disproof of a conjecture of Pólya."
+*Mathematika* 5 (1958), 141–145. The first disproof of Pólya's
+conjecture; the canonization target of §6.3.
+
+Huang, Y., Lau, K., Ono, K., and Paule, P. "Algebraic geometric
+framework of Rogers--Ramanujan identities." arXiv:2608.15219. One of
+the two type-D PASS targets (§4).
+
+Ibarra, J. A. "A counterexample to a subadditivity conjecture of
+Cohen for Sophie Germain cyclic numbers." arXiv:2607.09793. Cohen's
+Conjecture 66 (subadditivity of C_sigma); the type-F gate recomputes
+the (m, n) = (31, 3928) witness (§4).
+
+Kempe, A. B. "On the geographical problem of the four colours."
+*Amer. J. Math.* 2 (1879), 193–200. The original flawed proof;
+background to the §6.1 gate.
+
+Koutschan, C. "Eliminating Human Insight: An Algorithmic Proof of
+Stembridge's TSPP Theorem." arXiv:0906.1018. The q = 1 shakedown
+target of the q-TSPP line (§6.4).
+
+Koutschan, C., Kauers, M., and Zeilberger, D. "Proof of George
+Andrews's and David Robbins's q-TSPP Conjecture." arXiv:1002.4384;
+*Proc. Natl. Acad. Sci.* 108(6) (2011), 2196–2199. The q-TSPP line's
+target theorem (§6.4).
+
+Lamé, G. Attempted proof of Fermat's Last Theorem by cyclotomic
+unique factorization (1847). The route broken at p = 23 by the
+type-G gates (§4).
+
+Lau, K., and Ono, K. "Modularity of Point Counts for the Curves
+X^a=Y^b: New Rogers--Ramanujan Identities." arXiv:2608.05480. The
+other type-D PASS target (§4).
+
+Lopez, M. A. "A Complete Congruence System for the Erdos-Straus
+Conjecture." arXiv:2404.01508. Target of the es_cover PASS gate
+(§4).
+
+Münch, F. "A counterexample to a conjecture by Salez and Youssef."
+arXiv:2504.08055. The published refutation (birth--death chains of
+increasing length) recomputed by the type-G gate (§4).
+
+Okada, S. "On the generating functions for certain classes of plane
+partitions." *J. Combin. Theory Ser. A* 51 (1989), 1–23. The
+determinant reduction the q-TSPP proof builds on (§6.4).
+
+Salez, J., and Youssef, P. "Intrinsic regularity in the discrete
+log-Sobolev inequality." arXiv:2503.02793. Conjecture 1, refuted by
+Münch; the type-G gate's target (§4).
+
+Suman, S. "A note on the Irrationality of $\zeta(5)$ and Higher Odd Zeta
+Values." arXiv:2407.07121. The withdrawn irrationality claim broken
+by the type-B gate (§4).
+
+Tait, P. G. Claimed proof of the four-color theorem (1884), refuted
+by Tutte's 46-vertex counterexample (1946); the gate replays Tutte's
+counterexample (§4).
+
+Tanaka, M. Computation of the smallest Pólya counterexample,
+L(906,150,257) = +1 (1980), per the campaign's Pólya blueprint
+(§6.3).
+
+Tang, Q. "A counterexample to a conjecture of Sárközy on sums and
+products modulo a prime." arXiv:2603.29992. The published refutation
+recomputed by the type-F gate (§4).
+
+Zadehgol Mohammadi, A., and Kolahdouz, M. "Introducing and Applying
+S.C.E Model Under Dusart's Inequality to Prove Goldbach's Strong
+Conjecture for 74 Typical Structures out of All 75 Structural Types
+of Even Number." arXiv:1909.13230v5. Target of the gb_sce BREAK
+gate (§5).

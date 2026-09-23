@@ -27,5 +27,16 @@
   "inequality_is_the_verdict": false,
   "graceful_tree_conjecture_is_the_verdict": false,
   "verdict": "BREAK",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "krr_cl_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/krr_cl_break_control_meta.json",
+      "receipt_sha256": "fc6a4f497cba2d3bb8766ad8944acb365bb2d11a12fd4e2f7bcc2315b518aa2c",
+      "receipt_timestamp": "2026-09-22T08:26:46.373660+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

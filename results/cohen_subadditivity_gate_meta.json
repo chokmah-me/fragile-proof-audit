@@ -41,5 +41,16 @@
   "lemma": "C_sigma(m+n) <= C_sigma(m) + C_sigma(n) for all 1<=m<=n",
   "instance": "m=31, n=3928",
   "false_instance": "C_sigma(3959)=697 > 696=C_sigma(31)+C_sigma(3928)",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "cohen_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/cohen_break_control_meta.json",
+      "receipt_sha256": "26d3cc108e66eb24d9cce5a441e58b6840bac282889da159e6d052ee7e00c0a4",
+      "receipt_timestamp": "2026-09-22T03:01:11.548505+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

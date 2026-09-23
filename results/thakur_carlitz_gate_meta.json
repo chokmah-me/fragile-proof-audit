@@ -19,5 +19,16 @@
   "verdict": "BREAK",
   "lemma": "every c-Wieferich prime of F_q[T] (odd char) has degree divisible by p",
   "false_instance": "explicit irreducible degree-5 c-Wieferich prime P over F_{19^3}, and 19 does not divide 5",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "thakur_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/thakur_break_control_meta.json",
+      "receipt_sha256": "10f94229395aa2cf115129bb56abb028a23000dea81e1108c954a0a06514ae43",
+      "receipt_timestamp": "2026-09-22T03:04:51.984529+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

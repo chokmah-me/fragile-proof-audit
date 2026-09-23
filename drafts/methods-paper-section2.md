@@ -1,11 +1,11 @@
-# §2. Introduction: the verification gap — draft (2026-09-23)
+# §2. Introduction: the verification gap -- draft (2026-09-23)
 
 Peer review checks reasoning, not computation. A referee reads the
 argument, follows the lemmas, and judges whether the inferences hold.
 What the referee almost never does is replay the computation: the
 thousand-line script, the supplementary data file, the certificate the
 theorem's truth depends on. Those artifacts are trusted on the
-strength of the prose around them — and prose is not a checksum.
+strength of the prose around them -- and prose is not a checksum.
 
 The rot is ordinary, not scandalous. Authors move institutions and
 their pages die; file formats age out; a dataset lives on a personal
@@ -17,15 +17,16 @@ the work.
 
 The campaign described in this paper takes the next step: it treats
 published computational claims under a *hostile prior*. Not because
-authors are dishonest — the overwhelming majority of the defects found
-here are mistakes, not misconduct — but because trust is not a
-verification method. Every claim in the audit catalog (`docs/audits/`)
-was replayed from pinned inputs by gates built
-to produce the opposite verdict where the opposite was correct. Where
-the claim survived, that is recorded as a PASS with the same weight as
-a BREAK: the method does not grade on a curve.
+authors are dishonest -- the overwhelming majority of the defects found
+here are mistakes, not misconduct -- but because trust is not a
+verification method. Every locked gate was replayed from pinned
+inputs by a script built to produce the opposite verdict where the
+opposite was correct; GAP, SKIP, and UNKNOWN dispositions have no
+executable gate by definition (section 3). Where the claim survived,
+that is recorded as a PASS with the same weight as a BREAK: the method
+does not grade on a curve.
 
-Two scoping admissions, then a word on the labor. First, the timeline is short — the campaign's first
+Two scoping admissions, then a word on the labor. First, the timeline is short -- the campaign's first
 commit is 2026-09-18. The claim of this paper is the reproducibility
 of the *method*, not the longevity of the results: every gate,
 control, and certificate in the repository can be replayed by a reader,
@@ -33,12 +34,13 @@ and the verdict lock (§3) fails loudly if any of them drifts.
 Second, the targets were selected for fragility by harvest dossiers,
 not sampled at random. This paper makes no claim about the base rate
 of defective proofs in the literature. It claims only that *these*
-routes were tested, *this* is how, and *these* are the dispositions —
+routes were tested, *this* is how, and *these* are the dispositions --
 with the failures of the method itself recorded alongside (§5.7).
 
-Third, the labor. The throughput above — 25 gates, four replay lanes,
-a 91-chunk canonization, a two-milestone Lean formalization, and a
-dozen prose audits in five days — was produced by AI agents working
+Third, the labor. The throughput above -- 25 gates, four replay lanes,
+a 91-chunk canonization, a two-milestone Lean formalization, and eight
+prose audits in six calendar days (2026-09-18 to 2026-09-23) -- was
+produced by AI agents working
 under human direction: they wrote the gates, ran the computations,
 drafted the audit notes, and assembled this paper; the human set the
 targets, reviewed the verdicts, and owns every disposition. Target
@@ -47,26 +49,27 @@ deep-research prompts and ran them on the Kimi 3 and Grok 3.1
 deep-research tools to assemble the candidate harvest list, then
 shortlisted it by hand. Nothing else predates the repository's
 2026-09-18 root commit. This is stated plainly because it is load-bearing,
-not confessional. An agent pipeline fails in characteristic ways (§5.6–§5.7), and
+not confessional. An agent pipeline fails in characteristic ways (§5.6--§5.7), and
 §5's disciplines are in large part the scar tissue from those
 failures. The verification-of-verification question,
 *who audited the auditors*, is answered the same way this paper
 answers everything else: by the artifact. Every gate is a script a
 reader can run; every verdict is pinned in a lock that fails loudly on
 drift; every failure of the method is published beside its successes.
-Trust the replay, not the résumé — including ours.
+Trust the replay, not the résumé -- including ours.
 
-That review was a full re-execution, not a skim. The author directed
-a clean re-run of the twenty-five-gate verdict lock (executed by an AI
-agent at the author's direction) — 25/25 `[ok]`, zero drift — then
-read every gate's source code, every audit note, and every prose
-disposition, checking each verdict against the underlying evidence
-rather than the recorded pin. The re-run caught two missing Python
-dependencies in the review environment (`pypdf`, `networkx`); three
-gates aborted fail-closed on their PDF-identity controls until the
-dependencies were installed, then went green. Approximately two hours
-of review found no verdict discrepancies. The
-re-run log is pinned in the repository.
+That review was a full replay, not a skim. The author directed
+a clean replay of the twenty-five-gate verdict lock (executed by an AI
+agent at the author's direction) -- 25/25 `[ok]`, zero drift -- then
+re-read every audit note and every prose disposition, checking each
+verdict against the underlying evidence rather than the recorded pin,
+and spot-checked gate sources against their meta receipts. The replay
+caught two missing Python dependencies in the review environment
+(`pypdf`, `networkx`); three gates aborted fail-closed on their
+PDF-identity controls until the dependencies were installed, then
+went green. Approximately two hours of review found no verdict
+discrepancies. The
+replay log is pinned in the repository.
 
 The rest of the paper is the playbook. §3 defines the disposition
 taxonomy, §4 the attack types by mechanism with one worked example

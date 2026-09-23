@@ -27,5 +27,16 @@
   "lemma_3_10_is_the_verdict": false,
   "tree_packing_conjecture_is_the_verdict": false,
   "verdict": "BREAK",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "tpc_gn_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/tpc_gn_break_control_meta.json",
+      "receipt_sha256": "f2ea87b62880c97191f4ba50c1a89d3b59c5d2847ae12f642a54493d501b69fa",
+      "receipt_timestamp": "2026-09-22T11:12:20.108977+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

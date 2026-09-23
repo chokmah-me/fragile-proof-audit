@@ -218,5 +218,6 @@
     "note": "Blocked notebook replay is not a BREAK of the congruence route."
   },
   "verdict": "PASS",
-  "note": "PASS escalates the Type-D GF/congruence/(3.13) route. Does not certify (4.8) or the full Mathematica supplements, and does not attack the induction as a logical-gap (Type G) target."
+  "note": "PASS escalates the Type-D GF/congruence/(3.13) route. Does not certify (4.8) or the full Mathematica supplements, and does not attack the induction as a logical-gap (Type G) target.",
+  "controls": []
 }

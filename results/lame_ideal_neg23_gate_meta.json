@@ -68,5 +68,16 @@
   "ok": true,
   "claims_cyclotomic_class_number": false,
   "flt_regular": "blocked \u2014 upstream lean v4.34.* vs campaign pin v4.32.2",
-  "lean": "IdealWitness + IdealPrincipal (Algebra.norm bridge; \u00acIsPrincipal under IsDedekindDomain OKNeg23)"
+  "lean": "IdealWitness + IdealPrincipal (Algebra.norm bridge; \u00acIsPrincipal under IsDedekindDomain OKNeg23)",
+  "controls": [
+    {
+      "control": "lame_ideal_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/lame_ideal_control_meta.json",
+      "receipt_sha256": "e72a878abe675500d11e72d7a2b20f9c2fbb367293b0ea22a56be89014eada4e",
+      "receipt_timestamp": "2026-09-22T03:04:42.379195+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

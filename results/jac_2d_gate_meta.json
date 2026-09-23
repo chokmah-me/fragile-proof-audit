@@ -184,5 +184,16 @@
   },
   "lemma": "Remark 2.7 and Lemma 2.8 (eq. 2.41), the route's earliest checkable skeleton",
   "verdict": "PASS",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "jac_2d_break_control",
+      "verdict": "DISCRIMINATES",
+      "ok": true,
+      "receipt": "results/jac_2d_break_control_meta.json",
+      "receipt_sha256": "5ccb9c0a5ada41d793973a4f1f35663d1aed6adb21418d69961261fc3014ddce",
+      "receipt_timestamp": "2026-09-22T11:30:12.818200+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

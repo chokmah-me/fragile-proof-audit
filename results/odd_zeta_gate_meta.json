@@ -68,5 +68,16 @@
   "instance": "lambda = 2n+3 for n=1..5 (the paper's own kappa=2n+1, lambda:=kappa+2)",
   "false_instance": "g(alpha*(lambda,q)) is strictly positive for every admissible q>e^lambda-1, at every tested n>=1 (n=1..5); no witnessing q exists",
   "ok": true,
-  "break_route": true
+  "break_route": true,
+  "controls": [
+    {
+      "control": "odd_zeta_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/odd_zeta_break_control_meta.json",
+      "receipt_sha256": "cdc014723d2c4d3f0981d3f749bd468442d8807ba39c0c049ad3cfbe3df5b9e2",
+      "receipt_timestamp": "2026-09-22T03:04:50.985765+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }

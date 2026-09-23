@@ -33,5 +33,6 @@
   "elapsed_s": 6.3,
   "not_this_gate": "Goldbach's conjecture itself; the 74-structure relative claim",
   "verdict": "BREAK",
-  "ok": true
+  "ok": true,
+  "controls": []
 }

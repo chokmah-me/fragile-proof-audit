@@ -194,5 +194,6 @@
   },
   "verdict": "PASS",
   "note": "PASS escalates the Type-D q-expand route; does not certify the geometric point-count identification or the b=8 Ore proof. BREAK is a coefficient mismatch, not a claim that HJO is false.",
-  "harvest_correction": "2608.05480 eq. (5) is the published HJO geometric identity S_q = Z(q^{-1}) prod (1-q^{-n})^{-1}, not an unpublished q-series."
+  "harvest_correction": "2608.05480 eq. (5) is the published HJO geometric identity S_q = Z(q^{-1}) prod (1-q^{-n})^{-1}, not an unpublished q-series.",
+  "controls": []
 }

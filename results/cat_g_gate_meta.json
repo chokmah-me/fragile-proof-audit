@@ -44,5 +44,16 @@
   },
   "dossier_line_2_16_is_not_the_witness": true,
   "verdict": "BREAK",
-  "ok": true
+  "ok": true,
+  "controls": [
+    {
+      "control": "cat_g_break_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/cat_g_break_control_meta.json",
+      "receipt_sha256": "5980fb35f827d21cf8eb996cd600daf99973b9cd26b254dd25151fbcb83a1843",
+      "receipt_timestamp": "2026-09-22T07:46:02.556664+00:00",
+      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+    }
+  ]
 }
