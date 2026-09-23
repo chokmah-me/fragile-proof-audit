@@ -1,5 +1,7 @@
 # Replay Audits of Published Mathematical Claims: Gates, Controls, and Dispositions
 
+**Daniyel Yaacov Bilar**
+
 *Draft manuscript — companion methods paper to the fragile-proof-audit campaign. Exported 2026-09-23.*
 
 ## 1. Abstract
