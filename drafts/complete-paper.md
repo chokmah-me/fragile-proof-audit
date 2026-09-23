@@ -1,4 +1,4 @@
-# Replay Audits of Published Mathematical Claims: Gates, Controls, and Dispositions
+# Trust, but Replay: Auditing Published Mathematical Claims
 
 **Daniyel Yaacov Bilar**
 

@@ -4,7 +4,7 @@ Decision: public repo + companion methods paper. Straight-methods tone (not mani
 Named campaign, artifacts released alongside the paper.
 Status: §4 drafted (`drafts/methods-paper-section4.md`); remaining sections outline only.
 
-**Working title:** *Replay Audits of Published Mathematical Claims: Gates, Controls, and Dispositions*
+**Working title:** *Trust, but Replay: Auditing Published Mathematical Claims*
 (Prior title "Trust Nothing, Replay Everything" dropped as manifesto-toned; keep as a possible subtitle/epigraph only.)
 
 ## 1. Abstract
