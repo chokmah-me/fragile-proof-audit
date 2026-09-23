@@ -208,12 +208,11 @@ or a from-scratch Ore-relation finder (multi-week). The naive q→1 limit of
 the q-case operator would give constant (not polynomial) coefficients anyway;
 the (q−1)-adic leading-term extraction is unexplored.
 
-**Avenue 2 — author contact: DRAFTED, awaiting user approval.**
-Draft email to Christoph Koutschan requesting the q=1 diagonal recurrence
-coefficients (and ideally the q=1 ∂-finite description / Gröbner basis).
-The q=1 operator was computed in "a couple of minutes" per the paper §5.3,
-so re-running it is trivial for the author — this is the highest-probability
-path to the TRUE coefficients.
+**Avenue 2 — author contact: SENT 2026-09-23.**
+Email to Christoph Koutschan requesting the q=1 diagonal recurrence
+coefficients (plain text, pasted into email body) sent by the user on
+2026-09-23. If no reply in ~2 weeks, one short follow-up; then fall back to
+Avenue 3.
 
 **Avenue 3 — full re-derivation (guessing + DFiniteSubstitute): SCOPED, not started.**
 Re-guess the q=1 ∂-finite description from determinant data (B(n,j) via exact

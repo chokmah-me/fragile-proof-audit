@@ -1,4 +1,4 @@
-# Draft — author contact for q-TSPP milestone 3 (user sends; NOT sent by agent)
+# Draft — author contact for q-TSPP milestone 3 — SENT 2026-09-23 by user
 
 **To:** Christoph Koutschan (christoph.koutschan@risc.jku.at — verify before sending)
 **Subject:** Quick request: q=1 diagonal recurrence from arXiv:0906.1018
