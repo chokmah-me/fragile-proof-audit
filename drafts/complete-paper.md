@@ -700,8 +700,11 @@ cannot be instantiated at any parameters end in SKIP (§3) — honestly,
 but unavoidably. The Mahler 3D audit is the boundary case: every
 finitely checkable layer passed, the prose audit found no defect, and
 the connectedness step that carries the conclusion has no finite
-residue at all. The target is set aside — the correct output of the
-method, and its admission of reach.
+residue at all. The gate verdict stays PASS — it correctly reports
+what the counting lemma gate checked — but the claim as a whole is
+SKIP: the decisive step cannot be instantiated at any parameters, so
+there is nothing to promote. The target is set aside — the correct
+output of the method, and its admission of reach.
 
 ## 7.3 The certificate cost curve is unsolved
 

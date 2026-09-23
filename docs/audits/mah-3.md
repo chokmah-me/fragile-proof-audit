@@ -8,16 +8,16 @@
 (SHA-256 `cd2b5f801f3015e3b7bfc883103f9fa33e8e20817729ed8072ec50af1ad4405f`,
 493,186 bytes; PDF metadata confirms title and all four authors).
 
-## Disposition: WATCH (counting layer PASS, prose clean, connectedness ungated)
+## Disposition: SKIP (counting-layer gate PASS, prose clean, connectedness ungated)
 
-**Verdict: WATCH — not a full PASS.** The finite counting core (Lemma 5.1)
+**Verdict: SKIP — the gate passed; the claim is set aside.** The finite counting core (Lemma 5.1)
 survives an exact gate with discrimination; the variational (§4), counting
 (§5), connectedness (Proposition 6.4), and symmetric (§7) arguments all survive
 a line-by-line prose audit with no defect found; two floating-point stress
 probes of Proposition 6.4's finite dependencies pass. But Proposition 6.4
 (connectedness of the sublevel sets C̃_{N,a}) is an irreducibly topological
 argument — no finite scalar gate captures it — so per the dossier's own
-instruction the target is demoted to the watch list rather than promoted to
+instruction the target is set aside (SKIP) rather than promoted to
 PASS. **The 24/24 BREAK lock is untouched**: no lemma statement was falsified.
 
 ## Route audited
@@ -106,10 +106,10 @@ against the wrong quantity. Both fixed and re-verified.
 ## Not done, on purpose
 
 - No finite gate for Proposition 6.4's connectedness itself — this is the
-  reason for WATCH rather than PASS.
+  reason for SKIP rather than PASS.
 - Did not re-derive Kim–Reisner [28] or the John-position compactness setup.
 - Did not search for a published rebuttal; none was found during the read.
 
 ## Lean
 
-None this landing. WATCH disposition; nothing to formalize against.
+None this landing. SKIP disposition; nothing to formalize against.
