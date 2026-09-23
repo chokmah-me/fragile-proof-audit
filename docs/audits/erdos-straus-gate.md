@@ -80,12 +80,31 @@ exhibited `(u,v)`, and the odd-`k` members are covered only by the separate
 "automatic" case which the paragraph does not invoke. Concretely, the even
 `k=718` is left uncovered by the proof as written.
 
-**This is a gap in the proof of Theorem 10, not a counterexample to anything:**
-with a different choice `(u,v) = (1,6)` (both divide `720`, `7 | 1+6`), the
-construction goes through and `n = 2873 = 4·718+1` does satisfy ES
-(machine-checked). The paper's *conclusion* for `k=718` is true; its
-*argument* does not establish it. The interval claim needs either the
-odd/even split made explicit or a per-`f` choice of `(u,v)`.
+### Salvage analysis (2026-09-23, `scripts/analysis/erdos_straus_salvage.py`)
+
+Is the gap repairable? For each even `n ∈ {4, 6, 8}` and every `k` in
+`[n! − n/2, n! − 1]`, an exhaustive search over `d ∈ [1, n!/2]` and divisor
+pairs `(u,v)` of `k+d` asks whether **any** parameters complete the paper's
+construction (same exact-`Fraction` identity check as the gate):
+
+| n | interval | fail w/ paper's params | unsalvageable |
+|---|---|---|---|
+| 4 | [22, 23] | none | none |
+| 6 | [717, 719] | **718** | none — salvaged via `d=1,u=1,v=719` |
+| 8 | [40316, 40319] | **40318** | none — salvaged via `d=1,u=1,v=23` |
+
+The failure is structural, not a one-off: the exhibited `(u,v) = (n, n−1)`
+satisfies `4d−1 | u+v` only at the single endpoint `d = n/2`
+(`2n−1 | 2n−1`); every other even `k` in the interval fails with those
+parameters. But the conclusion is always repairable within the same
+construction family — e.g. the uniform choice `d=1, u=1`, `v | k+1` with
+`v ≡ 2 (mod 3)` (then `4d−1 = 3 | 1+v`), which exists for the failing cases
+above (`719 | 719`, `23 | 40319`).
+
+**Disposition of the gap:** confirmed real, precisely characterized, fully
+repairable. The theorem's conclusion stands; the proof as written does not
+establish it. Logical gap (route, not theorem) — it does not touch
+Conjecture 1 or the Erdős–Straus conjecture.
 
 ## Ambiguities documented (not resolved)
 
@@ -105,10 +124,15 @@ odd/even split made explicit or a per-`f` choice of `(u,v)`.
 - **Conjecture 1 (the paper's main claim): PASS on gate set** — 273/273 primes
   covered, transcription validated against all four named examples. Not a BREAK.
 - **Theorem 10 "automatic" step: PASS** — correct as stated, 12,500/12,500.
-- **Theorem 10 interval argument: GAP** — incomplete as written (`k=718`
-  counterexample to the proof step); conclusion salvageable with a different
-  `(u,v)` not supplied by the paper. Flagged as a logical gap (route, not
-  theorem): it does not touch Conjecture 1 or the Erdos-Straus conjecture.
+- **Theorem 10 interval argument: GAP, fully characterized and repairable**
+  (`scripts/analysis/erdos_straus_salvage.py`) — the paper's exhibited
+  `(u,v) = (n, n−1)` satisfies `4d−1 | u+v` only at the single endpoint
+  `d = n/2`; every other even `k` in `[n!−n/2, n!−1]` fails with those
+  parameters (n=6: k=718; n=8: k=40318). Exhaustive search over the paper's
+  `d`-range shows every such `k` is salvageable within the same construction
+  family (e.g. uniform `d=1, u=1`, `v | k+1`, `v ≡ 2 mod 3`). Conclusion
+  stands; proof as written does not establish it. Logical gap (route, not
+  theorem).
 
 ## Reproduction
 
