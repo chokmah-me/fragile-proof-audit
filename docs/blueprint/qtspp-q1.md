@@ -139,3 +139,51 @@ operators (out of kernel reach regardless — meta-level checking only).
 certificate + finite initial-value check" pattern at minimal size, and its
 closing lemma is now proved. It is the template for the q-case identity
 (1), and for the (3.3)→order-10 pilot next.
+
+## 7. Certificate recovery report — milestone 2 (2026-09-23)
+
+**Target:** the explicit order-7 recurrence coefficients for the diagonal
+identity (3.2) and the polynomials p_1, p_2 (degrees 4, 12) in the leading
+coefficient factorization. **Verdict: not present in any public source.**
+Searched, in order:
+
+1. **arXiv:0906.1018 source package** (`export.arxiv.org/e-print/0906.1018`,
+   fetched 2026-09-23; tarball SHA-256
+   `68ca7cf2a06ff933e70e448096e9fb9066c91e82d5947d0b0834c70fa3ea108b`,
+   54,137 bytes): contains only `koutschan_TSPP.tex`, 4 EPS figures, and the
+   document class. **No ancillary Mathematica/data files.** The TeX confirms
+   the paper prints only the leading-coefficient factorization, not the
+   operator.
+2. **Koutschan's PhD thesis** (RISC, JKU Linz, 2009):
+   `http://www.koutschan.de/publ/Koutschan09/thesisKoutschan.pdf`
+   (fetched 2026-09-23; 949,327 bytes, SHA-256
+   `7cebf40aa6c52ddfa42e6b4d21dbe92d08fda6e4b63711db8c91ea317351e861`).
+   The TSPP chapter (Ch. 7, §7.3 "The second identity") repeats the paper
+   **verbatim**: leading-coefficient factorization only; p_1, p_2 described
+   but not given; no appendices with operator data.
+3. **Wayback CDX of the author's supplementary pages**
+   (`risc.jku.at/people/ckoutsch/*`, all 200-status captures): only the
+   q-case `qtspp/` page was ever archived (the `qTSPP.nb` notebook,
+   `qtspp.zip` — q-case material, already recovered). **No q=1
+   supplementary page/file was found in the searched captures.**
+4. **Wayback CDX of `koutschan.de/publ/Koutschan09/*`**: only
+   `thesisKoutschan.pdf` and two HTML pages; no data files.
+
+**Consequence:** milestone 2 formalizes (3.2) **parametrically**
+(`FragileProofAudit/QTSPP/DiagonalIdentity.lean`): the certificate is an
+explicit `DiagonalCertificate` structure (order-7 coefficients `p`,
+right-factor witness `q`, with the Ore relations `L = Q·(S_n−1)` unfolded);
+the closing argument — right factor ⇒ constant-1 sequence satisfies `L` ⇒
+`d = 1` by `recurrence_unique` — is fully proved, sorry-free. Recovering the
+numeric `p`/`q` (e.g. by re-running `DFiniteSubstitute` from the ∂-finite
+description, or by author contact) reduces to discharging the structure's
+fields plus: the recurrence itself (`hrec`, needs the ∂-finite description),
+leading-coefficient nonvanishing (`hlead`, via the factored form), and the 7
+initial values (`hinit`, small determinants).
+
+**Status (2026-09-23):** the parametric formalization is complete and
+kernel-checked — `lake build FragileProofAudit.QTSPP.DiagonalIdentity`
+EXIT 0, 8,656/8,656 jobs, zero errors, no `sorry`/`admit`/`native_decide`
+(log `~/workspace/qtspp-m2-build.log`). Milestone 2 closed as
+"parametric proof of (3.2) modulo coefficient recovery"; the numeric
+coefficient recovery stays open as milestone-3-blocker work.
