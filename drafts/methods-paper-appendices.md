@@ -102,3 +102,79 @@ JAC-2D type-G (PASS, G), NCI (SKIP), quantum Hedetniemi
 ¹ `giuga_oracle` is a standing verification oracle (known Giuga
 composites checked against Korselt), not an attack on a route; it
 carries no A–G letter.
+
+## D. Glossary
+
+**Attack type.** One of the mechanism classes A–G (§4): the kind of
+route a proof takes to its conclusion.
+
+**BANKED / canonization.** An off-lock infrastructure product: a
+checkable record banked for the community (e.g., Pólya's smallest
+counterexample), not a verdict about a route.
+
+**BREAK.** Disposition: a specific lemma, as the paper states it, is
+false, exhibited by a gate with a passing discrimination control.
+Recorded as lemma · instance · false instance.
+
+**Control (discrimination control).** A runnable check, part of the
+gate, showing it produces the opposite verdict where the opposite is
+correct. A gate that cannot be calibrated is not run.
+
+**Corpus / dossier / harvest.** Target selection: the *harvest* is
+the fragility-targeted search; the *dossier* is the document it
+produces; the *corpus* is the dossier directory.
+
+**Disposition.** An audit's final outcome — exactly one of BREAK,
+GAP, PASS, SKIP, UNKNOWN — defined by what was done, not by how bad
+the news is.
+
+**Dual implementation.** A second, clean-room implementation of a
+computation, written without reading the first, that must agree on
+every certificate.
+
+**Fail-closed.** Any checksum mismatch, row disagreement, or
+unreproducible step fails the lane; no partial passes.
+
+**GAP.** Disposition: the paper's argument does not establish its
+conclusion, but no lemma statement was falsified. Found by prose
+audit; carries its own evidentiary standard (§3).
+
+**Gate.** The executable check: a script plus hash-pinned inputs plus
+a machine-readable meta record. A gate records a *verdict*
+(BREAK/PASS); an audit ends in a *disposition*.
+
+**Gate-before-prove.** No Lean formalization begins until the claim
+it targets has survived a numeric gate.
+
+**Hostile prior.** The audit stance: a computational claim is
+unconfirmed until an independent replay confirms it, regardless of
+the prose around it.
+
+**Lane.** A replay execution track — e.g., the Gomila audit's finite,
+Dini, barrier, and tail lanes.
+
+**Paper-first.** No gate from a secondary summary: pin the version
+of record (SHA-256, byte count) and read the argument first.
+
+**PASS.** Disposition: the gate confirmed what it was built to test —
+a statement about the audit's reach, not a certificate of truth.
+Carries the same weight as BREAK.
+
+**Prose audit.** Manual proof-reading path: GAP analysis and
+statement-fidelity checks, where no finite residue exists to gate.
+
+**Residue.** The finitely checkable remainder of a claim — what a
+gate actually tests.
+
+**Route.** The specific chain of lemmas under test. Gates refute
+routes, not theorems.
+
+**SKIP.** Disposition: the target as stated admits no gate — the
+verdict is about the audit ("we cannot test this"), not the paper.
+
+**UNKNOWN.** The checkable parts check out, but the decisive step
+cannot be replayed on the campaign's toolchain.
+
+**Verdict / verdict lock.** A gate's recorded outcome, pinned in
+`EXPECTED_VERDICT`; the lock runs in CI and any drift fails the
+build.

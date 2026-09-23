@@ -1,12 +1,11 @@
 # §1. Abstract — draft (2026-09-23)
 
-Published mathematics is trusted far more than it is independently
-re-run. Peer review checks reasoning, not computation — and
+Published mathematics is trusted far more than it is independently replayed. Peer review checks reasoning, not computation — and
 increasingly, part of the proof *is* a computation. This paper
 describes a short, intensive audit campaign (first commit 2026-09-18)
 that replays published mathematical claims from scratch, under a
-hostile posture: every computational claim must survive an
-independent, well-resourced re-execution, and every instrument must
+hostile prior: every computational claim must survive an
+independent, well-resourced replay, and every gate must
 demonstrate it can produce the opposite verdict where the opposite is
 correct.
 
@@ -14,17 +13,16 @@ The contribution is the playbook, not the verdicts. §3 defines a
 five-disposition taxonomy (BREAK, GAP, PASS, SKIP, UNKNOWN) with a
 CI-enforced verdict lock — currently 25 gates, 17 BREAK / 8 PASS —
 that fails loudly on drift in either direction. §4 classifies the
-attacks by mechanism (scalar gates, base-case kills, WZ-certificate
-audits, finite q-expansions, CAS-transcript replays, counterexample
-search, logical-gap exposure), each with a worked example. §5 states
-the evidentiary disciplines that keep the attacks honest —
-paper-first gating, discrimination controls, gate-before-prove,
-fail-closed replay, independent anchors with dual implementation,
-durable job discipline — together with the record of where those
-disciplines were violated and what caught the violations. §6 gives
-case studies (a refutation, a confirmation, a canonization, an
-unfinished line); §7 states the limitations, including the ones no
-discipline closes.
+attack types by mechanism (scalar gates, base-case kills,
+WZ-certificate audits, finite q-expansions, CAS-transcript replays,
+counterexample search, logical-gap exposure), each with a worked
+example. §5 states the evidentiary disciplines — paper-first gating,
+discrimination controls, gate-before-prove, fail-closed replay,
+independent anchors with dual implementation, durable job discipline —
+and the record of where those disciplines were violated and what
+caught the violations. §6 gives case studies (a refutation, a
+confirmation, a canonization, an unfinished line); §7 states the
+limitations, including the ones no discipline closes.
 
 The repository — every gate, control, certificate, and audit note —
 is released alongside this paper
@@ -32,6 +30,6 @@ is released alongside this paper
 This draft corresponds to commit `f441d14`; the submitted
 version will cite its exact commit SHA and an archival snapshot
 (Zenodo/Software Heritage DOI). A paper whose thesis is *don't trust
-prose, trust the re-run* must pin its artifact in the text.
+prose, trust the replay* must pin its artifact in the text.
 The standing doctrine throughout:
 gates refute routes, not theorems.
