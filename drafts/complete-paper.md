@@ -52,7 +52,7 @@ and the verdict lock (Sec. 2) fails loudly if any of them drifts.
 Second, the targets were selected for fragility by harvest dossiers,
 not sampled at random. This paper makes no claim about the base rate
 of defective proofs in the literature. It claims only that *these*
-routes were tested, *this* is how, and *these* are the dispositions --
+routes were tested, *this* is how, and *these* are the dispositions -
 with the failures of the method itself recorded alongside (Sec. 4.7).
 
 Third, the labor. The throughput above - 25 gates, four replay lanes,
@@ -109,11 +109,11 @@ The five dispositions: **BREAK**, **GAP**, **PASS**, **SKIP**,
 
 ## BREAK - the route is refuted by a gated, controlled witness
 
-A BREAK means: a specific lemma, as the paper states it, is false --
+A BREAK means: a specific lemma, as the paper states it, is false -
 exhibited by a gate with a passing discrimination control (Sec. 4.2). The
 record is always lemma, instance, false instance. "Gates refute
 routes, not theorems" (Sec. 3): $\zeta(5)$ is probably irrational, and
-Goldbach's conjecture is untouched by the S.C.E. audit - what died in
+Goldbach's conjecture is untouched by the semi-continuous (S.C.E.) audit - what died in
 each case is a specific chain of lemmas, and the audit note names them.
 
 A BREAK is on the verdict lock (see below): the gate that produced it runs
@@ -175,7 +175,8 @@ A SKIP means the target, as stated, admits no gate: nonconstructive
 arguments, claims with no witness to exhibit, routes whose decisive
 step cannot be instantiated at any parameters. SKIP is a verdict about
 the audit, not the paper - "we cannot test this," not "this
-is wrong." The NCI target is the example: skipped because the alleged
+is wrong." The NCI (Non-Cancelling Intersections; Wilhelm,
+arXiv:2608.27416v2) target is the example: skipped because the alleged
 finite gate was absent from the paper as written.
 
 ## UNKNOWN - artifacts verified, kernel not re-checkable
@@ -185,14 +186,14 @@ verification step cannot be replayed on our toolchain. The quantum
 Hedetniemi audit verified the Python certificates and the source
 catalog (PASS on those lanes) but the kernel step requires the
 authors' Lean 4.19.0 environment, which we do not run. UNKNOWN is the
-honest alternative to inflating a partial check into a confirmation --
+honest alternative to inflating a partial check into a confirmation -
 or discarding it.
 
 ## The polarity rule
 
 A verdict attaches to the *gate's claim*, not to the paper's
 conclusion. The Lame 1847 audit is the canonical case: the locked
-gates are **PASS** - the class number $h(\mathbb{Q}(\zeta_{23})) = 3$ is confirmed --
+gates are **PASS** - the class number $h(\mathbb{Q}(\zeta_{23})) = 3$ is confirmed -
 and it is precisely that confirmed fact that kills Lame's route,
 which needed the class number to be 1. The route verdict is BREAK;
 the gate verdicts are PASS; confusing the two would invert the
@@ -215,7 +216,7 @@ are not verdicts about routes at all.
 
 The campaign's history is append-only: git plus dated WORKPLAN
 checkpoints. When a verdict is corrected, the prior verdict is marked
-superseded, not deleted. The odd-zeta audit's early "$\Lambda$_m unevaluable"
+superseded, not deleted. The odd-zeta audit's early "$\Lambda_m$ unevaluable"
 verdict was superseded by the Lemma 5.1 BREAK on 2026-09-20; both
 remain visible, with the correction dated. Summary tables show the
 current verdict with a "superseded" note: a taxonomy that rewrites its
@@ -237,10 +238,12 @@ its own evidentiary weight:
 - **Live literature (12 gates: 8 BREAK / 4 PASS).** Claims from the
   active research literature, thirteen papers across twelve gates
   (`rr_qexpand` covers both Lau--Ono and Huang--Lau--Ono--Paule). Of the
-  eight BREAKs, two refute claimed proofs - Baste et al. (2019/2020,
-  `baste_domination`) and Sun's Catalan route (arXiv:2609.04176,
-  `cat_g`) - and six are counterexamples to stated conjectures:
-  Tang--Zhang, Chung--Graham--Spiro (2020), Sarkozy's Conjecture 65,
+  eight BREAKs - one refutes a claimed proof with no prior published
+  refutation, Sun's Catalan route (arXiv:2609.04176,
+  `cat_g`) - and seven are counterexamples to stated conjectures,
+  each already refuted in print: Baste et al.'s domination conjecture
+  (`baste_domination`), Tang--Zhang, Chung--Graham--Spiro (2020),
+  Sarkozy's Conjecture 65,
   Thakur (2015), Salez--Youssef's Conjecture 1, and Cohen's Conjecture
   66. Where a prior published refutation exists it is cited in the
   audit note (Zeng--Liu--Ratnavelu for Tang--Zhang, Aliabadi for
@@ -266,7 +269,7 @@ known-Giuga-number oracle other gates consult - not a claim audit.)
 
 The honest reading: the campaign's weight as evidence about the
 literature rests on the middle stratum - eight BREAKs against live
-claims (two against claimed proofs, six against stated conjectures),
+claims (one against a claimed proof, seven against stated conjectures),
 three live claims fully surviving their gates. The low-stakes stratum proves the machinery runs;
 the historical stratum proves it aims true. Neither is presented as
 more than that.
@@ -307,7 +310,7 @@ $C^{TZ}_{p,m} = \sqrt{x(x+m-1)} / (x^p + m - 1)^{1/p}$ - with `x` the unique
 `x > 1` solving `x^p - 2x - (m-1) = 0` - is exceeded by an explicit
 rank-one pair at `p = 3/2`, `m = 2`:
 $R = 1.03641365870489\ldots > 207/200 > C^{TZ}_{3/2,2} = 1.03465395185143\ldots$.
-Two paths - exact rational Gram-matrix algebra and 60-digit mpmath --
+Two paths - exact rational Gram-matrix algebra and 60-digit mpmath -
 agree to `1e-40`; margins `~1.4e-3` above and `~3.5e-4` below against
 a `1e-20` safety floor.
 Control: 5,000 random rank-one pairs at the same `(p, m)` - only ~1% exceed
@@ -362,7 +365,7 @@ the modular equation coefficient-by-coefficient. Depth is the open question
 for D-gates: 81 points carried no information; 6,747 did
 (`docs/GATE-BEFORE-PROVE.md`).
 
-**Worked example.** PDN1 congruences, Du--Yao, arXiv:2503.00004
+**Worked example.** PDN1 (partition-diamond) congruences, Du--Yao, arXiv:2503.00004
 (`docs/audits/pdn1.md`). Exact series of `J_2^2/J_1^5` through `q^500`
 (`PDN1(2) = 18`); Theorems 1.1--1.2 congruence predictions on stated APs mod
 $5^\alpha$, $7^\alpha$; modular equation (3.13) with the paper's $\sigma_i$ polynomials
@@ -385,7 +388,7 @@ available on the campaign stack, record blocked - do not invent operators.
 a factorization of the order-7 recurrence's leading coefficient, not
 the operator; the $\partial$-finite description (65 guessed recurrences, 5 MB)
 was never published, and the recovered notebook's 13 MB diagonal
-operator needs 3 GB RAM plus the HolonomicFunctions package --
+operator needs 3 GB RAM plus the HolonomicFunctions package -
 unavailable. The campaign's answer is a parametric Lean formalization
 of the closing argument (`DiagonalCertificate`, kernel-checked,
 sorry-free) modulo coefficient recovery, plus author contact for the
@@ -397,7 +400,7 @@ as tooling-limited: the route exists before the infrastructure does.
 **Route attacked.** Universal claims over finite combinatorial objects. The
 classic BREAK engine: one witness ends the argument.
 
-**Gate construction.** Exhibit the witness explicitly; close both sides --
+**Gate construction.** Exhibit the witness explicitly; close both sides -
 the upper bound by construction, the lower bound by exact (branch-and-bound
 or exhaustive) search. The control runs the same solver on graphs where the
 answer is known both ways, proving it is not an always-fire detector.
@@ -495,7 +498,7 @@ at 6,747 it is).
 
 Every control outcome recorded in a receipt JSON is embedded in its
 gate's own meta JSON, under the `controls` key - control name,
-verdict, ok, receipt path, receipt SHA-256, and receipt timestamp --
+verdict, ok, receipt path, receipt SHA-256, and receipt timestamp -
 by `scripts/gates/record_controls.py` on every aggregate run. A gate
 whose meta carries `"controls": []` has no *separate* control receipt:
 that is the honest record for the four exact-equality exemptions and
@@ -536,7 +539,7 @@ formalization of its false lemma.
 ### 4.4 Fail-closed replay: hash-pinned inputs, any mismatch fails the lane
 
 Replay lanes recompute from pinned inputs in shards; any checksum
-mismatch, row disagreement, or unreproducible step fails the lane --
+mismatch, row disagreement, or unreproducible step fails the lane -
 no "close enough," no partial passes. The Gomila $\Lambda$-bound finite lane verified
 3,149,013/3,149,013 rows across 15 shards checksummed at the pinned
 upstream commit; the Dini, barrier, and tail lanes each carry their own
@@ -551,11 +554,11 @@ whole is SKIP.)
 A single implementation can be wrong in ways its own tests cannot see.
 The campaign therefore uses two distinct layers. First, **brute-force
 anchors**: tiny, obviously-correct computations at small parameters
-that the real implementation must match. The Polya sieve's p=2 bug --
+that the real implementation must match. The Polya sieve's p=2 bug -
 the 2-adic inverse does not exist for p=2, corrupting L(100000) from
 -288 to -2074 - was caught by brute-force anchors before a second
 implementation existed. Second, **dual implementation**: a second implementation, written
-without reading the first, which must agree on every certificate --
+without reading the first, which must agree on every certificate -
 91/91 chunks for Polya. The anchor
 catches the bug class "wrong algorithm, confidently executed"; the
 dual implementation catches the class "right algorithm, wrong code".
@@ -591,14 +594,14 @@ checkpoints).
   could not support -> SKIP). The rule now opens the protocol document
   (`docs/GATE-BEFORE-PROVE.md`), and every audit note since records
   its paper pin.
-- **Ghost corpus entries.** Dossier table rows with no body section --
+- **Ghost corpus entries.** Dossier table rows with no body section -
   claims about claims with nothing behind them. Corpus hygiene is now
   part of target intake.
 - **Fabricated or garbled identifiers.** A "Reed/Zenodo $\gamma$" and a
   "Sun/Zenodo Catalan" entry turned out to reference nothing
   retrievable. Identifiers are now resolved to a fetchable artifact
   before a target is accepted. The rejected "Sun/Zenodo Catalan" entry
-  is not the Sun preprint the catalog later gated: the live type-E
+  is not the Sun preprint the catalog later gated: the live type-A
   BREAK target is Sun's arXiv:2609.04176v1, fetched from arXiv and
   pinned by SHA-256 - a different artifact from the unresolvable
   Zenodo handle.
@@ -643,7 +646,7 @@ and tangles vertex 1 irrevocably. The lemma is false, mechanically.
 
 The discrimination control is a matched near-miss: the same
 Configuration 2 color pattern on a bare 5-wheel, where the two Kempe
-chains are isolated single vertices and both switch orders agree --
+chains are isolated single vertices and both switch orders agree -
 confirming the tangle comes from the Fritsch graph's long-range edges
 (3--7, 4--7, 7--8), not from the machinery being order-sensitive. A
 separate brute-force properness check after every switch, independent
@@ -655,8 +658,8 @@ historical context, not the witness. Its lesson is the one the whole
 campaign is built on: a proof can be accepted for a decade and still
 die at one finite residue, and "the local case is clear" is a
 fragility signature, not a proof. It exercises paper-first at its
-most literal: the gate pins the modern telling (Fritsch & Fritsch
-1998; Gethner et al., *Involve* 2009), not anyone's summary of them.
+most literal: the gate pins Gethner et al. (*Involve* 2009) - Fritsch &
+Fritsch 1998 is background, not pinned, and not anyone's summary.
 
 ### 5.2 Gomila $\Lambda$-bound: the confirmation case (audit PASS)
 
@@ -668,7 +671,7 @@ fail-closed (Sec. 4.4): any mismatch would have failed the lane, and the
 sealed logs are re-verifiable.
 
 Lineage: Polymath15's Theorem 1.2 gave the method and the then-best
-bound $\Lambda \le 0.22$; Platt--Trudgian pushed it to 0.2; Gomila's 0.1787854 --
+bound $\Lambda \le 0.22$; Platt--Trudgian pushed it to 0.2; Gomila's 0.1787854 -
 $t_0 + y_0^2/2$ with $t_0 = 129/800$ and $y_0^2 = 87677/2,500,000$, i.e.
 893927/5,000,000 - instantiates Polymath15's machinery at an exact
 rational parameter row. The audit's question was
@@ -710,7 +713,7 @@ verdict about a route.
 
 The q-TSPP audit - formalizing Okada's determinant route to the
 totally symmetric plane partition identities - is the campaign's
-correct-proof infrastructure build, not a BREAK hunt. Milestone 1 --
+correct-proof infrastructure build, not a BREAK hunt. Milestone 1 -
 the q=1 Stembridge shakedown - closed with a sorry-free,
 kernel-checked recurrence-uniqueness lemma; milestone 2 - the
 parametric diagonal certificate - with a parametric order-7 diagonal
@@ -741,7 +744,7 @@ campaign's first BREAK is the example
 (`docs/audits/gamma-aejonanonymous.md`): the audited formalization
 proved `~is_rational_gamma` - a statement about its own predicate,
 not the irrationality of mathlib's $\gamma$. The computation was correct;
-the specification was wrong. A separate *statement-fidelity* audit --
+the specification was wrong. A separate *statement-fidelity* audit -
 checking that the formal statement says what the paper claims it
 says - is a partial remedy. It is not a closed gap: fidelity audits
 are manual, unglamorous, and easy to skip, which is exactly why the
@@ -765,7 +768,7 @@ output of the method, and its admission of reach.
 ### 6.3 The certificate cost curve is unsolved
 
 GB-scale certificates against kernel checking remain an unsolved
-tradeoff. The q-TSPP certificates are hundreds of megabytes --
+tradeoff. The q-TSPP certificates are hundreds of megabytes -
 uncheckable inside a proof kernel - so the campaign checks them
 outside the kernel and formalizes the *shape* of the argument instead.
 That is a principled compromise, not a solution: trust migrates to the
@@ -885,7 +888,7 @@ audits judge a proof against its own claims - and a BREAK must name
 the lemma and exhibit the false instance, not merely assign a
 severity.
 
-**The replication movement.** Empirical science learned --
+**The replication movement.** Empirical science learned -
 expensively - that published results often do not survive
 replay, and built preregistration, replication studies, and
 adversarial collaboration in response. Mathematics has largely
@@ -923,15 +926,15 @@ still be able to run every gate, check every control, and re-derive
 every disposition from the pinned artifacts.
 
 What the campaign found, in brief: eight live-literature gates
-refuted their target - two against claimed proofs (Baste et al.,
-Sun's Catalan route), six against stated conjectures (Tang--Zhang,
+refuted their target - one against a claimed proof (Sun's Catalan
+route), seven against stated conjectures (Baste et al., Tang--Zhang,
 Chung--Graham--Spiro, Sarkozy, Thakur, Salez--Youssef, Cohen); where a
 prior published refutation exists it is cited, and the gates compute
 their witnesses from the pinned claim artifact. Three more routes
 fell to prose audits that no gate could reach (Frankl union-closed,
 Legendre--Newman, Erdos--Straus Theorem 10). Three live claims survived
 their gates outright - Lopez's Erdos--Straus system, the Lau--Ono and
-Huang--Lau--Ono--Paule q-expansions, and Du--Yao's partition congruences --
+Huang--Lau--Ono--Paule q-expansions, and Du--Yao's partition congruences -
 and a fourth, the 3D-Mahler claim, passed its counting-lemma gate but
 stands as claim-level SKIP. Su's low-stakes 2D-Jacobian route survived
 both its computational gate and an off-lock type-G prose audit, and
@@ -1046,7 +1049,7 @@ p = 3/2) the type-A gate independently re-derives (Sec. 3).
 Afrasyab, K. "A 50-Vertex Cubic Counterexample to the
 Domination-versus-Edge-Domination Conjecture." arXiv:2609.10783. The
 published refutation of Baste et al.'s conjecture (50-vertex cubic
-graph, gamma = 16 > 15 = gamma_e) whose witness the type-F gate
+graph, $\gamma = 16 > 15 = \gamma_e$) whose witness the type-F gate
 recomputes from the pinned claim (Sec. 3).
 
 Aliabadi, M. "A counterexample to the Chung-Graham-Spiro gap-set
@@ -1056,7 +1059,7 @@ l = 4, 9 in U_4 \\ D_4) recomputed by the type-F gate (Sec. 3).
 Baste, J., Furst, M., Henning, M. A., Mohr, E., and Rautenbach, D.
 Domination-versus-edge-domination conjecture (2019/2020), as stated in
 Afrasyab arXiv:2609.10783: every finite regular graph of positive
-degree satisfies gamma(G) <= gamma_e(G). Refuted by Afrasyab; the
+degree satisfies $\gamma(G) \le \gamma_e(G)$. Refuted by Afrasyab; the
 type-F gate recomputes the witness (Sec. 3).
 
 Chalise, P., Clark, A., and Gnang, E. K. arXiv:2410.13840v2. The
@@ -1094,7 +1097,7 @@ proof of Lemma 25 broken by the type-F gate (Sec. 3).
 Gomila, J. "Riemann lambda 0.1787854."
 https://www.judegomila.com/posts/riemann-lambda-0.1787854. Audit
 repository: https://github.com/judegomila/dbn-lambda-01787854-candidate-audit.
-The Lambda <= 0.1787854 claim execution-verified in Sec. 5.2.
+The $\Lambda \le 0.1787854$ claim execution-verified in Sec. 5.2.
 
 Haselgrove, C. B. "A disproof of a conjecture of Polya."
 *Mathematika* 5 (1958), 141--145. The first disproof of Polya's
@@ -1206,7 +1209,7 @@ fail-closed check is the verdict comparison in `check.py`.
 The lock itself is `EXPECTED_VERDICT` in `scripts/gates/check.py`: a
 map from gate id to `(meta-file, expected-verdict)`. The aggregate
 run executes every gate, compares each recorded verdict against its
-expectation, and reports `[ok]` or `[DRIFT]` per gate; any drift --
+expectation, and reports `[ok]` or `[DRIFT]` per gate; any drift -
 in either direction - fails the run. Adding a gate means adding its
 entry in the same commit as the gate. Removing or re-pinning a
 verdict requires the re-audit to be recorded first. Prose
@@ -1223,8 +1226,8 @@ in the map; they live in `docs/audits/` (Sec. 2).
   network access at run time. Inputs are hash-pinned files under
   `incoming/` or generated deterministically in the script.
 - **Self-verifying inputs.** Hardcoded mathematical data (facet
-  lists, group tables) carries its own consistency checks --
-  supporting-plane verification, Euler characteristic, extremality --
+  lists, group tables) carries its own consistency checks -
+  supporting-plane verification, Euler characteristic, extremality -
   executed before the gate logic runs.
 - **Controls are code, not commentary.** Each gate's discrimination
   control is a standalone runnable script under `scripts/controls/`,
@@ -1281,7 +1284,7 @@ survives), infrastructure. Controls are standalone scripts under
 | lame_h23 | Lame 1847 cyclotomic route | hist | PASS | claim BREAK (route) | G | proof-route refutation | not required (exact equality) |
 | lame_ideal_neg23 | Lame 1847 ideal variant | hist | PASS | claim BREAK (route) | G | proof-route refutation | lame_ideal_control.py |
 | cohen_subadditivity | Cohen Conjecture 66 | live | BREAK | claim BREAK | F | conjecture counterexample | cohen_break_control.py |
-| baste_domination | Baste et al. 2019/2020 | live | BREAK | claim BREAK | F | proof-route refutation | baste_break_control.py |
+| baste_domination | Baste et al. 2019/2020 | live | BREAK | claim BREAK | F | conjecture counterexample | baste_break_control.py |
 | sarkozy_sum_product | Sarkozy Conjecture 65 | live | BREAK | claim BREAK | F | conjecture counterexample | sarkozy_break_control.py |
 | tang_zhang_schatten | Tang--Zhang | live | BREAK | claim BREAK | A | recomputation (Zeng--Liu--Ratnavelu) | tang_zhang_break_control.py |
 | thakur_carlitz | Thakur 2015 | live | BREAK | claim BREAK | F | conjecture counterexample | thakur_break_control.py |
@@ -1293,7 +1296,7 @@ survives), infrastructure. Controls are standalone scripts under
 | pdn1 | Du--Yao | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | mah_3 | Mahler 3D counting lemma | live | PASS | claim SKIP | A+G | confirmation (gate) | inline wrong-$\theta$ control |
 | suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | `suman_break_control` |
-| odd_zeta_1609 | odd-zeta claim | fringe | BREAK | claim BREAK | B | proof-route refutation | `odd_zeta_break_control` |
+| odd_zeta_1609 | odd-zeta claim (Chattopadhyay) | fringe | BREAK | claim BREAK | B | proof-route refutation | `odd_zeta_break_control` |
 | es5_eq35 | Ghermoul ES eq. 35 | fringe | BREAK | claim BREAK | A | proof-route refutation | es5_eq35_break_control.py |
 | tpc_area | twin-prime area method | fringe | BREAK | claim BREAK | F | proof-route refutation | tpc_area_break_control.py |
 | tpc_gn | Chalise--Clark--Gnang Prop. 3.4 | fringe | BREAK | claim BREAK | A | proof-route refutation | tpc_gn_break_control.py |
@@ -1370,7 +1373,7 @@ Dini, barrier, and tail lanes.
 **Paper-first.** No gate from a secondary summary: pin the version
 of record (SHA-256, byte count) and read the argument first.
 
-**PASS.** Disposition: the gate confirmed what it was built to test --
+**PASS.** Disposition: the gate confirmed what it was built to test -
 a statement about the audit's reach, not a certificate of truth.
 Carries the same weight as BREAK.
 

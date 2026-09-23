@@ -72,7 +72,7 @@ audits judge a proof against its own claims - and a BREAK must name
 the lemma and exhibit the false instance, not merely assign a
 severity.
 
-**The replication movement.** Empirical science learned --
+**The replication movement.** Empirical science learned -
 expensively - that published results often do not survive
 replay, and built preregistration, replication studies, and
 adversarial collaboration in response. Mathematics has largely

@@ -23,7 +23,7 @@ and tangles vertex 1 irrevocably. The lemma is false, mechanically.
 
 The discrimination control is a matched near-miss: the same
 Configuration 2 color pattern on a bare 5-wheel, where the two Kempe
-chains are isolated single vertices and both switch orders agree --
+chains are isolated single vertices and both switch orders agree -
 confirming the tangle comes from the Fritsch graph's long-range edges
 (3--7, 4--7, 7--8), not from the machinery being order-sensitive. A
 separate brute-force properness check after every switch, independent
@@ -35,8 +35,8 @@ historical context, not the witness. Its lesson is the one the whole
 campaign is built on: a proof can be accepted for a decade and still
 die at one finite residue, and "the local case is clear" is a
 fragility signature, not a proof. It exercises paper-first at its
-most literal: the gate pins the modern telling (Fritsch & Fritsch
-1998; Gethner et al., *Involve* 2009), not anyone's summary of them.
+most literal: the gate pins Gethner et al. (*Involve* 2009) - Fritsch &
+Fritsch 1998 is background, not pinned, and not anyone's summary.
 
 ## 5.2 Gomila $\Lambda$-bound: the confirmation case (audit PASS)
 
@@ -48,7 +48,7 @@ fail-closed (Sec. 4.4): any mismatch would have failed the lane, and the
 sealed logs are re-verifiable.
 
 Lineage: Polymath15's Theorem 1.2 gave the method and the then-best
-bound $\Lambda \le 0.22$; Platt--Trudgian pushed it to 0.2; Gomila's 0.1787854 --
+bound $\Lambda \le 0.22$; Platt--Trudgian pushed it to 0.2; Gomila's 0.1787854 -
 $t_0 + y_0^2/2$ with $t_0 = 129/800$ and $y_0^2 = 87677/2,500,000$, i.e.
 893927/5,000,000 - instantiates Polymath15's machinery at an exact
 rational parameter row. The audit's question was
@@ -90,7 +90,7 @@ verdict about a route.
 
 The q-TSPP audit - formalizing Okada's determinant route to the
 totally symmetric plane partition identities - is the campaign's
-correct-proof infrastructure build, not a BREAK hunt. Milestone 1 --
+correct-proof infrastructure build, not a BREAK hunt. Milestone 1 -
 the q=1 Stembridge shakedown - closed with a sorry-free,
 kernel-checked recurrence-uniqueness lemma; milestone 2 - the
 parametric diagonal certificate - with a parametric order-7 diagonal

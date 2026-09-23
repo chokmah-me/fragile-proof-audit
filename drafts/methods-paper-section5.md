@@ -56,7 +56,7 @@ at 6,747 it is).
 
 Every control outcome recorded in a receipt JSON is embedded in its
 gate's own meta JSON, under the `controls` key - control name,
-verdict, ok, receipt path, receipt SHA-256, and receipt timestamp --
+verdict, ok, receipt path, receipt SHA-256, and receipt timestamp -
 by `scripts/gates/record_controls.py` on every aggregate run. A gate
 whose meta carries `"controls": []` has no *separate* control receipt:
 that is the honest record for the four exact-equality exemptions and
@@ -97,7 +97,7 @@ formalization of its false lemma.
 ## 4.4 Fail-closed replay: hash-pinned inputs, any mismatch fails the lane
 
 Replay lanes recompute from pinned inputs in shards; any checksum
-mismatch, row disagreement, or unreproducible step fails the lane --
+mismatch, row disagreement, or unreproducible step fails the lane -
 no "close enough," no partial passes. The Gomila $\Lambda$-bound finite lane verified
 3,149,013/3,149,013 rows across 15 shards checksummed at the pinned
 upstream commit; the Dini, barrier, and tail lanes each carry their own
@@ -112,11 +112,11 @@ whole is SKIP.)
 A single implementation can be wrong in ways its own tests cannot see.
 The campaign therefore uses two distinct layers. First, **brute-force
 anchors**: tiny, obviously-correct computations at small parameters
-that the real implementation must match. The Polya sieve's p=2 bug --
+that the real implementation must match. The Polya sieve's p=2 bug -
 the 2-adic inverse does not exist for p=2, corrupting L(100000) from
 -288 to -2074 - was caught by brute-force anchors before a second
 implementation existed. Second, **dual implementation**: a second implementation, written
-without reading the first, which must agree on every certificate --
+without reading the first, which must agree on every certificate -
 91/91 chunks for Polya. The anchor
 catches the bug class "wrong algorithm, confidently executed"; the
 dual implementation catches the class "right algorithm, wrong code".
@@ -152,14 +152,14 @@ checkpoints).
   could not support -> SKIP). The rule now opens the protocol document
   (`docs/GATE-BEFORE-PROVE.md`), and every audit note since records
   its paper pin.
-- **Ghost corpus entries.** Dossier table rows with no body section --
+- **Ghost corpus entries.** Dossier table rows with no body section -
   claims about claims with nothing behind them. Corpus hygiene is now
   part of target intake.
 - **Fabricated or garbled identifiers.** A "Reed/Zenodo $\gamma$" and a
   "Sun/Zenodo Catalan" entry turned out to reference nothing
   retrievable. Identifiers are now resolved to a fetchable artifact
   before a target is accepted. The rejected "Sun/Zenodo Catalan" entry
-  is not the Sun preprint the catalog later gated: the live type-E
+  is not the Sun preprint the catalog later gated: the live type-A
   BREAK target is Sun's arXiv:2609.04176v1, fetched from arXiv and
   pinned by SHA-256 - a different artifact from the unresolvable
   Zenodo handle.

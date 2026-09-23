@@ -34,7 +34,7 @@ and the verdict lock (Sec. 2) fails loudly if any of them drifts.
 Second, the targets were selected for fragility by harvest dossiers,
 not sampled at random. This paper makes no claim about the base rate
 of defective proofs in the literature. It claims only that *these*
-routes were tested, *this* is how, and *these* are the dispositions --
+routes were tested, *this* is how, and *these* are the dispositions -
 with the failures of the method itself recorded alongside (Sec. 4.7).
 
 Third, the labor. The throughput above - 25 gates, four replay lanes,

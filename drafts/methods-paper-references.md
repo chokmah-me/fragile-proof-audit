@@ -99,7 +99,7 @@ p = 3/2) the type-A gate independently re-derives (Sec. 3).
 Afrasyab, K. "A 50-Vertex Cubic Counterexample to the
 Domination-versus-Edge-Domination Conjecture." arXiv:2609.10783. The
 published refutation of Baste et al.'s conjecture (50-vertex cubic
-graph, gamma = 16 > 15 = gamma_e) whose witness the type-F gate
+graph, $\gamma = 16 > 15 = \gamma_e$) whose witness the type-F gate
 recomputes from the pinned claim (Sec. 3).
 
 Aliabadi, M. "A counterexample to the Chung-Graham-Spiro gap-set
@@ -109,7 +109,7 @@ l = 4, 9 in U_4 \\ D_4) recomputed by the type-F gate (Sec. 3).
 Baste, J., Furst, M., Henning, M. A., Mohr, E., and Rautenbach, D.
 Domination-versus-edge-domination conjecture (2019/2020), as stated in
 Afrasyab arXiv:2609.10783: every finite regular graph of positive
-degree satisfies gamma(G) <= gamma_e(G). Refuted by Afrasyab; the
+degree satisfies $\gamma(G) \le \gamma_e(G)$. Refuted by Afrasyab; the
 type-F gate recomputes the witness (Sec. 3).
 
 Chalise, P., Clark, A., and Gnang, E. K. arXiv:2410.13840v2. The
@@ -147,7 +147,7 @@ proof of Lemma 25 broken by the type-F gate (Sec. 3).
 Gomila, J. "Riemann lambda 0.1787854."
 https://www.judegomila.com/posts/riemann-lambda-0.1787854. Audit
 repository: https://github.com/judegomila/dbn-lambda-01787854-candidate-audit.
-The Lambda <= 0.1787854 claim execution-verified in Sec. 5.2.
+The $\Lambda \le 0.1787854$ claim execution-verified in Sec. 5.2.
 
 Haselgrove, C. B. "A disproof of a conjecture of Polya."
 *Mathematika* 5 (1958), 141--145. The first disproof of Polya's

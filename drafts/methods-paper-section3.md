@@ -13,11 +13,11 @@ The five dispositions: **BREAK**, **GAP**, **PASS**, **SKIP**,
 
 ## BREAK - the route is refuted by a gated, controlled witness
 
-A BREAK means: a specific lemma, as the paper states it, is false --
+A BREAK means: a specific lemma, as the paper states it, is false -
 exhibited by a gate with a passing discrimination control (Sec. 4.2). The
 record is always lemma, instance, false instance. "Gates refute
 routes, not theorems" (Sec. 3): $\zeta(5)$ is probably irrational, and
-Goldbach's conjecture is untouched by the S.C.E. audit - what died in
+Goldbach's conjecture is untouched by the semi-continuous (S.C.E.) audit - what died in
 each case is a specific chain of lemmas, and the audit note names them.
 
 A BREAK is on the verdict lock (see below): the gate that produced it runs
@@ -79,7 +79,8 @@ A SKIP means the target, as stated, admits no gate: nonconstructive
 arguments, claims with no witness to exhibit, routes whose decisive
 step cannot be instantiated at any parameters. SKIP is a verdict about
 the audit, not the paper - "we cannot test this," not "this
-is wrong." The NCI target is the example: skipped because the alleged
+is wrong." The NCI (Non-Cancelling Intersections; Wilhelm,
+arXiv:2608.27416v2) target is the example: skipped because the alleged
 finite gate was absent from the paper as written.
 
 ## UNKNOWN - artifacts verified, kernel not re-checkable
@@ -89,14 +90,14 @@ verification step cannot be replayed on our toolchain. The quantum
 Hedetniemi audit verified the Python certificates and the source
 catalog (PASS on those lanes) but the kernel step requires the
 authors' Lean 4.19.0 environment, which we do not run. UNKNOWN is the
-honest alternative to inflating a partial check into a confirmation --
+honest alternative to inflating a partial check into a confirmation -
 or discarding it.
 
 ## The polarity rule
 
 A verdict attaches to the *gate's claim*, not to the paper's
 conclusion. The Lame 1847 audit is the canonical case: the locked
-gates are **PASS** - the class number $h(\mathbb{Q}(\zeta_{23})) = 3$ is confirmed --
+gates are **PASS** - the class number $h(\mathbb{Q}(\zeta_{23})) = 3$ is confirmed -
 and it is precisely that confirmed fact that kills Lame's route,
 which needed the class number to be 1. The route verdict is BREAK;
 the gate verdicts are PASS; confusing the two would invert the
@@ -119,7 +120,7 @@ are not verdicts about routes at all.
 
 The campaign's history is append-only: git plus dated WORKPLAN
 checkpoints. When a verdict is corrected, the prior verdict is marked
-superseded, not deleted. The odd-zeta audit's early "$\Lambda$_m unevaluable"
+superseded, not deleted. The odd-zeta audit's early "$\Lambda_m$ unevaluable"
 verdict was superseded by the Lemma 5.1 BREAK on 2026-09-20; both
 remain visible, with the correction dated. Summary tables show the
 current verdict with a "superseded" note: a taxonomy that rewrites its
@@ -141,10 +142,12 @@ its own evidentiary weight:
 - **Live literature (12 gates: 8 BREAK / 4 PASS).** Claims from the
   active research literature, thirteen papers across twelve gates
   (`rr_qexpand` covers both Lau--Ono and Huang--Lau--Ono--Paule). Of the
-  eight BREAKs, two refute claimed proofs - Baste et al. (2019/2020,
-  `baste_domination`) and Sun's Catalan route (arXiv:2609.04176,
-  `cat_g`) - and six are counterexamples to stated conjectures:
-  Tang--Zhang, Chung--Graham--Spiro (2020), Sarkozy's Conjecture 65,
+  eight BREAKs - one refutes a claimed proof with no prior published
+  refutation, Sun's Catalan route (arXiv:2609.04176,
+  `cat_g`) - and seven are counterexamples to stated conjectures,
+  each already refuted in print: Baste et al.'s domination conjecture
+  (`baste_domination`), Tang--Zhang, Chung--Graham--Spiro (2020),
+  Sarkozy's Conjecture 65,
   Thakur (2015), Salez--Youssef's Conjecture 1, and Cohen's Conjecture
   66. Where a prior published refutation exists it is cited in the
   audit note (Zeng--Liu--Ratnavelu for Tang--Zhang, Aliabadi for
@@ -170,7 +173,7 @@ known-Giuga-number oracle other gates consult - not a claim audit.)
 
 The honest reading: the campaign's weight as evidence about the
 literature rests on the middle stratum - eight BREAKs against live
-claims (two against claimed proofs, six against stated conjectures),
+claims (one against a claimed proof, seven against stated conjectures),
 three live claims fully surviving their gates. The low-stakes stratum proves the machinery runs;
 the historical stratum proves it aims true. Neither is presented as
 more than that.

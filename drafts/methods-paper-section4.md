@@ -34,7 +34,7 @@ $C^{TZ}_{p,m} = \sqrt{x(x+m-1)} / (x^p + m - 1)^{1/p}$ - with `x` the unique
 `x > 1` solving `x^p - 2x - (m-1) = 0` - is exceeded by an explicit
 rank-one pair at `p = 3/2`, `m = 2`:
 $R = 1.03641365870489\ldots > 207/200 > C^{TZ}_{3/2,2} = 1.03465395185143\ldots$.
-Two paths - exact rational Gram-matrix algebra and 60-digit mpmath --
+Two paths - exact rational Gram-matrix algebra and 60-digit mpmath -
 agree to `1e-40`; margins `~1.4e-3` above and `~3.5e-4` below against
 a `1e-20` safety floor.
 Control: 5,000 random rank-one pairs at the same `(p, m)` - only ~1% exceed
@@ -89,7 +89,7 @@ the modular equation coefficient-by-coefficient. Depth is the open question
 for D-gates: 81 points carried no information; 6,747 did
 (`docs/GATE-BEFORE-PROVE.md`).
 
-**Worked example.** PDN1 congruences, Du--Yao, arXiv:2503.00004
+**Worked example.** PDN1 (partition-diamond) congruences, Du--Yao, arXiv:2503.00004
 (`docs/audits/pdn1.md`). Exact series of `J_2^2/J_1^5` through `q^500`
 (`PDN1(2) = 18`); Theorems 1.1--1.2 congruence predictions on stated APs mod
 $5^\alpha$, $7^\alpha$; modular equation (3.13) with the paper's $\sigma_i$ polynomials
@@ -112,7 +112,7 @@ available on the campaign stack, record blocked - do not invent operators.
 a factorization of the order-7 recurrence's leading coefficient, not
 the operator; the $\partial$-finite description (65 guessed recurrences, 5 MB)
 was never published, and the recovered notebook's 13 MB diagonal
-operator needs 3 GB RAM plus the HolonomicFunctions package --
+operator needs 3 GB RAM plus the HolonomicFunctions package -
 unavailable. The campaign's answer is a parametric Lean formalization
 of the closing argument (`DiagonalCertificate`, kernel-checked,
 sorry-free) modulo coefficient recovery, plus author contact for the
@@ -124,7 +124,7 @@ as tooling-limited: the route exists before the infrastructure does.
 **Route attacked.** Universal claims over finite combinatorial objects. The
 classic BREAK engine: one witness ends the argument.
 
-**Gate construction.** Exhibit the witness explicitly; close both sides --
+**Gate construction.** Exhibit the witness explicitly; close both sides -
 the upper bound by construction, the lower bound by exact (branch-and-bound
 or exhaustive) search. The control runs the same solver on graphs where the
 answer is known both ways, proving it is not an always-fire detector.

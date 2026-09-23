@@ -36,7 +36,7 @@ fail-closed check is the verdict comparison in `check.py`.
 The lock itself is `EXPECTED_VERDICT` in `scripts/gates/check.py`: a
 map from gate id to `(meta-file, expected-verdict)`. The aggregate
 run executes every gate, compares each recorded verdict against its
-expectation, and reports `[ok]` or `[DRIFT]` per gate; any drift --
+expectation, and reports `[ok]` or `[DRIFT]` per gate; any drift -
 in either direction - fails the run. Adding a gate means adding its
 entry in the same commit as the gate. Removing or re-pinning a
 verdict requires the re-audit to be recorded first. Prose
@@ -53,8 +53,8 @@ in the map; they live in `docs/audits/` (Sec. 2).
   network access at run time. Inputs are hash-pinned files under
   `incoming/` or generated deterministically in the script.
 - **Self-verifying inputs.** Hardcoded mathematical data (facet
-  lists, group tables) carries its own consistency checks --
-  supporting-plane verification, Euler characteristic, extremality --
+  lists, group tables) carries its own consistency checks -
+  supporting-plane verification, Euler characteristic, extremality -
   executed before the gate logic runs.
 - **Controls are code, not commentary.** Each gate's discrimination
   control is a standalone runnable script under `scripts/controls/`,
@@ -111,7 +111,7 @@ survives), infrastructure. Controls are standalone scripts under
 | lame_h23 | Lame 1847 cyclotomic route | hist | PASS | claim BREAK (route) | G | proof-route refutation | not required (exact equality) |
 | lame_ideal_neg23 | Lame 1847 ideal variant | hist | PASS | claim BREAK (route) | G | proof-route refutation | lame_ideal_control.py |
 | cohen_subadditivity | Cohen Conjecture 66 | live | BREAK | claim BREAK | F | conjecture counterexample | cohen_break_control.py |
-| baste_domination | Baste et al. 2019/2020 | live | BREAK | claim BREAK | F | proof-route refutation | baste_break_control.py |
+| baste_domination | Baste et al. 2019/2020 | live | BREAK | claim BREAK | F | conjecture counterexample | baste_break_control.py |
 | sarkozy_sum_product | Sarkozy Conjecture 65 | live | BREAK | claim BREAK | F | conjecture counterexample | sarkozy_break_control.py |
 | tang_zhang_schatten | Tang--Zhang | live | BREAK | claim BREAK | A | recomputation (Zeng--Liu--Ratnavelu) | tang_zhang_break_control.py |
 | thakur_carlitz | Thakur 2015 | live | BREAK | claim BREAK | F | conjecture counterexample | thakur_break_control.py |
@@ -123,7 +123,7 @@ survives), infrastructure. Controls are standalone scripts under
 | pdn1 | Du--Yao | live | PASS | claim PASS | D | confirmation | not required (exact equality) |
 | mah_3 | Mahler 3D counting lemma | live | PASS | claim SKIP | A+G | confirmation (gate) | inline wrong-$\theta$ control |
 | suman_eq48 | Suman $\zeta(5)$ | fringe | BREAK | claim BREAK | B | proof-route refutation | `suman_break_control` |
-| odd_zeta_1609 | odd-zeta claim | fringe | BREAK | claim BREAK | B | proof-route refutation | `odd_zeta_break_control` |
+| odd_zeta_1609 | odd-zeta claim (Chattopadhyay) | fringe | BREAK | claim BREAK | B | proof-route refutation | `odd_zeta_break_control` |
 | es5_eq35 | Ghermoul ES eq. 35 | fringe | BREAK | claim BREAK | A | proof-route refutation | es5_eq35_break_control.py |
 | tpc_area | twin-prime area method | fringe | BREAK | claim BREAK | F | proof-route refutation | tpc_area_break_control.py |
 | tpc_gn | Chalise--Clark--Gnang Prop. 3.4 | fringe | BREAK | claim BREAK | A | proof-route refutation | tpc_gn_break_control.py |
@@ -200,7 +200,7 @@ Dini, barrier, and tail lanes.
 **Paper-first.** No gate from a secondary summary: pin the version
 of record (SHA-256, byte count) and read the argument first.
 
-**PASS.** Disposition: the gate confirmed what it was built to test --
+**PASS.** Disposition: the gate confirmed what it was built to test -
 a statement about the audit's reach, not a certificate of truth.
 Carries the same weight as BREAK.
 

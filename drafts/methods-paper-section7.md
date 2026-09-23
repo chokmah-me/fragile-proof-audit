@@ -12,7 +12,7 @@ campaign's first BREAK is the example
 (`docs/audits/gamma-aejonanonymous.md`): the audited formalization
 proved `~is_rational_gamma` - a statement about its own predicate,
 not the irrationality of mathlib's $\gamma$. The computation was correct;
-the specification was wrong. A separate *statement-fidelity* audit --
+the specification was wrong. A separate *statement-fidelity* audit -
 checking that the formal statement says what the paper claims it
 says - is a partial remedy. It is not a closed gap: fidelity audits
 are manual, unglamorous, and easy to skip, which is exactly why the
@@ -36,7 +36,7 @@ output of the method, and its admission of reach.
 ## 6.3 The certificate cost curve is unsolved
 
 GB-scale certificates against kernel checking remain an unsolved
-tradeoff. The q-TSPP certificates are hundreds of megabytes --
+tradeoff. The q-TSPP certificates are hundreds of megabytes -
 uncheckable inside a proof kernel - so the campaign checks them
 outside the kernel and formalizes the *shape* of the argument instead.
 That is a principled compromise, not a solution: trust migrates to the

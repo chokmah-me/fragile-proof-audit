@@ -10,15 +10,15 @@ still be able to run every gate, check every control, and re-derive
 every disposition from the pinned artifacts.
 
 What the campaign found, in brief: eight live-literature gates
-refuted their target - two against claimed proofs (Baste et al.,
-Sun's Catalan route), six against stated conjectures (Tang--Zhang,
+refuted their target - one against a claimed proof (Sun's Catalan
+route), seven against stated conjectures (Baste et al., Tang--Zhang,
 Chung--Graham--Spiro, Sarkozy, Thakur, Salez--Youssef, Cohen); where a
 prior published refutation exists it is cited, and the gates compute
 their witnesses from the pinned claim artifact. Three more routes
 fell to prose audits that no gate could reach (Frankl union-closed,
 Legendre--Newman, Erdos--Straus Theorem 10). Three live claims survived
 their gates outright - Lopez's Erdos--Straus system, the Lau--Ono and
-Huang--Lau--Ono--Paule q-expansions, and Du--Yao's partition congruences --
+Huang--Lau--Ono--Paule q-expansions, and Du--Yao's partition congruences -
 and a fourth, the 3D-Mahler claim, passed its counting-lemma gate but
 stands as claim-level SKIP. Su's low-stakes 2D-Jacobian route survived
 both its computational gate and an off-lock type-G prose audit, and
