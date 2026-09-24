@@ -13,6 +13,10 @@ received 2026-09-24 from Christoph Koutschan (re-run at our request).
 Coefficient polynomials below are transcribed verbatim in the factored
 form sent by the author: `L = Σ p_i(n) S_n^i`, signs as given.
 
+Acknowledgment: Christoph Koutschan (RICAM, Austrian Academy of Sciences)
+is an acknowledged contributor to this formalization — he re-ran the §5.3
+elimination computation at our request and provided the explicit operator.
+
 Machine-checked properties of the transcribed operator (independent
 sympy verification, see `~/workspace/qtspp/verify_operator.py`):
   * order 7, all eight coefficient polynomials of degree 24;

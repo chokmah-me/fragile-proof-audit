@@ -229,7 +229,9 @@ a multi-week infrastructure project in its own right. Fallback if Avenues 1–2 
 **Position 2026-09-24:** Avenue 2 delivered the true operator; the concrete
 `KoutschanOperator` module built clean the same day (`lake build
 FragileProofAudit.QTSPP.KoutschanOperator`, EXIT 0, 8,657 jobs, sorry-free;
-8 right-factor identities by `ring`, `hlead` by positivity). Still owed:
+8 right-factor identities by `ring`, `hlead` by positivity). Christoph
+Koutschan (RICAM, Austrian Academy of Sciences) is an acknowledged
+contributor to this formalization. Still owed:
 `hrec` (∂-finite substitution output) and `hinit` (seven determinant
 evaluations) before `B(n,n) = 1` is fully formalized. No placeholder
 certificate was ever committed.
