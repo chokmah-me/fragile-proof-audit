@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-23T19:45:42.727866+00:00",
+  "timestamp": "2026-09-24T12:43:57.713898+00:00",
   "gate": "tang_zhang_schatten",
   "source_claim": "Tang-Zhang conjecture: C^TZ_{p,m} = sqrt(x(x+m-1))/(x^p+m-1)^(1/p), x>1 solving x^p-2x-(m-1)=0, is the dimension-free best constant in ||sum A_k||_p <= c(m) |||sum |A_k|||_p for all finite p>1",
   "source_refutation": "Zeng, Liu, Ratnavelu (2026), arXiv:2608.15558, Theorem 1.1",
@@ -47,7 +47,7 @@
       "receipt": "results/tang_zhang_break_control_meta.json",
       "receipt_sha256": "6158d33804fe4e8fba30173663b48cbb579cf970f85cccd38d833b5084c7e0ef",
       "receipt_timestamp": "2026-09-22T03:04:41.903118+00:00",
-      "recorded_at": "2026-09-23T20:54:51.536068+00:00"
+      "recorded_at": "2026-09-24T12:44:34.261543+00:00"
     }
   ]
 }
