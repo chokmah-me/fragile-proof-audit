@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-09-24T12:58:00.933327+00:00",
+  "gate": "nla_ie16",
+  "source_claim": "Holden (2026): nine-point set L_{1/1000} at degree 4 gives R_4 = M_4/B_4 > 13/10 > 4/pi, refuting the IE-16 subset bound",
+  "local_pdf": "incoming/nla-ie16-holden.pdf",
+  "local_pdf_sha256": "a28b181ac1eab457bbae3d609eff91d7800a33c8a69dec669ba9e08679964ff4",
+  "paper_exact_M4": "3003003000/1001003001001",
+  "paper_subset_bound": "B_4 < 23/10000",
+  "paper_ratio_approx": "1.33299891979475829424",
+  "checks": {
+    "m_equals_paper_fraction": true,
+    "m_gt_299_100000": true,
+    "H_plus_2Q_eq_3D": true,
+    "nine_points_distinct_nonzero": true,
+    "nine_moduli_eq_m2": true,
+    "nine_moduli_bad_points": [],
+    "mu_positive_sum_one": true,
+    "nu_positive_sum_one": true,
+    "orthogonality_conj_l1_l4": true,
+    "orthogonality_bad_l": [],
+    "paper_l3_cancellation_exact": true,
+    "one_plus_cstarU_eq_neg_m": true,
+    "subsets_checked_126": true,
+    "all_lagrange_sums_above_threshold": true,
+    "subsets_failing": [],
+    "min_lagrange_sum_num_den": [
+      1122471771434099,
+      2526190031250
+    ],
+    "implied_B4_upper_lt_23_10000": true,
+    "profile_counts": {
+      "(0, 2, 3)": 18,
+      "(1, 1, 3)": 27,
+      "(1, 2, 2)": 81
+    },
+    "profile_counts_match_paper_81_27_18": true,
+    "ratio_gt_13_10": true,
+    "pi_lower_bound_gt_3_1415": true,
+    "thirteen_tenths_gt_4_over_pi": true,
+    "pi_enclosure": [
+      3.141592653589793,
+      3.141592653589793
+    ]
+  },
+  "verdict": "PASS",
+  "lemma": "M_4(L_{1/1000}) = 3003003000/1001003001001 > 299/100000 and B_4(L_{1/1000}) < 23/10000, hence R_4 > 13/10 > 4/pi",
+  "false_instance": null,
+  "ok": true,
+  "controls": [
+    {
+      "control": "nla_ie16_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/nla_ie16_control_meta.json",
+      "receipt_sha256": "679f414bbe726f064b3323a43f17772e8d2c3d3ecde23754280bde3c1722d454",
+      "receipt_timestamp": "2026-09-24T12:55:45.467153+00:00",
+      "recorded_at": "2026-09-24T12:58:00.998036+00:00"
+    }
+  ]
+}

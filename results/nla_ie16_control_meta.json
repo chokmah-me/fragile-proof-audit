@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-09-24T12:55:45.467153+00:00",
+  "control": "nla_ie16_control",
+  "gate": "nla_ie16",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "wrong_m_1e9_rejected": true,
+    "paper_bound_23_10000_passes": true,
+    "tight_bound_22_10000_rejected": true,
+    "perturbed_point_rejected": true,
+    "unperturbed_passes": true
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "note": "Perturbations are matched: one value changed at a time (claimed m, claimed bound, one point), everything else fixed. Rejection comes from the gate's own exact checks, proving they read the witness rather than rubber-stamping."
+}

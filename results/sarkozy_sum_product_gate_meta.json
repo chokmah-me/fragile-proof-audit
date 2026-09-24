@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T12:43:57.590929+00:00",
+  "timestamp": "2026-09-24T12:57:24.223467+00:00",
   "gate": "sarkozy_sum_product",
   "source_claim": "Sarkozy's Conjecture 65 (2001 list), as stated in Tang Conjecture 1.1: there exist c>0 and p_0 such that for every prime p>p_0, every A subset F_p with |A| > (1/2 - c)p satisfies F_p^x subset (A+A) union (AA)",
   "source_refutation": "Tang, Q. (2026), arXiv:2603.29992v2, Theorem 2.2",
@@ -25,7 +25,7 @@
           2
         ],
         "cross_check_ok": true,
-        "elapsed_s": 0.0001,
+        "elapsed_s": 0.0,
         "has_witness": true
       },
       {
@@ -87,7 +87,7 @@
           12
         ],
         "cross_check_ok": true,
-        "elapsed_s": 0.1989,
+        "elapsed_s": 0.1875,
         "has_witness": true
       },
       {
@@ -106,7 +106,7 @@
           15
         ],
         "cross_check_ok": true,
-        "elapsed_s": 0.8926,
+        "elapsed_s": 0.8654,
         "has_witness": true
       }
     ],
@@ -1083,7 +1083,7 @@
       "receipt": "results/sarkozy_break_control_meta.json",
       "receipt_sha256": "a6da28008d8f6b6a119b60702e633e392bb79b49e2ec8d9cb05cf2eb22bfda09",
       "receipt_timestamp": "2026-09-22T03:02:49.951330+00:00",
-      "recorded_at": "2026-09-24T12:44:34.261543+00:00"
+      "recorded_at": "2026-09-24T12:58:00.998036+00:00"
     }
   ]
 }
