@@ -1,0 +1,331 @@
+{
+  "date": "2026-09-24",
+  "harvest_sha": "d3d1707f8c9c2570d9d45f905dddb153de3f7dc174d961247ab81ec6709ac7e4",
+  "meta": {
+    "window": "2026-09-10..2026-09-24",
+    "source": "user deep-research batch (first loop harvest)"
+  },
+  "claims": [
+    {
+      "id": "ab-fluid",
+      "title": "Forced 3D Euler blowup (Alpoge-Buckmaster)",
+      "score": 5,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2609.16470",
+        "title": "Extending the C\u00f3rdoba-Mart\u00ednez-Zoroa IPM Blow-Up to Uniformly Space-Time Smooth Forcing",
+        "authors": [
+          "Levent Alp\u00f6ge",
+          "Tristan Buckmaster",
+          "Matei P. Coiculescu"
+        ],
+        "published": "2026-09-15",
+        "url": "https://arxiv.org/abs/2609.16470"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "tristanbuckmaster/fluid_lean",
+        "branch": "main",
+        "size_kb": 18840,
+        "pushed_at": "2026-09-08",
+        "url": "https://github.com/tristanbuckmaster/fluid_lean",
+        "head_sha": "d0124689230b58b4f86e7b90ac59de06404b3b6b",
+        "head_date": "2026-09-08",
+        "lean_files": 3748,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "ai_generated",
+        "released_under_pressure",
+        "build_skips_main_file",
+        "third_party_rebuild"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found",
+        "+1: arXiv title does not closely match harvest title (check citation)"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (interval certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (blowup criterion)"
+        ]
+      ]
+    },
+    {
+      "id": "openai-nse",
+      "title": "Forced Navier-Stokes + unforced Euler blowup (OpenAI)",
+      "score": 0,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://openai.com/index/navier-stokes-solution/",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "openai/NavierStokesAndEuler",
+        "branch": "main",
+        "size_kb": 8370,
+        "pushed_at": "2026-09-10",
+        "url": "https://github.com/openai/NavierStokesAndEuler",
+        "head_sha": "f9e8bc5b38b6e212696e8a30e3e91517af887bbd",
+        "head_date": "2026-09-10",
+        "lean_files": 2659,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.34.0-rc2"
+      },
+      "signals": [
+        "ai_generated",
+        "credit_dispute",
+        "third_party_rebuild",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.34.0-rc2",
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (blowup criterion)"
+        ]
+      ]
+    },
+    {
+      "id": "nla-nr03",
+      "title": "127-term nonnegative factorization of C7 (Holden)",
+      "score": 4,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/ajt60gaibb/OpenProblemsInNLA/blob/0689db001ddc4c54f2652ed4b13b753637fef700/references/holden-nr03-2026-09-13/NR03_counterexample.pdf",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "sgstepaniants/OpenProblemsInNLA",
+        "branch": "main",
+        "size_kb": 406197,
+        "pushed_at": "2026-09-21",
+        "url": "https://github.com/sgstepaniants/OpenProblemsInNLA",
+        "pinned_in_harvest": "f664d07e82aaa60bc9c78dd1946e763168c5c530",
+        "head_sha": "f664d07e82aaa60bc9c78dd1946e763168c5c530",
+        "head_date": "2026-09-13",
+        "lean_files": 1672,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "single_author",
+        "disclosed_llm_help",
+        "ai_only_review"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (exact rational object)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "nla-mf14",
+      "title": "Exact seven-product maximum d7 = 47 (Webb)",
+      "score": 3,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/ajt60gaibb/OpenProblemsInNLA/blob/0689db001ddc4c54f2652ed4b13b753637fef700/references/webb-mf14-degree47-2026-09-17/proof.pdf",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "ajt60gaibb/OpenProblemsInNLA",
+        "branch": "main",
+        "size_kb": 406993,
+        "pushed_at": "2026-09-22",
+        "url": "https://github.com/ajt60gaibb/OpenProblemsInNLA",
+        "head_sha": "0689db001ddc4c54f2652ed4b13b753637fef700",
+        "head_date": "2026-09-22",
+        "lean_files": 3246,
+        "tree_truncated": true,
+        "has_lakefile": true
+      },
+      "signals": [
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ]
+      ]
+    },
+    {
+      "id": "nla-mf24",
+      "title": "Pseudospectral unboundedness refutation (Maierhofer)",
+      "score": 3,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/ajt60gaibb/OpenProblemsInNLA/blob/0689db001ddc4c54f2652ed4b13b753637fef700/references/mf24-counterexample/proof.pdf",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "ajt60gaibb/OpenProblemsInNLA",
+        "branch": "main",
+        "size_kb": 406993,
+        "pushed_at": "2026-09-22",
+        "url": "https://github.com/ajt60gaibb/OpenProblemsInNLA",
+        "head_sha": "0689db001ddc4c54f2652ed4b13b753637fef700",
+        "head_date": "2026-09-22",
+        "lean_files": 3246,
+        "tree_truncated": true,
+        "has_lakefile": true
+      },
+      "signals": [
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "nla-ie16",
+      "title": "GMRES subset-bound counterexample (Holden)",
+      "score": 3,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/ajt60gaibb/OpenProblemsInNLA/blob/0689db001ddc4c54f2652ed4b13b753637fef700/linear-systems-and-elimination/IE-16/solution.pdf",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "sgstepaniants/OpenProblemsInNLA",
+        "branch": "main",
+        "size_kb": 406197,
+        "pushed_at": "2026-09-21",
+        "url": "https://github.com/sgstepaniants/OpenProblemsInNLA",
+        "pinned_in_harvest": "697a2a1d88337a6747aa5c82fb6e554d3ff1b356",
+        "head_sha": "697a2a1d88337a6747aa5c82fb6e554d3ff1b356",
+        "head_date": "2026-09-13",
+        "lean_files": 1643,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "nla-mi32",
+      "title": "Latala-Swiatkowski upper comparison (Heidary)",
+      "score": 3,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/DiarHaidary/Spectral-norms-of-independent-entries-with-regular-moment-growth/tree/762bd5ec5050a96f5e6ba3926b6cda4816fcd4b0",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "DiarHaidary/Spectral-norms-of-independent-entries-with-regular-moment-growth",
+        "branch": "main",
+        "size_kb": 1059,
+        "pushed_at": "2026-09-14",
+        "url": "https://github.com/DiarHaidary/Spectral-norms-of-independent-entries-with-regular-moment-growth",
+        "pinned_in_harvest": "762bd5ec5050a96f5e6ba3926b6cda4816fcd4b0",
+        "head_sha": "762bd5ec5050a96f5e6ba3926b6cda4816fcd4b0",
+        "head_date": "2026-09-14",
+        "lean_files": 129,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.33.0"
+      },
+      "signals": [
+        "anonymous_or_unaffiliated",
+        "disclosed_llm_help",
+        "ai_only_review"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.33.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    }
+  ]
+}
