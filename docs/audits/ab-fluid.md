@@ -38,22 +38,37 @@ criterion is the per-piece Picard contraction
 `0 < (Ahi + Bhi·R − PertHi).lo ∧ 0 < (Alo + Blo·R + PertLo).lo`
 inside `pLeafOK`, replayed above for every piece.
 
-**Type G — no discrepancy.**
+**Type G — no discrepancy (Euler); process caveats elsewhere.**
 - `sorry`: one per `Challenge.lean`, each deliberate (challenge-side
-  statement file; the affinecore header says so explicitly). Zero in any
-  proof development.
+  statement file). Zero in any proof development, vendor included.
 - `axiom`: none. `native_decide`: none. `admit`: none.
 - `Solution.lean` proves exactly the `Challenge.lean` statement
   (verified textually identical).
-- The `build_skips_main_file` harvest flag is a misnomer:
-  `EulerBlowup/Main.lean` is a *planar* (R2) Boussinesq layer, not the
-  Euler entry point; the real route is
-  root → `Ring.Main` + `Ring3D.Final` + `Cert.FinalPrime` → `Solution`.
-  Nothing is skipped that the proof needs.
+- The `build_skips_main_file` harvest flag is **false at this commit**:
+  both `Main.lean` files are inside the `lake build` import closure
+  (1,113 modules from default targets; `EulerBlowup/Main.lean` is imported
+  by `Hypotheses.lean`, `Kit/Bootstrap.lean`, `Ring*.lean`,
+  `Ring3D/*.lean`, etc. — it is the shared planar-statement layer, not a
+  stale leftover). The flag's "hence never compiled" inference was wrong.
+- Statement-vs-prose divergences (sup-norms rendered as pointwise
+  minorants, integral divergence as arbitrarily large minorant integrals,
+  no certified blowup rate, pressure-free weak uniqueness) are all
+  **documented** in `formalization.yaml`'s `fidelity.divergences` and
+  verified faithful.
 - Toolchain is pinned (`leanprover/lean4:v4.32.2`, Mathlib via
-  `lake-manifest.json` at `81a5d25`) in each of the three projects —
-  the harvest's "no toolchain pin" flag was wrong.
-- Standard axioms only (`propext`, `Classical.choice`, `Quot.sound`).
+  `lake-manifest.json`) in each project — the "no toolchain pin" flag
+  was wrong. (Mathlib rev is v4.32.0 vs toolchain v4.32.2; READMEs note
+  4.32.2 = 4.32.0 plus two kernel soundness fixes, Mathlib from source.)
+- Euler review status: `author-verified` (Alpöge read `Challenge.lean`).
+- **Boussinesq caveat:** review status `unreviewed` — the maintainer had
+  not read `Challenge.lean` at this commit (README concurs).
+- **AffineCore gap:** `Challenge.lean`/`Solution.lean` are declared
+  `lean_lib`s but are **not** default targets (bare `lake build` never
+  type-checks them), and `formalization.yaml` states the comparator run
+  is **pending** — the bridge connecting the 1,100+-module proof to the
+  trusted statement has not been executed at this commit. Statement also
+  human-unreviewed. This is a genuine verification-chain gap for the
+  affinecore route (not covered by this gate, which replays Euler).
 
 ## Provenance notes (not verdict-affecting)
 
@@ -82,10 +97,13 @@ inside `pLeafOK`, replayed above for every piece.
 
 ## Disposition
 
-**PASS.** The entire Euler interval certificate — the only part of the
-proof a machine checks by brute force — replays green under an
+**PASS (Euler route).** The entire Euler interval certificate — the only
+part of the proof a machine checks by brute force — replays green under an
 independent transcription, with exact coverage and working controls.
-Type G shows no statement/proof mismatch. The provenance flags
-(AI-generated, released under pressure) are recorded but, per doctrine,
-do not refute the route. Gates refute routes, not theorems; here the
-route stands.
+Type G shows no statement/proof mismatch for Euler, whose review and
+comparator design are complete. The provenance flags (AI-generated,
+released under pressure) are recorded but, per doctrine, do not refute
+the route. Gates refute routes, not theorems; here the Euler route stands.
+**Scope note:** Boussinesq and AffineCore were not certificate-replayed,
+and carry the process caveats above (unreviewed statements; affinecore
+comparator pending) — they are not covered by this PASS.
