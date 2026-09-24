@@ -1,0 +1,23 @@
+{
+  "verdict": "PASS",
+  "pinned_commit": "d0124689230b58b4f86e7b90ac59de06404b3b6b",
+  "htab_cells": 128,
+  "odchunks": 135,
+  "pieces_checked": 5249,
+  "pieces_ok": 5249,
+  "checkpoint_resumed": 5249,
+  "coverage": "SB0-SB7 tile [0,1/100] in 1/800 steps",
+  "controls": [
+    {
+      "control": "ab_fluid_boussinesq_control",
+      "verdict": "PASS",
+      "ok": true,
+      "receipt": "results/ab_fluid_boussinesq_control_meta.json",
+      "receipt_sha256": "104d89dd2b70448bd60a403d2f35b8c2b76d018c405320a1526eb5b98a2a5eb7",
+      "receipt_timestamp": "2026-09-24T19:45:01.597337+00:00",
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
+    }
+  ],
+  "seconds": 5.4,
+  "scope": "Boussinesq dressed interval certificate only; Euler cert covered by ab_fluid; IPM cert, Lean kernel bridge, and PDE lifting not replayed"
+}

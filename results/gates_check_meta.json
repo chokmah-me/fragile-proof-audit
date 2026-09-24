@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-24T16:40:17.417887+00:00",
+  "timestamp": "2026-09-24T19:45:01.741909+00:00",
   "phase": "track-D",
-  "lock_size": 31,
+  "lock_size": 32,
   "gates": [
     {
       "name": "harness_selftest",
@@ -160,6 +160,11 @@
     },
     {
       "name": "ab_fluid",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "ab_fluid_boussinesq",
       "ok": true,
       "exit_code": 0
     }
@@ -412,11 +417,19 @@
       "actual": "PASS",
       "ok": true,
       "note": ""
+    },
+    {
+      "name": "ab_fluid_boussinesq",
+      "meta": "ab_fluid_boussinesq_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
     }
   ],
   "verdict_drift": [],
   "controls": {
-    "gates_with_controls": 24,
+    "gates_with_controls": 25,
     "gates_without_controls": 7,
     "control_failures": [],
     "warnings": []

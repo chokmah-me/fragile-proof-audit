@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T16:01:39.939310+00:00",
+  "timestamp": "2026-09-24T19:44:49.799130+00:00",
   "gate": "nla_mf24",
   "source_claim": "Maierhofer (2026): unbounded polynomial norm ratios for super-identical pseudospectra; ||p_m(X)||_2 >= t^2 sqrt(m), ||p_m(Y)||_2 <= t^2+m-1, ratio >= (4/5) sqrt(m) at t=m; C_N >= sqrt(floor(sqrt(N))-1), N >= 9",
   "local_pdf": "incoming/nla-mf24-maierhofer.pdf",
@@ -77,7 +77,7 @@
       "receipt": "results/nla_mf24_control_meta.json",
       "receipt_sha256": "23cc009148c3431fe039342d7cc78d46e2ce28f0752e432d7f0171ba5e6b89cb",
       "receipt_timestamp": "2026-09-24T15:29:38.325589+00:00",
-      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
     }
   ]
 }

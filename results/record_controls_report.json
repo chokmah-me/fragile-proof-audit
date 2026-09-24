@@ -1,5 +1,5 @@
 {
-  "recorded_at": "2026-09-24T16:01:42.714806+00:00",
+  "recorded_at": "2026-09-24T19:45:01.722850+00:00",
   "gates": [
     {
       "gate": "suman_eq48",
@@ -296,6 +296,23 @@
       "controls": [
         {
           "control": "nla_mi32_control",
+          "ok": true
+        }
+      ],
+      "note": "controls embedded/updated"
+    },
+    {
+      "gate": "ab_fluid",
+      "meta": "ab_fluid_gate_meta.json",
+      "controls": [],
+      "note": "controls embedded/updated; no control receipt (honest empty list)"
+    },
+    {
+      "gate": "ab_fluid_boussinesq",
+      "meta": "ab_fluid_boussinesq_gate_meta.json",
+      "controls": [
+        {
+          "control": "ab_fluid_boussinesq_control",
           "ok": true
         }
       ],

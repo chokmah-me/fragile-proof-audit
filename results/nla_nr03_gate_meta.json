@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T16:00:09.535079+00:00",
+  "timestamp": "2026-09-24T19:43:14.608711+00:00",
   "gate": "nla_nr03",
   "source_claim": "Holden (2026): rank+(C7) <= 127 < 128 via exact rational factorization, disproving the NR-03 universal 2^n conjecture",
   "local_pdf": "incoming/nla-nr03-holden.pdf",
@@ -44,7 +44,7 @@
       "receipt": "results/nla_nr03_control_meta.json",
       "receipt_sha256": "220d46dc74c5c17f6ee41fbd04674c83f6e9252af44ea5f0dc7745fc5a5193d0",
       "receipt_timestamp": "2026-09-24T12:37:58.483121+00:00",
-      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
     }
   ]
 }

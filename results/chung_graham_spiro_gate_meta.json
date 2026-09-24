@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:59:30.477869+00:00",
+  "timestamp": "2026-09-24T19:42:34.147106+00:00",
   "gate": "chung_graham_spiro",
   "source_claim": "Chung-Graham-Spiro (2020): the l-step gap sets D_l, U_l of the down-integer/up-integer partition of Z_{>=2} agree, D_l=U_l, for every l>=1",
   "source_refutation": "Mohsen Aliabadi (2026), arXiv:2609.04473, Theorem 1.1",
@@ -139,7 +139,7 @@
       "receipt": "results/chung_graham_break_control_meta.json",
       "receipt_sha256": "5df6d7c2870c95430fba257e5dea6237e682fff984e483775e2d661e606e1303",
       "receipt_timestamp": "2026-09-22T03:05:04.468361+00:00",
-      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
     }
   ]
 }

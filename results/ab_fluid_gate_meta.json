@@ -5,12 +5,9 @@
   "odchunks": 135,
   "pieces_checked": 5249,
   "pieces_ok": 5249,
-  "checkpoint_resumed": 0,
+  "checkpoint_resumed": 5249,
   "coverage": "SB0-SB7 tile [0,1/100] in 1/800 steps",
-  "controls": {
-    "inverted_barrier_rejected": true,
-    "doubled_hi_rejected": true
-  },
-  "seconds": 165.5,
+  "controls": [],
+  "seconds": 4.0,
   "scope": "Euler dressed interval certificate only; Boussinesq/IPM certs, Lean kernel bridge, and PDE lifting not replayed"
 }

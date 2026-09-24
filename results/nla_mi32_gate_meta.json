@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T16:01:42.538996+00:00",
+  "timestamp": "2026-09-24T19:44:51.852453+00:00",
   "gate": "nla_mi32",
   "source_claim": "E||X|| <= C_alpha (M(X)+D(X)) for independent mean-zero regular entries (Heidary, MI-32 upper)",
   "local_paper": "docs/source/MI32_solution.md @ DiarHaidary@762bd5e",
@@ -29,7 +29,7 @@
       "receipt": "results/nla_mi32_control_meta.json",
       "receipt_sha256": "60a38e836b2042c6e368dfa0f2f464981d03233cbce4ced20032cf14c4a7ed53",
       "receipt_timestamp": "2026-09-24T15:58:30.430984+00:00",
-      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
     }
   ]
 }

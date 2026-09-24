@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:59:04.848337+00:00",
+  "timestamp": "2026-09-24T19:42:06.373856+00:00",
   "gate": "suman_eq48",
   "source_claim": "arXiv:2407.07121v6",
   "source_refutation": "arXiv:2411.16774",
@@ -136,7 +136,7 @@
       "receipt": "results/suman_break_control_meta.json",
       "receipt_sha256": "21267c033d5ebb9725c235d3c7293e9fa4a97e9d829ba77fe5a4b02b4462148b",
       "receipt_timestamp": "2026-09-22T03:04:50.984248+00:00",
-      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
     }
   ]
 }

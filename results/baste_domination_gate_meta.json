@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:59:27.706034+00:00",
+  "timestamp": "2026-09-24T19:42:30.996012+00:00",
   "gate": "baste_domination",
   "source_claim": "Baste-Furst-Henning-Mohr-Rautenbach: gamma(G) <= gamma_e(G) for regular G",
   "source_refutation": "Afrasyab, K. (2026), arXiv:2609.10783v1, Theorem 1",
@@ -102,7 +102,7 @@
       "receipt": "results/baste_break_control_meta.json",
       "receipt_sha256": "1a59641404b5475e0c3f00627a1ac375583d2bdd7a1035de4d86f94d4461a613",
       "receipt_timestamp": "2026-09-22T03:00:15.360264+00:00",
-      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
     }
   ]
 }

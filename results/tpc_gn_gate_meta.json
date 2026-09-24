@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:59:32.746133+00:00",
+  "timestamp": "2026-09-24T19:42:36.916547+00:00",
   "target": "tpc_gn",
   "source": "arXiv:2410.13840v2",
   "local_pdf": "incoming/gnang-tpc-2410.13840v2.pdf",
@@ -36,7 +36,7 @@
       "receipt": "results/tpc_gn_break_control_meta.json",
       "receipt_sha256": "f2ea87b62880c97191f4ba50c1a89d3b59c5d2847ae12f642a54493d501b69fa",
       "receipt_timestamp": "2026-09-22T11:12:20.108977+00:00",
-      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
     }
   ]
 }

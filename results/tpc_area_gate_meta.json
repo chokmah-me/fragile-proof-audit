@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:59:31.105317+00:00",
+  "timestamp": "2026-09-24T19:42:34.851809+00:00",
   "target": "tpc_area",
   "source": "arXiv:1707.03265v4",
   "local_pdf": "incoming/agama-twin-1707.03265v4.pdf",
@@ -77,7 +77,7 @@
       "receipt": "results/tpc_area_break_control_meta.json",
       "receipt_sha256": "7266396500ebc1463f2db8608bec9095bca37e82699cdf442e67b02c3536e3e9",
       "receipt_timestamp": "2026-09-22T07:05:47.880412+00:00",
-      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-09-24T19:45:01.597337+00:00",
+  "control": "ab_fluid_boussinesq_control",
+  "gate": "ab_fluid_boussinesq",
+  "checks": {
+    "baseline_passes": true,
+    "inverted_barrier_rejected": true,
+    "doubled_hi_rejected": true
+  },
+  "verdict": "PASS",
+  "ok": true,
+  "note": "matched perturbations rejected; unperturbed baseline passes; independent artifact from the Euler certificate"
+}

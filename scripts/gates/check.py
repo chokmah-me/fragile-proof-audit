@@ -48,6 +48,7 @@ NLA_MF14 = ROOT / "scripts" / "gates" / "nla_mf14.py"
 NLA_MF24 = ROOT / "scripts" / "gates" / "nla_mf24.py"
 NLA_MI32 = ROOT / "scripts" / "gates" / "nla_mi32.py"
 AB_FLUID = ROOT / "scripts" / "gates" / "ab_fluid.py"
+AB_FLUID_BOUSSINESQ = ROOT / "scripts" / "gates" / "ab_fluid_boussinesq.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -94,6 +95,7 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "nla_mf24": ("nla_mf24_gate_meta.json", "PASS"),
     "nla_mi32": ("nla_mi32_gate_meta.json", "PASS"),
     "ab_fluid": ("ab_fluid_gate_meta.json", "PASS"),
+    "ab_fluid_boussinesq": ("ab_fluid_boussinesq_gate_meta.json", "PASS"),
 }
 
 
@@ -281,6 +283,10 @@ def run_ab_fluid() -> dict:
     return run_script("ab_fluid", AB_FLUID)
 
 
+def run_ab_fluid_boussinesq() -> dict:
+    return run_script("ab_fluid_boussinesq", AB_FLUID_BOUSSINESQ)
+
+
 # Registry: (gate name, runner) in run order.  The verdict-lock check at the
 # end always covers every gate's committed meta file, even when a subset is
 # run -- so `--only`/`--skip` are safe for reboot recovery: re-run just the
@@ -318,6 +324,7 @@ GATES: list[tuple[str, object]] = [
     ("nla_mf24", run_nla_mf24),
     ("nla_mi32", run_nla_mi32),
     ("ab_fluid", run_ab_fluid),
+    ("ab_fluid_boussinesq", run_ab_fluid_boussinesq),
 ]
 
 

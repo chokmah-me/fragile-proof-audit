@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T16:00:09.655010+00:00",
+  "timestamp": "2026-09-24T19:43:14.711752+00:00",
   "gate": "nla_ie16",
   "source_claim": "Holden (2026): nine-point set L_{1/1000} at degree 4 gives R_4 = M_4/B_4 > 13/10 > 4/pi, refuting the IE-16 subset bound",
   "local_pdf": "incoming/nla-ie16-holden.pdf",
@@ -54,7 +54,7 @@
       "receipt": "results/nla_ie16_control_meta.json",
       "receipt_sha256": "679f414bbe726f064b3323a43f17772e8d2c3d3ecde23754280bde3c1722d454",
       "receipt_timestamp": "2026-09-24T12:55:45.467153+00:00",
-      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+      "recorded_at": "2026-09-24T19:45:01.722850+00:00"
     }
   ]
 }

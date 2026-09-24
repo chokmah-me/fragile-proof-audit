@@ -2,7 +2,7 @@
 
 **Harvest ID:** `ab-fluid` · **Fragility:** 5 · **Date:** 2026-09-24
 **Repo:** `tristanbuckmaster/fluid_lean` @ `d0124689230b58b4f86e7b90ac59de06404b3b6b`
-**Verdict:** **PASS** (Euler route; Type A + Type E + Type G)
+**Verdict:** **PASS** (Euler + Boussinesq routes; Type A + Type E + Type G)
 
 ## Claim
 
@@ -13,6 +13,15 @@ compactly supported finite-energy data, smooth force with all mixed
 derivatives bounded up to `T` in one fixed ball; `‖ω(t)‖∞ → ∞` and
 `∫₀ᵀ‖ω‖∞ = ∞`; uniqueness in the finite-energy Lipschitz class on shorter
 intervals. No blowup rate is certified.
+
+The Boussinesq theorem (`boussinesq_smooth_force_blowup`; PDF Theorem 1.1,
+"For the fixed data (1.4), there are odd forces … and a time T* ∈ (0, ∞)
+such that … This solution blows up as t ↑ T* in the sense that
+sup ‖θ(t)‖∞ < ∞, lim ‖∇θ(t)‖∞ = ∞, lim sup ‖ω(t)‖∞ = ∞"): for every
+buoyancy `κ > 0` (via the paper's scaling reduction, Lemma 1.2),
+finite-time gradient blowup with bounded temperature and unbounded
+vorticity limsup, smooth compactly supported forces, strong-class
+uniqueness.
 
 ## What was checked
 
@@ -32,6 +41,21 @@ replayed **every** dressed-chunk piece of the Euler certificate:
   rejected; doubled `hi` coefficients → rejected. (Weak perturbations
   within the barrier slack correctly still pass — the checker is
   sensitive, not vacuous: malformed inputs are also rejected.)
+
+**Type E — Boussinesq certificate replay.** The same transcription, run
+unmodified against `boussinesq-blowup/` (`scripts/gates/
+ab_fluid_boussinesq.py`, sharing `ab_fluid_parse`/`ab_fluid_check`):
+
+- **5,249 / 5,249** `(chunk, piece)` occurrences pass, **2,603** unique
+  `PieceCert`s, **135** `ODChunk`s, 128-cell `hTab`, in 158.4 s. (Same
+  occurrence count as Euler: both certs are emitted by the same generator
+  with identical chunking.)
+- **Coverage:** the 8 sub-box rationals tile `[0, 1/100]` exactly,
+  same 1/800 tiling.
+- **Controls:** baseline passes; inverted barrier rejected; doubled-`hi`
+  rejected (receipt: `results/ab_fluid_boussinesq_control_meta.json`).
+  Separate control receipt kept because the Boussinesq cert is an
+  independent artifact — a pass here is not implied by the Euler pass.
 
 **Type A — blowup criterion.** There is no single scalar inequality; the
 criterion is the per-piece Picard contraction
@@ -91,19 +115,22 @@ inside `pLeafOK`, replayed above for every piece.
   to Lean+Mathlib, not re-derived.
 - `chainOK`/`headIs` chaining and `landOK`/`posOK`/`negOK` side conditions:
   structural, kernel-checked in Lean.
-- Boussinesq and IPM certificates use the same machinery but were not
-  re-run (Euler is the flagship; gate covers the Euler route).
+- The IPM certificate was not re-run (AffineCore route carries the
+  comparator-pending gap above).
 - No full `lake build` (needs ~100–150 GB RAM; this VM cannot).
 
 ## Disposition
 
-**PASS (Euler route).** The entire Euler interval certificate — the only
-part of the proof a machine checks by brute force — replays green under an
-independent transcription, with exact coverage and working controls.
-Type G shows no statement/proof mismatch for Euler, whose review and
-comparator design are complete. The provenance flags (AI-generated,
-released under pressure) are recorded but, per doctrine, do not refute
-the route. Gates refute routes, not theorems; here the Euler route stands.
-**Scope note:** Boussinesq and AffineCore were not certificate-replayed,
-and carry the process caveats above (unreviewed statements; affinecore
-comparator pending) — they are not covered by this PASS.
+**PASS (Euler + Boussinesq routes).** Both interval certificates — the
+only parts of either proof a machine checks by brute force — replay green
+under an independent transcription (Euler: 5,249/5,249; Boussinesq:
+5,249/5,249), with exact coverage and working controls. Type G shows no
+statement/proof mismatch for Euler, whose review and comparator design
+are complete. The provenance flags (AI-generated, released under
+pressure) are recorded but, per doctrine, do not refute the route. Gates
+refute routes, not theorems; here the Euler and Boussinesq routes stand.
+**Scope note:** the IPM/AffineCore route was not certificate-replayed and
+is not covered by this PASS — its comparator run is pending and its
+statement is human-unreviewed at this commit. The Boussinesq
+statement-review caveat (maintainer had not read `Challenge.lean` at this
+commit) remains a process note; it is not a mathematical finding.

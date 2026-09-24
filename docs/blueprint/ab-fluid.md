@@ -48,6 +48,13 @@ table (`hTab`), and perturbation bounds (`Om`).
 `[0, 1/100]` in eighths of `1/800`; ~70 `ODChunk`s binding
 `(P, Om, piece-list)`.
 
+**Scale (Boussinesq).** 1,244 files under
+`BoussinesqBlowup/Num/Cert/`; 10,819 `PieceCert` defs; identical chunk
+layout (`HB01234`, `HB567`, `HS123`, `HS45`, `HS67`, `SB0`–`SB7`; 143
+`ODChunk` defs, 135 parsed); same 1/800 sub-box tiling of `[0, 1/100]`.
+Plus `OT3H`/`OT4H`/`QH` directories not present in Euler (not part of
+the dressed-chunk certificate).
+
 ## Gate design (`scripts/gates/ab_fluid.py`)
 
 **Type A (scalar/inequality gate).** The blowup criterion has no single
@@ -75,9 +82,20 @@ defs, resolves `(P, Om)`, runs `pCheckPiece`. Plus:
   lemmas) — trusted to Lean+Mathlib, not re-derived.
 - The `chainOK`/`headIs` chaining and `landOK`/`posOK`/`negOK` side
   conditions — structural, checked by Lean `decide`.
-- Boussinesq and IPM certificates — same machinery, not re-run
-  (Euler is the flagship; the gate covers the Euler route).
+- The IPM certificate (AffineCore route) — same machinery, not re-run;
+  that route carries the comparator-pending gap regardless.
 - Full `lake build` (needs ~100–150 GB RAM; this VM cannot do it).
+
+## Boussinesq extension (2026-09-24)
+
+Gate: `scripts/gates/ab_fluid_boussinesq.py` — same transcription
+(`ab_fluid_parse`, `ab_fluid_check`), run unmodified against
+`boussinesq-blowup/`. PASS: **5,249/5,249** occurrences, 2,603 unique
+`PieceCert`s, 135 `ODChunk`s, coverage tiles `[0, 1/100]`, both controls
+reject. Separate control receipt
+(`results/ab_fluid_boussinesq_control_meta.json`) because the Boussinesq
+cert is an independent artifact — an Euler pass does not imply it.
+Registered as its own verdict-lock row (`ab_fluid_boussinesq`).
 
 **Verdict rule.** PASS iff every replayed piece passes, coverage tiles,
 and both controls reject. Any piece failure or control non-rejection →
