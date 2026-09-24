@@ -1,0 +1,72 @@
+# Harvest loop — weekly recon of fresh-claim harvests.
+#
+# Triggers:
+#   - push of a new file under incoming/harvests/   (event-driven: a harvest lands)
+#   - weekly schedule (backstop + identifier health re-check)
+#   - workflow_dispatch (manual; optional harvest date YYYY-MM-DD)
+#
+# What it does: runs scripts/harvest-loop/recon.py, which verifies each
+# claim's identifiers against public APIs (arXiv, GitHub), scores fragility,
+# suggests A-G attack lanes, and writes dated recon output to
+# docs/audits/harvest-<date>/. Then it commits the recon and opens (or
+# updates) a GitHub issue with the ranked queue so a target can be picked.
+#
+# What it never does: clone code, run builds, download artifacts, touch the
+# verdict lock. Deep gates wait for a human target pick.
+
+name: harvest-loop
+
+on:
+  push:
+    paths:
+      - "incoming/harvests/**"
+  schedule:
+    - cron: "17 13 * * 1" # Mondays ~09:17 ET
+  workflow_dispatch:
+    inputs:
+      harvest_date:
+        description: "Harvest file date (YYYY-MM-DD); default: newest unprocessed"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  recon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run recon analyzer
+        id: recon
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_SLUG: ${{ github.repository }}
+        run: |
+          python3 scripts/harvest-loop/recon.py ${{ inputs.harvest_date }} ${{ github.event_name == 'schedule' && '--health-check' || '' }}
+
+      - name: Commit recon output
+        if: steps.recon.outputs.changed == 'true'
+        run: |
+          git config user.name "harvest-loop"
+          git config user.email "harvest-loop@users.noreply.github.com"
+          git add "docs/audits/harvest-${{ steps.recon.outputs.harvest_date }}"
+          git diff --cached --quiet || git commit -m "Harvest loop: recon for ${{ steps.recon.outputs.harvest_date }}"
+          git push
+
+      - name: Open or update the harvest issue
+        if: steps.recon.outputs.changed == 'true' && steps.recon.outputs.harvest_date != 'none'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DIR="docs/audits/harvest-${{ steps.recon.outputs.harvest_date }}"
+          TITLE="$(cat "$DIR/issue-title.txt")"
+          gh label create harvest --description "Weekly harvest recon" --color "0e8a16" 2>/dev/null || true
+          EXISTING="$(gh issue list --state open --search "$TITLE in:title" --json number --jq '.[0].number // empty')"
+          if [ -z "$EXISTING" ]; then
+            gh issue create --title "$TITLE" --body-file "$DIR/issue-body.md" --label harvest
+          else
+            gh issue comment "$EXISTING" --body-file "$DIR/issue-body.md"
+          fi
