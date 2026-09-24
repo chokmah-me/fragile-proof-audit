@@ -208,11 +208,17 @@ or a from-scratch Ore-relation finder (multi-week). The naive q→1 limit of
 the q-case operator would give constant (not polynomial) coefficients anyway;
 the (q−1)-adic leading-term extraction is unexplored.
 
-**Avenue 2 — author contact: SENT 2026-09-23.**
-Email to Christoph Koutschan requesting the q=1 diagonal recurrence
-coefficients (plain text, pasted into email body) sent by the user on
-2026-09-23. If no reply in ~2 weeks, one short follow-up; then fall back to
-Avenue 3.
+**Avenue 2 — author contact: REPLIED 2026-09-24.**
+Koutschan re-ran the computation and sent the order-7 operator as a text file
+(`Bnn_op_0_a23r.txt`, SHA-256 `d12c1027…b8570`): all eight coefficient
+polynomials degree 24; `(S_n−1)` right factor, `p_7(n) > 0` on `ℕ`, and the
+odd/even degree-12 factor alternation all verified independently (sympy).
+Transcribed into `FragileProofAudit/QTSPP/KoutschanOperator.lean` as a concrete
+`DiagonalCertificate` (fields by `ring`, `hlead` by positivity). Remaining for
+the full identity: `hrec` (∂-finite substitution output) and `hinit` (seven
+determinant evaluations). The 2026-10-07 follow-up reminder was cancelled.
+
+**Avenue 3 — full re-derivation: not needed** (Avenue 2 delivered).
 
 **Avenue 3 — full re-derivation (guessing + DFiniteSubstitute): SCOPED, not started.**
 Re-guess the q=1 ∂-finite description from determinant data (B(n,j) via exact
@@ -220,7 +226,10 @@ integer-matrix cofactors), then implement substitution j↦n. Requires
 multivariate Ore guessing + noncommutative Gröbner + substitution —
 a multi-week infrastructure project in its own right. Fallback if Avenues 1–2 fail.
 
-**Interim position:** the parametric Lean module (`DiagonalCertificate`)
-is complete and kernel-checked; plugging in numbers is a pure data step once
-Avenue 2 (or 3) delivers. No placeholder/arbitrary certificate will be
-committed — the module must receive the true TSPP operator or none.
+**Position 2026-09-24:** Avenue 2 delivered the true operator; the concrete
+`KoutschanOperator` module built clean the same day (`lake build
+FragileProofAudit.QTSPP.KoutschanOperator`, EXIT 0, 8,657 jobs, sorry-free;
+8 right-factor identities by `ring`, `hlead` by positivity). Still owed:
+`hrec` (∂-finite substitution output) and `hinit` (seven determinant
+evaluations) before `B(n,n) = 1` is fully formalized. No placeholder
+certificate was ever committed.

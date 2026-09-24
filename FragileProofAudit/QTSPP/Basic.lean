@@ -20,6 +20,7 @@ Status: staging — q=1 Stembridge shakedown in `QTSPP.Stembridge`
 
 import FragileProofAudit.QTSPP.Stembridge
 import FragileProofAudit.QTSPP.DiagonalIdentity
+import FragileProofAudit.QTSPP.KoutschanOperator
 
 namespace FragileProofAudit.QTSPP
 

@@ -20,13 +20,12 @@ diagonal `d_n = B'(n,n)` with:
         (`p_1`, `p_2` irreducible of degrees 4, 12),
   (iii) the finite check `B'(1,1) = … = B'(7,7) = 1`.
 
-RECOVERY STATUS (2026-09-23): the explicit order-7 coefficients and the
-polynomials `p_1`, `p_2` are NOT printed in the paper, NOT in Koutschan's
-RISC 2009 PhD thesis (the TSPP chapter repeats the paper verbatim), NOT in
-the arXiv source package (TeX + figures only, no ancillary files), and NO
-q=1 supplementary page ever existed on the author's site (Wayback CDX
-checked). See `docs/blueprint/qtspp-q1.md` §7 for the full recovery report
-with hashes.
+RECOVERY STATUS (2026-09-24): the explicit order-7 coefficients arrived from
+Christoph Koutschan (re-run at our request; `Bnn_op_0_a23r.txt`,
+SHA-256 `d12c1027…b8570`) and are instantiated as the concrete
+`koutschanCertificate` in `FragileProofAudit.QTSPP.KoutschanOperator`.
+This module's parametric statement is retained as the general closing
+argument. See `docs/blueprint/qtspp-q1.md` §8 for the recovery report.
 
 This module therefore formalizes (3.2) PARAMETRICALLY: the certificate is
 an explicit `DiagonalCertificate` structure (the order-7 coefficients `p`
