@@ -1,0 +1,60 @@
+# Deep replay: the hours-long ab_fluid Euler interval-certificate gate.
+#
+# Triggers: weekly schedule + manual dispatch.  Runs OUTSIDE the per-push
+# verify workflow so a slow runner never blocks merges; the gate is
+# checkpointed (scripts/harness/resume.py), so an interrupted runner
+# re-run resumes rather than restarts.  Failure here = the Euler PASS
+# verdict no longer reproduces: investigate before re-pushing.
+#
+# AB_FLUID_PIN must match PINNED in scripts/gates/ab_fluid.py.
+
+name: deep-replay
+
+on:
+  schedule:
+    - cron: "23 6 * * 0" # Sundays ~02:23 ET
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deep-replay
+  cancel-in-progress: false
+
+env:
+  AB_FLUID_PIN: d0124689230b58b4f86e7b90ac59de06404b3b6b
+
+jobs:
+  ab_fluid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Python deps
+        run: pip install -r requirements.txt
+
+      - name: Clone Euler source at pinned commit
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/workspace"
+          git clone --quiet https://github.com/tristanbuckmaster/fluid_lean \
+            "$HOME/workspace/ab-fluid-verify"
+          git -C "$HOME/workspace/ab-fluid-verify" checkout --quiet "$AB_FLUID_PIN"
+          git -C "$HOME/workspace/ab-fluid-verify" rev-parse HEAD
+
+      - name: Run ab_fluid gate (checkpointed)
+        run: python scripts/gates/ab_fluid.py
+
+      - name: Upload gate meta
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab_fluid_gate_meta
+          path: results/ab_fluid_gate_meta.json

@@ -6,6 +6,9 @@
 results/lake_build*.txt
 results/*_raw.txt
 
+# checkpoint journals: local resume state for long replays, not audit evidence
+results/.checkpoints/
+
 .scratchpad/
 /_tmp/
 *.ndjson

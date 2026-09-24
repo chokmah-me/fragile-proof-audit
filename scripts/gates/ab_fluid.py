@@ -14,6 +14,7 @@ and both controls reject. Writes results/ab_fluid_gate_meta.json.
 
 from __future__ import annotations
 
+import argparse
 import copy
 import glob
 import json
@@ -26,9 +27,11 @@ from pathlib import Path
 
 GATE_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(GATE_DIR))
+sys.path.insert(0, str(GATE_DIR.parent))  # scripts/ -> harness.resume
 from ab_fluid_parse import (  # noqa: E402
     parse_piece_cert, parse_di_array_defs, parse_hcell_list, _tokenize)
 from ab_fluid_check import pCheckPiece  # noqa: E402
+from harness.resume import Checkpoint, file_sha256, run_units  # noqa: E402
 
 REPO = Path.home() / "workspace" / "ab-fluid-verify"
 EULER = REPO / "euler-blowup" / "EulerBlowup"
@@ -46,7 +49,16 @@ def fail(reason, **kw):
     return 0
 
 
+def parse_args(argv=None):
+    ap = argparse.ArgumentParser(
+        description="ab-fluid gate: replay the Euler dressed interval certificate")
+    ap.add_argument("--reset-checkpoint", action="store_true",
+                    help="discard the checkpoint journal and re-check every piece")
+    return ap.parse_args(argv)
+
+
 def main() -> int:
+    args = parse_args()
     t_start = time.time()
     if not (REPO / ".git").exists():
         return fail("repo not found", repo=str(REPO))
@@ -125,9 +137,20 @@ def main() -> int:
     if not odchunks:
         return fail("no ODChunk defs parsed")
 
-    # ---- replay every piece
-    n_ok = n_tot = 0
-    missing, failed, skipped = [], [], []
+    # ---- replay every piece (checkpointed: a reboot resumes, never restarts)
+    # Units are deterministic (file/chunk/piece order); only passing pieces
+    # are journaled, so a resume re-checks anything not yet proven ok.
+    # The journal header pins the source commit AND this checker's hash, so
+    # editing the checker or moving the source invalidates old checkpoints.
+    #
+    # Unit ids are occurrence-indexed (uNNNNN::chunk::piece): the source
+    # lists some (chunk, piece) pairs more than once, and the original gate
+    # checks every occurrence (5249 checks, not 2603 unique).  Indexing by
+    # occurrence keeps the checkpointed replay bit-for-bit identical to the
+    # uncheckpointed one -- checkpointing must never silently change what
+    # the gate verifies.
+    missing, skipped = [], []
+    units: list[tuple[str, tuple]] = []
     for (_nm, p_name, om_name, pieces_name) in odchunks:
         P = di_map.get(p_name)
         Om = di_map.get(om_name)
@@ -140,11 +163,27 @@ def main() -> int:
             if pc is None:
                 missing.append(pn)
                 continue
-            n_tot += 1
-            if pCheckPiece(Om, P, pc, hTab):
-                n_ok += 1
-            else:
-                failed.append((_nm, pn))
+            uid = f"u{len(units):05d}::{_nm}::{pn}"
+            units.append((uid, (Om, P, pc)))
+    ckpt = Checkpoint(
+        RESULTS / ".checkpoints" / "ab_fluid.jsonl",
+        header={"pinned_commit": PINNED,
+                "gate_sha": file_sha256(Path(__file__))},
+    )
+    if args.reset_checkpoint:
+        ckpt.reset()
+        print("ab_fluid: checkpoint reset — full re-check")
+    resumed = len(ckpt)
+    if resumed:
+        print(f"ab_fluid: resuming — {resumed} pieces already verified, "
+              f"{len(units) - resumed} to check")
+
+    def _one(payload) -> bool:
+        Om_, P_, pc_ = payload
+        return bool(pCheckPiece(Om_, P_, pc_, hTab))
+
+    n_ok, n_tot, failed = run_units(units, _one, ckpt, progress_every=250)
+    ckpt.close()
     if missing:
         return fail("piece defs missing", missing=missing[:10], n_pieces=n_tot)
     if skipped:
@@ -197,6 +236,7 @@ def main() -> int:
         "odchunks": len(odchunks),
         "pieces_checked": n_tot,
         "pieces_ok": n_ok,
+        "checkpoint_resumed": resumed,
         "coverage": "SB0-SB7 tile [0,1/100] in 1/800 steps",
         "controls": {"inverted_barrier_rejected": c1,
                      "doubled_hi_rejected": c2},

@@ -6,6 +6,7 @@ Phase 1+: each target gate registers here and must stay green in CI.
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import subprocess
@@ -280,7 +281,59 @@ def run_ab_fluid() -> dict:
     return run_script("ab_fluid", AB_FLUID)
 
 
-def main() -> int:
+# Registry: (gate name, runner) in run order.  The verdict-lock check at the
+# end always covers every gate's committed meta file, even when a subset is
+# run -- so `--only`/`--skip` are safe for reboot recovery: re-run just the
+# unfinished gates, then run the full suite once to re-seal the aggregate.
+GATES: list[tuple[str, object]] = [
+    ("harness_selftest", run_harness),
+    ("suman_eq48", run_suman_eq48),
+    ("odd_zeta_1609", run_odd_zeta_1609),
+    ("es_cover", run_es_cover),
+    ("rr_qexpand", run_rr_qexpand),
+    ("pdn1", run_pdn1),
+    ("giuga_oracle", run_giuga_oracle),
+    ("lame_h23", run_lame_h23),
+    ("lame_ideal_neg23", run_lame_ideal_neg23),
+    ("cohen_subadditivity", run_cohen_subadditivity),
+    ("baste_domination", run_baste_domination),
+    ("sarkozy_sum_product", run_sarkozy_sum_product),
+    ("tang_zhang_schatten", run_tang_zhang_schatten),
+    ("thakur_carlitz", run_thakur_carlitz),
+    ("chung_graham_spiro", run_chung_graham_spiro),
+    ("salez_youssef_logsobolev", run_salez_youssef_logsobolev),
+    ("tpc_area", run_tpc_area),
+    ("es5_eq35", run_es5_eq35),
+    ("cat_g", run_cat_g),
+    ("krr_cl", run_krr_cl),
+    ("tpc_gn", run_tpc_gn),
+    ("jac_2d", run_jac_2d),
+    ("tait_tutte", run_tait_tutte),
+    ("kempe_fritsch", run_kempe_fritsch),
+    ("gb_sce", run_gb_sce),
+    ("mah_3", run_mah_3),
+    ("nla_nr03", run_nla_nr03),
+    ("nla_ie16", run_nla_ie16),
+    ("nla_mf14", run_nla_mf14),
+    ("nla_mf24", run_nla_mf24),
+    ("nla_mi32", run_nla_mi32),
+    ("ab_fluid", run_ab_fluid),
+]
+
+
+def parse_args(argv=None):
+    ap = argparse.ArgumentParser(
+        description="Run the numeric gate suite and check the verdict lock")
+    ap.add_argument("--only", default="",
+                    help="comma-separated gate names to run (default: all)")
+    ap.add_argument("--skip", default="",
+                    help="comma-separated gate names to skip")
+    ap.add_argument("--list-gates", action="store_true",
+                    help="print gate names in run order and exit")
+    return ap.parse_args(argv)
+
+
+def main(argv=None) -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
     for stream in (sys.stdout, sys.stderr):
@@ -289,46 +342,31 @@ def main() -> int:
         except (AttributeError, OSError):
             pass
 
+    args = parse_args(argv)
+    if args.list_gates:
+        for name, _ in GATES:
+            print(name)
+        return 0
+    only = {s.strip() for s in args.only.split(",") if s.strip()}
+    skip = {s.strip() for s in args.skip.split(",") if s.strip()}
+    known = {name for name, _ in GATES}
+    unknown = (only | skip) - known
+    if unknown:
+        print(f"unknown gate(s): {sorted(unknown)}", file=sys.stderr)
+        return 2
+    selected = [(n, fn) for n, fn in GATES
+                if (not only or n in only) and n not in skip]
+    if args.only or args.skip:
+        print(f"running {len(selected)}/{len(GATES)} gates: "
+              f"{[n for n, _ in selected]}")
+
     RESULTS.mkdir(parents=True, exist_ok=True)
     # Phase 1(b)+2(d)–2(g)+3(h)+3(i)+3(i)++: prior gates + Lamé ideal witness.
     # Track D#1–#8: Cohen, Baste, Sárközy, Tang-Zhang, Thakur,
     # Chung-Graham-Spiro, Salez-Youssef (NCI SKIPPED, see
     # results/nci_skip_meta.json). Sources: corpus/live-fragile-proofs-2024-2026.md
     # plus the pinned PDFs under incoming/.
-    results = [
-        run_harness(),
-        run_suman_eq48(),
-        run_odd_zeta_1609(),
-        run_es_cover(),
-        run_rr_qexpand(),
-        run_pdn1(),
-        run_giuga_oracle(),
-        run_lame_h23(),
-        run_lame_ideal_neg23(),
-        run_cohen_subadditivity(),
-        run_baste_domination(),
-        run_sarkozy_sum_product(),
-        run_tang_zhang_schatten(),
-        run_thakur_carlitz(),
-        run_chung_graham_spiro(),
-        run_salez_youssef_logsobolev(),
-        run_tpc_area(),
-        run_es5_eq35(),
-        run_cat_g(),
-        run_krr_cl(),
-        run_tpc_gn(),
-        run_jac_2d(),
-        run_tait_tutte(),
-        run_kempe_fritsch(),
-        run_gb_sce(),
-        run_mah_3(),
-        run_nla_nr03(),
-        run_nla_ie16(),
-        run_nla_mf14(),
-        run_nla_mf24(),
-        run_nla_mi32(),
-        run_ab_fluid(),
-    ]
+    results = [fn() for _, fn in selected]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()
     drifted = [v for v in verdicts if not v["ok"]]
