@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:44:00.331751+00:00",
+  "timestamp": "2026-09-24T15:59:31.164396+00:00",
   "target": "es5_eq35",
   "source": "arXiv:2508.07367v1",
   "local_pdf": "incoming/es5-2508.07367.pdf",
@@ -26,7 +26,7 @@
       "receipt": "results/es5_eq35_break_control_meta.json",
       "receipt_sha256": "90ecb277d859ed8f37c074d761ac5cda82f7ce827ff5064e6c848610fc84d6f5",
       "receipt_timestamp": "2026-09-22T07:24:10.630754+00:00",
-      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
+      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
     }
   ]
 }

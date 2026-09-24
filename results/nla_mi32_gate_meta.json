@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-09-24T16:01:42.538996+00:00",
+  "gate": "nla_mi32",
+  "source_claim": "E||X|| <= C_alpha (M(X)+D(X)) for independent mean-zero regular entries (Heidary, MI-32 upper)",
+  "local_paper": "docs/source/MI32_solution.md @ DiarHaidary@762bd5e",
+  "local_paper_sha256": "fc2a01f6215d4d1e0e96095ae990ad4208e8126b0091ee0103edbf2918469073",
+  "witness": "Rademacher n x n, n = 2,3,4 (alpha = 1 regular)",
+  "checks": {
+    "S1_headline_exact": {
+      "ok": true,
+      "route": "(E||X||_2)^2 <= E||X||_F^2 = n^2 <= 4n = M(X)^2; D>=0"
+    },
+    "S2_sharpness": {
+      "ok": true,
+      "max_ratio": 0.7406208509585892
+    },
+    "S3_lemma_exact": {
+      "ok": true,
+      "worst_ratio": "109/441"
+    }
+  },
+  "verdict": "PASS",
+  "ok": true,
+  "controls": [
+    {
+      "control": "nla_mi32_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/nla_mi32_control_meta.json",
+      "receipt_sha256": "60a38e836b2042c6e368dfa0f2f464981d03233cbce4ced20032cf14c4a7ed53",
+      "receipt_timestamp": "2026-09-24T15:58:30.430984+00:00",
+      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
+    }
+  ]
+}

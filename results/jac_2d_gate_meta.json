@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:44:05.673569+00:00",
+  "timestamp": "2026-09-24T15:59:37.109937+00:00",
   "gate": "jac_2d",
   "source_claim": "Yucai Su, 'Generalizations of local bijectivity of Keller maps and a proof of 2-dimensional Jacobian conjecture', arXiv:1603.01867v43 (43 versions, 2016-2024, FINAL)",
   "corpus_pointer": "corpus/Fragile-Route_Harvest_Dossier_II.md, Hit JAC-2D",
@@ -193,7 +193,7 @@
       "receipt": "results/jac_2d_break_control_meta.json",
       "receipt_sha256": "5ccb9c0a5ada41d793973a4f1f35663d1aed6adb21418d69961261fc3014ddce",
       "receipt_timestamp": "2026-09-22T11:30:12.818200+00:00",
-      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
+      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
     }
   ]
 }

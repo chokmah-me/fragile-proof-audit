@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-09-24T15:58:47.660461+00:00",
+  "gate": "nla_mi32",
+  "tree": "DiarHaidary/Spectral-norms-of-independent-entries-with-regular-moment-growth@762bd5ec5050a96f5e6ba3926b6cda4816fcd4b0",
+  "checks": {
+    "lean_files_total": 113,
+    "lean_files_MI32": 95,
+    "toolchain": "leanprover/lean4:v4.33.0",
+    "mathlib_pin": "db584cd6d46c92f209a44c0f1c829460d327499d",
+    "sorry_challenge_lean": 2,
+    "sorry_solution_lean": 0,
+    "sorry_MI32_modules": 0,
+    "sorry_fulltargetaudit": 0,
+    "axiom_admit_native_decide": 0,
+    "exported_declaration": "MI32.main_upper",
+    "statement_shape": "forall alpha >= 1, exists C > 0, UpperBoundAt alpha C",
+    "tree_readme_palomar": "not registered; registration not requested; no human peer review; no novelty/priority claim",
+    "status_json": {
+      "comparator": "not_run",
+      "nanoda": "not_run",
+      "registration": "not_requested",
+      "checked_at": "2026-09-14T13:55:09Z"
+    },
+    "catalog_claims": {
+      "RESOLVED.md": "registered as PALOMAR-2026-09-14-000006 v1; run 34852526384 accepted; trust high; review neutral",
+      "MI-32_README": "Lean verified 2026-09-14; same Palomar entry/run claims"
+    },
+    "registry_ground_truth": {
+      "entry": "PALOMAR-2026-09-14-000006",
+      "status": "registered",
+      "trust": "high",
+      "source_commit": "762bd5ec5050a96f5e6ba3926b6cda4816fcd4b0",
+      "published_at": "2026-09-14T15:41:11Z",
+      "run_id": 34852526384,
+      "comparator_commit": "575674928e239f5bc452aab72d1dd7b0f1326494",
+      "nanoda_commit": "68d5ca9db226849b41a6fff59d796ff19d0a8840",
+      "review_outcome": "neutral",
+      "review_warning": "informal account misidentifies LocalLogMoment as a proof step; describe as unused companion corollary"
+    },
+    "registration_discrepancy_resolution": "catalog vindicated; tree page stale (frozen ~2h before registration published)"
+  },
+  "verdict": "NO DISCREPANCY",
+  "ok": true
+}

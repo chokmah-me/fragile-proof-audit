@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-09-24T15:58:30.430984+00:00",
+  "control": "nla_mi32_control",
+  "gate": "nla_mi32",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "tightened_headline_constant_rejected": true,
+    "observed_max_ratio": 0.7406208509585892,
+    "tightened_lemma_constant_rejected": true,
+    "true_constant_passes_same_form": true,
+    "linear_form_ratio_3_minus_2_over_m": "601/201",
+    "unperturbed_S1_passes": true,
+    "unperturbed_S2_passes": true,
+    "unperturbed_S3_passes": true
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "note": "Near-misses are matched: the same checker, the same witnesses, only the claimed constant tightened (C 1 -> 0.7; 9^d -> 2.98^d). Rejection comes from the gate's own comparisons (observed ratio 0.7406 > 0.7; exact 3-2/201 > 2.98), proving the checks read the witnesses rather than rubber-stamping."
+}

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:43:46.548091+00:00",
+  "timestamp": "2026-09-24T15:59:17.243329+00:00",
   "phase": "3i++",
   "gate": "lame_ideal_neg23",
   "source": "classical ideal-class witness for Q(\u221a-23); Lagarias-style exercise",
@@ -77,7 +77,7 @@
       "receipt": "results/lame_ideal_control_meta.json",
       "receipt_sha256": "e72a878abe675500d11e72d7a2b20f9c2fbb367293b0ea22a56be89014eada4e",
       "receipt_timestamp": "2026-09-22T03:04:42.379195+00:00",
-      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
+      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
     }
   ]
 }

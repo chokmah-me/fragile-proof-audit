@@ -1,5 +1,5 @@
 {
-  "recorded_at": "2026-09-24T15:46:02.707855+00:00",
+  "recorded_at": "2026-09-24T16:01:42.714806+00:00",
   "gates": [
     {
       "gate": "suman_eq48",
@@ -285,6 +285,17 @@
       "controls": [
         {
           "control": "nla_mf24_control",
+          "ok": true
+        }
+      ],
+      "note": "controls embedded/updated"
+    },
+    {
+      "gate": "nla_mi32",
+      "meta": "nla_mi32_gate_meta.json",
+      "controls": [
+        {
+          "control": "nla_mi32_control",
           "ok": true
         }
       ],

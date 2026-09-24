@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:43:47.197038+00:00",
+  "timestamp": "2026-09-24T15:59:18.095425+00:00",
   "gate": "cohen_subadditivity",
   "source_claim": "Cohen's Conjecture 66 (subadditivity of C_sigma)",
   "source_refutation": "Ibarra, J. A. (2026), arXiv:2607.09793v1, Theorem 1",
@@ -50,7 +50,7 @@
       "receipt": "results/cohen_break_control_meta.json",
       "receipt_sha256": "26d3cc108e66eb24d9cce5a441e58b6840bac282889da159e6d052ee7e00c0a4",
       "receipt_timestamp": "2026-09-22T03:01:11.548505+00:00",
-      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
+      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
     }
   ]
 }

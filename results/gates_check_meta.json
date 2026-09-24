@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-24T15:46:02.727607+00:00",
+  "timestamp": "2026-09-24T16:01:42.785819+00:00",
   "phase": "track-D",
-  "lock_size": 29,
+  "lock_size": 30,
   "gates": [
     {
       "name": "harness_selftest",
@@ -150,6 +150,11 @@
     },
     {
       "name": "nla_mf24",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "nla_mi32",
       "ok": true,
       "exit_code": 0
     }
@@ -386,11 +391,19 @@
       "actual": "PASS",
       "ok": true,
       "note": ""
+    },
+    {
+      "name": "nla_mi32",
+      "meta": "nla_mi32_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
     }
   ],
   "verdict_drift": [],
   "controls": {
-    "gates_with_controls": 23,
+    "gates_with_controls": 24,
     "gates_without_controls": 6,
     "control_failures": [],
     "warnings": []

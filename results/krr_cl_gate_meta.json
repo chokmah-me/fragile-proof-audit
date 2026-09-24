@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:44:01.507133+00:00",
+  "timestamp": "2026-09-24T15:59:32.474001+00:00",
   "target": "krr_cl",
   "source": "arXiv:2202.03178v3",
   "local_pdf": "incoming/gnang-krr-2202.03178.pdf",
@@ -36,7 +36,7 @@
       "receipt": "results/krr_cl_break_control_meta.json",
       "receipt_sha256": "fc6a4f497cba2d3bb8766ad8944acb365bb2d11a12fd4e2f7bcc2315b518aa2c",
       "receipt_timestamp": "2026-09-22T08:26:46.373660+00:00",
-      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
+      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:44:00.209325+00:00",
+  "timestamp": "2026-09-24T15:59:31.048655+00:00",
   "gate": "salez_youssef_logsobolev",
   "source_claim": "Conjecture 1.2 (Salez-Youssef): Ollivier curvature K>0 implies alpha_LSI >= c*K/log(d) for a universal constant c",
   "source_refutation": "Munch (2025), arXiv:2504.08055, Theorem via Section 2",
@@ -107,7 +107,7 @@
       "receipt": "results/salez_youssef_break_control_meta.json",
       "receipt_sha256": "b1cae20387b3da470e6e4308f8e12f001c6c666dd23c2aca66fbb2733960a0dc",
       "receipt_timestamp": "2026-09-22T03:03:29.126837+00:00",
-      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
+      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
     }
   ]
 }

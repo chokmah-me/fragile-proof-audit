@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:43:35.643547+00:00",
+  "timestamp": "2026-09-24T15:59:06.439647+00:00",
   "phase": "2e",
   "source": "arXiv:2404.01508",
   "pdf": "incoming/erdos-straus-2404.01508.pdf",
@@ -342,7 +342,7 @@
       "receipt": "results/es_cover_control_meta.json",
       "receipt_sha256": "6fb813a6da39e1ad4f5d18f945afb2794b9806d8f79470ea66975db0e99a9eb3",
       "receipt_timestamp": "2026-09-22T03:05:48.833982+00:00",
-      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
+      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
     }
   ]
 }

@@ -45,6 +45,7 @@ NLA_NR03 = ROOT / "scripts" / "gates" / "nla_nr03.py"
 NLA_IE16 = ROOT / "scripts" / "gates" / "nla_ie16.py"
 NLA_MF14 = ROOT / "scripts" / "gates" / "nla_mf14.py"
 NLA_MF24 = ROOT / "scripts" / "gates" / "nla_mf24.py"
+NLA_MI32 = ROOT / "scripts" / "gates" / "nla_mi32.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -89,6 +90,7 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "nla_ie16": ("nla_ie16_gate_meta.json", "PASS"),
     "nla_mf14": ("nla_mf14_gate_meta.json", "PASS"),
     "nla_mf24": ("nla_mf24_gate_meta.json", "PASS"),
+    "nla_mi32": ("nla_mi32_gate_meta.json", "PASS"),
 }
 
 
@@ -268,6 +270,10 @@ def run_nla_mf24() -> dict:
     return run_script("nla_mf24", NLA_MF24)
 
 
+def run_nla_mi32() -> dict:
+    return run_script("nla_mi32", NLA_MI32)
+
+
 def main() -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
@@ -314,6 +320,7 @@ def main() -> int:
         run_nla_ie16(),
         run_nla_mf14(),
         run_nla_mf24(),
+        run_nla_mi32(),
     ]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()

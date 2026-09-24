@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T15:44:24.534448+00:00",
+  "timestamp": "2026-09-24T15:59:56.435471+00:00",
   "gate": "tait_tutte",
   "source_claim": "Tait (1884): every 3-connected planar cubic graph is Hamiltonian",
   "source_refutation": "Tutte (1946): the 46-vertex, 69-edge Tutte graph is 3-connected, planar, cubic, and has no Hamiltonian cycle",
@@ -24,7 +24,7 @@
     "hamiltonian_cycle_found": false,
     "witness_cycle": null,
     "recursive_calls": 38698468,
-    "elapsed_s": 18.3
+    "elapsed_s": 18.793
   },
   "verdict": "BREAK",
   "lemma": "every 3-connected planar cubic graph is Hamiltonian (Tait's conjecture)",
@@ -38,7 +38,7 @@
       "receipt": "results/tait_tutte_break_control_meta.json",
       "receipt_sha256": "a33c0121784e2ec1a742bb4c6e68efa9b0e93bca13e87ea15178d1c6cb404491",
       "receipt_timestamp": "2026-09-22T19:30:37.311914+00:00",
-      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
+      "recorded_at": "2026-09-24T16:01:42.714806+00:00"
     }
   ]
 }
