@@ -1,6 +1,6 @@
 # FragileProofAudit
 
-**Private** Lean 4 / mathlib campaign (Chokmah LLC) that audits mathematically
+Lean 4 / mathlib campaign (Chokmah LLC) that audits mathematically
 consequential but structurally fragile proofs.
 
 > **Gates refute routes, not theorems.**  
@@ -13,6 +13,7 @@ consequential but structurally fragile proofs.
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy / `networkx` (graph gates only) · no Sage / Magma / cluster |
 | **Resume** | Resume threads: [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 | **Lock** | 25 gates pinned in `EXPECTED_VERDICT` (17 BREAK / 8 PASS, 2026-09-23) (`scripts/gates/check.py`); drift in either direction fails CI |
+| **Paper** | [Trust, but Replay](https://doi.org/10.5281/zenodo.22926995) (concept) · version [10.5281/zenodo.22926996](https://doi.org/10.5281/zenodo.22926996) · [`ZENODO.md`](ZENODO.md) |
 
 ---
 
