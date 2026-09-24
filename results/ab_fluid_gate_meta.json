@@ -1,0 +1,12 @@
+{
+  "verdict": "PASS",
+  "pinned_commit": "d0124689230b58b4f86e7b90ac59de06404b3b6b",
+  "htab_cells": 128,
+  "odchunks": 135,
+  "pieces_checked": 5249,
+  "pieces_ok": 5249,
+  "coverage": "SB0-SB7 tile [0,1/100] in 1/800 steps",
+  "controls": [],
+  "seconds": 48.2,
+  "scope": "Euler dressed interval certificate only; Boussinesq/IPM certs, Lean kernel bridge, and PDE lifting not replayed"
+}
