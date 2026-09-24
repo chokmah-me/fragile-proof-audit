@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-09-24T15:46:02.689982+00:00",
+  "gate": "nla_mf24",
+  "source_claim": "Maierhofer (2026): unbounded polynomial norm ratios for super-identical pseudospectra; ||p_m(X)||_2 >= t^2 sqrt(m), ||p_m(Y)||_2 <= t^2+m-1, ratio >= (4/5) sqrt(m) at t=m; C_N >= sqrt(floor(sqrt(N))-1), N >= 9",
+  "local_pdf": "incoming/nla-mf24-maierhofer.pdf",
+  "local_pdf_sha256": "1ae9316d7c935f6133a54b133d36bc55dce34f3a252b44c314b3b45a54514139",
+  "m_range": [
+    2,
+    12
+  ],
+  "t_values": [
+    "2",
+    "3",
+    "m"
+  ],
+  "rhos": [
+    "1",
+    "2",
+    "4"
+  ],
+  "checks": {
+    "S1_sip_charpoly_identity_all": true,
+    "S2_numerator_row_norm_all": true,
+    "S3_denominator_block_bound_all": true,
+    "S4_ratio_arithmetic_all": true,
+    "detail_m2_t2": {
+      "sip": {
+        "rho_1_equal": true,
+        "rho_2_equal": true,
+        "rho_4_equal": true
+      },
+      "num": {
+        "heights_match_eq11": true,
+        "row0_cols_D_to_mD": true,
+        "row0_norm2_eq_m_t4": true,
+        "row0_norm2": "32"
+      },
+      "den": {
+        "block_sizes_m_or_m1": true,
+        "height_counts_le_1": true,
+        "frob_le_bound_all_blocks": true,
+        "worst_frob2": "24",
+        "corner_entry_eq_t2_nonzero": true
+      },
+      "ratio": {
+        "ratio_sq_identity": true,
+        "t_eq_m_sharp_factor": true,
+        "t_eq_m_sq_gap": "0"
+      }
+    },
+    "S5a_divergence_ladder": true,
+    "ladder": {
+      "m4_ge_8/5": true,
+      "m16_ge_16/5": true,
+      "m36_ge_24/5": true,
+      "m64_ge_32/5": true
+    },
+    "S5b_corollary3_instances": true,
+    "corollary": {
+      "N9_m2": true,
+      "N10_m2": true,
+      "N15_m2": true,
+      "N25_m4": true,
+      "N50_m6": true,
+      "N100_m9": true
+    }
+  },
+  "verdict": "PASS",
+  "lemma": "S1: eta-charpoly identity (8) holds exactly for all m, t, rho; S2: row-0 2-norm^2 of p_m(X) is exactly m t^4; S3: every Y residue block has ||bB||_F <= t^2+L-2 <= t^2+m-1 and (p_m(Y))_{0,N-1} = t^2 != 0; S4: ratio identity exact; t=m gives (4/5) sqrt(m) via (m-2)^2>=0; S5: (4/5) sqrt(m) exceeds 8/5,16/5,24/5,32/5 at m=4,16,36,64; Corollary 3 instances check out",
+  "false_instance": null,
+  "ok": true,
+  "controls": [
+    {
+      "control": "nla_mf24_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/nla_mf24_control_meta.json",
+      "receipt_sha256": "23cc009148c3431fe039342d7cc78d46e2ce28f0752e432d7f0171ba5e6b89cb",
+      "receipt_timestamp": "2026-09-24T15:29:38.325589+00:00",
+      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
+    }
+  ]
+}

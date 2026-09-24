@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-09-24T15:29:38.325589+00:00",
+  "control": "nla_mf24_control",
+  "gate": "nla_mf24",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "bridge_perturbation_sip_rejected": true,
+    "sip_mismatch_rhos": [
+      "1",
+      "2",
+      "4"
+    ],
+    "increment_perturbation_numerator_rejected": true,
+    "perturbed_row0_norm2": "27",
+    "expected_row0_norm2": "243",
+    "unperturbed_sip_passes": true,
+    "unperturbed_numerator_passes": true,
+    "unperturbed_denominator_passes": true
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "note": "Perturbations are matched: one bridge weight (1->2) or one height increment (1->0) changed, everything else fixed. Rejection comes from the gate's own exact checks (charpoly mismatch; row norm^2 != m t^4), proving they read the witness rather than rubber-stamping."
+}

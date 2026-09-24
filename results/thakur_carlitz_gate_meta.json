@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T12:57:24.428763+00:00",
+  "timestamp": "2026-09-24T15:43:58.227754+00:00",
   "gate": "thakur_carlitz",
   "source_claim": "Thakur (2015): every c-Wieferich prime of F_q[T] (q an odd prime power) has degree divisible by the characteristic p",
   "source_refutation": "D. Niedbala Giraudin (2026), arXiv:2607.15305v2, Theorem 1.1",
@@ -28,7 +28,7 @@
       "receipt": "results/thakur_break_control_meta.json",
       "receipt_sha256": "10f94229395aa2cf115129bb56abb028a23000dea81e1108c954a0a06514ae43",
       "receipt_timestamp": "2026-09-22T03:04:51.984529+00:00",
-      "recorded_at": "2026-09-24T12:58:00.998036+00:00"
+      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
     }
   ]
 }

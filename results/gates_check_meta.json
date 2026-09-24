@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-09-24T12:58:01.010110+00:00",
+  "timestamp": "2026-09-24T15:46:02.727607+00:00",
   "phase": "track-D",
-  "lock_size": 27,
+  "lock_size": 29,
   "gates": [
     {
       "name": "harness_selftest",
@@ -140,6 +140,16 @@
     },
     {
       "name": "nla_ie16",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "nla_mf14",
+      "ok": true,
+      "exit_code": 0
+    },
+    {
+      "name": "nla_mf24",
       "ok": true,
       "exit_code": 0
     }
@@ -360,11 +370,27 @@
       "actual": "PASS",
       "ok": true,
       "note": ""
+    },
+    {
+      "name": "nla_mf14",
+      "meta": "nla_mf14_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
+    },
+    {
+      "name": "nla_mf24",
+      "meta": "nla_mf24_gate_meta.json",
+      "expected": "PASS",
+      "actual": "PASS",
+      "ok": true,
+      "note": ""
     }
   ],
   "verdict_drift": [],
   "controls": {
-    "gates_with_controls": 21,
+    "gates_with_controls": 23,
     "gates_without_controls": 6,
     "control_failures": [],
     "warnings": []

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-24T14:50:33.699336+00:00",
+  "timestamp": "2026-09-24T15:45:46.274098+00:00",
   "gate": "nla_mf14",
   "source_claim": "Webb (2026): exact seven-product closure degree d7 = 47; Lemma 3 certified contact via exact Gaussian-rational contraction certificate",
   "local_pdf": "incoming/nla-mf14-webb.pdf",
@@ -44,7 +44,7 @@
       "receipt": "results/nla_mf14_control_meta.json",
       "receipt_sha256": "676242d479decf0e25e2f1e49c6a782ed3a767e33da7dc8f3d8f489f045101f8",
       "receipt_timestamp": "2026-09-24T15:30:00+00:00",
-      "recorded_at": "2026-09-24T14:50:33.826273+00:00"
+      "recorded_at": "2026-09-24T15:46:02.707855+00:00"
     }
   ]
 }
