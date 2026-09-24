@@ -59,8 +59,12 @@ inside `pLeafOK`, replayed above for every piece.
 
 - Lean code written by Claude under Alpöge's direction; Alpöge reportedly
   read `Challenge.lean` (Euler). Per doctrine, authorship is not evidence.
-- A third-party rebuild is documented; the rebuild commit/result were
-  located during recon (see blueprint).
+- A third-party rebuild was attempted (goodcarp/navier-stokes, targeting the
+  pinned `d012468` commit, Lean 4.32.2, Mathlib built from source) but is
+  **incomplete on record**: the build reached 9,739/9,769 modules over ~19.5 h
+  before the host rebooted and the build tree was lost. No completed
+  independent rebuild of this commit exists on record; the OpenAI
+  NavierStokesAndEuler comparator replay is a separate repo, not fluid_lean.
 - Papers pinned: `incoming/ab-fluid-ipm-arxiv.pdf` (57 pp, arXiv
   2609.16470), `incoming/ab-fluid-euler-nyu.pdf` (112 pp),
   `incoming/ab-fluid-boussinesq-nyu.pdf` (76 pp), with SHA-256 sidecar.
