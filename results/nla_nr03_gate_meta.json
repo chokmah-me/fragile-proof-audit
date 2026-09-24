@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-09-24T12:38:46.497991+00:00",
+  "gate": "nla_nr03",
+  "source_claim": "Holden (2026): rank+(C7) <= 127 < 128 via exact rational factorization, disproving the NR-03 universal 2^n conjecture",
+  "local_pdf": "incoming/nla-nr03-holden.pdf",
+  "local_pdf_sha256": "249a1c630d2442be22456cc7eaf12f02c80439c00ea08508663cb0742563db02",
+  "certificate": "incoming/nla-nr03-factors_n7.json",
+  "certificate_sha256": "fa515775f9c77e5dfe85109125d3f730c4b36684894730096247cd67fcc60bb9",
+  "certificate_source": "data/factors_n7.json in sgstepaniants/OpenProblemsInNLA at f664d07e82aaa60bc9c78dd1946e763168c5c530",
+  "cert_metadata_n_r": [
+    7,
+    127
+  ],
+  "cert_metadata_ok": true,
+  "checks": {
+    "W_dims_128x127": true,
+    "V_dims_127x128": true,
+    "d_len_128_positive_int": true,
+    "W_entries_nonneg_int": true,
+    "V_entries_nonneg_int": true,
+    "W_entries_in_0_1_2": true,
+    "V_entries_le_36": true,
+    "denominators_in_paper_set": true,
+    "int_product_all_16384": true,
+    "int_product_entries_checked": 16384,
+    "int_product_bad_entries": [],
+    "rational_product_all_16384": true,
+    "rational_product_bad_entries": [],
+    "target_zero_count": 5103,
+    "target_positive_count": 11281,
+    "zero_count_matches_paper_5103": true,
+    "positive_count_matches_paper_11281": true,
+    "term_count_127": true
+  },
+  "verdict": "PASS",
+  "lemma": "exists nonnegative rational W (128x127), H (127x128) with W H = C7, i.e. rank+(C7) <= 127",
+  "false_instance": null,
+  "ok": true,
+  "controls": [
+    {
+      "control": "nla_nr03_control",
+      "verdict": "NO FALSE POSITIVE",
+      "ok": true,
+      "receipt": "results/nla_nr03_control_meta.json",
+      "receipt_sha256": "220d46dc74c5c17f6ee41fbd04674c83f6e9252af44ea5f0dc7745fc5a5193d0",
+      "receipt_timestamp": "2026-09-24T12:37:58.483121+00:00",
+      "recorded_at": "2026-09-24T12:38:46.542228+00:00"
+    }
+  ]
+}

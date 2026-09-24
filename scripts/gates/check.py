@@ -41,6 +41,7 @@ TAIT_TUTTE = ROOT / "scripts" / "gates" / "tait_tutte.py"
 KEMPE_FRITSCH = ROOT / "scripts" / "gates" / "kempe_fritsch.py"
 GB_SCE = ROOT / "scripts" / "gates" / "gb_sce.py"
 MAH_3 = ROOT / "scripts" / "gates" / "mah_3.py"
+NLA_NR03 = ROOT / "scripts" / "gates" / "nla_nr03.py"
 
 # ---------------------------------------------------------------------------
 # Verdict lock.
@@ -81,6 +82,7 @@ EXPECTED_VERDICT: dict[str, tuple[str, str]] = {
     "kempe_fritsch": ("kempe_fritsch_gate_meta.json", "BREAK"),
     "gb_sce": ("gb_sce_gate_meta.json", "BREAK"),
     "mah_3": ("mah_3_gate_meta.json", "PASS"),
+    "nla_nr03": ("nla_nr03_gate_meta.json", "PASS"),
 }
 
 
@@ -244,6 +246,10 @@ def run_mah_3() -> dict:
     return run_script("mah_3", MAH_3)
 
 
+def run_nla_nr03() -> dict:
+    return run_script("nla_nr03", NLA_NR03)
+
+
 def main() -> int:
     # The suite relays child output containing mathematical notation; a cp1252
     # console would otherwise kill the runner itself while every gate passed.
@@ -286,6 +292,7 @@ def main() -> int:
         run_kempe_fritsch(),
         run_gb_sce(),
         run_mah_3(),
+        run_nla_nr03(),
     ]
     failed = [r for r in results if not r["ok"]]
     verdicts = check_verdicts()

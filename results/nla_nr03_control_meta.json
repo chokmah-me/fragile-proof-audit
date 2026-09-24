@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-09-24T12:37:58.483121+00:00",
+  "control": "nla_nr03_control",
+  "gate": "nla_nr03",
+  "instrument": true,
+  "registered_in_check_py": false,
+  "checks": {
+    "certificate_sha256": "fa515775f9c77e5dfe85109125d3f730c4b36684894730096247cd67fcc60bb9",
+    "perturb_W00_rejected": true,
+    "perturb_W00_rejected_by_product_check": true,
+    "perturb_V5_10_rejected": true,
+    "perturb_V5_10_rejected_by_product_check": true,
+    "perturb_d3_rejected": true,
+    "unperturbed_passes": true,
+    "target_rebuilt_from_definition": true
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true,
+  "note": "Perturbations are matched: one entry changed, everything else (including the independently rebuilt target) fixed. Rejection must come from the exact-product check, proving the gate reads and verifies all 16,384 entries."
+}
