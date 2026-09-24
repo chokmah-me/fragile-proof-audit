@@ -45,5 +45,19 @@ Per doctrine, gates refute routes, not theorems. No lemma of the paper's proof r
 ## Scope and limits
 
 - The GitHub Actions run 34785341662 cited by RESOLVED.md was not independently inspected (no browser in this audit). The tree page at the linked commit already characterizes the Linux diagnostic as bridge-only (six lightweight modules) and disavows it as establishing the complete graph, the ten exports, or a Comparator pass; a human click-through could confirm what that run actually checked. This does not affect the finding, which rests on the tree page's own words.
-- No Lean build was attempted: with the tree page stating canonical verification is pending and the paper stating none was performed, a build would test the author's unclaimed claim, not the catalog's.
+- ~~No Lean build was attempted~~ — superseded 2026-09-24: a full `lake build` was run (see "Verification run 2026-09-24" below).
 - The audit pins the certificate at the tree commit `f664d07`; later commits on either repo are out of scope.
+
+## Verification run 2026-09-24 (build)
+
+At the user's direction the candidate tree was put through a real Lean build to settle the GAP above.
+
+- Tree: `sgstepaniants/OpenProblemsInNLA@f664d07`, subtree `nonnegative-and-positive-factorizations/NR-03/lean`. The subtree **does** pin its toolchain: `leanprover/lean4:v4.33.1` (harvest recon's repo-level "not pinned" was wrong here too). Deps: leancert @ `621a43d` → mathlib @ `0df444a` (v4.33.1) + 8 others at exact revs; 8,690 mathlib oleans via `lake exe cache get`.
+- **`lake build` (default target `Solution`): EXIT 0, 0 errors, wall time 25m15s.**
+- 10/10 public exports elaborate; every `#print axioms` = exactly `[propext, Classical.choice, Quot.sound]`; all 10 `#assert_trust kernel` passed.
+- Sorry census: `Challenge.lean` 10 (by design, Comparator boundary); `Solution.lean` 0; all 58 NLA modules 0; no `axiom`/`admit`/`native_decide` in project sources.
+- Comparator name match: Challenge's 10 contract names = comparator.json's 10 theorem names = Solution's 10 verified exports (identical).
+
+**One honest qualifier:** the pinned tree does not build *unmodified*. The canonical run 34783909558 died at `Rank.lean:40:4` (a `mod_cast` elaboration error); a one-line cast repair was needed, after which the full graph builds cleanly. So the tree page's "pending" self-description remains the accurate one for the pinned artifact — the catalog's "passed" credit is still premature as written — but the GAP closes upward in substance: the proof genuinely verifies with a trivial fix, standard axioms only.
+
+Caveats: `lake build` was run, not the repo's `tools/lean/verify.sh` harness (outside the sparse checkout) — sandbox/rejection controls and kernel-control cases were not executed; the Comparator's core checks (name inventory, permitted-axiom audit, sorry scan) were replicated manually. The leancert dependency contains sorrys in its own test/example files; none leak into any export's axiom set. Full logs and report: `~/workspace/nr03-lean-verify/REPORT.md` (outside this repo).
