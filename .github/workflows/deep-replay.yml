@@ -27,7 +27,8 @@ env:
 
 jobs:
   ab_fluid:
-    runs-on: ubuntu-latest
+    # Schedule/dispatch only (no PR trigger), so self-hosted is safe here.
+    runs-on: self-hosted
     timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
