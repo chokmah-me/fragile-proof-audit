@@ -19,7 +19,9 @@ concurrency:
 
 jobs:
   gates:
-    runs-on: ubuntu-latest
+    # External PRs keep the clean-room GitHub-hosted runner; pushes and
+    # manual runs use the self-hosted runner (persistent elan/pip cache).
+    runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || 'self-hosted' }}
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +35,8 @@ jobs:
         run: python scripts/gates/check.py --skip ab_fluid
 
   lean:
-    runs-on: ubuntu-latest
+    # Same routing as gates: PRs on hosted, everything else on self-hosted.
+    runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || 'self-hosted' }}
     timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
