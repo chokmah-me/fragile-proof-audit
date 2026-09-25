@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-09-25T04:35:10.134096+00:00",
+  "gate": "qtspp_diagonal",
+  "source_claim": "Koutschan/Paule/Stembridge, 'The q-TSPP conjecture', arXiv:0906.1018: identity (3.2), B(n,n)=1 at q=1",
+  "scope": "FINITE replay + transcription-fidelity control for the q=1 diagonal formalization. Does NOT prove hrec for all n (needs the d-finite substitution certificate).",
+  "checks": {
+    "operator_sha256": "d12c102723fb07cea2ac7987d316309c5728e002ae074da3d9de7bad387c8570",
+    "operator_pin_match": true,
+    "operator_transcription_match": true,
+    "det_nonzero_0_to_12": true,
+    "minor_eq_okada": true,
+    "true_diagonal_values": [
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1"
+    ],
+    "true_diagonal_all_one": true,
+    "inverse_certs_verify": true,
+    "hrec_finite_range": "0..25",
+    "hrec_finite_ok": true
+  },
+  "verdict": "PASS",
+  "ok": true
+}
