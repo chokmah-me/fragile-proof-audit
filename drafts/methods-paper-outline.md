@@ -50,7 +50,10 @@ One page each, mapped to §4/§5:
 - **Kempe–Fritsch (BREAK).** The 1879 four-color route, gated + controlled; paper-first discipline (Gethner/Involve 2009 pinned). Gives §6 its refutation case.
 - **Gomila Λ-bound (audit PASS).** Replay lanes (finite 3,149,013/3,149,013 rows, Dini, barrier, tail) + sealed-log verification at pinned commit `a74738d`.
 - **Pólya counterexample (canonization).** 91 SHA-256-pinned chunk certificates, anchors, dual sieves, Lean slice to n = 100.
-- *q-TSPP:* short "in progress" note only (milestone 3 blocked on author reply); promote if coefficients arrive before submission.
+- *q-TSPP:* milestones 3 (coefficients supplied by the author 2026-09-24)
+  and 4 (true-diagonal $B(n,n)=1$) closed; the case study records the
+  honest remainder (the guessed-$B'$ $\partial$-finite-substitution route,
+  author contact the plausible path).
 
 ## 7. Limitations
 - Replay cannot catch specification errors on its own. The campaign's first BREAK (γ audit, `docs/audits/gamma-aejonanonymous.md`: proves `¬ is_rational_gamma`, not mathlib γ) shows a separate *statement-fidelity* audit can. That is a partial remedy, not a closed gap.

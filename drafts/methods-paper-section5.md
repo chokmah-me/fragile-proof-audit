@@ -88,8 +88,10 @@ how effort gets spent on false lemmas.
 
 The q-TSPP line follows this order: the milestone-1 Stembridge
 shakedown (sorry-free, kernel-checked) preceded the milestone-2
-diagonal identity, and milestone 3 is blocked on recovering the
-recurrence coefficients from the authors rather than inventing them. The
+diagonal identity, and milestone 3 refused to invent the recurrence
+coefficients - the parametric certificate waited until the author
+supplied the true operator (2026-09-24), which was transcribed and
+kernel-checked before milestone 4 closed the diagonal. The
 discipline also sets the boundary of what formalization is *for* here:
 it is not applied to BREAK verdicts at all - a refuted route needs no
 formalization of its false lemma.

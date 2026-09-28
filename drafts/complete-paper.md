@@ -392,16 +392,29 @@ unpublished.
 available on the campaign stack, record blocked - do not invent operators.
 
 **Worked example.** q-TSPP, the q=1 case of Koutschan's proof
-(arXiv:0906.1018; `docs/blueprint/qtspp-q1.md`). The paper's Sec. 4.3 prints only
-a factorization of the order-7 recurrence's leading coefficient, not
-the operator; the $\partial$-finite description (65 guessed recurrences, 5 MB)
-was never published, and the recovered notebook's 13 MB diagonal
-operator needs 3 GB RAM plus the HolonomicFunctions package -
-unavailable. The campaign's answer is a parametric Lean formalization
-of the closing argument (`DiagonalCertificate`, kernel-checked,
-sorry-free) modulo coefficient recovery, plus author contact for the
-true coefficients. Type E is the attack type the campaign documents
-as tooling-limited: the route exists before the infrastructure does.
+(arXiv:0906.1018; `docs/blueprint/qtspp-q1.md`). The paper's \S5.3 prints only
+a factorization of the order-7 recurrence's leading coefficient ($p_1$, $p_2$
+irreducible, degrees 4 and 12), not the operator; the $\partial$-finite
+description (65 guessed recurrences, 5 MB, reduced to a 5-polynomial
+Gr\"obner basis, 1.6 MB) was never published, and the recovered notebook's
+13 MB diagonal operator needs 3 GB RAM plus the HolonomicFunctions package -
+unavailable. The campaign's answer was a parametric Lean formalization of
+the closing argument (`DiagonalCertificate`, kernel-checked, sorry-free)
+built to receive the true coefficients rather than invent them. On
+2026-09-24 the author re-ran the computation and supplied the order-7
+operator as a text file (SHA-256-pinned at
+`incoming/qtspp-q1/Bnn_op_0_a23r.txt`); it was transcribed byte-faithfully
+into `KoutschanOperator.lean` as a concrete certificate - eight degree-24
+polynomials, the $(S_n-1)$ right factor and leading-coefficient positivity
+all kernel-checked - with the author listed as an acknowledged contributor,
+and the true diagonal $B(n,n) = 1$ then closed by the normalization
+argument (milestone 4). What stays blocked is the paper's actual \S5.3
+route for the *guessed* sequence $B'$ - the five-generator $\partial$-finite
+description and the substitution certificate - and behind it the 900 MB
+(3.1) operators: GB-scale certificates against kernel checking remain the
+unsolved tradeoff (Sec. 6.3). Type E is the attack type the campaign
+documents as tooling-limited: the route exists before the infrastructure
+does.
 
 ## F - Counterexample search
 
@@ -538,8 +551,10 @@ how effort gets spent on false lemmas.
 
 The q-TSPP line follows this order: the milestone-1 Stembridge
 shakedown (sorry-free, kernel-checked) preceded the milestone-2
-diagonal identity, and milestone 3 is blocked on recovering the
-recurrence coefficients from the authors rather than inventing them. The
+diagonal identity, and milestone 3 refused to invent the recurrence
+coefficients - the parametric certificate waited until the author
+supplied the true operator (2026-09-24), which was transcribed and
+kernel-checked before milestone 4 closed the diagonal. The
 discipline also sets the boundary of what formalization is *for* here:
 it is not applied to BREAK verdicts at all - a refuted route needs no
 formalization of its false lemma.
@@ -633,7 +648,7 @@ is the entire argument of this paper.
 
 The playbook is only as good as its hardest cases. Four studies, one
 each for a refutation, a confirmation, a canonization, and an
-unfinished line - each mapped to the Sec. 3 attack type and the Sec. 4
+infrastructure line - each mapped to the Sec. 3 attack type and the Sec. 4
 disciplines it leans on. Full records live in `docs/audits/`; what
 follows is one page each.
 
@@ -719,7 +734,7 @@ are why the banked counterexample can be cited. It sits off the
 verdict lock deliberately: canonization is infrastructure, not a
 verdict about a route.
 
-### 5.4 q-TSPP: the unfinished line (in progress)
+### 5.4 q-TSPP: the infrastructure line
 
 The q-TSPP audit - formalizing the totally symmetric plane partition
 identities - is the campaign's correct-proof infrastructure build, not
@@ -729,23 +744,37 @@ algorithmic proofs and certificates are the formalization targets.
 Milestone 1 - the q=1 Stembridge shakedown - closed with a sorry-free,
 kernel-checked recurrence-uniqueness lemma; milestone 2 closed with a
 parametric order-7 diagonal certificate (8,656/8,656 jobs, zero
-errors). Milestone 3 is blocked on recovering the explicit q=1
-recurrence coefficients: the paper does not print them, the thesis
-does not yield them, and the author's site survives only on Wayback.
-The author has been contacted; the line waits on his reply.
+errors). Milestone 3 - the explicit q=1 recurrence coefficients that
+the paper's \S5.3 does not print, the thesis does not yield, and the
+author's dead site (recovered only on Wayback) did not carry - closed
+on 2026-09-24, when Koutschan re-ran the computation and supplied the
+order-7 operator as a text file (SHA-256-pinned at
+`incoming/qtspp-q1/Bnn_op_0_a23r.txt`): eight degree-24 polynomials,
+$(S_n-1)$ right factor, leading coefficient positive on $\mathbb{N}$,
+transcribed into `KoutschanOperator.lean` and kernel-checked, with the
+author listed as an acknowledged contributor. Milestone 4 closed
+$B(n,n) = 1$ for the *true* normalized cofactors - not by the paper's
+\S5.3 route, which proves the diagonal for the *guessed* sequence
+$B'$, but by the normalization argument: deleting the last row and
+column of $A_n$ gives $A_{n-1}$, so the diagonal cofactor is 1 wherever
+the determinant is nonzero, with seven inverse-matrix certificates
+checked by `native_decide` and the remainder exactly the norm identity
+(3.3)'s content.
 
 It belongs in this paper as "gate before prove" (Sec. 4.3) at a
-projected 6--10-week scale (the blueprint's estimate, not a completed
-line) - with a stated exception. No q-TSPP gate is on the verdict
-lock, and no off-lock numeric gate preceded the Lean work: this line
-formalizes a known-correct proof as infrastructure, so the
-gate-before-prove rule - which exists to stop the campaign
+projected 6--10-week scale - with a stated exception. No q-TSPP gate is
+on the verdict lock, and no off-lock numeric gate preceded the Lean
+work: this line formalizes a known-correct proof as infrastructure, so
+the gate-before-prove rule - which exists to stop the campaign
 formalizing a claim that might be false - has nothing to guard
 against. The q=1 shakedown, kernel-checked against the known result,
-is the empirical anchor in place of a gate. The blocker - the
-unrecovered recurrence coefficients - is stated plainly instead of
-being worked around. It is the honest boundary of what the campaign
-could do alone.
+is the empirical anchor in place of a gate. The honest boundary moved
+with the work: the coefficients the campaign could not recover alone
+arrived from the author, and the line states plainly what is still
+open - the $\partial$-finite-substitution route for the guessed $B'$
+(the paper's actual \S5.3 argument), whose five-generator description
+and substitution certificate remain a multi-week infrastructure item,
+with author contact as the plausible route.
 
 ## 6. Limitations
 
