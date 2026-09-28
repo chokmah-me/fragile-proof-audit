@@ -61,6 +61,19 @@ at the pinned value.
   is the standard Turán density; convergence is proved in the development
   (`tendsto_tetraTuranDensity`).
 
+## Loose end resolved (2026-09-28): verifier-script hash mismatch
+
+The certificate's `exact_verification.verifier_script_sha256` is
+`d0864d2e…`, but the repo's `search/exactify_five_root.py` hashes to
+`dcb4a291…`. Explanation, confirmed by reading the code: line 347 writes
+`verifier_script_sha256=EXECUTED_SCRIPT_SHA256` where line 41 defines it as
+the SHA-256 of the script *as executed*. The certificate therefore pins the
+hash of the script revision that generated it; the repo (single squashed
+public-import commit, no history) ships a later revision of that script.
+Benign: the current script independently reproduces the certificate's
+recorded numerator, denominator, maximizing mask, and raw count exactly, so
+the inter-version change did not affect the verification outcome.
+
 ## Verdict lock
 
 Standalone verify/audit PASS. The 25-gate verdict lock (17 BREAK / 8 PASS) is
