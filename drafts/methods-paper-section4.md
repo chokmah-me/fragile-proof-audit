@@ -108,16 +108,29 @@ unpublished.
 available on the campaign stack, record blocked - do not invent operators.
 
 **Worked example.** q-TSPP, the q=1 case of Koutschan's proof
-(arXiv:0906.1018; `docs/blueprint/qtspp-q1.md`). The paper's Sec. 4.3 prints only
-a factorization of the order-7 recurrence's leading coefficient, not
-the operator; the $\partial$-finite description (65 guessed recurrences, 5 MB)
-was never published, and the recovered notebook's 13 MB diagonal
-operator needs 3 GB RAM plus the HolonomicFunctions package -
-unavailable. The campaign's answer is a parametric Lean formalization
-of the closing argument (`DiagonalCertificate`, kernel-checked,
-sorry-free) modulo coefficient recovery, plus author contact for the
-true coefficients. Type E is the attack type the campaign documents
-as tooling-limited: the route exists before the infrastructure does.
+(arXiv:0906.1018; `docs/blueprint/qtspp-q1.md`). The paper's \S5.3 prints only
+a factorization of the order-7 recurrence's leading coefficient ($p_1$, $p_2$
+irreducible, degrees 4 and 12), not the operator; the $\partial$-finite
+description (65 guessed recurrences, 5 MB, reduced to a 5-polynomial
+Gr\"obner basis, 1.6 MB) was never published, and the recovered notebook's
+13 MB diagonal operator needs 3 GB RAM plus the HolonomicFunctions package -
+unavailable. The campaign's answer was a parametric Lean formalization of
+the closing argument (`DiagonalCertificate`, kernel-checked, sorry-free)
+built to receive the true coefficients rather than invent them. On
+2026-09-24 the author re-ran the computation and supplied the order-7
+operator as a text file (SHA-256-pinned at
+`incoming/qtspp-q1/Bnn_op_0_a23r.txt`); it was transcribed byte-faithfully
+into `KoutschanOperator.lean` as a concrete certificate - eight degree-24
+polynomials, the $(S_n-1)$ right factor and leading-coefficient positivity
+all kernel-checked - with the author listed as an acknowledged contributor,
+and the true diagonal $B(n,n) = 1$ then closed by the normalization
+argument (milestone 4). What stays blocked is the paper's actual \S5.3
+route for the *guessed* sequence $B'$ - the five-generator $\partial$-finite
+description and the substitution certificate - and behind it the 900 MB
+(3.1) operators: GB-scale certificates against kernel checking remain the
+unsolved tradeoff (Sec. 6.3). Type E is the attack type the campaign
+documents as tooling-limited: the route exists before the infrastructure
+does.
 
 ## F - Counterexample search
 
