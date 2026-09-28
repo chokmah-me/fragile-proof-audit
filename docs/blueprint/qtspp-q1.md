@@ -188,7 +188,7 @@ EXIT 0, 8,656/8,656 jobs, zero errors, no `sorry`/`admit`/`native_decide`
 "parametric proof of (3.2) modulo coefficient recovery"; the numeric
 coefficient recovery stays open as milestone-3-blocker work.
 
-## 8. Milestone 3 — coefficient recovery attempt (2026-09-23)
+## 8. Milestone 3 — coefficient recovery (2026-09-23; delivered 2026-09-24)
 
 **Target:** explicit polynomials `p_0..p_7`, `q_0..q_6` for the
 `DiagonalCertificate` (q=1 diagonal recurrence, order 7, right factor
@@ -219,12 +219,14 @@ the full identity: `hrec` (∂-finite substitution output) and `hinit` (seven
 determinant evaluations). The 2026-10-07 follow-up reminder was cancelled.
 
 **Avenue 3 — full re-derivation: not needed** (Avenue 2 delivered).
-
-**Avenue 3 — full re-derivation (guessing + DFiniteSubstitute): SCOPED, not started.**
-Re-guess the q=1 ∂-finite description from determinant data (B(n,j) via exact
-integer-matrix cofactors), then implement substitution j↦n. Requires
-multivariate Ore guessing + noncommutative Gröbner + substitution —
-a multi-week infrastructure project in its own right. Fallback if Avenues 1–2 fail.
+The scoped plan — re-guessing the q=1 ∂-finite description from determinant
+data (B(n,j) via exact integer-matrix cofactors), then implementing
+substitution j↦n via multivariate Ore guessing + noncommutative Gröbner —
+is superseded for the true-cofactor diagonal: milestone 4 (§9) closed
+`B(n,n) = 1` by the normalization argument. What remains multi-week
+infrastructure is the ∂-finite-substitution route for the *guessed* `B′`
+(five Gröbner generators, bivariate initial data, substitution certificate);
+author contact is the plausible route to those artifacts.
 
 **Position 2026-09-24:** Avenue 2 delivered the true operator; the concrete
 `KoutschanOperator` module built clean the same day (`lake build
