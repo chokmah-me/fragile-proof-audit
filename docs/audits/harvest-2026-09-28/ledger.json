@@ -1,0 +1,316 @@
+{
+  "date": "2026-09-28",
+  "harvest_sha": "9fb6f788d089622300615853da18ddbbe28b361a6267759cc89fd3bd640f187e",
+  "meta": {
+    "window": "2026-09-21..2026-09-28",
+    "source": "weekly arXiv sweep (math.CO, math.NT, math.PR, math.NA, cs.DM, cs.SC) + repo verification"
+  },
+  "claims": [
+    {
+      "id": "venn-simple-symmetric-17-19",
+      "title": "Simple symmetric Venn diagrams with 17 and 19 curves",
+      "score": 3,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2609.26546",
+        "detail": "http 406"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "dzoba/venn17",
+        "branch": "main",
+        "size_kb": 111760,
+        "pushed_at": "2026-09-24",
+        "url": "https://github.com/dzoba/venn17",
+        "head_sha": "5f08c24ed357b87ea8edd870a39abc64d17c3a17",
+        "head_date": "2026-09-23",
+        "lean_files": 879,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "single_author",
+        "disclosed_llm_help"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ]
+      ]
+    },
+    {
+      "id": "tetrahedron-turan-upper-bound",
+      "title": "Upper bound on the Turan density of the tetrahedron K_4^(3)",
+      "score": -1,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2609.27495",
+        "detail": "http 406"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "taeyool/tetrahedron-turan",
+        "branch": "main",
+        "size_kb": 315181,
+        "pushed_at": "2026-09-24",
+        "url": "https://github.com/taeyool/tetrahedron-turan",
+        "head_sha": "f3ef8e6bf57dd36da9e642124b24151c80e8021c",
+        "head_date": "2026-09-24",
+        "lean_files": 355,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.27.0"
+      },
+      "signals": [
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.27.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "gw-speed-biased-random-walk",
+      "title": "Speed of the biased random walk on a {2,3} Galton-Watson tree is decreasing on [0, 1.755]",
+      "score": 0,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2609.29894",
+        "detail": "http 406"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "samyama-ai/gw-speed-certificate",
+        "branch": "main",
+        "size_kb": 88,
+        "pushed_at": "2026-09-24",
+        "url": "https://github.com/samyama-ai/gw-speed-certificate",
+        "head_sha": "d8b9a57215090fbd745c019821d879a82f051c47",
+        "head_date": "2026-09-17",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (interval certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "biplanar-alpha2-9-colorable",
+      "title": "Biplanar graphs with independence number two are 9-colorable",
+      "score": 1,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2609.28102",
+        "detail": "http 406"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://doi.org/10.5281/zenodo.22913639"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "sss-trace-lower-bound",
+      "title": "New lower bound lambda_SSS >= 1.80220 for the Schur-Siegel-Smyth trace problem",
+      "score": 1,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2609.29298",
+        "detail": "http 406"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (interval certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "k-wise-independent-bits-reflection",
+      "title": "Exceptional-point reflection for optimal supports of k-wise independent bits",
+      "score": 1,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2609.25595",
+        "detail": "http 406"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [],
+      "lanes": []
+    },
+    {
+      "id": "simplex-gaussian-maxima-lean",
+      "title": "Stochastic domination of Gaussian maxima by the regular simplex (Lean 4 formalization)",
+      "score": 2,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2609.28452",
+        "detail": "http 406"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "abhmul/full-simplex-conjecture-lean",
+        "branch": "main",
+        "size_kb": 695,
+        "pushed_at": "2026-09-24",
+        "url": "https://github.com/abhmul/full-simplex-conjecture-lean",
+        "head_sha": "0153a3548b845d9333fbb3e0346853b5b6201da5",
+        "head_date": "2026-09-24",
+        "lean_files": 129,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.31.0"
+      },
+      "signals": [
+        "single_author",
+        "pinned_toolchain",
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.31.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ]
+    },
+    {
+      "id": "high-contrast-homogenization-lean",
+      "title": "Homogenization at a polynomial scale in high contrast (Lean 4 formalization)",
+      "score": 1,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2609.27647",
+        "detail": "http 406"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "scottnarmstrong/HighContrastHomogenization",
+        "branch": "main",
+        "size_kb": 7945,
+        "pushed_at": "2026-09-24",
+        "url": "https://github.com/scottnarmstrong/HighContrastHomogenization",
+        "head_sha": "7a13dbcd8d6609264a713373f5c69ceeac870472",
+        "head_date": "2026-09-24",
+        "lean_files": 1579,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc2"
+      },
+      "signals": [
+        "pinned_toolchain",
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc2"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "fr-05-phase-retrieval-injectivity",
+      "title": "Phase-retrieval injectivity decay p_d <= C/d (OpenProblemsInNLA FR-05 Lean development)",
+      "score": 1,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/ajt60gaibb/OpenProblemsInNLA",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "ajt60gaibb/OpenProblemsInNLA",
+        "branch": "main",
+        "size_kb": 409945,
+        "pushed_at": "2026-09-28",
+        "url": "https://github.com/ajt60gaibb/OpenProblemsInNLA",
+        "head_sha": "80c0e3e638b2f26dcb3a00353651fc3d2215dd65",
+        "head_date": "2026-09-27",
+        "lean_files": 3355,
+        "tree_truncated": true,
+        "has_lakefile": true
+      },
+      "signals": [],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ]
+    }
+  ]
+}
