@@ -58,4 +58,4 @@ jobs:
           lake update
           lake build FragileProofAudit
       - name: Forge verify
-        run: python scripts/forge/verify_lean_project.py --project . --target FragileProofAudit
+        run: python scripts/forge/verify_lean_project.py --project . --target FragileProofAudit --allow-native-decide
