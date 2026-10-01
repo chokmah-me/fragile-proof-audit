@@ -61,12 +61,13 @@ jobs:
 
       - name: Full build
         run: |
+          set -o pipefail
           TARGET="${{ inputs.target }}"
-          lake build ${TARGET:-FragileProofAudit}
+          lake build ${TARGET:-FragileProofAudit} 2>&1 | tee build.log
 
       - name: Upload build log on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: lake-build-log
-          path: .lake/build/log
+          path: build.log

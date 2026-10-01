@@ -3,6 +3,11 @@ Copyright (c) 2026 Chokmah LLC. All rights reserved.
 Private campaign artifact. Gates refute routes, not theorems.
 -/
 
+import FragileProofAudit.QTSPP.Stembridge
+import FragileProofAudit.QTSPP.DiagonalIdentity
+import FragileProofAudit.QTSPP.KoutschanOperator
+import FragileProofAudit.QTSPP.TrueDiagonal
+
 /-!
 # q-TSPP — Andrews–Robbins product formula (Koutschan–Kauers–Zeilberger)
 
@@ -17,11 +22,6 @@ Status: staging — q=1 Stembridge shakedown in `QTSPP.Stembridge`
 (see `docs/blueprint/qtspp-q1.md`); q-case certificates recovered at
 `~/workspace/qtspp-certs/public/` (SHA-256 pinned, too large to commit).
 -/
-
-import FragileProofAudit.QTSPP.Stembridge
-import FragileProofAudit.QTSPP.DiagonalIdentity
-import FragileProofAudit.QTSPP.KoutschanOperator
-import FragileProofAudit.QTSPP.TrueDiagonal
 
 namespace FragileProofAudit.QTSPP
 
