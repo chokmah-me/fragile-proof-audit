@@ -12,6 +12,7 @@ import Mathlib.Algebra.Order.GroupWithZero.Basic
 import Mathlib.Algebra.GroupWithZero.Basic
 import Mathlib.Algebra.Order.Field.Basic
 import Mathlib.Data.Rat.Cast.Order
+import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Positivity
 
 /-!
@@ -82,14 +83,43 @@ theorem theta_eq_zero_of_overlapSet_eq_empty {U V : List (Fin q)}
   rw [h, Finset.sum_empty, zero_div]
 
 /-- Worked example: `θ_HH = 1/2`. "HH" has the length-1 self-overlap
-    (suffix "H" = prefix "H"), so `θ = 2^1 / 2^2 = 1/2`. -/
+    (suffix "H" = prefix "H"), so `θ = 2^1 / 2^2 = 1/2`.
+    Proved by kernel-checked tactics (no `native_decide`): the overlap set
+    is `{1}` by a uniqueness argument, then the sum is a singleton. -/
+theorem overlapSet_HH_self : overlapSet 2 [0, 0] [0, 0] = {1} := by
+  rw [Finset.eq_singleton_iff_unique_mem]
+  refine ⟨?_, ?_⟩
+  · rw [mem_overlapSet_iff]
+    exact ⟨le_refl 1, by simp, by decide⟩
+  · intro k hk
+    rw [mem_overlapSet_iff] at hk
+    obtain ⟨h1, h2, -⟩ := hk
+    simp at h2
+    omega
+
 theorem theta_HH_self : theta 2 [0, 0] [0, 0] = 1 / 2 := by
-  native_decide
+  unfold theta
+  rw [overlapSet_HH_self, Finset.sum_singleton]
+  have hlen : ([0, 0] : List (Fin 2)).length = 2 := rfl
+  have h4 : ((2 : ℕ) : ℚ) ^ 2 = 4 := by norm_num
+  rw [hlen, pow_one, h4]
+  norm_num
 
 /-- Worked example: `θ_HT = 0`. "HT" has no self-overlap
-    (suffix "T" ≠ prefix "H"). -/
-theorem theta_HT_self : theta 2 [0, 1] [0, 1] = 0 := by
-  native_decide
+    (suffix "T" ≠ prefix "H"). The emptiness is by a uniqueness argument:
+    any overlap position would have to be `1`, but `[1] ≠ [0]`. -/
+theorem overlapSet_HT_self : overlapSet 2 [0, 1] [0, 1] = ∅ := by
+  rw [Finset.eq_empty_iff_forall_notMem]
+  intro k hk
+  rw [mem_overlapSet_iff] at hk
+  obtain ⟨h1, h2, h3⟩ := hk
+  simp at h2
+  have hk1 : k = 1 := by omega
+  subst hk1
+  simp at h3
+
+theorem theta_HT_self : theta 2 [0, 1] [0, 1] = 0 :=
+  theta_eq_zero_of_overlapSet_eq_empty 2 overlapSet_HT_self
 
 -- Spot checks: the definitions compute as claimed.
 #eval overlapSet 2 [0, 0] [0, 0] = {1} -- expected true
