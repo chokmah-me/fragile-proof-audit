@@ -25,3 +25,4 @@ import FragileProofAudit.Polya.SieveCheck
 import FragileProofAudit.QTSPP.Basic
 import FragileProofAudit.LittGame.Theta
 import FragileProofAudit.LittGame.Game
+import FragileProofAudit.LittGame.Chain
