@@ -12,7 +12,7 @@ consequential but structurally fragile proofs.
 | **Pin** | Lean `v4.32.2` · mathlib `v4.32.2` (same as [`catalan-sun-lean`](https://github.com/chokmah-me/catalan-sun-lean)) |
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy / `networkx` (graph gates only) · no Sage / Magma / cluster |
 | **Resume** | Resume threads: [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
-| **Lock** | 25 gates pinned in `EXPECTED_VERDICT` (17 BREAK / 8 PASS, 2026-09-23) (`scripts/gates/check.py`); drift in either direction fails CI |
+| **Lock** | 32 gates pinned in `EXPECTED_VERDICT` (17 BREAK / 15 PASS, 2026-09-29) (`scripts/gates/check.py`); drift in either direction fails CI |
 | **Paper** | [Trust, but Replay](https://doi.org/10.5281/zenodo.22926995) (concept) · version [10.5281/zenodo.22933576](https://doi.org/10.5281/zenodo.22933576) · [`ZENODO.md`](ZENODO.md) |
 
 ---
@@ -86,7 +86,9 @@ Repository layout: see [`docs/repo-layout.md`](docs/repo-layout.md).
 | **GB-SCE** Goldbach semi-continuous model (2026-09-23) | **BREAK (route)** at v5, gated + controlled; lock extended to 24. [`docs/audits/gb-sce.md`](docs/audits/gb-sce.md) |
 | **LEG-NS** Legendre via Newman sums (2026-09-23) | **proof GAP** (type G) at v4 — prose audit, no finite gate applies. Not a BREAK. [`docs/audits/leg-ns.md`](docs/audits/leg-ns.md) |
 | **JAC-2D type G** (2026-09-23) | **PASS** — Su v43 decisive inferences re-derived and sound; complements the D/E gate PASS. [`docs/audits/jac-2d-typeg.md`](docs/audits/jac-2d-typeg.md) |
-| **q-TSPP** (2026-09-23) | Correct-proof infrastructure, not a BREAK — milestone 2 closed parametrically (kernel-checked); milestone 3 (coefficient recovery) awaiting author reply. [`docs/blueprint/qtspp.md`](docs/blueprint/qtspp.md) |
+| **q-TSPP** (2026-09-23) | Correct-proof infrastructure, not a BREAK — milestone 2 closed parametrically (kernel-checked); milestone 3 (KoutschanOperator.lean, factored coefficient transcription, sorry-free) closed 2026-09-24; milestone 4 (TrueDiagonal, B(n,n)=1) closed 2026-09-25. Author reply received 2026-09-29. [`docs/blueprint/qtspp.md`](docs/blueprint/qtspp.md) |
+| **Harvest sweep** (2026-09-28) | 7 of 9 targets audited, all standalone verify/audit **PASS**, none on the verdict lock: gw-speed (arXiv:2609.29894, biased random-walk speed) · tetrahedron-turan (arXiv:2609.27495) · k-wise reflection (arXiv:2609.25595) · SSS trace lower bound λ_SSS ≥ 1.80220 (arXiv:2609.29298) · venn17 (17/19 curves) · gaussian-maxima (arXiv:2609.28452, Lean) · biplanar α≤2 9-colorable (Zenodo 22913639). Briefs: [`docs/audits/`](docs/audits/) |
+| **FR-05 phase retrieval** (2026-09-29) | **VERIFY/AUDIT PASS** — Zhangsong Li's resolution of Vinzant's conjecture; full `lake build` EXIT 0 (3,344 jobs), all exported theorems within the classical three axioms. Not on the verdict lock. [`docs/audits/fr-05-phase-retrieval-injectivity.md`](docs/audits/fr-05-phase-retrieval-injectivity.md) |
 
 Detail and day-level steps: [`docs/WORKPLAN.md`](docs/WORKPLAN.md). Per-target detail: [`docs/audits/`](docs/audits/).
 
@@ -98,10 +100,9 @@ Attack taxonomy (A–G): see [`docs/attack-taxonomy.md`](docs/attack-taxonomy.md
 
 ## License / visibility
 
-Private Chokmah LLC artifact. No public deposit until an explicit release
-decision. Third-party material under `incoming/` retains its upstream license.
+Public repository under the MIT License (see [`LICENSE`](LICENSE)).
+Third-party material under `incoming/` retains its upstream license.
 Lean mirrors are **not** republished here (their directories are gitignored;
 commit SHAs are recorded under `results/`). Source **PDFs are tracked** — they
 are the pinned provenance every gate is checked against, and a gate whose paper
-is not in the repo cannot be re-audited. Any public release must revisit
-whether those PDFs ship.
+is not in the repo cannot be re-audited.

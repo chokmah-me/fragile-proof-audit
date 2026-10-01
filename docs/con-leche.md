@@ -1,6 +1,6 @@
 # External kernel check (con-leche)
 
-This repo is a private Lean 4 / Mathlib proof-audit campaign (Chokmah LLC).
+This repo is a public Lean 4 / Mathlib proof-audit campaign (Chokmah LLC).
 `lake build` is the ordinary check: Lean's C++ kernel accepted the default
 target. We also run [con-leche](https://github.com/leanprover/con-leche) on
 every push.

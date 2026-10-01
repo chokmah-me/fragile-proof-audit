@@ -1,6 +1,14 @@
 # One-command campaign verify: Lean forge + Python gates.
-# Usage (from repo root):  pwsh ./scripts/verify.ps1
+# Usage (from repo root):  pwsh ./scripts/verify.ps1 [-Skip ab_fluid]
 # Exit nonzero if either half fails.
+#
+# -Skip names a comma-separated list of gate keys to skip (default: ab_fluid,
+# the hours-long Euler interval replay, which runs in the deep-replay
+# workflow instead — mirrors verify.yml's `check.py --skip ab_fluid`).
+
+param(
+    [string]$Skip = "ab_fluid"
+)
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
@@ -9,7 +17,12 @@ Set-Location $Root
 New-Item -ItemType Directory -Force -Path (Join-Path $Root "results") | Out-Null
 
 Write-Host "=== Python gates ===" -ForegroundColor Cyan
-python (Join-Path $Root "scripts\gates\check.py")
+$gateArgs = @()
+if ($Skip -ne "") {
+    $gateArgs += "--skip"
+    $gateArgs += $Skip
+}
+python (Join-Path $Root "scripts\gates\check.py") @gateArgs
 if ($LASTEXITCODE -ne 0) {
     Write-Host "gates FAILED" -ForegroundColor Red
     exit $LASTEXITCODE

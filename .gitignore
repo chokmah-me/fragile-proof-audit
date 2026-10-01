@@ -2,6 +2,10 @@
 /build/
 *.olean
 
+# full-build.yml tees `lake build` output here; local runs shouldn't commit it
+/build.log
+build.log
+
 # forge / gate receipts may be large; keep briefs, ignore raw dumps if needed
 results/lake_build*.txt
 results/*_raw.txt

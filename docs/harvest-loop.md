@@ -19,7 +19,8 @@ Weekly pipeline: fresh-claim harvest in → recon analysis out → target pick.
 3. **Output.** `docs/audits/harvest-<date>/recon.md` (verification ledger,
    ranked queue, per-claim cards), `ledger.json` (machine-readable checks),
    committed to main; a `harvest`-labeled GitHub issue carries the ranked
-   table for the target pick.
+   table for the target pick. Examples: [`docs/audits/harvest-2026-09-24/`](audits/harvest-2026-09-24/),
+   [`docs/audits/harvest-2026-09-28/`](audits/harvest-2026-09-28/).
 4. **Target pick (human).** Reply on the issue. On pick: pin inputs
    (PDF + repo SHA under `incoming/`), write the audit note, then run gates.
 

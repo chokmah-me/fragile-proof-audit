@@ -128,7 +128,7 @@ Two further genre anchors deserve mention. **Helfgott's ternary Goldbach proof**
 
 ## 7. The Harvest, Scored and Ranked
 
-![The harvest map: formalizability vs fragility, bubble size = refutability](harvest-map.png)
+*(Figure `harvest-map.png` — formalizability vs fragility, bubble size = refutability — is not in the repo; scores below are the author's calibrated judgment against the §2 rubric.)*
 
 Scores are the author's calibrated judgment against the §2 rubric; F = formalizability, Fr = fragility, R = refutability (0–10 each). "Priority" = F̄·R̄ weighted toward refutability, penalized by estimated effort.
 

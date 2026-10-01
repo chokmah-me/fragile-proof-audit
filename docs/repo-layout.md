@@ -8,8 +8,11 @@
 | `scripts/controls/` | Discrimination instruments; never in `check.py` |
 | `scripts/forge/` | `axiom_audit.py` + lean-proof-forge verify |
 | `docs/WORKPLAN.md` | **Resume checklist** (start here) |
-| `docs/blueprint/` | Per-target blueprints |
-| `docs/audits/` | Bug-report style write-ups |
+| `docs/blueprint/` | Per-target blueprints ([index](blueprint/INDEX.md)) |
+| `docs/audits/` | Bug-report style write-ups ([index](audits/INDEX.md)); `harvest-<date>/` holds recon cards + `ledger.json` from the harvest loop |
+| `drafts/` | Methods-paper source (`complete-paper.md` + section drafts); released PDF under [`ZENODO.md`](../ZENODO.md) |
+| `polya/` | Pólya counterexample canonization workspace (`src/`, `certs/`, `build.sh`) |
+| `.github/workflows/` | CI: `verify` (per-push), `con-leche` (external kernel), `deep-replay` (weekly Euler replay), `full-build` (reboot-free full `lake build`), `harvest-loop` (weekly recon) |
 | `corpus/` | Scout reports (graded trust) |
 | `incoming/` | Pinned source PDFs (tracked) + third-party Lean mirrors (gitignored; pin SHA in `results/`) |
 | `results/` | Gate and forge receipts |
