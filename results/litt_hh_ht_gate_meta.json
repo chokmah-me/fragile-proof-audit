@@ -1,0 +1,442 @@
+{
+  "audit_date": "2026-10-01",
+  "gate": "litt_hh_ht",
+  "arxiv_id": "2503.19035v1",
+  "paper_title": "The generalized Alice HH vs Bob HT problem",
+  "authors": [
+    "Svante Janson",
+    "Mihai Nica",
+    "Simon Segert"
+  ],
+  "source_sha256": "de954eead3b07c017c4e7ef206f9ba7812449973ea3816349df828fef0ef909f",
+  "source_note": "arXiv e-print tarball (single-version paper; v1 == current tarball)",
+  "claim": "Theorem 1.1: for distinct equal-length words A,B over a q-letter alphabet, P(Alice)-P(Bob) = (theta_BB-theta_AA)/sqrt(2 pi sigma^2) n^-1/2 + O(n^-1), with the -1 tie-split terms in (1.5)/(1.6) and P(tie) = 1/sqrt(2 pi sigma^2) n^-1/2 + O(n^-1); sigma^2 from (4.19); exact fairness iff theta_AA == theta_BB",
+  "lanes": {
+    "asymptotics_tab1_tab4": {
+      "ok": true,
+      "detail": {
+        "litt-original": {
+          "theta_AA": 0.5,
+          "theta_BB": 0.0,
+          "sigma2": 0.5,
+          "rows": {
+            "500": {
+              "r_diff": 0.999876,
+              "r_winA": 1.00021,
+              "r_tie": 1.000377,
+              "pa": 0.481073,
+              "pb": 0.493687,
+              "pt": 0.025241
+            },
+            "1000": {
+              "r_diff": 0.999938,
+              "r_winA": 1.000104,
+              "r_tie": 1.000188,
+              "pa": 0.486618,
+              "pb": 0.495538,
+              "pt": 0.017845
+            },
+            "2000": {
+              "r_diff": 0.999969,
+              "r_winA": 1.000052,
+              "r_tie": 1.000094,
+              "pa": 0.490538,
+              "pb": 0.496845,
+              "pt": 0.012617
+            },
+            "3000": {
+              "r_diff": 0.999979,
+              "r_winA": 1.000035,
+              "r_tie": 1.000063,
+              "pa": 0.492274,
+              "pb": 0.497424,
+              "pt": 0.010301
+            }
+          },
+          "checks": [
+            [
+              "r_diff->1",
+              "True"
+            ],
+            [
+              "err-decay",
+              "True"
+            ],
+            [
+              "r_winA->1",
+              "True"
+            ],
+            [
+              "r_tie->1",
+              "True"
+            ]
+          ],
+          "ok": true
+        },
+        "hhh-vs-hth": {
+          "theta_AA": 0.75,
+          "theta_BB": 0.25,
+          "sigma2": 0.375,
+          "rows": {
+            "500": {
+              "r_diff": 1.002262,
+              "r_winA": 1.00294,
+              "r_tie": 1.00328,
+              "pa": 0.478085,
+              "pb": 0.492685,
+              "pt": 0.02923
+            },
+            "1000": {
+              "r_diff": 1.001128,
+              "r_winA": 1.001464,
+              "r_tie": 1.001632,
+              "pa": 0.484526,
+              "pb": 0.494839,
+              "pt": 0.020635
+            },
+            "2000": {
+              "r_diff": 1.000563,
+              "r_winA": 1.000731,
+              "r_tie": 1.000814,
+              "pa": 0.489067,
+              "pb": 0.496354,
+              "pt": 0.014579
+            },
+            "3000": {
+              "r_diff": 1.000375,
+              "r_winA": 1.000487,
+              "r_tie": 1.000542,
+              "pa": 0.491075,
+              "pb": 0.497024,
+              "pt": 0.011901
+            }
+          },
+          "checks": [
+            [
+              "r_diff->1",
+              "True"
+            ],
+            [
+              "err-decay",
+              "True"
+            ],
+            [
+              "r_winA->1",
+              "True"
+            ],
+            [
+              "r_tie->1",
+              "True"
+            ]
+          ],
+          "ok": true
+        },
+        "q3-aaa-vs-abc": {
+          "theta_AA": 0.4444444444444444,
+          "theta_BB": 0.0,
+          "sigma2": 0.09876543209876543,
+          "rows": {
+            "500": {
+              "r_diff": 0.998944,
+              "r_winA": 1.003868,
+              "r_tie": 1.006056,
+              "pa": 0.458841,
+              "pb": 0.484045,
+              "pt": 0.057114
+            },
+            "1000": {
+              "r_diff": 0.999494,
+              "r_winA": 1.001914,
+              "r_tie": 1.00299,
+              "pa": 0.470952,
+              "pb": 0.488785,
+              "pt": 0.040263
+            },
+            "2000": {
+              "r_diff": 0.999753,
+              "r_winA": 1.000952,
+              "r_tie": 1.001486,
+              "pa": 0.47948,
+              "pb": 0.492093,
+              "pt": 0.028427
+            },
+            "3000": {
+              "r_diff": 0.999836,
+              "r_winA": 1.000634,
+              "r_tie": 1.000988,
+              "pa": 0.483251,
+              "pb": 0.49355,
+              "pt": 0.023199
+            }
+          },
+          "checks": [
+            [
+              "r_diff->1",
+              "True"
+            ],
+            [
+              "err-decay",
+              "True"
+            ],
+            [
+              "r_winA->1",
+              "True"
+            ],
+            [
+              "r_tie->1",
+              "True"
+            ]
+          ],
+          "ok": true
+        },
+        "hhhh-vs-htht": {
+          "theta_AA": 0.875,
+          "theta_BB": 0.25,
+          "sigma2": 0.25,
+          "rows": {
+            "500": {
+              "r_diff": 1.005607,
+              "r_winA": 1.006271,
+              "r_tie": 1.006686,
+              "pa": 0.470826,
+              "pb": 0.493253,
+              "pt": 0.035921
+            },
+            "1000": {
+              "r_diff": 1.002787,
+              "r_winA": 1.003112,
+              "r_tie": 1.003316,
+              "pa": 0.479436,
+              "pb": 0.495249,
+              "pt": 0.025315
+            },
+            "2000": {
+              "r_diff": 1.001389,
+              "r_winA": 1.00155,
+              "r_tie": 1.001651,
+              "pa": 0.485482,
+              "pb": 0.496648,
+              "pt": 0.017871
+            },
+            "3000": {
+              "r_diff": 1.000925,
+              "r_winA": 1.001032,
+              "r_tie": 1.001099,
+              "pa": 0.488152,
+              "pb": 0.497265,
+              "pt": 0.014583
+            }
+          },
+          "checks": [
+            [
+              "r_diff->1",
+              "True"
+            ],
+            [
+              "err-decay",
+              "True"
+            ],
+            [
+              "r_winA->1",
+              "True"
+            ],
+            [
+              "r_tie->1",
+              "True"
+            ]
+          ],
+          "ok": true
+        },
+        "q3-ab-vs-ba": {
+          "theta_AA": 0.0,
+          "theta_BB": 0.0,
+          "sigma2": 0.07407407407407408,
+          "rows": {
+            "500": {
+              "r_diff": null,
+              "r_winA": 0.998628,
+              "r_tie": 0.998628,
+              "pa": 0.467269,
+              "pb": 0.467269,
+              "pt": 0.065463
+            },
+            "1000": {
+              "r_diff": null,
+              "r_winA": 0.999313,
+              "r_tie": 0.999313,
+              "pa": 0.476839,
+              "pb": 0.476839,
+              "pt": 0.046321
+            },
+            "2000": {
+              "r_diff": null,
+              "r_winA": 0.999656,
+              "r_tie": 0.999656,
+              "pa": 0.483617,
+              "pb": 0.483617,
+              "pt": 0.032765
+            },
+            "3000": {
+              "r_diff": null,
+              "r_winA": 0.999771,
+              "r_tie": 0.999771,
+              "pa": 0.486622,
+              "pb": 0.486622,
+              "pt": 0.026756
+            }
+          },
+          "checks": [
+            [
+              "fair-decay",
+              "True"
+            ],
+            [
+              "r_winA->1",
+              "True"
+            ],
+            [
+              "r_tie->1",
+              "True"
+            ]
+          ],
+          "ok": true
+        }
+      }
+    },
+    "exact_fairness": {
+      "ok": "True",
+      "detail": {
+        "q2-(0, 0, 1)-(0, 1, 1)": {
+          "theta": 0.0,
+          "exact_n10": [
+            314,
+            314,
+            396
+          ],
+          "exact_ok": true,
+          "float_diff_n3000": -1.1102230246251565e-16,
+          "float_ok": "True",
+          "ok": "True"
+        },
+        "q2-(0, 1, 0)-(1, 0, 1)": {
+          "theta": 0.25,
+          "exact_n10": [
+            300,
+            300,
+            424
+          ],
+          "exact_ok": true,
+          "float_diff_n3000": 5.551115123125783e-17,
+          "float_ok": "True",
+          "ok": "True"
+        },
+        "q2-(0, 0, 0)-(1, 1, 1)": {
+          "theta": 0.75,
+          "exact_n10": [
+            384,
+            384,
+            256
+          ],
+          "exact_ok": true,
+          "float_diff_n3000": 5.551115123125783e-17,
+          "float_ok": "True",
+          "ok": "True"
+        },
+        "q3-(0, 0, 1)-(0, 1, 1)": {
+          "theta": 0.0,
+          "exact_n10": [
+            10296,
+            10296,
+            38457
+          ],
+          "exact_ok": true,
+          "float_diff_n3000": 3.885780586188048e-16,
+          "float_ok": "True",
+          "ok": "True"
+        }
+      }
+    },
+    "pathological_cases": {
+      "ok": true,
+      "detail": {
+        "Egss2_HTT_vs_TTH": {
+          "sigma2": 0.0,
+          "sym_diff_max": 0.0,
+          "tie_probs": [
+            0.625,
+            0.625,
+            0.625
+          ],
+          "sym_ok": true,
+          "tie_stuck_ok": "True",
+          "ok": "True"
+        },
+        "EH-T_H_vs_T": {
+          "tie_odd_n999": 0.0,
+          "odd_ok": "True",
+          "tie_n1000": 0.025225018178360804,
+          "even_ok": "True",
+          "tie_over_tab3_n2000": 1.999750015634765,
+          "factor2_ok": "True",
+          "sym_ok": true,
+          "ok": true
+        }
+      }
+    },
+    "matrix_identities": {
+      "ok": "True",
+      "detail": {
+        "P4_q2_ell2": {
+          "max_abs_err": 0.0,
+          "ok": true
+        },
+        "P4_q2_ell3": {
+          "max_abs_err": 2.220446049250313e-16,
+          "ok": "True"
+        },
+        "P4_q3_ell2": {
+          "max_abs_err": 6.661338147750939e-16,
+          "ok": "True"
+        },
+        "ql2_q2_(0, 0)_(0, 1)": {
+          "got": 2.0,
+          "expected": 2.0,
+          "abs_err": 0.0,
+          "ok": "True"
+        },
+        "ql2_q2_(0, 0, 0)_(0, 1, 0)": {
+          "got": 2.5,
+          "expected": 2.5,
+          "abs_err": 0.0,
+          "ok": "True"
+        },
+        "ql2_q3_(0, 0, 0)_(0, 1, 2)": {
+          "got": 2.3333333333333326,
+          "expected": 2.3333333333333335,
+          "abs_err": 8.881784197001252e-16,
+          "ok": "True"
+        }
+      }
+    },
+    "crosschecks_1.1_1.2": {
+      "ok": true,
+      "detail": {
+        "eq1.1_ratio": 0.9999791929557882,
+        "eq1.2a_ratio": 1.000034758937733,
+        "eq1.2b_ratio": 1.000145890901622,
+        "ok": true
+      }
+    }
+  },
+  "teeth_control": {
+    "description": "asymptotic lane re-run with all predicted constants x1.1",
+    "must_fail": true,
+    "failed_as_required": true
+  },
+  "status": "PASS",
+  "verdict_lock_untouched": true,
+  "notes": [
+    "DP engine self-tested: hand theta values, n=2 hand enumeration, DP vs brute-force enumeration at n=8.",
+    "Doc nits (not findings): (i) Sec 2.1 calls rho(A)=max|lambda| the 'spectral norm' -- it is the spectral radius; (ii) (jw5) second indicator should read Theta(V,T), not Theta(U,V) (result unaffected); (iii) Tgss0 proof writes sum to n-ell-1, should be n-ell+1."
+  ]
+}
