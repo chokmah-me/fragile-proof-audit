@@ -15,7 +15,7 @@ O(n⁻¹) errors. Rationale: the analytic infrastructure does not exist in
 mathlib (no Edgeworth anywhere; the CLT is i.i.d.-only; Perron–Frobenius is
 definitions-only) — that is a separate research-formalization project.
 
-## M1 — θ combinatorics (`Theta.lean`)
+## M1 — θ combinatorics (`Theta.lean`) ✅ COMPLETE (181bba2)
 
 Alphabet `Fin q`, words `List (Fin q)`. Define the overlap set
 Θ(U,V) = {1 ≤ k ≤ ℓ−1 : suffix of U of length k = prefix of V of length k}
@@ -24,7 +24,7 @@ Prove: basic properties, worked examples (θ_HH = 1/2, θ_HT = 0 for q = 2),
 overlap characterization lemmas.
 Close: sorry-free, `#eval` spot checks.
 
-## M2 — Game model (`Game.lean`)
+## M2 — Game model (`Game.lean`) ✅ COMPLETE (8c01784)
 
 Occurrence count of a word as a (possibly overlapping) contiguous sublist of a
 length-n sequence. Finite uniform space `Fin n → Fin q`; probabilities as
@@ -33,7 +33,7 @@ Define Alice/Bob scores, the difference S_n, win/lose/tie events.
 Lemmas: score under concatenation, letter-permutation symmetry.
 Close: sorry-free.
 
-## M3 — The chain itself (`Chain.lean`)
+## M3 — The chain itself (`Chain.lean`) ✅ COMPLETE (6f322c8)
 
 The de Bruijn block chain of §4 (states are length-ℓ blocks per the paper —
 confirm the exact state space against the pinned `main.tex`; the audit
@@ -51,7 +51,7 @@ stationary-distribution theory, so the general lemmas (finite irreducible
 chain → unique stationary distribution) get built here as reusable
 infrastructure. Close: sorry-free.
 
-## M4 — Exact fairness (`ExactFairness.lean`)
+## M4 — Exact fairness (`ExactFairness.lean`) 🚧 BACKGROUND WIP (uncommitted)
 
 θ_AA = θ_BB → ∀ n, P(Alice wins) = P(Bob wins) (Basdevant et al., Remark 1.2).
 Step 0: obtain Basdevant et al. [1] and transcribe the combinatorial
