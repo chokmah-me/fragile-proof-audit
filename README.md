@@ -13,7 +13,7 @@ consequential but structurally fragile proofs.
 | **Stack** | Laptop · Python `mpmath` / `Fraction` / SymPy / `networkx` (graph gates only) · no Sage / Magma / cluster |
 | **Resume** | Resume threads: [`docs/WORKPLAN.md`](docs/WORKPLAN.md) |
 | **Lock** | 32 gates pinned in `EXPECTED_VERDICT` (17 BREAK / 15 PASS, 2026-09-29) (`scripts/gates/check.py`); drift in either direction fails CI |
-| **Paper** | [Trust, but Replay](https://doi.org/10.5281/zenodo.22926995) (concept) · version [10.5281/zenodo.22933576](https://doi.org/10.5281/zenodo.22933576) · [`ZENODO.md`](ZENODO.md) |
+| **Paper** | [Trust, but Replay](https://doi.org/10.5281/zenodo.22926995) (concept) · version [10.5281/zenodo.23148836](https://doi.org/10.5281/zenodo.23148836) · [`ZENODO.md`](ZENODO.md) |
 
 ---
 

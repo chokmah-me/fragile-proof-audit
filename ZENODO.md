@@ -5,7 +5,7 @@ Two separate Zenodo **concepts** (do **not** merge paper and software):
 | Role | DOI | Status |
 |---|---|---|
 | **Paper concept** | [10.5281/zenodo.22926995](https://doi.org/10.5281/zenodo.22926995) | **Stable.** Always resolves to the latest paper PDF. |
-| **Paper (current version)** | [10.5281/zenodo.22933576](https://doi.org/10.5281/zenodo.22933576) | v1.0.2; same PDF; adds OSF related identifiers. |
+| **Paper (current version)** | [10.5281/zenodo.23148836](https://doi.org/10.5281/zenodo.23148836) | v1.0.3; q-TSPP/Koutschan + §8 PDF revision. |
 | **Software concept** | [10.5281/zenodo.22927669](https://doi.org/10.5281/zenodo.22927669) | Always latest software zip (GitHub→Zenodo). |
 | **Software (current version)** | [10.5281/zenodo.22927670](https://doi.org/10.5281/zenodo.22927670) | From GitHub Release `v1.0.1`. |
 
@@ -13,7 +13,8 @@ Two separate Zenodo **concepts** (do **not** merge paper and software):
 
 | Version DOI | Status | Notes |
 |---|---|---|
-| [10.5281/zenodo.22933576](https://doi.org/10.5281/zenodo.22933576) | **Current** | `v1.0.2`; metadata cross-link to OSF `ukmjp`. File `bilar-2026-trust-but-replay.pdf`. |
+| [10.5281/zenodo.23148836](https://doi.org/10.5281/zenodo.23148836) | **Current** | `v1.0.3`; 2026-10-04 PDF revision. File `bilar-2026-trust-but-replay.pdf`. |
+| [10.5281/zenodo.22933576](https://doi.org/10.5281/zenodo.22933576) | Superseded | `v1.0.2`; metadata-only OSF cross-link. |
 | [10.5281/zenodo.22926996](https://doi.org/10.5281/zenodo.22926996) | Superseded | `v1.0.1`; first mint 2026-09-24. |
 
 ## Software version history
@@ -34,8 +35,8 @@ Two separate Zenodo **concepts** (do **not** merge paper and software):
 
 **Paper (prefer concept DOI; version DOI for a pinned PDF):**
 
-Bilar, D. Y. (2026). *Trust, but Replay: Auditing Published Mathematical Claims* (v1.0.2). Zenodo.
-https://doi.org/10.5281/zenodo.22926995 (concept); https://doi.org/10.5281/zenodo.22933576 (this PDF)
+Bilar, D. Y. (2026). *Trust, but Replay: Auditing Published Mathematical Claims* (v1.0.3). Zenodo.
+https://doi.org/10.5281/zenodo.22926995 (concept); https://doi.org/10.5281/zenodo.23148836 (this PDF)
 
 **Software:**
 
@@ -46,4 +47,4 @@ Gates refute routes, not theorems.
 
 ## Direct PDF
 
-https://zenodo.org/records/22933576/files/bilar-2026-trust-but-replay.pdf
+https://zenodo.org/records/23148836/files/bilar-2026-trust-but-replay.pdf
