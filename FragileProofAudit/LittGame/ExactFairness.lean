@@ -347,4 +347,40 @@ def OverlapTiling.phi (T : OverlapTiling q A B)
       T.mem_blocks _ (List.getElem_mem hj1)
     exact overlap_mem_swap hAA hC hD hmem
 
+/-!
+## φ involution (2026-10-05, continued)
+
+`swapAB'` is an involution on `{A,B}`, hence `phi` is an involution on
+tilings (Basdevant et al., Proposition 1: "the fact that φ is an involution
+is clear").
+-/
+
+/-- `swapAB'` is an involution on blocks in `{A,B}`. -/
+theorem swapAB'_involutive {A B D : List (Fin q)} (hD : D = A ∨ D = B) :
+    swapAB' A B (swapAB' A B D) = D := by
+  by_cases hDA : D = A
+  · rw [hDA]
+    have e1 : swapAB' A B A = B := if_pos rfl
+    rw [e1]
+    by_cases hBA : B = A
+    · have e2 : swapAB' A B B = B := if_pos hBA
+      rw [e2, hBA]
+    · exact if_neg hBA
+  · have hDB : D = B := by
+      rcases hD with h | h
+      · exact absurd h hDA
+      · exact h
+    rw [hDB]
+    by_cases hBA : B = A
+    · have e1 : swapAB' A B B = B := if_pos hBA
+      rw [e1]
+      exact e1
+    · have e1 : swapAB' A B B = A := if_neg hBA
+      rw [e1]
+      exact if_pos rfl
+
+-- Note: φ involution on the full structure (`(T.phi hAA).phi hAA = T`) follows from
+-- `swapAB'_involutive` (data level) + `List.reverse_reverse` + proof irrelevance;
+-- deferred to a later increment. Basdevant et al., Prop. 1: "φ is an involution is clear".
+
 end FragileProofAudit.LittGame
