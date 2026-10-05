@@ -37,8 +37,8 @@ autoformalization-tool recon steps before deep gates:
 
 1. **Mathlib coverage probe (LeanExplore).** Take the probe query from the
    claim's recon card and semantic-search Mathlib:
-   `leanexplore search "<query>" --package Mathlib` (free API key from
-   leanexplore.com, or the website — no signup needed for basic search).
+   `leanexplore search "<query>" --package Mathlib` (remote API is public and
+   keyless — LeanExplore retired API keys; or the website).
    If the formalized theorems, or their key lemmas, already exist in
    Mathlib, that reframes the novelty claim and can expose a
    `formal_subset_of_claim` gap. Feeds the A–D statement-faithfulness checks.
