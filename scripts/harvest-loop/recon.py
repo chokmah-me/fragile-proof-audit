@@ -206,8 +206,9 @@ def suggest_lanes(text):
 
 def probe_query(claim):
     """Semantic-query text for the post-pick LeanExplore Mathlib coverage
-    probe. Built from the harvest record only — no API key needed to emit it;
-    running it (website or `leanexplore search`) happens after a target pick."""
+    probe. Built from the harvest record only; running it (keyless public
+    remote API via `leanexplore search`, or the website) happens after a
+    target pick."""
     q = "%s. %s" % (claim.get("title", ""), claim.get("claim", ""))
     return re.sub(r"\s+", " ", q).strip()[:180]
 
@@ -397,8 +398,9 @@ def render_recon(date, meta, claims, results, harvest_sha):
                 "`%s`" % cov["toolchain"] if cov["toolchain"] else "not pinned"))
             for d in cov["declared_verification"]:
                 lines.append("- declared by authors (unverified until target pick): %s" % d)
-            lines.append("- LeanExplore probe (post-pick; needs free leanexplore.com API key or the "
-                         "website): `leanexplore search \"%s\" --package Mathlib` — checks whether "
+            lines.append("- LeanExplore probe (post-pick; remote API is public and keyless — "
+                         "LeanExplore retired API keys, no account needed; or use the website): "
+                         "`leanexplore search \"%s\" --package Mathlib` — checks whether "
                          "the formalized statement or its key lemmas already exist in Mathlib; "
                          "feeds the A–D statement-faithfulness checks." % cov["probe_query"])
             lines.append("")
