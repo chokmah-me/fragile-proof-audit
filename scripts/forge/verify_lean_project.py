@@ -17,7 +17,13 @@ Checks performed
                          produced by macros or tactics)
   5. Axiom audit         generates a temporary Lean file that `#print axioms`
                          every discovered top-level theorem, runs it under
-                         `lake env lean`, and compares against the allowlist
+                         `lake env lean`, and compares against the allowlist.
+                         Pre-checks that every imported module has a built
+                         .olean (one missing olean fails every import and used
+                         to black out the whole audit as "N unresolved"); on a
+                         parse failure the generated file is kept under
+                         results/ together with the head of lean's raw output
+                         instead of being silently deleted.
 
 Exit codes
 ----------
@@ -473,11 +479,41 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
     lines = [f"import {m}" for m in sorted(set(modules))]
     lines += [f"#print axioms {d}" for d in decls]
     scratch = root / "_lpf_axiom_audit.lean"
-    try:
-        scratch.write_text("\n".join(lines) + "\n", encoding="utf-8")
-        code, output = run(["lake", "env", "lean", scratch.name], root, timeout)
-    finally:
-        scratch.unlink(missing_ok=True)
+    # A stale scratch file from a killed previous run must not be mistaken for
+    # a source file on this run.
+    scratch.unlink(missing_ok=True)
+
+    # A missing .olean for any imported module fails the whole generated file
+    # at line 1 (Lean elaborates nothing), which used to surface as every
+    # declaration "unresolved" — a total, silent audit blackout. Name the
+    # missing modules up front instead of running a doomed audit.
+    olean_dir = root / ".lake" / "build" / "lib" / "lean"
+    missing_oleans = sorted(
+        m for m in set(modules)
+        if not (olean_dir / (m.replace(".", "/") + ".olean")).is_file()
+    )
+    if missing_oleans:
+        shown = ", ".join(missing_oleans[:8])
+        if len(missing_oleans) > 8:
+            shown += f" (+{len(missing_oleans) - 8} more)"
+        return Finding(
+            "axiom_audit", "UNKNOWN",
+            f"{len(missing_oleans)} imported module(s) have no built .olean, so "
+            f"the audit cannot run — build the project first, and make sure no "
+            f"other build is running concurrently (lake deletes a module's "
+            f"olean when its rebuild starts): {shown}. Axioms NOT checked.",
+            [{"missing_oleans": missing_oleans}],
+        ), len(decls)
+
+    results_dir = root / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    # Kept under results/ (a SKIP_DIR) so find_sources never mistakes a
+    # preserved failure artifact for a project source on the next run.
+    failed_scratch = results_dir / "_lpf_axiom_audit.failed.lean"
+
+    scratch.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    code, output = run(["lake", "env", "lean", scratch.name], root, timeout)
+    raw_head = "\n".join(output.splitlines()[:12]).strip()
 
     used: dict[str, list[str]] = {}
     for m in AXIOM_OUT_RE.finditer(output):
@@ -513,19 +549,36 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
     }
 
     if violations:
+        scratch.unlink(missing_ok=True)
         return Finding(
             "axiom_audit", "FAIL",
             f"{len(violations)} declaration(s) depend on axioms outside the allowlist",
             [hits],
         ), len(decls)
     if unresolved:
-        return Finding(
-            "axiom_audit", "UNKNOWN",
+        # The audit measured nothing (or only part of the tree): keep the
+        # generated file and the head of lean's raw output so the real error
+        # stays diagnosable instead of hiding behind "N unresolved".
+        kept = failed_scratch
+        try:
+            scratch.rename(failed_scratch)
+        except OSError:
+            kept = scratch  # rename failed; report wherever the file still is
+        detail = (
             f"audited {len(used)}/{len(decls)}; {len(unresolved)} name(s) did not "
             "resolve (namespace/section parsing or elaboration failure) — treat "
-            "those as unchecked, not as clean",
-            [hits],
-        ), len(decls)
+            "those as unchecked, not as clean"
+        )
+        if code != 0:
+            detail += f" (lean exited {code})"
+        if raw_head:
+            detail += f"; lean output head:\n{raw_head}"
+        detail += f"\ngenerated audit file kept at {kept}"
+        hits["kept_scratch"] = str(kept)
+        hits["lean_raw_head"] = raw_head
+        hits["lean_exit_code"] = code
+        return Finding("axiom_audit", "UNKNOWN", detail, [hits]), len(decls)
+    scratch.unlink(missing_ok=True)
     detail = f"all {len(used)} declaration(s) within allowlist"
     if allow_native_decide and nd_exempted:
         detail += f" ({nd_exempted} native_decide axiom(s) exempted by --allow-native-decide)"
