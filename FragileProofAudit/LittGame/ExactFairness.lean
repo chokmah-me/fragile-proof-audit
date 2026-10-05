@@ -383,4 +383,55 @@ theorem swapAB'_involutive {A B D : List (Fin q)} (hD : D = A ∨ D = B) :
 -- `swapAB'_involutive` (data level) + `List.reverse_reverse` + proof irrelevance;
 -- deferred to a later increment. Basdevant et al., Prop. 1: "φ is an involution is clear".
 
+-- Note: Count-swapping (`#A-blocks` in `φ(T)` = `#B-blocks` in `T`) follows from
+-- `swap_eq_A_iff` + `List.count_reverse`; deferred to a later increment along
+-- with the pattern-decomposition and L_M counting lemmas.
+
+/-!
+## Count swapping (2026-10-05, resumed)
+
+φ swaps the number of A-blocks and B-blocks.
+-/
+
+/-- For `x ∈ {A,B}`, `swapAB' A B x = A ↔ x = B`. -/
+theorem swap_eq_A_iff {A B x : List (Fin q)} (hx : x = A ∨ x = B) :
+    swapAB' A B x = A ↔ x = B := by
+  by_cases hxA : x = A
+  · rw [hxA]
+    have e : swapAB' A B A = B := if_pos rfl
+    rw [e]
+    exact eq_comm
+  · have hxB : x = B := by
+      rcases hx with h | h
+      · exact absurd h hxA
+      · exact h
+    rw [hxB]
+    have eB : swapAB' A B B = (if B = A then B else A) := rfl
+    rw [eB]
+    by_cases hBA : B = A
+    · rw [if_pos hBA, hBA]
+    · rw [if_neg hBA]
+      exact iff_of_true rfl rfl
+
+/-- φ swaps A-count and B-count on the block list. -/
+theorem count_swap_blocks (l : List (List (Fin q)))
+    (h : ∀ x ∈ l, x = A ∨ x = B) :
+    List.count A (l.map (swapAB' A B)) = List.count B l := by
+  induction l with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [List.map_cons, List.count_cons, beq_iff_eq]
+    have hiff := swap_eq_A_iff (h x List.mem_cons_self)
+    have ih' := ih (fun y hy => h y (List.mem_cons_of_mem x hy))
+    simp only [ih', hiff]
+
+/-- φ swaps the block counts: `#A-blocks` in `φ(T)` = `#B-blocks` in `T`. -/
+theorem OverlapTiling.phi_count_swap (T : OverlapTiling q A B)
+    (hAA : overlapSet q A A = overlapSet q B B) :
+    List.count A (T.phi hAA).blocks = List.count B T.blocks := by
+  have hblocks : (T.phi hAA).blocks
+      = List.map (swapAB' A B) T.blocks.reverse := rfl
+  rw [hblocks, List.map_reverse, List.count_reverse]
+  exact count_swap_blocks T.blocks T.mem_blocks
+
 end FragileProofAudit.LittGame
