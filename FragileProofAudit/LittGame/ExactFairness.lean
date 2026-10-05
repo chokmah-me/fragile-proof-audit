@@ -434,4 +434,50 @@ theorem OverlapTiling.phi_count_swap (T : OverlapTiling q A B)
   rw [hblocks, List.map_reverse, List.count_reverse]
   exact count_swap_blocks T.blocks T.mem_blocks
 
+/-!
+## Pattern decomposition (2026-10-05, continued)
+
+Basdevant et al., Lemma 1: For a pattern `M = (E₁, ..., Eₖ)` (each `Eᵢ ∈ {A,B}`)
+and gap lengths `I = (i₀, ..., iₖ)`, let
+`L_M(I) = {Y = X₀ E₁ X₁ ... Eₖ Xₖ : Patt_{A,B}(Y) = M, |Xⱼ| = iⱼ}`.
+Then `|L_M(I)| = |L_{φ(M)}(I')|` where `I' = (iₖ, ..., i₀)`.
+
+We formalize the decomposition `Y = X₀ E₁ X₁ ... Eₖ Xₖ` as a structure.
+The gaps `Xⱼ` contain no `A` or `B` as a subword (ensuring the `Eᵢ`
+are the successive maximal blocks, i.e. `Patt_{A,B}(Y) = M`).
+-/
+
+/-- A pattern is a list of blocks, each `A` or `B`. -/
+abbrev Pattern (q : ℕ) := List (List (Fin q))
+
+/-- `X` contains no `A` or `B` as a (contiguous) subword. -/
+def NoABSubword (q : ℕ) (A B X : List (Fin q)) : Prop :=
+  ∀ i : ℕ, ∀ h : i + A.length ≤ X.length, (X.drop i).take A.length ≠ A ∧
+  ∀ i : ℕ, ∀ h : i + B.length ≤ X.length, (X.drop i).take B.length ≠ B
+
+/-- Interleave gaps and pattern blocks: `X₀ E₁ X₁ ... Eₖ Xₖ`. -/
+def interleaveGaps {α : Type} : List (List α) → List (List α) → List α
+  | [], [] => []
+  | [X], [] => X
+  | X :: gaps', E :: pat' => X ++ E ++ interleaveGaps gaps' pat'
+  | _, _ => []
+
+/-- Pattern decomposition: `Y = X₀ E₁ X₁ ... Eₖ Xₖ` with `Eᵢ ∈ {A,B}`
+    and gaps containing no `A`/`B` subword. -/
+structure PatternDecomp (q : ℕ) (A B : List (Fin q)) where
+  /-- The word being decomposed. -/
+  Y : List (Fin q)
+  /-- The pattern `(E₁, ..., Eₖ)`. -/
+  pat : Pattern q
+  /-- Gaps `(X₀, ..., Xₖ)`; `gaps.length = pat.length + 1`. -/
+  gaps : List (List (Fin q))
+  /-- Each pattern block is `A` or `B`. -/
+  pat_mem : ∀ E ∈ pat, E = A ∨ E = B
+  /-- Gap count matches. -/
+  gaps_len : gaps.length = pat.length + 1
+  /-- Gaps contain no A/B subword. -/
+  gaps_clean : ∀ X ∈ gaps, NoABSubword q A B X
+  /-- The decomposition equation. -/
+  decomp : Y = interleaveGaps gaps pat
+
 end FragileProofAudit.LittGame
