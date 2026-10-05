@@ -204,6 +204,44 @@ def suggest_lanes(text):
     return out
 
 
+def probe_query(claim):
+    """Semantic-query text for the post-pick LeanExplore Mathlib coverage
+    probe. Built from the harvest record only — no API key needed to emit it;
+    running it (website or `leanexplore search`) happens after a target pick."""
+    q = "%s. %s" % (claim.get("title", ""), claim.get("claim", ""))
+    return re.sub(r"\s+", " ", q).strip()[:180]
+
+
+def formalization_coverage(claim, code_chk):
+    """Lean-formalization inventory from API metadata only (no clones, no
+    builds). Returns None for non-Lean claims. Declared verification is
+    recorded as a *declaration*, never credited — scoring stays with the
+    fixed signal vocabulary."""
+    if code_chk.get("status") != "PUBLIC" or not code_chk.get("lean_files"):
+        return None
+    # declarations may appear in code_note, paper, or inputs_note
+    cn = " ".join([claim.get("code_note", ""), claim.get("paper", ""),
+                   claim.get("inputs_note", "")])
+    declared = []
+    m = re.search(r"PALOMAR[-\w\d]*\d[\w\d-]*", cn)
+    if re.search(r"palomar", cn, re.I):
+        declared.append("Palomar registration %s declared"
+                        % ("`%s`" % m.group(0) if m else "(id not parsed)"))
+    if re.search(r"comparator|dual[- ]kernel|triple[- ]kernel", cn, re.I):
+        declared.append("multi-kernel / comparator replay declared")
+    if re.search(r"zero sorry|no sorry|0 sorry|0 admit", cn, re.I):
+        declared.append("zero-sorry declared")
+    if re.search(r"axiom audit clean|axioms audit", cn, re.I):
+        declared.append("clean axiom audit declared")
+    return {
+        "lean_files": code_chk.get("lean_files"),
+        "has_lakefile": bool(code_chk.get("has_lakefile")),
+        "toolchain": code_chk.get("lean_toolchain"),
+        "declared_verification": declared,
+        "probe_query": probe_query(claim),
+    }
+
+
 def parse_harvest(path):
     with open(path, encoding="utf-8") as f:
         text = f.read()
@@ -263,8 +301,10 @@ def analyze_claim(claim):
         adjustments.append("paper URL bot-blocked (http 403); human-reachable, not loop-verified")
     lanes = suggest_lanes(" ".join([claim.get("title", ""), claim.get("claim", ""),
                                     claim.get("code_note", "")]))
+    coverage = formalization_coverage(claim, code_chk)
     return {"paper": paper_chk, "code": code_chk, "signals": signals,
-            "score": score, "adjustments": adjustments, "lanes": lanes}
+            "score": score, "adjustments": adjustments, "lanes": lanes,
+            "coverage": coverage}
 
 
 def render_recon(date, meta, claims, results, harvest_sha):
@@ -349,6 +389,19 @@ def render_recon(date, meta, claims, results, harvest_sha):
         lane_str = "; ".join("type %s — %s" % (t, w) for t, w in r["lanes"]) or "none suggested"
         lines.append("**Suggested lanes (heuristic, confirm on pick):** %s" % lane_str)
         lines.append("")
+        cov = r.get("coverage")
+        if cov:
+            lines.append("**Formalization coverage (Lean; API metadata only — nothing cloned or run).**")
+            lines.append("- inventory: %d .lean files · lakefile: %s · toolchain: %s" % (
+                cov["lean_files"], "yes" if cov["has_lakefile"] else "not found",
+                "`%s`" % cov["toolchain"] if cov["toolchain"] else "not pinned"))
+            for d in cov["declared_verification"]:
+                lines.append("- declared by authors (unverified until target pick): %s" % d)
+            lines.append("- LeanExplore probe (post-pick; needs free leanexplore.com API key or the "
+                         "website): `leanexplore search \"%s\" --package Mathlib` — checks whether "
+                         "the formalized statement or its key lemmas already exist in Mathlib; "
+                         "feeds the A–D statement-faithfulness checks." % cov["probe_query"])
+            lines.append("")
     lines.append("## Next step")
     lines.append("")
     lines.append("Pick a target. On pick: pin inputs (PDF + repo SHA), write the audit "
@@ -392,7 +445,9 @@ def write_outputs(date, meta, claims, results, harvest_sha):
               "claims": [{"id": c["id"], "title": c["title"], "score": r["score"],
                           "paper": r["paper"], "code": r["code"],
                           "signals": r["signals"], "adjustments": r["adjustments"],
-                          "lanes": r["lanes"]} for c, r in zip(claims, results)]}
+                          "lanes": r["lanes"],
+                          "formalization_coverage": r.get("coverage")}
+                         for c, r in zip(claims, results)]}
     with open(os.path.join(outdir, "ledger.json"), "w", encoding="utf-8") as f:
         json.dump(ledger, f, indent=2)
     with open(os.path.join(outdir, "issue-title.txt"), "w", encoding="utf-8") as f:
