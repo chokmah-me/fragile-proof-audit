@@ -80,3 +80,29 @@ statements are true in the model (they are not a proof of `False`).
 Later pushes re-export and re-check. A red **check** job means the new commit
 is not accepted in this sense. A red job that dies while installing Lean
 (disk full) is infrastructure, not a mathematical reject.
+
+## Known checker-coverage decline: `native_decide` auxiliary axioms (2026-10-01–)
+
+Since 2026-10-01 the **check** job exits **2** (decline, not reject) on every
+run. Cause, confirmed against CI's own NDJSON (run `36952223977`): the six
+`native_decide` proofs in `FragileProofAudit/QTSPP/TrueDiagonal.lean`
+(commit `dc0f7da`, 2026-09-25) emit per-declaration auxiliary axioms of the
+form `<decl>._native.native_decide.ax_<i>_<j>` (Lean 4.32) — exactly six
+non-standard axiom records; every other axiom is the pinned set. con-leche
+declines any non-pinned axiom at its record. This is a **checker-coverage
+decline, not a rejected proof**: the proofs are kernel-valid (Lean's C++
+kernel accepted them in `lake build`), and the repo's own forge already
+permits `native_decide` via `--allow-native-decide` — since commit `4fbac9b`
+(2026-10-01) the forge's `check_axioms` exempts exactly the
+`native_decide` auxiliary-axiom family when the flag is set, and records the
+exemption count.
+
+Remediation was attempted and rejected: swapping the six proofs to kernel
+`decide` (scratch branch `test/decide-swap`, never merged) fails outright —
+kernel `decide` cannot reduce the rational-matrix-over-`Fin`-literal
+certificate identities to `isTrue`/`isFalse` at all. It is not a performance
+question; the swap is not viable.
+
+**Decision (2026-10-05): keep `native_decide`, documented here as a known
+checker-coverage decline.** The mathematics is unaffected; the external
+checker simply does not cover this axiom family yet.
