@@ -480,4 +480,10 @@ structure PatternDecomp (q : ℕ) (A B : List (Fin q)) where
   /-- The decomposition equation. -/
   decomp : Y = interleaveGaps gaps pat
 
+-- Note: `L_M(I)` (the Finset of words with pattern `M` and gap lengths `I`)
+-- requires bounded word enumeration (`wordsOfLength` via `List.ofFn`).
+-- The `Finset.univ : Finset (Fin L → Fin q)` with computed `L` causes
+-- prohibitive typeclass search; deferred to a dedicated increment.
+-- Basdevant et al., Lemma 1: `|L_M(I)| = |L_{φ(M)}(I')|`.
+
 end FragileProofAudit.LittGame
