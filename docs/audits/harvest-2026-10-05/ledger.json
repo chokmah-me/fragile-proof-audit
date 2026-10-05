@@ -1,0 +1,350 @@
+{
+  "date": "2026-10-05",
+  "harvest_sha": "b60e1b5b4587d14759f4a5b658e861e659ae4348f5fcbf2a377f169a850d62bb",
+  "meta": {
+    "window": "2026-09-28..2026-10-05",
+    "source": "scheduled weekly scan, three parallel sweeps (arXiv math.CO/math.NT; arXiv math.PR/math.NA/cs.DM/cs.SC; math blogs + GitHub)"
+  },
+  "claims": [
+    {
+      "id": "zeta2-irrationality-exponent-5019378",
+      "title": "New upper bound for the irrationality exponent of zeta(2) (Giraudin)",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.02912",
+        "title": "A new upper bound for the irrationality exponent of $\u03b6(2)$",
+        "authors": [
+          "David Niedbala Giraudin"
+        ],
+        "published": "2026-10-02",
+        "url": "https://arxiv.org/abs/2610.02912"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "disclosed_llm_help"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (exact rational object)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "nahm-sum-rank-two-degree-bound",
+      "title": "Uniform degree bound for modular rank-two Nahm sums (Hakimoglu-Brown)",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.02743",
+        "title": "A uniform degree bound for modular rank-two Nahm sums",
+        "authors": [
+          "Cetin Hakimoglu-Brown"
+        ],
+        "published": "2026-10-02",
+        "url": "https://arxiv.org/abs/2610.02743"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "quadratic-brown-erdos-sos-pi9-pi8",
+      "title": "Quadratic Brown-Erdos-Sos problem for 3-uniform hypergraphs (Bodnar, Pikhurko, Sun, Wang, Zeng)",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.03323",
+        "title": "The quadratic Brown--Erd\u0151s--S\u00f3s problem for 3-uniform hypergraphs with 8 and 9 edges",
+        "authors": [
+          "Levente Bodn\u00e1r",
+          "Oleg Pikhurko",
+          "Shumin Sun",
+          "Yan Wang",
+          "Jiasheng Zeng"
+        ],
+        "published": "2026-10-02",
+        "url": "https://arxiv.org/abs/2610.03323"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": []
+    },
+    {
+      "id": "pascal-extremes-p-adic-gcd",
+      "title": "Sharp p-adic extrema for restricted binomial GCDs, Lean-formalized (Fairfax-Ball)",
+      "score": 4,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/jfairfaxball-348/pascal-extremes",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "jfairfaxball-348/pascal-extremes",
+        "branch": "main",
+        "size_kb": 464,
+        "pushed_at": "2026-10-02",
+        "url": "https://github.com/jfairfaxball-348/Pascal-Extremes",
+        "head_sha": "505729852d91a5728d004eeb87887d3deb484f01",
+        "head_date": "2026-10-02",
+        "lean_files": 14,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc2"
+      },
+      "signals": [
+        "anonymous_or_unaffiliated",
+        "single_author",
+        "ai_generated"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc2"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "unit-distance-exponent-104273",
+      "title": "Unit-distance exponent 1.04273 record lower bound (Naslund)",
+      "score": 5,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/enaslund/unit-distance-bound-0.0427",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "enaslund/unit-distance-bound-0.0427",
+        "branch": "master",
+        "size_kb": 153038,
+        "pushed_at": "2026-10-02",
+        "url": "https://github.com/enaslund/unit-distance-bound-0.0427",
+        "head_sha": "14289d9d528881efef7db051f0078f519d470c68",
+        "head_date": "2026-10-02",
+        "lean_files": 2407,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "ai_generated",
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    },
+    {
+      "id": "four-point-sumset-diameter-compression",
+      "title": "Exact diameter compression for four-point sumset cardinalities (Zhang)",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.02216",
+        "title": "Exact diameter compression for four-point sumset cardinalities",
+        "authors": [
+          "Enkai Zhang"
+        ],
+        "published": "2026-09-09",
+        "url": "https://arxiv.org/abs/2610.02216"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "disclosed_llm_help"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (interval certificate)"
+        ]
+      ]
+    },
+    {
+      "id": "additive-multiplicative-graph-diameter",
+      "title": "Diameter and radius of the additive-multiplicative graph (Hu, Yang)",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2609.39347",
+        "title": "Diameter and radius of an additive-multiplicative graph",
+        "authors": [
+          "Yi Hu",
+          "Nan Yang"
+        ],
+        "published": "2026-09-30",
+        "url": "https://arxiv.org/abs/2609.39347"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ]
+      ]
+    },
+    {
+      "id": "genus-bipartite-kneser-h32mod8",
+      "title": "Genus of bipartite Kneser graphs for primes h>3 with h=3 mod 8 (Ulrigg, Metzger)",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.03159",
+        "title": "The Genus of Bipartite Kneser Graphs",
+        "authors": [
+          "Austin Ulrigg",
+          "Alexander Metzger"
+        ],
+        "published": "2026-10-02",
+        "url": "https://arxiv.org/abs/2610.03159"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "sandergi/genus",
+        "branch": "main",
+        "size_kb": 25774,
+        "pushed_at": "2026-10-02",
+        "url": "https://github.com/SanderGi/Genus",
+        "head_sha": "4b68d247240ed0e47c8c6e9f40e83f84330242c1",
+        "head_date": "2026-10-02",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ]
+      ]
+    },
+    {
+      "id": "moving-sofa-uniqueness",
+      "title": "Uniqueness of Gerver's sofa, Lean-formalized (Vu-Le)",
+      "score": 2,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://vltanh.me/projects/lean4-moving-sofa/",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "vltanh/lean4-moving-sofa",
+        "branch": "main",
+        "size_kb": 6606,
+        "pushed_at": "2026-10-05",
+        "url": "https://github.com/vltanh/lean4-moving-sofa",
+        "head_sha": "16653ae81e0e4f52a362bafae2ad3440100ad065",
+        "head_date": "2026-10-04",
+        "lean_files": 67,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
+      },
+      "signals": [
+        "ai_generated"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc3",
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ]
+    },
+    {
+      "id": "matmul-4x4-with-48-multiplications",
+      "title": "Fast matrix multiplication via recursive <4x4x4:48> algorithms (Dumas et al.)",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2609.12027",
+        "title": "Fast matrix multiplication via recursive $\\langle$ 4x4x4:48 $\\rangle$ algorithms into practice",
+        "authors": [
+          "Jean-Guillaume Dumas",
+          "Cl\u00e9ment Pernet",
+          "Alexandre Sedoglavic",
+          "Joshua Stapleton",
+          "Petr Tichavsk\u00fd"
+        ],
+        "published": "2026-09-10",
+        "url": "https://arxiv.org/abs/2609.12027"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "jgdumas/Fast-Matrix-Multiplication",
+        "branch": "main",
+        "size_kb": 2806,
+        "pushed_at": "2026-09-24",
+        "url": "https://github.com/jgdumas/Fast-Matrix-Multiplication",
+        "head_sha": "8d3f4339cd01c78fb1e939777453395b7c935281",
+        "head_date": "2026-09-24",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ]
+    }
+  ]
+}
