@@ -73,6 +73,7 @@ def phiBlocks (A B : List (Fin q)) (cs : List (List (Fin q))) :
 
 end FragileProofAudit.LittGame
 
+
 /-!
 ## M4 core lemmas (proved 2026-10-05)
 
@@ -244,5 +245,106 @@ theorem overlap_mem_swap {A B C D : List (Fin q)}
     · rw [hC, hD] at hm ⊢
       have e : swapAB' A B B = A := if_neg (Ne.symm hab)
       rw [e, hAA]; exact hm
+
+end FragileProofAudit.LittGame
+
+/-!
+## M4 tilings and φ (2026-10-05, continued)
+
+`OverlapTiling` formalizes Basdevant et al. Definition 3
+(`Y = C_1^{m_1} ... C_k`), and `OverlapTiling.phi` the Proposition 1
+bijection (reverse blocks, swap A↔B, reverse overlaps).
+-/
+
+namespace FragileProofAudit.LittGame
+
+open Finset
+
+variable {q : ℕ}
+
+/-- A tiling of an overlap word (Basdevant et al., Definition 3):
+    blocks `C_1, ..., C_k ∈ {A,B}` with overlap witnesses `m_1, ..., m_{k-1}`. -/
+structure OverlapTiling (q : ℕ) (A B : List (Fin q)) where
+  blocks : List (List (Fin q))
+  overlaps : List ℕ
+  blocks_pos : 0 < blocks.length
+  mem_blocks : ∀ C ∈ blocks, C = A ∨ C = B
+  len_eq : overlaps.length + 1 = blocks.length
+  mem_overlaps : ∀ i : ℕ, ∀ hi : i + 1 < blocks.length, ∀ ho : i < overlaps.length,
+    overlaps[i]'ho ∈ overlapSet q (blocks[i]'(by omega)) (blocks[i + 1]'hi)
+
+/-- The word of a tiling: `C_1 ++ (C_2.drop m_1) ++ (C_3.drop m_2) ++ ...`. -/
+def OverlapTiling.word (T : OverlapTiling q A B) : List (Fin q) :=
+  match T.blocks, T.overlaps with
+  | [], _ => []
+  | C :: Cs, ms => C ++ (Cs.zip ms).foldl (fun acc p => acc ++ p.1.drop p.2) []
+
+/-- φ on tilings (Basdevant et al., Proposition 1): reverse the block order,
+    swap A↔B in each block, reverse the overlaps. -/
+def OverlapTiling.phi (T : OverlapTiling q A B)
+    (hAA : overlapSet q A A = overlapSet q B B) : OverlapTiling q A B where
+  blocks := T.blocks.reverse.map (swapAB' A B)
+  overlaps := T.overlaps.reverse
+  blocks_pos := by
+    rw [List.length_map, List.length_reverse]
+    exact T.blocks_pos
+  mem_blocks := by
+    intro C hC
+    simp only [List.mem_map, List.mem_reverse] at hC
+    obtain ⟨D, hDmem, rfl⟩ := hC
+    by_cases h : D = A
+    · simp [swapAB', h]
+    · simp [swapAB', h]
+  len_eq := by
+    have e1 : (T.overlaps.reverse).length = T.overlaps.length :=
+      List.length_reverse
+    have e2 : (T.blocks.reverse.map (swapAB' A B)).length = T.blocks.length := by
+      rw [List.length_map, List.length_reverse]
+    have hTeq := T.len_eq
+    omega
+  mem_overlaps := by
+    intro i hi ho
+    have hbl : (T.blocks.reverse.map (swapAB' A B)).length = T.blocks.length := by
+      rw [List.length_map, List.length_reverse]
+    have hol : (T.overlaps.reverse).length = T.overlaps.length :=
+      List.length_reverse
+    have hTeq := T.len_eq
+    have hTpos := T.blocks_pos
+    -- Length facts about original lists (for omega)
+    have hi' : i + 1 < T.blocks.length := hbl ▸ hi
+    have ho' : i < T.overlaps.length := hol ▸ ho
+    -- Unfold the three reversed/map accesses.
+    -- Note: ho : i < (T.overlaps.reverse).length is exactly what getElem_reverse needs.
+    have e1 : (T.overlaps.reverse)[i]'ho
+        = T.overlaps[T.overlaps.length - 1 - i]'(by omega) :=
+      List.getElem_reverse ho
+    have e2 : (T.blocks.reverse.map (swapAB' A B))[i]'(by omega)
+        = swapAB' A B (T.blocks[T.blocks.length - 1 - i]'(by omega)) := by
+      rw [List.getElem_map, List.getElem_reverse]
+    have e3 : (T.blocks.reverse.map (swapAB' A B))[i + 1]'(by omega)
+        = swapAB' A B (T.blocks[T.blocks.length - 1 - (i + 1)]'(by omega)) := by
+      rw [List.getElem_map, List.getElem_reverse]
+    simp only [e1, e2, e3]
+    -- Align the block indices via congruence (proof irrelevance handles the bounds).
+    have eC : T.blocks[T.blocks.length - 1 - (i + 1)]'(by omega)
+        = T.blocks[T.overlaps.length - 1 - i]'(by omega) := by
+      congr 1
+      omega
+    have eD : T.blocks[T.blocks.length - 1 - i]'(by omega)
+        = T.blocks[(T.overlaps.length - 1 - i) + 1]'(by omega) := by
+      congr 1
+      omega
+    rw [eC, eD]
+    -- Apply the original tiling's validity at j = overlaps.length - 1 - i
+    have hj1 : (T.overlaps.length - 1 - i) + 1 < T.blocks.length := by omega
+    have hj2 : T.overlaps.length - 1 - i < T.overlaps.length := by omega
+    have hmem := T.mem_overlaps _ hj1 hj2
+    have hC : T.blocks[T.overlaps.length - 1 - i]'(by omega) = A
+        ∨ T.blocks[T.overlaps.length - 1 - i]'(by omega) = B :=
+      T.mem_blocks _ (List.getElem_mem (by omega))
+    have hD : T.blocks[(T.overlaps.length - 1 - i) + 1]'(by omega) = A
+        ∨ T.blocks[(T.overlaps.length - 1 - i) + 1]'(by omega) = B :=
+      T.mem_blocks _ (List.getElem_mem hj1)
+    exact overlap_mem_swap hAA hC hD hmem
 
 end FragileProofAudit.LittGame
