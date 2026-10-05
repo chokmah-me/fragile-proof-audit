@@ -8,8 +8,6 @@
   "claims": [
     {
       "id": "zeta2-irrationality-exponent-5019378",
-      "title": "New upper bound for the irrationality exponent of zeta(2) (Giraudin)",
-      "score": 1,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2610.02912",
@@ -22,26 +20,10 @@
       },
       "code": {
         "status": "NONE-GIVEN"
-      },
-      "signals": [
-        "disclosed_llm_help"
-      ],
-      "adjustments": [],
-      "lanes": [
-        [
-          "E",
-          "CAS-transcript replay (exact rational object)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ]
+      }
     },
     {
       "id": "nahm-sum-rank-two-degree-bound",
-      "title": "Uniform degree bound for modular rank-two Nahm sums (Hakimoglu-Brown)",
-      "score": 1,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2610.02743",
@@ -54,22 +36,10 @@
       },
       "code": {
         "status": "NONE-GIVEN"
-      },
-      "signals": [
-        "single_author"
-      ],
-      "adjustments": [],
-      "lanes": [
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ]
+      }
     },
     {
       "id": "quadratic-brown-erdos-sos-pi9-pi8",
-      "title": "Quadratic Brown-Erdos-Sos problem for 3-uniform hypergraphs (Bodnar, Pikhurko, Sun, Wang, Zeng)",
-      "score": 0,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2610.03323",
@@ -86,15 +56,10 @@
       },
       "code": {
         "status": "NONE-GIVEN"
-      },
-      "signals": [],
-      "adjustments": [],
-      "lanes": []
+      }
     },
     {
       "id": "pascal-extremes-p-adic-gcd",
-      "title": "Sharp p-adic extrema for restricted binomial GCDs, Lean-formalized (Fairfax-Ball)",
-      "score": 4,
       "paper": {
         "status": "URL-RESOLVED",
         "url": "https://github.com/jfairfaxball-348/pascal-extremes",
@@ -113,30 +78,10 @@
         "tree_truncated": false,
         "has_lakefile": true,
         "lean_toolchain": "leanprover/lean4:v4.35.0-rc2"
-      },
-      "signals": [
-        "anonymous_or_unaffiliated",
-        "single_author",
-        "ai_generated"
-      ],
-      "adjustments": [
-        "toolchain pinned: leanprover/lean4:v4.35.0-rc2"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ]
+      }
     },
     {
       "id": "unit-distance-exponent-104273",
-      "title": "Unit-distance exponent 1.04273 record lower bound (Naslund)",
-      "score": 5,
       "paper": {
         "status": "URL-RESOLVED",
         "url": "https://github.com/enaslund/unit-distance-bound-0.0427",
@@ -154,33 +99,10 @@
         "lean_files": 2407,
         "tree_truncated": false,
         "has_lakefile": true
-      },
-      "signals": [
-        "ai_generated",
-        "formal_subset_of_claim"
-      ],
-      "adjustments": [
-        "+1: Lean files present, no lean-toolchain pin found"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ],
-        [
-          "E",
-          "CAS-transcript replay (certificate)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ]
+      }
     },
     {
       "id": "four-point-sumset-diameter-compression",
-      "title": "Exact diameter compression for four-point sumset cardinalities (Zhang)",
-      "score": 1,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2610.02216",
@@ -193,22 +115,10 @@
       },
       "code": {
         "status": "NONE-GIVEN"
-      },
-      "signals": [
-        "disclosed_llm_help"
-      ],
-      "adjustments": [],
-      "lanes": [
-        [
-          "E",
-          "CAS-transcript replay (interval certificate)"
-        ]
-      ]
+      }
     },
     {
       "id": "additive-multiplicative-graph-diameter",
-      "title": "Diameter and radius of the additive-multiplicative graph (Hu, Yang)",
-      "score": 0,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2609.39347",
@@ -222,20 +132,10 @@
       },
       "code": {
         "status": "NONE-GIVEN"
-      },
-      "signals": [],
-      "adjustments": [],
-      "lanes": [
-        [
-          "E",
-          "CAS-transcript replay (certificate)"
-        ]
-      ]
+      }
     },
     {
       "id": "genus-bipartite-kneser-h32mod8",
-      "title": "Genus of bipartite Kneser graphs for primes h>3 with h=3 mod 8 (Ulrigg, Metzger)",
-      "score": 0,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2610.03159",
@@ -259,20 +159,10 @@
         "lean_files": 0,
         "tree_truncated": false,
         "has_lakefile": false
-      },
-      "signals": [],
-      "adjustments": [],
-      "lanes": [
-        [
-          "E",
-          "CAS-transcript replay (certificate)"
-        ]
-      ]
+      }
     },
     {
       "id": "moving-sofa-uniqueness",
-      "title": "Uniqueness of Gerver's sofa, Lean-formalized (Vu-Le)",
-      "score": 2,
       "paper": {
         "status": "URL-BLOCKED",
         "url": "https://vltanh.me/projects/lean4-moving-sofa/",
@@ -282,7 +172,7 @@
         "status": "PUBLIC",
         "slug": "vltanh/lean4-moving-sofa",
         "branch": "main",
-        "size_kb": 6606,
+        "size_kb": 8288,
         "pushed_at": "2026-10-05",
         "url": "https://github.com/vltanh/lean4-moving-sofa",
         "head_sha": "16653ae81e0e4f52a362bafae2ad3440100ad065",
@@ -291,25 +181,10 @@
         "tree_truncated": false,
         "has_lakefile": true,
         "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
-      },
-      "signals": [
-        "ai_generated"
-      ],
-      "adjustments": [
-        "toolchain pinned: leanprover/lean4:v4.35.0-rc3",
-        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ]
-      ]
+      }
     },
     {
       "id": "matmul-4x4-with-48-multiplications",
-      "title": "Fast matrix multiplication via recursive <4x4x4:48> algorithms (Dumas et al.)",
-      "score": 0,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2609.12027",
@@ -336,15 +211,8 @@
         "lean_files": 0,
         "tree_truncated": false,
         "has_lakefile": false
-      },
-      "signals": [],
-      "adjustments": [],
-      "lanes": [
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ]
+      }
     }
-  ]
+  ],
+  "last_health_check": "2026-10-05"
 }
