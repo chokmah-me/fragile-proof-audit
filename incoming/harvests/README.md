@@ -49,7 +49,9 @@ signals: ai_generated, released_under_pressure, build_skips_main_file
 
 Computed adjustments (analyzer-added, not in the file): code repo
 unreachable → inputs BLOCKED; Lean files present but no `lean-toolchain`
-pin → +1; paper identifier does not resolve → +1.
+pin → +1; paper identifier does not resolve → +1; Lean repo →
+formalization coverage inventory + LeanExplore probe query written to the
+recon card and `ledger.json` (API metadata only, no clones or builds).
 
 Higher score = more fragile = higher in the recon queue. The score is a
 triage signal, not a verdict. The verdict lock is never touched by the loop.
