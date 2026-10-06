@@ -2,8 +2,9 @@
 #
 # Manual dispatch ONLY (Actions tab -> quick-triage -> Run workflow). Runs on the
 # self-hosted WSL runner. This workflow is triage, not an audit: each job
-# downloads the arXiv e-print tarball fresh, extracts the authors' own ancillary
-# verification scripts, runs the QUICK check, and uploads the log.
+# downloads the source fresh (arXiv e-print tarball, or the author's GitHub
+# repo), extracts the authors' own ancillary verification scripts, runs the
+# QUICK check, and uploads the log.
 #
 # Reading the result: a FAIL here means the author's own quick check does not
 # reproduce on a clean box — a strong fragility signal for ~zero cost. A PASS
@@ -141,3 +142,32 @@ jobs:
         with:
           name: amg-check-certificate-log
           path: amg_check_certificate.log
+
+  # ---- #8 genus of bipartite Kneser graphs (Metzger) ----
+  # BipartiteKneser/verify_all.py: stdlib-only ("All tests use Python's standard
+  # library" per its own docstring) — bounded certificate, exceptional cases,
+  # and construction tests. Fail-closed: exits 1 with "verification failed" on
+  # any disagreement. Source is the author's GitHub repo, shallow-cloned fresh.
+  triage-genus:
+    name: "Kneser genus — verify_all.py"
+    runs-on: self-hosted
+    timeout-minutes: 30
+    steps:
+      - name: Clone genus repo (shallow)
+        run: |
+          set -euo pipefail
+          git clone --depth 1 https://github.com/sandergi/genus.git
+          test -f genus/BipartiteKneser/verify_all.py
+      - name: Run verify_all.py
+        run: |
+          set -euo pipefail
+          cd genus/BipartiteKneser
+          python3 verify_all.py --output "$GITHUB_WORKSPACE/genus_verify_report.json" 2>&1 | tee "$GITHUB_WORKSPACE/genus_verify_all.log"
+      - name: Upload log and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: genus-verify-all
+          path: |
+            genus_verify_all.log
+            genus_verify_report.json
