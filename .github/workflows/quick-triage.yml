@@ -46,22 +46,25 @@ jobs:
 
   # ---- #2 rank-two Nahm sums [K:Q] <= 24 (Hakimoglu-Brown) ----
   # verify_all.sh quick (~30 s): reciprocity certificate for j <= 2 + Section 11 identities.
-  # NEEDS cypari2 (PARI/GP bindings). If pip install fails, the box likely needs
-  # libpari-dev: sudo apt install libpari-dev, then re-run this workflow.
+  # NEEDS cypari2 (PARI/GP bindings). Installed into a job-local venv because the
+  # runner's system Python 3.12 is PEP 668 externally-managed (plain pip install
+  # fails). If the venv build fails, the box likely needs libpari-dev /
+  # python3-venv: sudo apt install libpari-dev python3-venv, then re-run.
   triage-nahm:
     name: "Nahm sums — verify_all.sh quick"
     runs-on: self-hosted
     timeout-minutes: 30
     steps:
-      - name: Ensure cypari2 is importable
+      - name: Set up venv with cypari2
         run: |
           set -euo pipefail
-          python3 -c "import cypari2" 2>/dev/null && { echo "cypari2 already present"; exit 0; }
-          python3 -m pip install cypari2 || {
-            echo "::error::cypari2 install failed — box likely needs libpari-dev (sudo apt install libpari-dev), then re-run"
+          python3 -m venv .triage-venv
+          . .triage-venv/bin/activate
+          pip install cypari2 || {
+            echo "::error::cypari2 install failed inside venv — box likely needs libpari-dev (sudo apt install libpari-dev python3-venv), then re-run"
             exit 1
           }
-          python3 -c "import cypari2; print('cypari2 OK:', cypari2.pari('2+2'))"
+          python -c "import cypari2; print('cypari2 OK:', cypari2.pari('2+2'))"
       - name: Fetch arXiv e-print 2610.02743
         run: |
           set -euo pipefail
@@ -71,6 +74,7 @@ jobs:
       - name: Run verify_all.sh quick
         run: |
           set -euo pipefail
+          . .triage-venv/bin/activate
           cd src/anc/code
           bash verify_all.sh quick 2>&1 | tee "$GITHUB_WORKSPACE/nahm_verify_all_quick.log"
       - name: Upload log
