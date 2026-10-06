@@ -65,7 +65,7 @@ jobs:
             echo "::error::cypari2 install failed inside venv — box likely needs libpari-dev (sudo apt install libpari-dev python3-venv), then re-run"
             exit 1
           }
-          python -c "import cypari2; print('cypari2 OK:', cypari2.pari('2+2'))"
+          python -c "from cypari2 import Pari; pari = Pari(); print('cypari2 OK:', pari('2+2'))"
       - name: Fetch arXiv e-print 2610.02743
         run: |
           set -euo pipefail
