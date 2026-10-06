@@ -1,0 +1,139 @@
+# Quick-triage scratch workflow — author-script replays for harvest 2026-10-05 tier-1 claims.
+#
+# Manual dispatch ONLY (Actions tab -> quick-triage -> Run workflow). Runs on the
+# self-hosted WSL runner. This workflow is triage, not an audit: each job
+# downloads the arXiv e-print tarball fresh, extracts the authors' own ancillary
+# verification scripts, runs the QUICK check, and uploads the log.
+#
+# Reading the result: a FAIL here means the author's own quick check does not
+# reproduce on a clean box — a strong fragility signal for ~zero cost. A PASS
+# is weak evidence (it is the expected outcome) but a prerequisite for any
+# deeper audit. Nothing here touches the verdict lock; nothing here is a verdict.
+#
+# Touches nothing in this repo: no checkout, no repo writes. Logs go to run artifacts.
+
+name: quick-triage
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  # ---- #1 zeta(2) irrationality exponent <= 5.0193784 (Giraudin) ----
+  # verify_zeta2_exact.py: stdlib-only exact rational/p-adic comparisons.
+  # Self-test reproduces Zudilin's 5.09541178, then checks the new point.
+  triage-zeta2:
+    name: "zeta2 exponent — stdlib exact replay"
+    runs-on: self-hosted
+    timeout-minutes: 30
+    steps:
+      - name: Fetch arXiv e-print 2610.02912
+        run: |
+          set -euo pipefail
+          curl -sSL --max-time 180 https://arxiv.org/e-print/2610.02912 -o src.tar.gz
+          mkdir -p src && tar xzf src.tar.gz -C src
+          test -f src/anc/verify_zeta2_exact.py
+      - name: Run stdlib exact verifier
+        run: |
+          set -euo pipefail
+          cd src/anc
+          python3 verify_zeta2_exact.py 2>&1 | tee "$GITHUB_WORKSPACE/verify_zeta2_exact.log"
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zeta2-exact-log
+          path: verify_zeta2_exact.log
+
+  # ---- #2 rank-two Nahm sums [K:Q] <= 24 (Hakimoglu-Brown) ----
+  # verify_all.sh quick (~30 s): reciprocity certificate for j <= 2 + Section 11 identities.
+  # NEEDS cypari2 (PARI/GP bindings). If pip install fails, the box likely needs
+  # libpari-dev: sudo apt install libpari-dev, then re-run this workflow.
+  triage-nahm:
+    name: "Nahm sums — verify_all.sh quick"
+    runs-on: self-hosted
+    timeout-minutes: 30
+    steps:
+      - name: Ensure cypari2 is importable
+        run: |
+          set -euo pipefail
+          python3 -c "import cypari2" 2>/dev/null && { echo "cypari2 already present"; exit 0; }
+          python3 -m pip install cypari2 || {
+            echo "::error::cypari2 install failed — box likely needs libpari-dev (sudo apt install libpari-dev), then re-run"
+            exit 1
+          }
+          python3 -c "import cypari2; print('cypari2 OK:', cypari2.pari('2+2'))"
+      - name: Fetch arXiv e-print 2610.02743
+        run: |
+          set -euo pipefail
+          curl -sSL --max-time 180 https://arxiv.org/e-print/2610.02743 -o src.tar.gz
+          mkdir -p src && tar xzf src.tar.gz -C src
+          test -f src/anc/code/verify_all.sh
+      - name: Run verify_all.sh quick
+        run: |
+          set -euo pipefail
+          cd src/anc/code
+          bash verify_all.sh quick 2>&1 | tee "$GITHUB_WORKSPACE/nahm_verify_all_quick.log"
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nahm-verify-all-quick-log
+          path: nahm_verify_all_quick.log
+
+  # ---- #6 four-point sumset diameter compression (Zhang) ----
+  # reproduce.py quick: stdlib-only, ~8,778 recorded witnesses + tail coverage.
+  # Nonzero exit + FAIL receipt on any disagreement.
+  triage-sumset:
+    name: "sumset compression — reproduce.py quick"
+    runs-on: self-hosted
+    timeout-minutes: 30
+    steps:
+      - name: Fetch arXiv e-print 2610.02216
+        run: |
+          set -euo pipefail
+          curl -sSL --max-time 180 https://arxiv.org/e-print/2610.02216 -o src.tar.gz
+          mkdir -p src && tar xzf src.tar.gz -C src
+          test -f src/anc/reproduce.py
+      - name: Run reproduce.py quick
+        run: |
+          set -euo pipefail
+          cd src/anc
+          python3 reproduce.py quick 2>&1 | tee "$GITHUB_WORKSPACE/sumset_reproduce_quick.log"
+          echo "--- receipt ---"
+          cat runs/latest/receipt.json 2>/dev/null || true
+      - name: Upload log and receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sumset-reproduce-quick
+          path: |
+            sumset_reproduce_quick.log
+            src/anc/runs/latest/receipt.json
+
+  # ---- #7 additive-multiplicative graph diameter (Hu-Yang) ----
+  # check_certificate.py: stdlib-only independent checker (backward propagation).
+  # Reads endpoints from the manuscript .tex; asserts fail the run.
+  # (verify_draft.py, the generator, needs python-flint — out of scope for triage.)
+  triage-amg:
+    name: "additive-multiplicative graph — certificate check"
+    runs-on: self-hosted
+    timeout-minutes: 20
+    steps:
+      - name: Fetch arXiv e-print 2609.39347
+        run: |
+          set -euo pipefail
+          curl -sSL --max-time 180 https://arxiv.org/e-print/2609.39347 -o src.tar.gz
+          mkdir -p src && tar xzf src.tar.gz -C src
+          test -f src/anc/check_certificate.py
+          test -f src/additive_multiplicative_graph.tex
+      - name: Run independent certificate checker
+        run: |
+          set -euo pipefail
+          cd src
+          python3 anc/check_certificate.py additive_multiplicative_graph.tex 2>&1 | tee "$GITHUB_WORKSPACE/amg_check_certificate.log"
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amg-check-certificate-log
+          path: amg_check_certificate.log
