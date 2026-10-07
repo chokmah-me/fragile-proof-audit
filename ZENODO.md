@@ -7,7 +7,7 @@ Two separate Zenodo **concepts** (do **not** merge paper and software):
 | **Paper concept** | [10.5281/zenodo.22926995](https://doi.org/10.5281/zenodo.22926995) | **Stable.** Always resolves to the latest paper PDF. |
 | **Paper (current version)** | [10.5281/zenodo.23200273](https://doi.org/10.5281/zenodo.23200273) | v1.0.4; verdict lock 25→32, §7 autoformalization, §8 PASS-count fix, single-statement AI disclosure. |
 | **Software concept** | [10.5281/zenodo.22927669](https://doi.org/10.5281/zenodo.22927669) | Always latest software zip (GitHub→Zenodo). |
-| **Software (current version)** | [10.5281/zenodo.22927670](https://doi.org/10.5281/zenodo.22927670) | From GitHub Release `v1.0.1`. |
+| **Software (current version)** | [10.5281/zenodo.23200768](https://doi.org/10.5281/zenodo.23200768) | From GitHub Release `v1.0.4`. |
 
 ## Paper version history
 
@@ -22,12 +22,13 @@ Two separate Zenodo **concepts** (do **not** merge paper and software):
 
 | Version DOI | Status | Notes |
 |---|---|---|
-| [10.5281/zenodo.22927670](https://doi.org/10.5281/zenodo.22927670) | **Current** | `v1.0.1`; GitHub→Zenodo webhook. |
+| [10.5281/zenodo.23200768](https://doi.org/10.5281/zenodo.23200768) | **Current** | `v1.0.4`; GitHub→Zenodo webhook. |
+| [10.5281/zenodo.22927670](https://doi.org/10.5281/zenodo.22927670) | Superseded | `v1.0.1`; GitHub→Zenodo webhook. |
 
 ## External links
 
 - **GitHub:** https://github.com/chokmah-me/fragile-proof-audit
-- **Software release:** https://github.com/chokmah-me/fragile-proof-audit/releases/tag/v1.0.1
+- **Software release:** https://github.com/chokmah-me/fragile-proof-audit/releases/tag/v1.0.4
 - **Catalog:** https://chokmah.me/research/trust-but-replay-auditing-published-mathematical-claims-22926996/
 - **OSF (legacy mirror):** https://osf.io/ukmjp/ (DOI [10.17605/OSF.IO/UKMJP](https://doi.org/10.17605/OSF.IO/UKMJP))
 - **ORCID:** https://orcid.org/0000-0002-9040-6914 _(manual add still pending for this work)_
@@ -41,8 +42,8 @@ https://doi.org/10.5281/zenodo.22926995 (concept); https://doi.org/10.5281/zenod
 
 **Software:**
 
-Bilar, D. Y. (2026). *fragile-proof-audit* (v1.0.1). Zenodo.
-https://doi.org/10.5281/zenodo.22927669 (concept); https://doi.org/10.5281/zenodo.22927670 (this zip)
+Bilar, D. Y. (2026). *fragile-proof-audit* (v1.0.4). Zenodo.
+https://doi.org/10.5281/zenodo.22927669 (concept); https://doi.org/10.5281/zenodo.23200768 (this zip)
 
 Gates refute routes, not theorems.
 
