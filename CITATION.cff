@@ -8,7 +8,7 @@ authors:
     orcid: "https://orcid.org/0000-0002-9040-6914"
     affiliation: "Chokmah LLC"
 date-released: "2026-10-06"
-version: "1.0.5"
+version: "1.0.4"
 license: MIT
 url: "https://github.com/chokmah-me/fragile-proof-audit"
 repository-code: "https://github.com/chokmah-me/fragile-proof-audit"

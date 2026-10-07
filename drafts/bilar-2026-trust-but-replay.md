@@ -7,9 +7,9 @@
  [ORCID 0000-0002-9040-6914](https://orcid.org/0000-0002-9040-6914), chokmah-dyb@pm.me *DOI: [10.5281/zenodo.22926995](https://doi.org/10.5281/zenodo.22926995)*
 
 *Companion methods paper to the fragile-proof-audit campaign.
-(v1.0.5) §7 related-work entry on autoformalization (upstream, not overlapping — ArXivLean/LeanExplore/LeanDojo positioning); §8 conclusion PASS count corrected (three → ten).*
+(v1.0.4) Verdict lock grown 25 → 32 gates (17 BREAK / 15 PASS): the seven 2026-09-24 PASS audits pinned — five live-literature confirmations (Holden's C7 factorization, Holden's GMRES counterexample, Webb's d7 = 47, Maierhofer's pseudospectra, Heidary's Latała–Świątkowski) plus the two-route Euler-blowup audit — with a clean 32/32 re-run; repository-public line corrected; §7 related-work entry on autoformalization (upstream, not overlapping); §8 conclusion PASS count corrected (three → ten).*
 
-<p class="hebrew-date" dir="rtl" lang="he">י״ב תִּשְׁרֵי תשפ״ז</p>
+<p class="hebrew-date" dir="rtl" lang="he">כ״ה תשרי תשפ״ז</p>
 
 ## Abstract
 
