@@ -61,6 +61,12 @@ jobs:
           open Lake DSL
           package forge_check where
           require mathlib from git "https://github.com/leanprover-community/mathlib4.git" @ "d13f23b723b8a846827a245b89c10fc7d3f11612"
+          -- Declare the vendored OAI modules as a library; without this,
+          -- `lake build OAI.Probability.Honeycomb.*` fails with "unknown target".
+          lean_lib OAI where
+            roots := #[`OAI.Probability.Honeycomb.FreeEnergy,
+                       `OAI.Probability.Honeycomb.TriangleVisits]
+            globs := #[`OAI.Probability.Honeycomb.+]
           EOF
           mkdir -p OAI/Probability/Honeycomb
           cp ../oai-math/lean/OAI/Probability/Honeycomb/*.lean OAI/Probability/Honeycomb/
