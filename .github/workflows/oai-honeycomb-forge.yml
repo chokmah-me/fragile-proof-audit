@@ -1,0 +1,126 @@
+name: oai-honeycomb-forge
+
+# Independent axiom audit of openai/math family 237 (honeycomb SAW free energy,
+# challenge HoneycombFreeEnergy): builds the 2-file OAI.Probability.Honeycomb
+# subtree under Lean v4.34.1 on a GitHub-hosted runner and runs #print axioms
+# on OAI.HoneycombForce.logPartition_tendsto.
+#
+# Context: the OAI tree is statically clean (no sorry/admit repo-wide, all 405
+# challenge JSONs well-formed with the propext/Quot.sound/Classical.choice
+# allowlist, all solution modules present), but no build has ever been
+# independently verified -- upstream has no CI that builds the Lean code.
+# This workflow is that check, scoped to the smallest famous-theorem target
+# (2 files, 2007 lines, Mathlib-only imports). A scratch project with just
+# mathlib at the pinned rev avoids the repo's 46-package dependency closure.
+#
+# Recon notes (agent VM, not in repo):
+#   ~/workspace/openai-math-recon/RECON-REPORT.md
+#   ~/workspace/openai-math-recon/RECON-005-CATALAN.md
+#   ~/workspace/openai-math-recon/SCOPE-FORGE-RUN.md
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oai-honeycomb-forge
+  cancel-in-progress: false
+
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Cache elan toolchains
+        uses: actions/cache@v4
+        with:
+          path: ~/.elan/toolchains
+          key: elan-v4.34.1
+
+      - name: Sparse-clone openai/math (Honeycomb files only)
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse https://github.com/openai/math.git oai-math
+          cd oai-math
+          git sparse-checkout set --no-cone '/lean/OAI/Probability/Honeycomb/*'
+          git rev-parse HEAD | tee ../OAI_COMMIT
+          ls lean/OAI/Probability/Honeycomb/
+
+      - name: Scratch lake project (mathlib only, pinned rev)
+        run: |
+          mkdir -p forge-check && cd forge-check
+          echo "leanprover/lean4:v4.34.1" > lean-toolchain
+          cat > lakefile.lean <<'EOF'
+          import Lake
+          open Lake DSL
+          package forge_check where
+          require mathlib from git "https://github.com/leanprover-community/mathlib4.git" @ "d13f23b723b8a846827a245b89c10fc7d3f11612"
+          EOF
+          mkdir -p OAI/Probability/Honeycomb
+          cp ../oai-math/lean/OAI/Probability/Honeycomb/*.lean OAI/Probability/Honeycomb/
+
+      - name: Cache lake artifacts
+        uses: actions/cache@v4
+        with:
+          path: forge-check/.lake
+          key: oai-forge-lake-d13f23b723b8a846827a245b89c10fc7d3f11612
+
+      - name: Fetch dependencies
+        working-directory: forge-check
+        run: lake update
+
+      - name: Fetch mathlib prebuilt oleans
+        working-directory: forge-check
+        run: lake exe cache get
+
+      - name: Build Honeycomb modules
+        working-directory: forge-check
+        run: |
+          set -o pipefail
+          lake build OAI.Probability.Honeycomb.FreeEnergy OAI.Probability.Honeycomb.TriangleVisits 2>&1 | tee ../build.log
+
+      - name: Axiom audit
+        working-directory: forge-check
+        run: |
+          cat > AxiomCheck.lean <<'EOF'
+          import OAI.Probability.Honeycomb.FreeEnergy
+          #print axioms OAI.HoneycombForce.logPartition_tendsto
+          EOF
+          lake env lean AxiomCheck.lean > ../axioms.txt 2>&1 || true
+          cat ../axioms.txt
+
+      - name: Verdict (fail-closed)
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          txt = open('axioms.txt').read()
+          allow = {'propext', 'Quot.sound', 'Classical.choice'}
+          m = re.search(r"depends on axioms: \[(.*)\]", txt)
+          if not m:
+              print('FAIL: no axiom listing found -- build or #print axioms did not produce output')
+              print(txt[-3000:])
+              sys.exit(1)
+          found = {a.strip().strip("'") for a in m.group(1).split(',') if a.strip()}
+          extra = found - allow
+          print('theorem axioms:', sorted(found))
+          if extra:
+              print('FAIL: axioms outside allowlist:', sorted(extra))
+              sys.exit(1)
+          print('PASS: axioms within allowlist')
+          EOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: honeycomb-forge-evidence
+          path: |
+            axioms.txt
+            build.log
+            OAI_COMMIT
