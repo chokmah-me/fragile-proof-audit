@@ -299,9 +299,9 @@ What the campaign found, in brief: eight live-literature gates refuted their tar
 
 The open problems are stated in Sec. 6 and not repeated here, except the one that matters most: the certificate cost curve. Until large computational certificates can be checked inside a proof kernel at reasonable cost, the strongest computer-assisted proofs will rest on external checkers - software of exactly the kind this paper argues should be distrusted. Closing that gap is the work that would make this playbook obsolete. We would welcome it.
 
-## AI Utilization Statement 
+## AI Utilization Statement
 
-The candidate-harvest list was assembled with Kimi 3 and Grok 3.1 deep research; gate execution, audit-note drafting, and manuscript preparation were performed by Muse Spark agents at the author's direction. Multiple rounds of pre-submission internal-consistency review of this draft were performed by Claude Opus 5.5 (Anthropic), which cross-checked disposition counts, stratum totals, attack-type labels, and numerical values across sections, tables, and references, and flagged contradictions for the author to resolve. Human-review protocol: the author directed a clean re-run of all 32 locked gates (32/32 [ok], zero drift) and read every gate script, audit note, and prose disposition before this draft.
+Muse (Meta) agents performed the candidate-harvest research, gate execution, audit-note drafting, manuscript preparation, and pre-submission consistency review at the author's direction; the author set the targets, reviewed every verdict, and owns every disposition.
 
 ## References
 
