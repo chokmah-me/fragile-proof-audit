@@ -9,9 +9,13 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from harness_pin import harness_pin  # noqa: E402
 
 PATTERNS = {
     "sorry": re.compile(r"\bsorry\b"),
@@ -116,6 +120,7 @@ def main() -> int:
     args = ap.parse_args()
     report = scan_tree(args.root)
     enrich_statement_heuristics(args.root.resolve(), report)
+    report["harness"] = harness_pin()
 
     print(f"root: {report['root']}")
     print(f"lean files: {report['lean_file_count']}")

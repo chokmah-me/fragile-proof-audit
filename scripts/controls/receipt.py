@@ -16,11 +16,15 @@ what the instrument found and when.
 from __future__ import annotations
 
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "results"
+
+sys.path.insert(0, str(ROOT / "scripts"))
+from harness_pin import harness_pin  # noqa: E402
 
 
 def write_receipt(
@@ -44,6 +48,7 @@ def write_receipt(
         "gate": gate,
         "instrument": True,
         "registered_in_check_py": False,
+        "harness": harness_pin(),
         "checks": checks,
         "verdict": verdict,
         "ok": ok,
