@@ -1,0 +1,39 @@
+# One-shot: collect the ai-os gate skill bodies from the self-hosted
+# runner's machine and upload them as an artifact.
+# Manual dispatch only. Reads ONLY the four skill directories below —
+# no credentials, no config files, no other trees.
+name: fetch-gate-skills
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - name: Collect gate skill bodies
+        shell: bash
+        run: |
+          set -u
+          base="/mnt/c/Users/Elke Shayna/Documents/00Dev"
+          out="${RUNNER_TEMP}/gate-skill-bodies"
+          rm -rf "$out"
+          mkdir -p "$out"
+          for d in computational-claim-gate manuscript-integrity-gate lean-proof-forge paper-robustness-check; do
+            if [ -d "$base/$d" ]; then
+              cp -r "$base/$d" "$out/$d"
+              echo "collected: $d"
+            else
+              echo "MISSING: $base/$d"
+            fi
+          done
+          tar -czf "${RUNNER_TEMP}/gate-skill-bodies.tar.gz" -C "$out" .
+          ls -la "${RUNNER_TEMP}/gate-skill-bodies.tar.gz"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-skill-bodies
+          path: ${{ runner.temp }}/gate-skill-bodies.tar.gz
+          if-no-files-found: error
