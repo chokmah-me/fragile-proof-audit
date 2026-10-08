@@ -19,6 +19,8 @@ tarball).
 19-Venn diagrams exist, published as machine-checkable certificates,
 plus 11- and 13-curve non-monotone examples.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-28` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Verdict: PASS (verify/audit)
 
 ## What was run

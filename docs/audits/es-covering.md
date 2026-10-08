@@ -6,6 +6,8 @@ Erdős–Straus Conjecture*, arXiv:2404.01508.
 `scripts/gates/es_cover.py`, `results/es_cover_gate_meta.json`,
 `incoming/erdos-straus-2404.01508.pdf`.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-20` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Bug report (lemma · instance · false instance)
 
 | Field | Content |

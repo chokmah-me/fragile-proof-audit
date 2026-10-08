@@ -7,6 +7,8 @@
 
 **Verdicts: Type-E PASS. Type-G NO DISCREPANCY** (honest scope boundary on both sides). The Lemma-3 contraction certificate is exactly as claimed, and the catalog's Lean formalization explicitly disclaims the degree-47 result.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-24` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## The claim
 
 For the seven-product family X_7, the closure degree d_7 = 47. Lower bound: a 49-parameter family with exact contact through degree 47 (Lemma 3's Banach certificate), lifted by an inverse-function/scaling argument to all of V_47. Upper bound: X_7 irreducible, dim ≤ 49; V_48 ⊆ X_7 would force X_7 = V_48, contradicted by seven squarings producing x^128. The paper claims no Lean verification, no proof-kernel check, no external human peer review — and none is needed for the gate.

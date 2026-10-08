@@ -16,6 +16,8 @@ Pinned at `incoming/leg-ns-2307.08725v4.pdf`
 decisive step is **Proposition 2.18** (analytic continuation); the paper was
 read fresh and the dossier's equation numbers were not trusted.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-23` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Claim under test
 
 Theorem 2.19: for 0<λ<1, π(x+x^λ)−π(x) ∼ x^λ/log x. Proposition 4.6 deduces

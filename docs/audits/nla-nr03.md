@@ -7,6 +7,8 @@
 
 **Verdicts: Type-E PASS. Type-G GAP** (catalog verification credit, not the proof route). The mathematical claim — rank₊(C7) ≤ 127 via explicit exact factorization — is sound. What fails is RESOLVED.md's "Lean verified" credit for it.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-24` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## The claim
 
 NR-03 asks whether rank₊(C_n) = 2ⁿ for every n ≥ 3, where C_n(a,b) = (1 − |a ∩ b|)². Holden proves rank₊(C_n) ≤ 2ⁿ⁻¹ + C(n,1) + C(n,2) + C(n,4), hence "rank₊(C7) ≤ 64 + 7 + 21 + 35 = 127 < 128". The paper is explicit about what it does *not* claim: "It does not assert that the exact nonnegative rank of C7 is 127, or that 7 is the smallest counterexample dimension."

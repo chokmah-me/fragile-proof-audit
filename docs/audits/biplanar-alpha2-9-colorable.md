@@ -19,6 +19,8 @@ Zenodo record byte-for-byte), 26,637 entries, extracted 2026-09-28.
 independent set of size 3; plus `earth_moon_18'` for the order-18 apex
 case the counting argument leaves open.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-28` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Verdict: PASS (verify/audit)
 
 ## What was run

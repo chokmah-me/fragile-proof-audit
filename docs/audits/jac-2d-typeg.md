@@ -18,6 +18,8 @@ expository/computational slips were identified; none affects logical validity.
 The 2D Jacobian conjecture itself is untouched (gates refute routes, not
 theorems).
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-23` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Proof skeleton (as written)
 
 Assume a Keller pair σ = (F,G) is not injective. Let

@@ -14,6 +14,8 @@ committed).
 SHA-256 `c3b0e0b9364f669763bdb8fd1e3914bcd55acdee17fe7a5adbbb2e92da22beb4`
 (matches the `CERT_SHA` pin in `scripts/exact_certificate/full_seven_long_common.py`).
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-28` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Verdict: PASS (verify/audit)
 
 The exact-integer certificate replay passes end to end on this machine, the

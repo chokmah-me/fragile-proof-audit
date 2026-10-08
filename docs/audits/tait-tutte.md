@@ -6,6 +6,8 @@ refutation via an explicit 46-vertex graph.
 `scripts/gates/tait_tutte.py`, `scripts/controls/tait_tutte_break_control.py`,
 `results/tait_tutte_gate_meta.json`.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-22` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Bug report (lemma · instance · false instance)
 
 | Field | Content |

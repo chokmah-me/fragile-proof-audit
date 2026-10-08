@@ -7,6 +7,8 @@
 
 **Verdicts: Type-A PASS. Type-G NO DISCREPANCY.** The quantitative headline replays on the witness family, the analytic engine's key lemma replays exactly, and the apparent catalog/tree contradiction on Palomar registration resolves in the catalog's favor against registry ground truth.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-24` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## The claim
 
 For real n×n X with independent mean-zero entries, all absolute moments finite, and ||X_ij||_{2r} ≤ α||X_ij||_r (r ≥ 1):

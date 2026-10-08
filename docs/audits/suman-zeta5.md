@@ -4,6 +4,8 @@
 **Refutation:** Chen–He–He–Huang–Li–Tang–Wu–Xu–Yang–Yu, arXiv:2411.16774.  
 **Campaign objects:** `docs/blueprint/suman-zeta5.md`, `scripts/gates/suman_eq48.py`, `FragileProofAudit/SumanZeta5/BaseCase.lean`, `FragileProofAudit/IrrationalityCriterion.lean`.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-20` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Bug report (lemma · instance · false instance)
 
 | Field | Content |

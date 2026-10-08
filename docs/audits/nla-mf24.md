@@ -7,6 +7,8 @@
 
 **Verdicts: Type-A PASS. Type-G NO DISCREPANCY** (honest scope boundary on both sides). The quantitative chain replays exactly, and the catalog's Lean formalization explicitly disclaims the sharp constants.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-24` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## The claim
 
 For every integer m ≥ 2 and real t > 1, weighted shifts X = X_{m,t}, Y = Y_{m,t} of order N = (m+1)² have super-identical pseudospectra (X ∼_{sip} Y), and for D = m+2, p_m(z) = Σ_{j=1}^m z^{Dj}: ‖p_m(X)‖₂ ≥ t²√m, ‖p_m(Y)‖₂ ≤ t²+m−1, so the ratio ≥ √m/(1+(m−1)/t²). At t = m the ratio ≥ (4/5)√m → ∞ — finite rational matrices, no limit of matrices needed. Corollary 3: C_N ≥ √(⌊√N⌋−1) for N ≥ 9, hence lim inf C_N/N^{1/4} ≥ 1.

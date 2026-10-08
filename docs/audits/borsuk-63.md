@@ -8,6 +8,8 @@
 **Instrument:** `scripts/gates/borsuk63.py` → `results/borsuk63_gate_meta.json`  
 **Registered in `check.py`:** no
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-20` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Verdict (route, not theorem)
 
 Borsuk’s conjecture is already known false in high dimension. This pin

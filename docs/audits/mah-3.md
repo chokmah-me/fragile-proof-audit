@@ -8,6 +8,8 @@
 (SHA-256 `cd2b5f801f3015e3b7bfc883103f9fa33e8e20817729ed8072ec50af1ad4405f`,
 493,186 bytes; PDF metadata confirms title and all four authors).
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-23` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Disposition: SKIP (counting-layer gate PASS, prose clean, connectedness ungated)
 
 **Verdict: SKIP — the gate passed; the claim is set aside.** The finite counting core (Lemma 5.1)

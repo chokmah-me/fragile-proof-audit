@@ -10,6 +10,8 @@ in `‖Σ A_k‖_p ≤ c(m) ‖ |Σ |A_k| | ‖_p`.
 `results/tang_zhang_break_control_meta.json`,
 `incoming/tang-zhang-2608.15558.pdf`.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-22` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Bug report (lemma · instance · false instance)
 
 | Field | Content |

@@ -13,6 +13,8 @@
 > had to correct it.** The verdict never changed; the statement being refuted
 > did. Read "The transcription failure" below before citing anything here.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-22` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Bug report (lemma · instance · false instance)
 
 For `A ⊆ 𝔽_p` write `A* = (A+A) ∪ (AA)`.

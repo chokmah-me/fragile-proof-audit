@@ -9,6 +9,8 @@ Preprints.org 202601.1609.v1 (doi:10.20944/preprints202601.1609.v1).
 sha256 `686998ff30f778fba4aa9a3874ccf09637bd76663a4edb7c39fae24b1125aae2`
 (gitignored per repo convention; SHA recorded here and in the gate meta JSON).
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-19` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Correction to the prior (2026-09) verdict
 
 The original Phase 2(d) note, written against OCR/indexed excerpts before the

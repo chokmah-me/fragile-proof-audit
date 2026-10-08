@@ -17,6 +17,8 @@ offspring uniform on {2,3} is strictly decreasing on [0, 1.755], extending
 the published range (Song–Wang–Xiang: λ ≤ 2/(1+√(1/2)) ≈ 1.1716). The repo
 certifies [1.17, 1.755]; [0, 1.17] is the published result.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-28` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Verdict: PASS (verify/audit)
 
 ## What was run

@@ -7,6 +7,8 @@
 `incoming/agama-twin-1707.03265v4.pdf`.
 **Lock:** `tpc_area` → BREAK.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-22` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Bug report
 
 | Field | Content |

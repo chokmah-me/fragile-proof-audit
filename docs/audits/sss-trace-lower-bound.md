@@ -14,6 +14,8 @@ sha256 `3caa729730c5c52d755353ccf5e643372aadd0d792c37b14fcdb932ec6f1abe5`
 `prove_SSS_C86.py`, `13999f714961e8b37bf68a6ce8c86bb06629555fa9f065af2446046b876fca70`
 `verify_C86.py`.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-28` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Verdict: PASS (verify/audit)
 
 The certificate replay succeeds end to end. λ_SSS ≥ 1.80220 is verified by

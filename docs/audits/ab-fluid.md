@@ -4,6 +4,8 @@
 **Repo:** `tristanbuckmaster/fluid_lean` @ `d0124689230b58b4f86e7b90ac59de06404b3b6b`
 **Verdict:** **PASS** (Euler + Boussinesq routes; Type A + Type E + Type G)
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-24` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Claim
 
 Smooth space-time forcing drives finite-time blowup for 3D Euler, planar

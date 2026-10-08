@@ -7,6 +7,8 @@
 **Campaign pin (for contrast):** `v4.32.2`  
 **Scanner:** `scripts/forge/axiom_audit.py` → `results/gamma_audit_meta.json`
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-18` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Verdict (route, not theorem)
 
 The artifact does **not** prove `Irrational Real.eulMascheroniConst` (or any mathlib γ).

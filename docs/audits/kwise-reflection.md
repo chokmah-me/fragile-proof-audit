@@ -15,6 +15,8 @@ sha256 `062ab99260010e6ff89ffc07fb4ad9cd33afa60a67530c8aa4b98594f1a7f3cb`
 `e550eaabb5b84826bb4603c70080bdd5ca3596e70210dc7645240c2c268e08de`
 `verify_reflection.py`.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-28` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Verdict: PASS (verify/audit)
 
 The exact-arithmetic verifier reproduces PASS, its outputs are byte-identical

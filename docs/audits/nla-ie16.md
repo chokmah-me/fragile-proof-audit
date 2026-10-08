@@ -7,6 +7,8 @@
 
 **Verdicts: Type-A PASS. Type-G GAP** (catalog verification credit, not the proof route). The nine-point witness is exactly as claimed: R_4 > 13/10 > 4/π. What fails is RESOLVED.md's "Lean verified" credit for it.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-24` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## The claim
 
 IE-16 asks whether R_k(E) = M_k(E)/B_k(E) ≤ 4/π for every admissible set, where M_k is the degree-k residual minimum with p(0) = 1 and B_k the max over (k+1)-point subsets. Holden's Theorem 1.1: the nine-point set L = {ω^a + 10^{−3}ω^b : a,b ∈ {0,1,2}} at degree 4 satisfies M_4(L)/max_{|S|=5} M_4(S) > 13/10 > 4/π, with M_4(L) = 3003003000/1001003001001 and actual ratio ≈ 1.33299891979475829424. Theorem 1.2 (stronger, analytic): no finite dimension-independent constant can replace 4/π.

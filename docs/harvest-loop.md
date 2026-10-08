@@ -53,6 +53,9 @@ autoformalization-tool recon steps before deep gates:
 - The loop never clones code, never runs builds, never downloads artifacts.
   Running anything waits for the target pick.
 - The loop never touches the verdict lock.
+- Every audit note pins its agent harness (model + harness + version + run
+  date) in the header block, the same way it pins the Lean toolchain —
+  harness choice moves results more than model choice.
 - The weekly scheduled run with no new harvest does a health re-check of
   the latest harvest's identifiers and reports only on drift (repo gone
   private, new HEAD, paper v2/withdrawn).

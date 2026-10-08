@@ -7,6 +7,8 @@
 `scripts/gates/rr_qexpand.py`, `results/rr_qexpand_gate_meta.json`,
 `incoming/rr-2608.05480.pdf`, `incoming/rr-2608.15219.pdf`.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-20` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Bug report (lemma · instance · false instance)
 
 | Field | Content |

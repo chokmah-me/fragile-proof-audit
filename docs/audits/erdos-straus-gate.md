@@ -4,6 +4,8 @@
 Erdos-Straus Conjecture" (arXiv:2404.01508v3, 2024).
 **Date:** 2026-09-23. **Checker:** `scripts/gates/erdos_straus_checker.py`.
 
+**Agent provenance (reconstructed):** Muse (Meta) · model `Muse Spark 1.3` · run date `2026-09-23` · added before the harness-pinning policy (2026-10-08); the verdict rests on pinned artifacts, independent of the agent transcript.
+
 ## Claim under test
 
 **Conjecture 1** (paper L379–382): every prime `p` admits `d,n ∈ ℕ` with
