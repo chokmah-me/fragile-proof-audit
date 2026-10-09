@@ -92,14 +92,19 @@ jobs:
           cd oai-math
           git checkout '${{ inputs.oai_commit }}'
           git rev-parse HEAD | tee ../OAI_COMMIT
+          # NOTE: input values may contain shell metacharacters ('|' in the
+          # dep specs). Always assign to a quoted variable FIRST; the shell
+          # parses metacharacters in source text, never in expansions.
+          OAI_SUBDIRS='${{ inputs.oai_subdirs }}'
+          DEP_PATCHES='${{ inputs.dep_patches }}'
           SPARSE=""
-          for sub in ${{ inputs.oai_subdirs }}; do SPARSE="$SPARSE /lean/$sub/*"; done
-          for pp in ${{ inputs.dep_patches }}; do SPARSE="$SPARSE /${pp#*|}"; done
+          for sub in $OAI_SUBDIRS; do SPARSE="$SPARSE /lean/$sub/*"; done
+          for pp in $DEP_PATCHES; do SPARSE="$SPARSE /${pp#*|}"; done
           # shellcheck disable=SC2086
           git sparse-checkout set --no-cone $SPARSE
           # expected vendored .lean count, straight from the pinned commit
           expected=0
-          for sub in ${{ inputs.oai_subdirs }}; do
+          for sub in $OAI_SUBDIRS; do
             c=$(git ls-files "lean/$sub" | grep -c '\.lean$')
             echo "subdir lean/$sub: $c lean files"
             expected=$((expected + c))
@@ -111,9 +116,11 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p forge-stage family-forge
+          OAI_SUBDIRS2='${{ inputs.oai_subdirs }}'
+          BUILD_ROOTS='${{ inputs.build_roots }}'
           cd oai-math
           i=0
-          for sub in ${{ inputs.oai_subdirs }}; do
+          for sub in $OAI_SUBDIRS2; do
             if [ $i -eq 0 ]; then tar cf ../forge-stage/stage.tar "lean/$sub";
             else tar rf ../forge-stage/stage.tar "lean/$sub"; fi
             i=$((i+1))
@@ -126,19 +133,20 @@ jobs:
           [ "$vendored" -eq "$expected" ] || { echo "FAIL: vendored $vendored != expected $expected"; exit 1; }
           mv lean/OAI ../family-forge/OAI
           cd ..
-          for mod in ${{ inputs.build_roots }}; do
+          for mod in $BUILD_ROOTS; do
             f="family-forge/$(echo "$mod" | tr . /).lean"
             [ -f "$f" ] || { echo "FAIL: build root module file missing: $f"; exit 1; }
           done
           echo "all build roots present"
           cd family-forge
           echo "leanprover/lean4:v4.34.1" > lean-toolchain
+          EXTRA_DEPS='${{ inputs.extra_deps }}'
           {
             echo 'import Lake'
             echo 'open Lake DSL'
             echo 'package family_forge where'
             echo ''
-            for dep in ${{ inputs.extra_deps }}; do
+            for dep in $EXTRA_DEPS; do
               name="${dep%%|*}"; rest="${dep#*|}"; url="${rest%%|*}"; rev="${rest##*|}"
               echo "require $name from git \"$url\" @ \"$rev\""
             done
@@ -173,7 +181,8 @@ jobs:
       - name: Apply upstream dependency patches
         run: |
           set -euo pipefail
-          for pp in ${{ inputs.dep_patches }}; do
+          DEP_PATCHES2='${{ inputs.dep_patches }}'
+          for pp in $DEP_PATCHES2; do
             pkg="${pp%%|*}"; p="${pp#*|}"
             echo "applying oai-math/$p to family-forge/.lake/packages/$pkg"
             (cd "family-forge/.lake/packages/$pkg" && git apply "../../../../oai-math/$p")
@@ -190,15 +199,17 @@ jobs:
         timeout-minutes: 330
         run: |
           set -o pipefail
+          BUILD_ROOTS3='${{ inputs.build_roots }}'
           # shellcheck disable=SC2086
-          lake build ${{ inputs.build_roots }} 2>&1 | tee ../build.log
+          lake build $BUILD_ROOTS3 2>&1 | tee ../build.log
 
       - name: Axiom audit
         working-directory: family-forge
         run: |
           set -euo pipefail
+          BUILD_ROOTS2='${{ inputs.build_roots }}'
           {
-            for mod in ${{ inputs.build_roots }}; do echo "import $mod"; done
+            for mod in $BUILD_ROOTS2; do echo "import $mod"; done
             echo "#print axioms ${{ inputs.theorem_name }}"
           } > AxiomCheck.lean
           cat AxiomCheck.lean
