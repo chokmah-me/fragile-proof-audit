@@ -8,7 +8,7 @@ fail-closed PASS/FAIL, scoped strictly to the pinned revision that ran.
 | Family | Claim | Verdict | Axioms | Run | Receipt |
 |---|---|---|---|---|---|
 | 005 — Catalan | `OAI.InternalCatalan.catalan_irrational` (irrationality of Catalan's constant) | PASS | propext, Classical.choice, Quot.sound | [37963519628](https://github.com/chokmah-me/fragile-proof-audit/actions/runs/37963519628) (2026-10-09, `oai-family-forge.yml` @ `7355ef4`, 988 files) | [005-catalan.md](005-catalan.md) |
-| 237 — Honeycomb | `OAI.HoneycombForce.logPartition_tendsto` | PASS | propext, Classical.choice, Quot.sound | [37647725873](https://github.com/chokmah-me/fragile-proof-audit/actions/runs/37647725873) (2026-10-07, `oai-honeycomb-forge` @ `e16a378`, openai/math `adc7f12`) | run log (no standalone receipt file was written at the time) |
+| 237 — Honeycomb | `OAI.HoneycombForce.logPartition_tendsto` | PASS | propext, Classical.choice, Quot.sound | [37647725873](https://github.com/chokmah-me/fragile-proof-audit/actions/runs/37647725873) (2026-10-07, `oai-honeycomb-forge` @ `e16a378`, openai/math `adc7f12`, 2 files) | [237-honeycomb.md](237-honeycomb.md) |
 
 ## Method
 
