@@ -1,0 +1,257 @@
+name: oai-family-forge
+
+# Parameterized independent axiom audit for openai/math Lean families.
+#
+# One dispatch per family. The build runs on a fresh GitHub-hosted runner
+# (ubuntu-latest), independent of any dev box: it vendors the family's OAI
+# subtree from a pinned openai/math commit into a scratch Lean v4.34.1
+# project, builds the family's root modules, and runs #print axioms on the
+# family's headline theorem, failing closed unless the axioms are within
+# {propext, Quot.sound, Classical.choice}.
+#
+# Prototype: family 237 (honeycomb), oai-honeycomb-forge run 37647725873
+# (PASS: [propext, Classical.choice, Quot.sound]).
+# First parameterized run: family 005 (Catalan).
+#
+# Inputs:
+#   family_id    e.g. "005"
+#   family_label e.g. "Catalan -- Irrationality of Catalan's constant"
+#   oai_commit   pinned openai/math commit (full SHA)
+#   oai_subdirs  space-separated OAI subtrees under lean/, e.g. "OAI/NumberTheory/Catalan"
+#   extra_deps   space-separated "name|url|rev" lake deps (may be empty)
+#   dep_patches  space-separated "pkgdir|oai_relpath" upstream patches to apply
+#                after fetch, e.g. "PrimeNumberTheoremAnd|lean/patches/PrimeNumberTheoremAnd-lean4341.patch"
+#   build_roots  space-separated Lean modules to build, e.g. "OAI.NumberTheory.Catalan.Main"
+#   theorem_name fully-qualified headline theorem for #print axioms
+#
+# Harness rules baked in (no failure goes to waste):
+#   - vendoring asserts the vendored .lean count equals the commit's file
+#     count for the subdirs, and that every build root landed (run #1 class);
+#   - `require mathlib` goes LAST in the scratch lakefile so its satellite
+#     revs win, and the fetch step fails fast on "pins different versions"
+#     (run #2 class).
+
+on:
+  workflow_dispatch:
+    inputs:
+      family_id:
+        description: 'Family id (e.g. 005)'
+        required: true
+      family_label:
+        description: 'Human-readable family label'
+        required: true
+      oai_commit:
+        description: 'Pinned openai/math commit (full SHA)'
+        required: true
+        default: 'fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb'
+      oai_subdirs:
+        description: 'Space-separated OAI subtrees under lean/ to vendor'
+        required: true
+      extra_deps:
+        description: 'Space-separated name|url|rev lake deps (may be empty)'
+        required: false
+        default: ''
+      dep_patches:
+        description: 'Space-separated pkgdir|oai_relpath upstream patches (may be empty)'
+        required: false
+        default: ''
+      build_roots:
+        description: 'Space-separated Lean modules to build'
+        required: true
+      theorem_name:
+        description: 'Fully-qualified headline theorem for #print axioms'
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oai-family-forge
+  cancel-in-progress: false
+
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Cache elan toolchains
+        uses: actions/cache@v4
+        with:
+          path: ~/.elan/toolchains
+          key: elan-v4.34.1
+
+      - name: Clone openai/math and pin commit
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none https://github.com/openai/math.git oai-math
+          cd oai-math
+          git checkout '${{ inputs.oai_commit }}'
+          git rev-parse HEAD | tee ../OAI_COMMIT
+          SPARSE=""
+          for sub in ${{ inputs.oai_subdirs }}; do SPARSE="$SPARSE /lean/$sub/*"; done
+          for pp in ${{ inputs.dep_patches }}; do SPARSE="$SPARSE /${pp#*|}"; done
+          # shellcheck disable=SC2086
+          git sparse-checkout set --no-cone $SPARSE
+          # expected vendored .lean count, straight from the pinned commit
+          expected=0
+          for sub in ${{ inputs.oai_subdirs }}; do
+            c=$(git ls-files "lean/$sub" | grep -c '\.lean$')
+            echo "subdir lean/$sub: $c lean files"
+            expected=$((expected + c))
+          done
+          echo "$expected" > ../EXPECTED_COUNT
+          echo "expected total: $expected"
+
+      - name: Scratch lake project and vendor family sources
+        run: |
+          set -euo pipefail
+          mkdir -p forge-stage family-forge
+          cd oai-math
+          i=0
+          for sub in ${{ inputs.oai_subdirs }}; do
+            if [ $i -eq 0 ]; then tar cf ../forge-stage/stage.tar "lean/$sub";
+            else tar rf ../forge-stage/stage.tar "lean/$sub"; fi
+            i=$((i+1))
+          done
+          cd ../forge-stage
+          tar xf stage.tar
+          vendored=$(find lean/OAI -name '*.lean' | wc -l)
+          expected=$(cat ../EXPECTED_COUNT)
+          echo "vendored lean files: $vendored (expected $expected)"
+          [ "$vendored" -eq "$expected" ] || { echo "FAIL: vendored $vendored != expected $expected"; exit 1; }
+          mv lean/OAI ../family-forge/OAI
+          cd ..
+          for mod in ${{ inputs.build_roots }}; do
+            f="family-forge/$(echo "$mod" | tr . /).lean"
+            [ -f "$f" ] || { echo "FAIL: build root module file missing: $f"; exit 1; }
+          done
+          echo "all build roots present"
+          cd family-forge
+          echo "leanprover/lean4:v4.34.1" > lean-toolchain
+          {
+            echo 'import Lake'
+            echo 'open Lake DSL'
+            echo 'package family_forge where'
+            echo ''
+            for dep in ${{ inputs.extra_deps }}; do
+              name="${dep%%|*}"; rest="${dep#*|}"; url="${rest%%|*}"; rev="${rest##*|}"
+              echo "require $name from git \"$url\" @ \"$rev\""
+            done
+            echo ''
+            echo '-- Harness rule: mathlib MUST be last. Extra deps pin older'
+            echo '-- satellite revs; with mathlib last, its revs win (matching'
+            echo '-- upstream manifests) and `lake exe cache get` hashes verify.'
+            echo 'require mathlib from git "https://github.com/leanprover-community/mathlib4.git" @ "d13f23b723b8a846827a245b89c10fc7d3f11612"'
+            echo ''
+            echo '-- Declare the vendored OAI modules as a library; without this,'
+            echo '-- `lake build OAI....` fails with "unknown target".'
+            echo 'lean_lib OAI where'
+          } > lakefile.lean
+          cat lakefile.lean
+
+      - name: Cache lake artifacts
+        uses: actions/cache@v4
+        with:
+          path: family-forge/.lake
+          key: oai-family-forge-${{ inputs.family_id }}-${{ inputs.oai_commit }}
+
+      - name: Fetch dependencies
+        working-directory: family-forge
+        run: |
+          set -o pipefail
+          lake update 2>&1 | tee ../lake-update.log
+          if grep -q "pins different versions" ../lake-update.log; then
+            echo "FAIL: dependency satellite version conflict -- 'require mathlib' must be last in lakefile.lean"
+            exit 1
+          fi
+
+      - name: Apply upstream dependency patches
+        run: |
+          set -euo pipefail
+          for pp in ${{ inputs.dep_patches }}; do
+            pkg="${pp%%|*}"; p="${pp#*|}"
+            echo "applying oai-math/$p to family-forge/.lake/packages/$pkg"
+            (cd "family-forge/.lake/packages/$pkg" && git apply "../../../../oai-math/$p")
+            git -C "family-forge/.lake/packages/$pkg" diff --stat | tail -2
+          done
+          echo "patches applied (none listed = input empty)"
+
+      - name: Fetch mathlib prebuilt oleans
+        working-directory: family-forge
+        run: lake exe cache get
+
+      - name: Build family modules
+        working-directory: family-forge
+        timeout-minutes: 330
+        run: |
+          set -o pipefail
+          # shellcheck disable=SC2086
+          lake build ${{ inputs.build_roots }} 2>&1 | tee ../build.log
+
+      - name: Axiom audit
+        working-directory: family-forge
+        run: |
+          set -euo pipefail
+          {
+            for mod in ${{ inputs.build_roots }}; do echo "import $mod"; done
+            echo "#print axioms ${{ inputs.theorem_name }}"
+          } > AxiomCheck.lean
+          cat AxiomCheck.lean
+          lake env lean AxiomCheck.lean > ../axioms.txt 2>&1 || true
+          cat ../axioms.txt
+
+      - name: Verdict (fail-closed)
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          txt = open('axioms.txt').read()
+          allow = {'propext', 'Quot.sound', 'Classical.choice'}
+          m = re.search(r"depends on axioms: \[(.*)\]", txt)
+          if not m:
+              print('FAIL: no axiom listing found -- build or #print axioms did not produce output')
+              print(txt[-3000:])
+              sys.exit(1)
+          found = {a.strip().strip("'") for a in m.group(1).split(',') if a.strip()}
+          extra = found - allow
+          print('theorem: ${{ inputs.theorem_name }}')
+          print('theorem axioms:', sorted(found))
+          if extra:
+              print('FAIL: axioms outside allowlist:', sorted(extra))
+              sys.exit(1)
+          print('PASS: axioms within allowlist')
+          EOF
+
+      - name: Write pins file
+        if: always()
+        run: |
+          cat > PINS <<EOF
+          family_id=${{ inputs.family_id }}
+          family_label=${{ inputs.family_label }}
+          oai_commit=${{ inputs.oai_commit }}
+          oai_subdirs=${{ inputs.oai_subdirs }}
+          extra_deps=${{ inputs.extra_deps }}
+          dep_patches=${{ inputs.dep_patches }}
+          build_roots=${{ inputs.build_roots }}
+          theorem=${{ inputs.theorem_name }}
+          mathlib=d13f23b723b8a846827a245b89c10fc7d3f11612
+          toolchain=leanprover/lean4:v4.34.1
+          EOF
+          cat PINS
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: family-forge-evidence-${{ inputs.family_id }}
+          path: |
+            axioms.txt
+            build.log
+            lake-update.log
+            OAI_COMMIT
+            EXPECTED_COUNT
+            PINS
