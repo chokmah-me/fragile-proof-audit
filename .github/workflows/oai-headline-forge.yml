@@ -69,15 +69,24 @@ jobs:
       - name: Scratch lake project (3 deps at upstream-pinned revs)
         run: |
           set -euo pipefail
+          # Clean slate: a previous run's .lake may hold a manifest resolved
+          # with the old require order.
+          rm -rf headline-forge headline-stage
           mkdir -p headline-forge && cd headline-forge
           echo "leanprover/lean4:v4.34.1" > lean-toolchain
           cat > lakefile.lean <<'EOF'
           import Lake
           open Lake DSL
           package headline_forge where
-          require mathlib from git "https://github.com/leanprover-community/mathlib4.git" @ "d13f23b723b8a846827a245b89c10fc7d3f11612"
+          -- NOTE: mathlib MUST come last. PrimeNumberTheoremAnd and
+          -- rellich-kondrachov pin older revisions of mathlib's satellite
+          -- packages (batteries, aesop, Qq, ...); with mathlib first, lake
+          -- resolves to those older revs and `lake exe cache get` then
+          -- computes wrong hashes ("failed to fetch cache"). With mathlib
+          -- last, its satellite revs win, matching upstream's manifest.
           require PrimeNumberTheoremAnd from git "https://github.com/AlexKontorovich/PrimeNumberTheoremAnd.git" @ "c39a751132c88b6e8080b74c74023fd95b3d8be0"
           require "rellich-kondrachov" from git "https://github.com/abenenson/rellich-kondrachov.git" @ "70f85d4c1bf99c6e7d61e8be4daa6f3664d08d23"
+          require mathlib from git "https://github.com/leanprover-community/mathlib4.git" @ "d13f23b723b8a846827a245b89c10fc7d3f11612"
           -- Declare the four vendored headline modules as build roots; without
           -- this, `lake build OAI...` fails with "unknown target".
           lean_lib OAI where
