@@ -38,12 +38,16 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 360
     steps:
-      - name: Check out this repo (closure file list)
+      - name: Check out this repo
+        # META-RULE (2026-10-09): never use sparse-checkout -- or leave any
+        # other persistent git-config change -- on the shared self-hosted
+        # checkout. Every workflow on DESKTOP-7HDI2D1 shares one
+        # _work/<repo>/<repo> dir; a sparse config left behind silently guts
+        # all later checkouts (verify died twice at setup-python with "no
+        # requirements.txt" before this was found). The closure file list is
+        # one small text file -- a full checkout is cheap and leaves no
+        # residue. Scratch work goes in subdirs (oai-math/, headline-forge/).
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            .github/workflows/oai-headline-files.txt
-          sparse-checkout-cone-mode: false
 
       - name: Install elan
         run: |
@@ -195,3 +199,13 @@ jobs:
             axioms.txt
             build.log
             OAI_COMMIT
+
+      - name: Leave shared checkout clean (meta-rule)
+        if: always()
+        working-directory: fragile-proof-audit
+        run: |
+          # Self-heal: never leave sparse-checkout (or other persistent git
+          # state) behind in the shared self-hosted workspace -- see the
+          # META-RULE comment on the checkout step above.
+          git sparse-checkout disable 2>/dev/null || true
+          git checkout --force HEAD 2>/dev/null || true
