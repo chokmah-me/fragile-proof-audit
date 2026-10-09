@@ -139,6 +139,20 @@ jobs:
           done
           echo "all build roots present"
           cd family-forge
+          # Harness: import-closure check. Every OAI import in the vendored
+          # tree must resolve to a vendored file. (Run #2 class: the Catalan
+          # tree imports OAI.NumberTheory.ZetaFive.*, which lives outside the
+          # vendored subdir -- a file count can't catch a missing subdir.)
+          missing_imports=$(grep -rh --include="*.lean" "^import OAI\." OAI | awk '{print $2}' | sort -u | while read -r mod; do
+            f="$(echo "$mod" | tr '.' '/').lean"
+            [ -f "$f" ] || echo "$mod"
+          done)
+          if [ -n "$missing_imports" ]; then
+            echo "FAIL: OAI imports with no vendored source file (add the missing subdir to oai_subdirs):"
+            echo "$missing_imports"
+            exit 1
+          fi
+          echo "import-closure check OK"
           echo "leanprover/lean4:v4.34.1" > lean-toolchain
           EXTRA_DEPS='${{ inputs.extra_deps }}'
           {
