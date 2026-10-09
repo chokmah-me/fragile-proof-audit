@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-10-09T01:22:55.413585+00:00",
+  "control": "oai_weil_sign_control",
+  "gate": "oai_weil_sign",
+  "outward_leg": {
+    "paper_sign": -1,
+    "eems_G1_sign": -1,
+    "match": true,
+    "note": "gate must NOT fire here"
+  },
+  "internal_arithmetic": {
+    "I_f1": -1,
+    "m": 1,
+    "claimed_reverse_sign": 1,
+    "I_new_under_claimed_signs": 0,
+    "consistent": true,
+    "note": "paper's arithmetic is correct given its signs; the error is the sign assignment itself"
+  },
+  "reverse_leg": {
+    "paper_sign_formula": "(-1)^k",
+    "paper_sign_at_k4": 1,
+    "applicable_eems_trace": "G_3 (destabilization)",
+    "eems_sign_at_k4": -1,
+    "mismatch": true,
+    "note": "the gate fires ONLY here"
+  },
+  "verdict": "NO FALSE POSITIVE",
+  "ok": true
+}

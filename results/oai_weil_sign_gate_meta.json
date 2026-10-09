@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-10-09T01:22:55.308621+00:00",
+  "gate": "oai_weil_sign",
+  "source_claim": "OpenAI (2026-09-18): m reverse stabilization traces cancel m negative double points; total signed count I(f_1)+m = 0, meeting Eliashberg-Murphy [9, Thm 2.3]",
+  "source_refutation": "withdrawn 2026-10-06 (sign error); this gate replays the sign assignment from the paper's own text against its cited [6], without using the withdrawal notice",
+  "local_pdf": "incoming/oai-weil-classes-prewithdrawal.pdf",
+  "local_pdf_sha256": "7318472a98297321fc61ab89aff328b72c9c8371ab90515e97bec2adb7223787",
+  "repo_revision": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "cited_authority": "arXiv:1303.0588v2 Lemma 3.4 proof (ref [6])",
+  "k": 4,
+  "paper_trace_direction": "destabilization",
+  "paper_reverse_sign_formula": "(-1)^k",
+  "paper_reverse_sign_at_k4": 1,
+  "eems_sign_table": {
+    "stabilization": -1,
+    "inverse_stabilization": 1,
+    "destabilization": -1,
+    "inverse_destabilization": 1
+  },
+  "applicable_eems_trace": "G_3 (destabilization lift)",
+  "correct_reverse_sign_at_k4": -1,
+  "sign_assignment_matches_citation": false,
+  "paper_internal_arithmetic_consistent": true,
+  "replayed_signed_count_I_new": -2,
+  "replayed_I_new_symbolic": "-2m",
+  "eliashberg_murphy_zero_count_hypothesis_met": false,
+  "verdict": "BREAK",
+  "lemma": "each inserted reverse stabilization trace has sign (-1)^k (hence +1 at k=4), so m traces cancel I(f_1) = -m",
+  "false_instance": "the inserted traces run stabilized->destabilized (G_3 direction); [6] gives G_3 sign (-1)^{k-1} = -1 at k=4, not (-1)^k = +1; replayed count -2m != 0, so the Eliashberg-Murphy zero-count hypothesis fails on the paper's own terms",
+  "calibration": "TRUE POSITIVE target: manuscript withdrawn 2026-10-06 for this sign error; gate uses only pre-withdrawal PDF and [6]; NOT on the 32-gate verdict lock",
+  "ok": true
+}
