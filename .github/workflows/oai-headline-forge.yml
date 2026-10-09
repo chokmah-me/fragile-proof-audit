@@ -1,0 +1,165 @@
+name: oai-headline-forge
+
+# Independent build + axiom audit of the four openai/math "headline" claims
+# from the 2026-10-08 replay map: family 003 quasi-RH 7/8 zero-free region,
+# the symmetric Mahler conjecture, and both Kaplansky direct-finiteness
+# counterexamples (char 2 + odd char).
+#
+# Static recon (agent VM, 2026-10-08, openai/math @ fd4aeeb2e):
+#   - M1 statement correspondence: PASS x4 at declaration level -- each named
+#     declaration states its paper's headline claim.
+#   - 0 sorry, 0 admit, 0 native_decide in the 3,365-file transitive OAI
+#     import closure of the four modules.
+# Upstream has no CI that builds this Lean code. This workflow is the build
+# check: compile the four modules and run #print axioms on the four named
+# main-result declarations, fail-closed against the
+# propext / Quot.sound / Classical.choice allowlist.
+#
+# Scratch-project trick (cf. oai-honeycomb-forge.yml): vendor only the
+# transitive closure (oai-headline-files.txt, computed at fd4aeeb2e) into a
+# scratch lake project with just the 3 external deps the closure needs
+# (mathlib, PrimeNumberTheoremAnd, rellich-kondrachov) at the exact revs from
+# upstream's lake-manifest.json -- avoids the 46-package full-project closure.
+#
+# Manual dispatch only. Runs on the self-hosted WSL runner.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: oai-headline-forge
+  cancel-in-progress: false
+
+jobs:
+  forge:
+    runs-on: self-hosted
+    timeout-minutes: 360
+    steps:
+      - name: Check out this repo (closure file list)
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github/workflows/oai-headline-files.txt
+          sparse-checkout-cone-mode: false
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Pin openai/math commit
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none --sparse https://github.com/openai/math.git oai-math
+          cd oai-math
+          git fetch --depth 1 origin fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb || git fetch --depth 1 origin main
+          git checkout fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb 2>/dev/null || git checkout FETCH_HEAD
+          git rev-parse HEAD | tee ../OAI_COMMIT
+
+      - name: Sparse-checkout the 3,365-file closure
+        run: |
+          set -euo pipefail
+          cd oai-math
+          git sparse-checkout set --no-cone --stdin < ../.github/workflows/oai-headline-files.txt
+          echo "checked out lean files: $(find lean/OAI -name '*.lean' | wc -l)"
+
+      - name: Scratch lake project (3 deps at upstream-pinned revs)
+        run: |
+          set -euo pipefail
+          mkdir -p headline-forge && cd headline-forge
+          echo "leanprover/lean4:v4.34.1" > lean-toolchain
+          cat > lakefile.lean <<'EOF'
+          import Lake
+          open Lake DSL
+          package headline_forge where
+          require mathlib from git "https://github.com/leanprover-community/mathlib4.git" @ "d13f23b723b8a846827a245b89c10fc7d3f11612"
+          require PrimeNumberTheoremAnd from git "https://github.com/AlexKontorovich/PrimeNumberTheoremAnd.git" @ "c39a751132c88b6e8080b74c74023fd95b3d8be0"
+          require "rellich-kondrachov" from git "https://github.com/abenenson/rellich-kondrachov.git" @ "70f85d4c1bf99c6e7d61e8be4daa6f3664d08d23"
+          -- Declare the four vendored headline modules as build roots; without
+          -- this, `lake build OAI...` fails with "unknown target".
+          lean_lib OAI where
+            roots := #[`OAI.NumberTheory.DirichletL.Nonvanishing,
+                       `OAI.Analysis.Mahler.MainTheorem,
+                       `OAI.RingTheory.DirectFiniteness.FinitelyPresented,
+                       `OAI.Algebra.OddKaplansky.Main]
+          EOF
+          cd ../oai-math
+          sed 's|^lean/||' ../.github/workflows/oai-headline-files.txt > ../closure-stripped.txt
+          tar cf - -T ../closure-stripped.txt | tar xf - -C ../headline-forge
+          echo "vendored lean files: $(find ../headline-forge/OAI -name '*.lean' | wc -l)"
+
+      - name: Fetch dependencies
+        working-directory: headline-forge
+        run: lake update
+
+      - name: Fetch mathlib prebuilt oleans
+        working-directory: headline-forge
+        run: lake exe cache get
+
+      - name: Build the four headline modules
+        working-directory: headline-forge
+        run: |
+          set -o pipefail
+          lake build OAI.NumberTheory.DirichletL.Nonvanishing OAI.Analysis.Mahler.MainTheorem OAI.RingTheory.DirectFiniteness.FinitelyPresented OAI.Algebra.OddKaplansky.Main 2>&1 | tee ../build.log
+
+      - name: Axiom audit (four main-result declarations)
+        working-directory: headline-forge
+        run: |
+          cat > AxiomCheck.lean <<'EOF'
+          import OAI.NumberTheory.DirichletL.Nonvanishing
+          import OAI.Analysis.Mahler.MainTheorem
+          import OAI.RingTheory.DirectFiniteness.FinitelyPresented
+          import OAI.Algebra.OddKaplansky.Main
+          #print axioms OAI.DirichletCharacter.LFunction_ne_zero_of_seven_eighths_lt_re
+          #print axioms OAI.SymmetricMahler.symmetric_mahler
+          #print axioms OAI.KaplanskyCounterexample.finitelyPresented_counterexample
+          #print axioms OAI.OddKaplansky.main_theorem
+          EOF
+          lake env lean AxiomCheck.lean > ../axioms.txt 2>&1 || true
+          cat ../axioms.txt
+
+      - name: Verdict (fail-closed)
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          txt = open('axioms.txt').read()
+          allow = {'propext', 'Quot.sound', 'Classical.choice'}
+          decls = ['OAI.DirichletCharacter.LFunction_ne_zero_of_seven_eighths_lt_re',
+                   'OAI.SymmetricMahler.symmetric_mahler',
+                   'OAI.KaplanskyCounterexample.finitelyPresented_counterexample',
+                   'OAI.OddKaplansky.main_theorem']
+          listings = re.findall(r"'?([\w.]+)'? depends on axioms: \[(.*)\]", txt)
+          found = {name: set() for name in decls}
+          for name, ax in listings:
+              if name in found:
+                  found[name] = {a.strip().strip("'") for a in ax.split(',') if a.strip()}
+          ok = True
+          for name in decls:
+              if not found[name]:
+                  print(f'FAIL: no axiom listing for {name}')
+                  ok = False
+                  continue
+              extra = found[name] - allow
+              print(f'{name}: axioms={sorted(found[name])}')
+              if extra:
+                  print(f'  FAIL: axioms outside allowlist: {sorted(extra)}')
+                  ok = False
+          if 'sorryAx' in txt:
+              print('FAIL: sorryAx present -- an unproved sorry leaked into the closure')
+              ok = False
+          print('PASS: all four within allowlist' if ok else 'FAIL: see above')
+          sys.exit(0 if ok else 1)
+          EOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: headline-forge-evidence
+          path: |
+            axioms.txt
+            build.log
+            OAI_COMMIT
