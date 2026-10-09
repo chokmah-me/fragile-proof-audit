@@ -238,6 +238,39 @@ contributor to this formalization. Still owed:
 evaluations) before `B(n,n) = 1` is fully formalized. No placeholder
 certificate was ever committed.
 
+### Statement-fidelity trial (three-mode checklist, 2026-10-08)
+
+First live run of the M1–M3 checklist (`docs/harvest-loop.md`) on our own
+formalization.
+
+- **M1 — Statement correspondence: PASS.** The formalized closing theorem
+  `koutschan_diagonal_of_hrec_hinit` states the paper's identity (3.2) in
+  conditional form: any `d` satisfying `L` with seven initial values `= 1`
+  is identically 1 — exactly the paper's proof obligations (the §5.3
+  recurrence + determinant evaluations), recorded as explicit hypotheses
+  rather than silently dropped. Transcription fidelity mechanically
+  re-verified today: `Bnn_op_0_a23r.txt` still matches its pinned SHA-256
+  (`d12c1027…b8570`), and re-running `gen_koutschan_lean.py` reproduces the
+  committed `koutschanP` definitions byte-for-byte except the 4-line
+  acknowledgment paragraph added by hand in `a397f40` (prose, not
+  mathematics). Generator sanity checks re-pass: 8 terms, all degree 24,
+  signed coefficient sum = 0.
+- **M2 — Argument correspondence: faithful formalization.** The mathematical
+  argument is the paper's: operator → `(S_n−1)` right factor → constancy →
+  uniqueness via nonvanishing leading coefficient (`DiagonalCertificate`
+  is that argument shape). The eight right-factor identities the paper's
+  Mathematica package computed are re-proved here by kernel-checked `ring`
+  — same argument, computational engine differs (re-derived, not inherited
+  from the CAS). What is *not* formalized is the paper's derivation *that*
+  `L` annihilates the diagonal — that is `hrec`, an explicit hypothesis.
+- **M3 — Credit honesty: PASS.** The closing theorem is conditional and
+  says so in the module docstring; sorry-free; `lake build` EXIT 0 at
+  `90c9593`; covered by the hardened forge axiom audit on main (no local
+  axioms, no sorrys). "No placeholder certificate was ever committed"
+  (above) stands. `hinit` for the true diagonal was later closed by
+  milestone 4 (§9); `hrec` (∂-finite substitution) remains the open
+  computational input.
+
 ## 9. Milestone 4 — true-diagonal formalization (2026-09-24)
 
 **Target:** close `hinit` in Lean and reduce `hrec` to its exact content for

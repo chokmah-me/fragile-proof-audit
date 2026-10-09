@@ -13,6 +13,14 @@ statement-level bugs this way. The Jana–Karmakar episode shows the converse:
 a **failed** gate is only as good as its harness — so gate code is part of
 the artifact and must be self-tested (see `scripts/harness/selftest.py`).
 
+Compilation is never the acceptance criterion for "the source proof is
+correct." Lean acceptance certifies the formal proposition and the formal
+derivation supplied for it — not that the proposition is the one the source
+text states, that the derivation follows the source argument, or that the
+source argument is correct (arXiv:2610.08144; their SCI = ∞ result: no fixed
+finite procedure can certify faithful translation). The campaign's standing
+answer is the statement-fidelity checklist (M1–M3, `docs/harvest-loop.md`).
+
 ## Protocol
 
 0. **Pin the real paper first.** Live-check the identifier, download the PDF to
