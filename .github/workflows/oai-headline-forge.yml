@@ -103,11 +103,29 @@ jobs:
           mkdir -p ../headline-stage
           tar cf - -T ../.github/workflows/oai-headline-files.txt | tar xf - -C ../headline-stage
           mv ../headline-stage/lean/OAI ../headline-forge/OAI
-          echo "vendored lean files: $(find ../headline-forge/OAI -name '*.lean' | wc -l)"
+          vendored=$(find ../headline-forge/OAI -name '*.lean' | wc -l)
+          expected=$(wc -l < ../.github/workflows/oai-headline-files.txt)
+          echo "vendored lean files: $vendored (expected $expected)"
+          # Fail-fast (harness rule: no failure goes to waste -- run #1 died
+          # here with a path bug, tar looking in oai-math/OAI instead of
+          # oai-math/lean/OAI). Every listed file must have landed.
+          [ "$vendored" -eq "$expected" ] || { echo "FAIL: vendored $vendored != expected $expected"; exit 1; }
+          for mod in OAI/NumberTheory/DirichletL/Nonvanishing OAI/Analysis/Mahler/MainTheorem OAI/RingTheory/DirectFiniteness/FinitelyPresented OAI/Algebra/OddKaplansky/Main; do
+            [ -f "../headline-forge/$mod.lean" ] || { echo "FAIL: missing root module $mod"; exit 1; }
+          done
 
       - name: Fetch dependencies
         working-directory: headline-forge
-        run: lake update
+        run: |
+          set -o pipefail
+          lake update 2>&1 | tee ../lake-update.log
+          # Fail-fast (harness rule: no failure goes to waste -- run #2 died
+          # at cache-get because satellites resolved to older revs; the
+          # warning below is the early signal).
+          if grep -q "pins different versions" ../lake-update.log; then
+            echo "FAIL: dependency satellite version conflict -- 'require mathlib' must be last in lakefile.lean so its revs win"
+            exit 1
+          fi
 
       - name: Fetch mathlib prebuilt oleans
         working-directory: headline-forge
