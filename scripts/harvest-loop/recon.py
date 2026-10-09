@@ -402,7 +402,7 @@ def render_recon(date, meta, claims, results, harvest_sha):
                          "LeanExplore retired API keys, no account needed; or use the website): "
                          "`leanexplore search \"%s\" --package Mathlib` — checks whether "
                          "the formalized statement or its key lemmas already exist in Mathlib; "
-                         "feeds the A–D statement-faithfulness checks." % cov["probe_query"])
+                         "feeds the statement-fidelity checklist (three modes, docs/harvest-loop.md)." % cov["probe_query"])
             lines.append("")
     lines.append("## Next step")
     lines.append("")

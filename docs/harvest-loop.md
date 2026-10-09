@@ -41,12 +41,48 @@ autoformalization-tool recon steps before deep gates:
    keyless — LeanExplore retired API keys; or the website).
    If the formalized theorems, or their key lemmas, already exist in
    Mathlib, that reframes the novelty claim and can expose a
-   `formal_subset_of_claim` gap. Feeds the A–D statement-faithfulness checks.
+   `formal_subset_of_claim` gap. Feeds the statement-fidelity checklist below.
 2. **Trace extraction (LeanDojo).** For the pinned repo, extract tactic
-   traces, syntax trees, and proof states. Use them in the statement-
-   faithfulness checks (does the formal theorem say what the paper's
-   theorem says?) and in the axiom audit (what do the proofs actually
-   depend on?).
+   traces, syntax trees, and proof states. Use them in the
+   statement-fidelity checklist (M1: does the formal theorem say what the
+   paper's theorem says?) and in the axiom audit (what do the proofs
+   actually depend on?).
+
+### Statement-fidelity checklist (three modes)
+
+Adopted 2026-10-08 from arXiv:2610.08144 (Bastounis–Circelli–Hansen,
+"Navier-Stokes lost in translation"): Lean acceptance certifies the formal
+proposition and the formal derivation supplied for it — not that the
+proposition is the one the source text states, that the derivation follows
+the source argument, or that the source argument is correct. A compiling
+proof can coexist with a wrong NL proof, prove a different theorem by a
+different method, or prove less than the NL text claims. Compilation is
+therefore never the acceptance criterion for "the source proof is
+correct"; no fixed finite procedure can certify faithful translation (their
+SCI = ∞ result), so the checks below stay human-judgment, fail-closed.
+
+Every audit note that evaluates a Lean formalization — ours or a third
+party's — answers these three modes explicitly. Pure computational-replay
+gates (types A–F) that re-derive the quantity from scratch have no
+formalization under review; the note says so in one line.
+
+- **M1 — Statement correspondence.** Does the formalized theorem state what
+  the source's theorem states? Compare quantifiers, side conditions,
+  derivative counts / integrability exponents, domains, norms,
+  dependencies, and implicit existence conditions. Record any weakening,
+  strengthening, or change — and whether downstream uses depend on the
+  changed part. (Their Navier–Stokes case: m+4 → m+5 derivative loss and an
+  added localized gradient term made the Lean estimate a different, weaker
+  proposition.)
+- **M2 — Argument correspondence.** Does the formal derivation follow the
+  source's argument, or does it prove the formalized statement by a
+  different route — or repair a broken one? Label it: *faithful
+  formalization of the source proof* vs *independent proof of the
+  formalized statement*. Both are legitimate; conflating them is not.
+- **M3 — Credit honesty.** Does the claimed verification credit match what
+  is actually verified? Disclose sorrys, axioms, divergences, and scope
+  limits; no over-claiming. (This is the existing Type-G
+  verification-credit scan, e.g. the NLA notes.)
 
 ## Boundaries
 
