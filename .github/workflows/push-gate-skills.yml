@@ -1,0 +1,46 @@
+# Reverse of fetch-gate-skills: push curated doctrine patches from this repo
+# into the ai-os skill installations on the runner's machine.
+# Manual dispatch only. Backup-first, additive, idempotent.
+name: push-gate-skills
+
+on:
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: self-hosted
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Backup current skills and apply patches
+        shell: bash
+        run: |
+          set -u
+          base="/mnt/c/Users/Elke Shayna/Documents/00Dev"
+          ts="$(date +%Y%m%d-%H%M%S)"
+          backup="$base/skill-backups/$ts"
+          mkdir -p "$backup"
+          applied=0
+          skipped=0
+          # $1 = skill dir on the machine, $2 = patch file in this repo,
+          # $3 = idempotency marker (must appear in the patch file)
+          apply_patch() {
+            local dir="$1" patch="$2" marker="$3"
+            if [ ! -d "$dir" ]; then echo "MISSING: $dir"; return 0; fi
+            if [ ! -f "$dir/SKILL.md" ]; then echo "NO SKILL.md: $dir"; return 0; fi
+            cp -r "$dir" "$backup/$(basename "$dir")" && echo "backed up: $dir"
+            if grep -q "$marker" "$dir/SKILL.md"; then
+              echo "already applied, skipping: $dir"; skipped=$((skipped+1)); return 0
+            fi
+            printf '\n' >> "$dir/SKILL.md"
+            cat "$patch" >> "$dir/SKILL.md"
+            echo "patched: $dir"; applied=$((applied+1))
+          }
+          apply_patch "$base/lean-proof-forge" \
+            "$GITHUB_WORKSPACE/docs/skill-patches/lean-proof-forge-fidelity.md" \
+            "arXiv:2610.08144"
+          apply_patch "$base/manuscript-integrity-gate" \
+            "$GITHUB_WORKSPACE/docs/skill-patches/manuscript-integrity-gate-exposure.md" \
+            "arXiv:2610.08144"
+          echo "RESULT applied=$applied skipped=$skipped backup=$backup"
