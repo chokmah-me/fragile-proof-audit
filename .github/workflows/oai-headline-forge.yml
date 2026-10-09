@@ -57,6 +57,10 @@ jobs:
       - name: Pin openai/math commit
         run: |
           set -euo pipefail
+          # The workspace root persists between runs on the self-hosted
+          # runner -- a second dispatch would fail cloning into an existing
+          # oai-math dir. Clean slate first (cf. META-RULE on checkout).
+          rm -rf oai-math
           git clone --filter=blob:none --sparse https://github.com/openai/math.git oai-math
           cd oai-math
           git fetch --depth 1 origin fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb || git fetch --depth 1 origin main
