@@ -1,0 +1,407 @@
+{
+  "_provenance": "Backfill computed 2026-10-09 from the files as they exist in the repo at that date. These are NOT hashes observed at the original gate run time; they pin what each note's claim rests on today. Standard: docs/harvest-loop.md 'Receipt requirement'.",
+  "_computed_at": "2026-10-09",
+  "gates": {
+    "ab-fluid.md": {
+      "class": "computational-gate",
+      "script_sha256": {},
+      "output_sha256": {
+        "results/ab_fluid_boussinesq_control_meta.json": "104d89dd2b70448bd60a403d2f35b8c2b76d018c405320a1526eb5b98a2a5eb7"
+      },
+      "missing": []
+    },
+    "agoh-giuga.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/giuga_oracle.py": "a6f099162d453909572c211273ea035f3cb903b363cdbc56fceae37713ec7744"
+      },
+      "output_sha256": {
+        "results/giuga_oracle_gate_meta.json": "b8f39d88c51606ef7d03b23f790d1191ae1014c0109f4962d5e1be8612b8e77e"
+      },
+      "missing": []
+    },
+    "baste-domination.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/baste_break_control.py": "656b2eece5abf8f6dfe14597c29c6ed612875d32f620fc8557f0696646135b15",
+        "scripts/gates/baste_domination.py": "79a4c2984e97fff8b905d7778d3052defeccc8f2382e8e09abba4be43cab2858"
+      },
+      "output_sha256": {
+        "results/baste_break_control_meta.json": "1a59641404b5475e0c3f00627a1ac375583d2bdd7a1035de4d86f94d4461a613",
+        "results/baste_domination_gate_meta.json": "f9f86c5db4cf54715b41f43ca4f657f450dd5a31d8d9dd5763c6afe43ea340ee"
+      },
+      "missing": []
+    },
+    "biplanar-alpha2-9-colorable.md": {
+      "class": "computational-gate",
+      "script_sha256": {},
+      "output_sha256": {
+        "results/biplanar_alpha2_gate_meta.json": "90b9d6a0dd27692d6e4d60be20fe3960a7c0bd7a0e51af067560ef9f0d269b83"
+      },
+      "missing": []
+    },
+    "cat-g.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/cat_g_break_control.py": "74264866afbf738e09b9a56a1df99e18118ce4ab63b1abbf068c443b07fe88e8",
+        "scripts/gates/cat_g.py": "8a548ab24f628006c5b3ea52ace5f4512f53fb0295a2f67305857bd0365ea034"
+      },
+      "output_sha256": {
+        "results/cat_g_gate_meta.json": "e780713d4ef45c482c476e4e236e5008ff571f98330f41c1f7984d34698f214c"
+      },
+      "missing": []
+    },
+    "chung-graham-spiro.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/chung_graham_break_control.py": "b3eb98ade229276c6688ec6a29ddc489009688d4ecad292b848255a97027c236",
+        "scripts/gates/chung_graham_spiro.py": "a6322fe6995d46318d4006e253e166e4bfceca27cbefac523e2b9ddb431f75a9"
+      },
+      "output_sha256": {
+        "results/chung_graham_break_control_meta.json": "5df6d7c2870c95430fba257e5dea6237e682fff984e483775e2d661e606e1303",
+        "results/chung_graham_spiro_gate_meta.json": "8de813672ccf90b2751dd68c44943ecc5468356a578bb466fe77740de268151a"
+      },
+      "missing": []
+    },
+    "cohen-subadditivity.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/cohen_break_control.py": "270f6c430458923aabcdd8697dd480ba03580e0c5bf6ea6a708868885555f942",
+        "scripts/gates/cohen_subadditivity.py": "6e7504398ac827ffe77bf491712cd3934732205a2506da22fca73eb48118e88e"
+      },
+      "output_sha256": {
+        "results/cohen_break_control_meta.json": "26d3cc108e66eb24d9cce5a441e58b6840bac282889da159e6d052ee7e00c0a4",
+        "results/cohen_subadditivity_gate_meta.json": "2e4a5d9ea54244c7f62cb0966c6cada5ea5c6cc8098b6a237d4644a3c930da1e"
+      },
+      "missing": []
+    },
+    "erdos-straus-gate.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/analysis/erdos_straus_salvage.py": "efd66550c7dca62d493e604148eb15f6af9b2ebe0688442d43e8bfc98cf2145c",
+        "scripts/gates/erdos_straus_checker.py": "e0ae91b92cd10ab0f8debd36b438af29fb8a6023a57bd16ac9f6b6173fee8ad7"
+      },
+      "output_sha256": {},
+      "missing": []
+    },
+    "es-covering.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/es_cover_control.py": "d48f1b8027dc6dffc0e8372a54342d8869a0181f895807d5a3a74286d6e702a2",
+        "scripts/gates/es_cover.py": "4bc646176bfac674d2e0bf44f082c6907795903da406b7b20c3076056b15492f"
+      },
+      "output_sha256": {
+        "results/es_cover_gate_meta.json": "801d348f2afb2ab38bd036a789d89593827c9221a2a329388267687315d17ee7"
+      },
+      "missing": []
+    },
+    "es5-eq35.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/es5_eq35_break_control.py": "706ebca5af137793d4f19616b81019e96946d46fa40095338cf387291c5ff855",
+        "scripts/gates/es5_eq35.py": "a14d124039faa6f9ebf28e1e53b014a924c57a97de92d9b5fa7ed9ba75788a60"
+      },
+      "output_sha256": {
+        "results/es5_eq35_gate_meta.json": "ba36ca9a30a359e63b1c67313e4cf6bd1016390d48d00a43a9e6fe2db9bd0991"
+      },
+      "missing": []
+    },
+    "gb-sce.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/check.py": "6b932540175c3f9661c42448eb2751669f646d55ce287b032f9771a120e3cc5f",
+        "scripts/gates/gb_sce.py": "0971477138490e37627d1d1d2c6d3cb189dbf6f657ac076da8b8802badcd5ae0"
+      },
+      "output_sha256": {
+        "results/gb_sce_gate_meta.json": "b3b439df8ec5f45ee08db04ff8360b69f5c030c4f83057a3599b7277863d1952"
+      },
+      "missing": []
+    },
+    "gw-speed.md": {
+      "class": "computational-gate",
+      "script_sha256": {},
+      "output_sha256": {
+        "results/gw_speed_gate_meta.json": "fd14b16e82c893df6fbf2285f4e77e64f530e31bcb4c50b41b34496aeabfc160"
+      },
+      "missing": []
+    },
+    "jac-2d.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/jac_2d_break_control.py": "472a198f4313d6e8302082b9e3778b10e86efe4522c11cc414b2ba7ebc1b758f",
+        "scripts/gates/jac_2d.py": "207e8d3c520e123658e71b5c67df489c4574a2376cafbf0b38f620b3ff120f6b"
+      },
+      "output_sha256": {
+        "results/jac_2d_gate_meta.json": "82ace5db7bfdbf461f9efe75bd8bef6850b88a96c5f1e427a02aa0bd5bf4a377"
+      },
+      "missing": []
+    },
+    "kawasaki-collatz.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/col_fp.py": "fb54713189a3fe88ad28f9fe78eb26d3ca6ef028a06a4c7a97abf0bb946c8a1f"
+      },
+      "output_sha256": {
+        "results/col_fp_meta.json": "2b66fa8ccbfd21cadee9c3e0752ad534a24ff33ea1f0dab6afa6cd129ffa8fb8"
+      },
+      "missing": []
+    },
+    "kempe-fritsch.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/kempe_fritsch_break_control.py": "7b3cc9e55df6e0dcf1ab30e1a3b2fbd643ff2216a407eb56d2c4a0ed84985a36",
+        "scripts/gates/kempe_fritsch.py": "4ea35eb86ae98eeb8cd8f4d5b52a85622c6323057e08f2a711fb08516321867f"
+      },
+      "output_sha256": {
+        "results/kempe_fritsch_gate_meta.json": "bad7456037e36bf5a779bd4732171f54f91ab09b92791bdadfb139b658c3ddfc"
+      },
+      "missing": []
+    },
+    "krr-cl.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/krr_cl_break_control.py": "d35959cc2d32e99def5c8bd88a88aac444bfe2aea88643d6b26f4c69c736eebb",
+        "scripts/controls/krr_cl_composition_scan.py": "74271f01e16ad5dffbf49c3212e0147b09bfc986028c3f745f50bbaeb7273387",
+        "scripts/gates/check.py": "6b932540175c3f9661c42448eb2751669f646d55ce287b032f9771a120e3cc5f",
+        "scripts/gates/krr_cl.py": "00351399fd8c729ee333ad2fcefb1831d6ca954bd8bb424769545f00ed4ba3c6"
+      },
+      "output_sha256": {
+        "results/krr_cl_gate_meta.json": "e78697e9aad8a7de5448e3c5970df9014111a0c8b8855c060bd1066855d785f0"
+      },
+      "missing": []
+    },
+    "kwise-reflection.md": {
+      "class": "computational-gate",
+      "script_sha256": {},
+      "output_sha256": {
+        "results/kwise_reflection_gate_meta.json": "aca0567c605bcaefdfc27091860458cbfb99f49f2fabf1358dfb735a1a70fb12"
+      },
+      "missing": []
+    },
+    "lame-1847.md": {
+      "class": "computational-gate (+ Lean premise slice)",
+      "script_sha256": {
+        "scripts/gates/lame_h23.py": "0d82b3081a8c3e220390c31b78958e65d1cb85233cbabdc74a52b99c7b29ce16"
+      },
+      "output_sha256": {
+        "results/lame_h23_gate_meta.json": "0d2b3d3af2721b203cb4e19f78aae24fd7540fc4f24099f165bba517b1dc4557"
+      },
+      "missing": []
+    },
+    "mah-3.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/analysis/mah_3_stress_5b.py": "0a39408519d99c699e2d0b9ecbc47469cd9ed287f39875de2168ddc67e747379",
+        "scripts/gates/check.py": "6b932540175c3f9661c42448eb2751669f646d55ce287b032f9771a120e3cc5f",
+        "scripts/gates/mah_3.py": "0daa7bb2d78de641a66ea9c49c1ab1cce76455e7aac2461ba4583eff9ab073b0"
+      },
+      "output_sha256": {
+        "results/mah_3_gate_meta.json": "9209cc5f909123ff853ecbcc240c5a1a921484e0c943ae0c813aa413c155b7f7"
+      },
+      "missing": []
+    },
+    "nla-ie16.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/nla_ie16_control.py": "f68e8f3dfa6299cbc7267b9e7ed3d9e63a0147adcba04ef6bf7939fec14a439c",
+        "scripts/gates/nla_ie16.py": "cb8cdb79e3a0fef783a391e17e52c5c8eaa03277b0963d55565e683d980997d1"
+      },
+      "output_sha256": {},
+      "missing": []
+    },
+    "nla-mf14.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/nla_mf14.py": "76dc5e278ba975821854dcaacad3f07bdade3a872928bce9f838c20e33b0152c"
+      },
+      "output_sha256": {
+        "results/nla_mf14_control_meta.json": "676242d479decf0e25e2f1e49c6a782ed3a767e33da7dc8f3d8f489f045101f8"
+      },
+      "missing": []
+    },
+    "nla-mf24.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/nla_mf24.py": "89f6d3a91246b341c032e07cf8df70fa4c676d2852966ec99da0625a640f739f"
+      },
+      "output_sha256": {
+        "results/nla_mf24_control_meta.json": "23cc009148c3431fe039342d7cc78d46e2ce28f0752e432d7f0171ba5e6b89cb",
+        "results/nla_mf24_typeg_meta.json": "0f38477a60cd0a59d1804ac1c5a0df35f35d4dd7b7672234a2b02f40d79b2a1d"
+      },
+      "missing": []
+    },
+    "nla-mi32.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/nla_mi32.py": "ee173190783cbebc5d2d48641cb05cab99ab52f1fcc4d4821328c360588d71be"
+      },
+      "output_sha256": {
+        "results/nla_mi32_control_meta.json": "60a38e836b2042c6e368dfa0f2f464981d03233cbce4ced20032cf14c4a7ed53",
+        "results/nla_mi32_typeg_meta.json": "ee56364621627153d422daecfedb54ac2bab4a3ec6ec433b50d97513e4b2cea4"
+      },
+      "missing": []
+    },
+    "nla-nr03.md": {
+      "class": "computational-gate + lean-formalization",
+      "script_sha256": {
+        "scripts/controls/nla_nr03_control.py": "a96539416a688633e01bcbe2e371562f76a9f5678b47d72f3955a8c9fb19097f",
+        "scripts/gates/nla_nr03.py": "be7fe2ade5f83a9023ddeb9bb791094b11f6282aa510ef49c4f6f4be8659c4a8"
+      },
+      "output_sha256": {},
+      "missing": []
+    },
+    "oai-weil-sign.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/oai_weil_sign_control.py": "f92043c1143e4812d9b3b92da206a6d4c949ac7c72ba43de0d429853081c6339",
+        "scripts/gates/oai_weil_sign.py": "c0006c923f432e71118f5c099765772dbd2d0b14b27256b13c4878511a87af84"
+      },
+      "output_sha256": {
+        "results/oai_weil_sign_control_meta.json": "673113879e1c7ca28ec272ed03e77803926dc8ff1d7d6d84e595041d89d98224",
+        "results/oai_weil_sign_gate_meta.json": "034621ee1e91941aedb31ee9754b8f718eab3b1383870cdf388c0c26b22d0a45"
+      },
+      "missing": []
+    },
+    "odd-zeta-202601.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/break_control.py": "e99029621bc065f1f89a99520d18ba38567297eb65bfe0794d5d48d77124019f",
+        "scripts/gates/odd_zeta_1609.py": "9f6c48a4a4c9076a04ecb61215dadc8aafedce5e5407e9482cfd67411ec1c970"
+      },
+      "output_sha256": {
+        "results/odd_zeta_gate_meta.json": "e59515321357b9ec34a596d97dc89273c250002ab5500e467974ab921df4de52"
+      },
+      "missing": []
+    },
+    "pdn1.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/pdn1.py": "f433bdacf4531a1735ff6b6e6ae3f82880d8417689708fda47699ece722dc035"
+      },
+      "output_sha256": {
+        "results/pdn1_gate_meta.json": "a2af95d6ebc11d30d87f877f80fff9aa1f60d018422cc9aee879a1dd791f7713"
+      },
+      "missing": []
+    },
+    "rr-qexpand.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/rr_qexpand.py": "f1a44a7b3f62ce57450a607793e130a34a125b009ed84b5d727092ebe715cd31"
+      },
+      "output_sha256": {
+        "results/rr_qexpand_gate_meta.json": "12d9e371c8ac3733dbc44b6da27d0befb84f838748ba7d84d4836e53f38b0e7d"
+      },
+      "missing": []
+    },
+    "salez-youssef-logsobolev.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/salez_youssef_break_control.py": "06d5d8473b2b01f6f2f5d9bf9652ed1c48c0f283fbf88c14aaa033c5fa8cca99",
+        "scripts/gates/salez_youssef_logsobolev.py": "5e724674a0f1fc1f24b9b35fb4ad02ea2b2c392231f1ed9be9d220452b0ff45f"
+      },
+      "output_sha256": {
+        "results/salez_youssef_break_control_meta.json": "b1cae20387b3da470e6e4308f8e12f001c6c666dd23c2aca66fbb2733960a0dc",
+        "results/salez_youssef_gate_meta.json": "baf0919e1bf802a9a1ca100181d8d3035417324bf8aa03ebd366fd2271d34819"
+      },
+      "missing": []
+    },
+    "sarkozy-sum-product.md": {
+      "class": "computational-gate + lean-formalization",
+      "script_sha256": {
+        "scripts/controls/sarkozy_break_control.py": "20412fa5ce1e035fdc2018d9696953a4fa99868955dce1db59d2a3b97506d857",
+        "scripts/gates/sarkozy_sum_product.py": "7514b6ee06feddf329b7e05b68321d87411aaa75fd221cd1f6df0dc5a245db80"
+      },
+      "output_sha256": {
+        "results/sarkozy_break_control_meta.json": "a6da28008d8f6b6a119b60702e633e392bb79b49e2ec8d9cb05cf2eb22bfda09",
+        "results/sarkozy_sum_product_gate_meta.json": "a70dd6a3fec48317199463d63d4d8a488f53316d651324398bfccd5b3b456a13"
+      },
+      "missing": []
+    },
+    "sss-trace-lower-bound.md": {
+      "class": "computational-gate",
+      "script_sha256": {},
+      "output_sha256": {
+        "results/sss_trace_gate_meta.json": "b59df2a78fb4512bd853a9906daa19a4f1547ae6052fabe98b89f4d61a77b00f"
+      },
+      "missing": []
+    },
+    "suman-zeta5.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/break_control.py": "e99029621bc065f1f89a99520d18ba38567297eb65bfe0794d5d48d77124019f",
+        "scripts/gates/suman_eq48.py": "7119e01052b55ba97e724a687689534f277a047d0e3b8c43db0dd52f626e1f4d"
+      },
+      "output_sha256": {
+        "results/suman_gate_meta.json": "2d10bdf683203547d3d2147f338662027ae978c9572939f90df5293e7ee1d0db"
+      },
+      "missing": []
+    },
+    "tait-tutte.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/tait_tutte_break_control.py": "675e3ad1f393a288efd96196c725332bc291b8fab4da2649f3eecf77d34392cb",
+        "scripts/gates/check.py": "6b932540175c3f9661c42448eb2751669f646d55ce287b032f9771a120e3cc5f",
+        "scripts/gates/tait_tutte.py": "6f9c385ff6ad94aa12f0ba003e6db8202361f0f928c3a8a6fc80b116e84bd54b"
+      },
+      "output_sha256": {
+        "results/tait_tutte_gate_meta.json": "da6d00e81443802b55ffe1e673cf794ea009f3d1b25060a6fe94399dc0e546c2"
+      },
+      "missing": []
+    },
+    "tang-zhang-schatten.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/tang_zhang_break_control.py": "7c384887f6d7103683a50ff0451c9f8e4010ab129fcfb0511a3c84b2df991d22",
+        "scripts/gates/tang_zhang_schatten.py": "9fc1cbb963f4d7720cfd3b98386f31a4fe3046d3c2f2111ce615854dad7e98cf"
+      },
+      "output_sha256": {
+        "results/tang_zhang_break_control_meta.json": "6158d33804fe4e8fba30173663b48cbb579cf970f85cccd38d833b5084c7e0ef",
+        "results/tang_zhang_schatten_gate_meta.json": "bfa9ba6806aa263c51ad1b0f407368df3620081e3a994bb94d6f52b3bd302511"
+      },
+      "missing": []
+    },
+    "thakur-carlitz.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/thakur_break_control.py": "f17ff1670b68f0243203d78beb86d4be4e6e77059ef4e7b60dce3b6c1cbfa0f4",
+        "scripts/gates/thakur_carlitz.py": "7126ec70752fef3beac52b6201c4cbe035521c84b511b2f48d1c9a80f9165dec",
+        "scripts/harness/finite_field.py": "0b122b81f3508012450d379ac8634cb0043dcac05880f906fee9a6a5e690c2f4"
+      },
+      "output_sha256": {
+        "results/thakur_break_control_meta.json": "10f94229395aa2cf115129bb56abb028a23000dea81e1108c954a0a06514ae43",
+        "results/thakur_carlitz_gate_meta.json": "e88b8fe22a4b01a58174b7fd5d498c8f51626081ed4b857f5c22085da83005f0"
+      },
+      "missing": []
+    },
+    "tpc-area.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/tpc_area_break_control.py": "afb1dd1297f667d1ff469771d32108bc57529f4f8ab0b559a41c8e3d28099247",
+        "scripts/gates/tpc_area.py": "0f347ef2e51363ea2143835c3b91339df402f9ac34a4132abe53fed49f1942ae"
+      },
+      "output_sha256": {
+        "results/tpc_area_gate_meta.json": "58c7c8799c492e6449b03cc9b64b78957a1fc94a8c46f8c43cbe645af78d418d"
+      },
+      "missing": []
+    },
+    "tpc-gn.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/controls/tpc_gn_break_control.py": "3daf7f32aa87ccffd0c65f08ccb4d54f0df0fd3eebdae0857523d58c8fb84742",
+        "scripts/gates/tpc_gn.py": "bcd7b9656a53c0ed28c9671b02f7388d72c8ada27a901a40113bc5a272f4e547"
+      },
+      "output_sha256": {
+        "results/tpc_gn_gate_meta.json": "f331536e16403df24a370edf838917601403dc21685a510f2eea6ba6e1962b9c"
+      },
+      "missing": []
+    },
+    "venn-simple-symmetric.md": {
+      "class": "computational-gate",
+      "script_sha256": {},
+      "output_sha256": {
+        "results/venn_simple_symmetric_gate_meta.json": "63cad27407ab8d161e2997ad855aa379c7d47909a11244501c40e39f037e7245"
+      },
+      "missing": []
+    }
+  }
+}
