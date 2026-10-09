@@ -17,6 +17,16 @@
 
 **Verdict: PASS (escalate)** on the Type-D/E route. **Type G not attempted.**
 
+### Type-E note (adjudicated 2026-10-08)
+
+The E in this row means from-scratch symbolic re-derivation, not CAS-transcript
+replay as defined in the paper's §4-E. Remark 2.7's degree bound was replayed
+abstractly with tight-degree generic symbolic coefficients, and Lemma 2.8 /
+(2.41) on from-scratch constructed Keller pairs; Su's Remark 2.7 defers to an
+unshown symbolic computation, so no transcript existed to re-run. True
+CAS-transcript replay remains tooling-blocked per §7.4 — the D+E typing does not
+contradict it.
+
 ## What was gated
 
 - Remark 2.7 parts (i) and (ii), replayed abstractly with tight-degree

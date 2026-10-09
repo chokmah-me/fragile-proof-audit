@@ -443,7 +443,7 @@ The lock itself is `EXPECTED_VERDICT` in `scripts/gates/check.py`: a map from ga
 
 | Gate | Target | Stratum | Verdict | Claim disposition | Attack | Evidence | Control |
 |---|---|---|---|---|---|---|---|
-| kempe_fritsch | Fritsch & Fritsch 1998 gadget | hist | BREAK | claim BREAK | B+F | recomputation | kempe_fritsch_break_control.py |
+| kempe_fritsch | Fritsch & Fritsch 1998 gadget | hist | BREAK | claim BREAK | F | recomputation | kempe_fritsch_break_control.py |
 | tait_tutte | Tait 1884 / Tutte 1946 | hist | BREAK | claim BREAK | F | recomputation | tait_tutte_break_control.py |
 | lame_h23 | Lame 1847 cyclotomic route | hist | PASS | claim BREAK (route) | G | proof-route refutation | not required (exact equality) |
 | lame_ideal_neg23 | Lame 1847 ideal variant | hist | PASS | claim BREAK (route) | G | proof-route refutation | lame_ideal_control.py |
