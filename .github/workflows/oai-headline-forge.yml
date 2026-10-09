@@ -87,8 +87,13 @@ jobs:
                        `OAI.Algebra.OddKaplansky.Main]
           EOF
           cd ../oai-math
-          sed 's|^lean/||' ../.github/workflows/oai-headline-files.txt > ../closure-stripped.txt
-          tar cf - -T ../closure-stripped.txt | tar xf - -C ../headline-forge
+          # NOTE: keep the leading lean/ in the tar paths -- the sparse
+          # checkout lays files out as oai-math/lean/OAI/..., and stripping
+          # the prefix (as the first version did) makes tar look in
+          # oai-math/OAI/... which does not exist.
+          mkdir -p ../headline-stage
+          tar cf - -T ../.github/workflows/oai-headline-files.txt | tar xf - -C ../headline-stage
+          mv ../headline-stage/lean/OAI ../headline-forge/OAI
           echo "vendored lean files: $(find ../headline-forge/OAI -name '*.lean' | wc -l)"
 
       - name: Fetch dependencies
