@@ -84,6 +84,23 @@ formalization under review; the note says so in one line.
   limits; no over-claiming. (This is the existing Type-G
   verification-credit scan, e.g. the NLA notes.)
 
+### Receipt requirement (adopted 2026-10-09)
+
+"Trust, but replay" without the replay artifact is just trust. Every audit
+note therefore carries a **Receipt** field pointing at machine evidence —
+generated as a matter of course, not as an optional extra:
+
+- **Lean formalization audits** end with an independent forge build and an
+  axiom receipt: the pinned inputs (repo revision, toolchain, dependency
+  pins), where it built (a machine separate from the author's), and the
+  exact `#print axioms` output for the headline theorem. "It compiled on my
+  machine" is not a receipt. (Pattern and catalog: `docs/family-receipts/`.)
+- **Computational-replay gates (types A–F)** already produce their receipt in
+  the gate script plus its output; the discipline is that the evidence hash
+  is part of the verdict record every time, not just when convenient.
+- A receipt that does not exist is reported as such — a missing receipt is a
+  GAP in the note, never silently omitted.
+
 ## Boundaries
 
 - The loop never clones code, never runs builds, never downloads artifacts.
