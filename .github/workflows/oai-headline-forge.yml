@@ -95,13 +95,12 @@ jobs:
           require PrimeNumberTheoremAnd from git "https://github.com/AlexKontorovich/PrimeNumberTheoremAnd.git" @ "c39a751132c88b6e8080b74c74023fd95b3d8be0"
           require "rellich-kondrachov" from git "https://github.com/abenenson/rellich-kondrachov.git" @ "70f85d4c1bf99c6e7d61e8be4daa6f3664d08d23"
           require mathlib from git "https://github.com/leanprover-community/mathlib4.git" @ "d13f23b723b8a846827a245b89c10fc7d3f11612"
-          -- Declare the four vendored headline modules as build roots; without
-          -- this, `lake build OAI...` fails with "unknown target".
+          -- Declare the vendored OAI modules as a library. NOTE: do NOT set
+          -- `roots` here -- a roots-restricted lib silently excludes every
+          -- non-root module from the build plan, so dependencies never get
+          -- .oleans and the build dies with "object file does not exist"
+          -- (headline run #3). A bare declaration covers all vendored files.
           lean_lib OAI where
-            roots := #[`OAI.NumberTheory.DirichletL.Nonvanishing,
-                       `OAI.Analysis.Mahler.MainTheorem,
-                       `OAI.RingTheory.DirectFiniteness.FinitelyPresented,
-                       `OAI.Algebra.OddKaplansky.Main]
           EOF
           cd ../oai-math
           # NOTE: keep the leading lean/ in the tar paths -- the sparse
