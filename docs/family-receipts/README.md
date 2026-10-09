@@ -1,5 +1,13 @@
 # Family receipts — independent axiom audits of openai/math Lean families
 
+## What is this, in plain English?
+
+OpenAI published hundreds of "machine-checked" math proofs, but nobody ever
+independently re-ran them — a proof that doesn't build on anyone else's machine
+isn't much of a proof. This pipeline rebuilds each one from scratch on an
+independent computer and issues a receipt: yes, it built, and here are the exact
+foundational assumptions it depends on. It's reproducibility, but for proofs.
+
 Each receipt records an independent machine build of one openai/math family's
 Lean formalization on a machine separate from the auditing VM, with the exact
 `#print axioms` output for the family's headline theorem. Verdicts are
