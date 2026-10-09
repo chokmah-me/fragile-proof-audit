@@ -2,6 +2,8 @@
 
 Per-target audit notes: claim artifact, gates, controls, and disposition.
 
+Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09): [`receipt-hashes.json`](receipt-hashes.json).
+
 | Note | Date |
 |---|---|
 | [ab-fluid audit — Alpöge–Buckmaster forced blowup (Euler / Boussinesq / IPM)](ab-fluid.md) |  |
