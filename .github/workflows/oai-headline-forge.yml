@@ -205,10 +205,13 @@ jobs:
 
       - name: Leave shared checkout clean (meta-rule)
         if: always()
-        working-directory: fragile-proof-audit
         run: |
           # Self-heal: never leave sparse-checkout (or other persistent git
           # state) behind in the shared self-hosted workspace -- see the
           # META-RULE comment on the checkout step above.
+          # NOTE: never set `working-directory` on this step -- the default
+          # step directory is already the repo checkout, so a repo-name value
+          # re-roots under the checkout (fragile-proof-audit/fragile-proof-audit)
+          # and the step dies before running anything (headline run #4).
           git sparse-checkout disable 2>/dev/null || true
           git checkout --force HEAD 2>/dev/null || true
