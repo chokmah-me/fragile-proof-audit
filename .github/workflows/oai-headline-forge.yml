@@ -63,9 +63,13 @@ jobs:
           rm -rf oai-math
           git clone --filter=blob:none --sparse https://github.com/openai/math.git oai-math
           cd oai-math
-          git fetch --depth 1 origin fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb || git fetch --depth 1 origin main
-          git checkout fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb 2>/dev/null || git checkout FETCH_HEAD
-          git rev-parse HEAD | tee ../OAI_COMMIT
+          # Fail-closed pin: no fallback to main. A wrong commit here would
+          # silently build the wrong formalizations (adversarial review).
+          git fetch --depth 1 origin fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb
+          git checkout fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb
+          head="$(git rev-parse HEAD)"
+          [ "$head" = "fd4aeeb2ee4fc729c18d98444fed42fd0529eeeb" ] || { echo "FAIL: oai-math HEAD $head != pinned fd4aeeb2e"; exit 1; }
+          echo "$head" | tee ../OAI_COMMIT
 
       - name: Sparse-checkout the 3,365-file closure
         run: |
@@ -73,6 +77,15 @@ jobs:
           cd oai-math
           git sparse-checkout set --no-cone --stdin < ../.github/workflows/oai-headline-files.txt
           echo "checked out lean files: $(find lean/OAI -name '*.lean' | wc -l)"
+          # Upstream's own build applies lean/patches/<dep>-lean4341.patch to
+          # each pinned dep (see the post_update hook in its lakefile). The
+          # scratch project must apply the ones for the deps it uses -- the
+          # raw dep revs do not elaborate against mathlib@d13f23b (run #4
+          # died in rellich-kondrachov, 9635/12321 modules in).
+          git sparse-checkout add lean/patches/rellich-kondrachov-lean4341.patch lean/patches/PrimeNumberTheoremAnd-lean4341.patch
+          for p in rellich-kondrachov PrimeNumberTheoremAnd; do
+            [ -f "lean/patches/${p}-lean4341.patch" ] || { echo "FAIL: patch lean/patches/${p}-lean4341.patch absent at pinned commit"; exit 1; }
+          done
 
       - name: Scratch lake project (3 deps at upstream-pinned revs)
         run: |
@@ -133,6 +146,25 @@ jobs:
             echo "FAIL: dependency satellite version conflict -- 'require mathlib' must be last in lakefile.lean so its revs win"
             exit 1
           fi
+
+      - name: Apply upstream compatibility patches
+        working-directory: headline-forge
+        run: |
+          set -euo pipefail
+          # Mirror upstream's post_update hook: its pinned dep revs need
+          # lean/patches/<dep>-lean4341.patch applied to elaborate against
+          # mathlib@d13f23b. Fail-closed: a patch that is missing or does not
+          # apply cleanly fails the run here, not 42 minutes into the build.
+          for dep in rellich-kondrachov PrimeNumberTheoremAnd; do
+            # Absolute path: git -C re-roots relative paths under the dep dir.
+            patch="$(pwd)/../oai-math/lean/patches/${dep}-lean4341.patch"
+            dir=".lake/packages/${dep}"
+            [ -f "$patch" ] || { echo "FAIL: patch missing: $patch"; exit 1; }
+            [ -d "$dir" ] || { echo "FAIL: dep checkout missing: $dir"; exit 1; }
+            git -C "$dir" apply --check "$patch" || { echo "FAIL: patch does not apply cleanly to $dir: $patch"; exit 1; }
+            git -C "$dir" apply "$patch"
+            echo "applied $patch -> $dir"
+          done
 
       - name: Fetch mathlib prebuilt oleans
         working-directory: headline-forge
