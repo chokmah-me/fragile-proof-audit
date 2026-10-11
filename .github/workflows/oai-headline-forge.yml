@@ -202,7 +202,11 @@ jobs:
                    'OAI.SymmetricMahler.symmetric_mahler',
                    'OAI.KaplanskyCounterexample.finitelyPresented_counterexample',
                    'OAI.OddKaplansky.main_theorem']
-          listings = re.findall(r"'?([\w.]+)'? depends on axioms: \[(.*)\]", txt)
+          # DOTALL + non-greedy: `#print axioms` wraps long lines, and a
+          # single-line regex silently drops the wrapped listings (run #5:
+          # two declarations reported "no axiom listing" despite being in
+          # the log). Reproduced against run #5's verbatim axioms.txt.
+          listings = re.findall(r"'?([\w.]+)'? depends on axioms: \[(.*?)\]", txt, re.DOTALL)
           found = {name: set() for name in decls}
           for name, ax in listings:
               if name in found:
