@@ -115,6 +115,25 @@ jobs:
             exit 1
           fi
 
+      - name: Align toolchain with mathlib (cache requirement)
+        # `lake exe cache get` fetches prebuilt oleans ONLY when the
+        # project's toolchain exactly matches the dependency's fixed
+        # toolchain. EulerBlowup declares v4.32.2 but mathlib@v4.32.0 pins
+        # v4.32.0 -- without this alignment the cache fetch fails with
+        # "error: mathlib: failed to fetch cache" (run #1) and the build
+        # would compile all of mathlib from source. This is the exact remedy
+        # the cache tool itself prescribes. Patch-level deviation
+        # (4.32.2 -> 4.32.0); the sources are compiled as-is otherwise.
+        working-directory: ab-fluid/euler-blowup
+        run: |
+          set -euo pipefail
+          mathlib_tc=".lake/packages/mathlib/lean-toolchain"
+          [ -f "$mathlib_tc" ] || { echo "FAIL: $mathlib_tc absent after lake update"; exit 1; }
+          echo "mathlib fixed toolchain: $(cat "$mathlib_tc")"
+          echo "project toolchain before: $(cat lean-toolchain)"
+          cp "$mathlib_tc" lean-toolchain
+          echo "project toolchain after: $(cat lean-toolchain)"
+
       - name: Fetch mathlib prebuilt oleans
         working-directory: ab-fluid/euler-blowup
         run: lake exe cache get
