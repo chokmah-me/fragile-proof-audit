@@ -53,7 +53,9 @@ jobs:
         # META-RULE (2026-10-09): full checkout -- never sparse-checkout or
         # any other persistent git-config change on the shared self-hosted
         # checkout. Scratch work goes in ab-fluid/ (a SEPARATE git repo, so
-        # it cannot poison this checkout's config); removed if: always().
+        # it cannot poison this checkout's config); removed on full success,
+        # kept for resume on failure/cancellation (see the cleanup step --
+        # the runner has died mid-build before).
         uses: actions/checkout@v4
 
       - name: Install elan
@@ -78,26 +80,49 @@ jobs:
           fi
           echo "FLUID_SHA=$PIN" >> "$GITHUB_ENV"
 
-      - name: Clone fluid_lean at the pinned commit
+      - name: Clone (or resume) fluid_lean at the pinned commit
         run: |
           set -euo pipefail
-          # Clean slate first: ab-fluid/ persists between dispatches on the
-          # self-hosted runner, and cloning into an existing dir fails.
-          rm -rf ab-fluid
-          git clone https://github.com/tristanbuckmaster/fluid_lean.git ab-fluid
-          cd ab-fluid
+          # RESUME POLICY: ab-fluid/ persists between dispatches on the
+          # self-hosted runner (the cleanup step removes it only on full
+          # success). If a usable clone is already there, re-pin it to the
+          # validated commit and keep the .lake incremental build progress
+          # -- the runner has died mid-build before (run #5, 2026-10-12:
+          # lost communication 2.5h in), and a blind rm -rf would discard
+          # hours of work every time. Any doubt -> fresh clone (fail-closed).
+          resumed=0
+          if [ -d ab-fluid/.git ]; then
+            if ( cd ab-fluid \
+                 && [ "$(git remote get-url origin 2>/dev/null)" = "https://github.com/tristanbuckmaster/fluid_lean.git" ] \
+                 && git fetch --depth 1 origin "$FLUID_SHA" \
+                 && git checkout "$FLUID_SHA" \
+                 && [ "$(git rev-parse HEAD)" = "$FLUID_SHA" ] ); then
+              resumed=1
+              echo "RESUME: existing ab-fluid/ re-pinned to $FLUID_SHA; keeping .lake build progress"
+            else
+              echo "RESUME failed (unexpected clone state) -- falling back to fresh clone"
+            fi
+          fi
+          if [ "$resumed" != 1 ]; then
+            # Clean slate first: cloning into an existing dir fails.
+            rm -rf ab-fluid
+            git clone https://github.com/tristanbuckmaster/fluid_lean.git ab-fluid
+            ( cd ab-fluid \
+              && git fetch --depth 1 origin "$FLUID_SHA" \
+              && git checkout "$FLUID_SHA" \
+              && [ "$(git rev-parse HEAD)" = "$FLUID_SHA" ] ) \
+              || { echo "FAIL: fresh clone could not be pinned to $FLUID_SHA"; exit 1; }
+            echo "FRESH: cloned fluid_lean at $FLUID_SHA"
+          fi
           # Fail-closed pin: no fallback to main. A wrong commit would
           # silently build (and audit) the wrong formalization.
-          git fetch --depth 1 origin "$FLUID_SHA"
-          git checkout "$FLUID_SHA"
-          head="$(git rev-parse HEAD)"
-          [ "$head" = "$FLUID_SHA" ] || { echo "FAIL: HEAD $head != pinned $FLUID_SHA"; exit 1; }
-          echo "$head" | tee ../FLUID_COMMIT
+          [ "$(git -C ab-fluid rev-parse HEAD)" = "$FLUID_SHA" ] || { echo "FAIL: HEAD $FLUID_SHA mismatch"; exit 1; }
+          git -C ab-fluid rev-parse HEAD | tee FLUID_COMMIT
           # Sanity: the Euler project must exist at this commit (it uses
           # lakefile.toml, not lakefile.lean -- check the right filename).
-          [ -f euler-blowup/lakefile.toml ] || { echo "FAIL: euler-blowup/lakefile.toml absent at $head"; exit 1; }
-          [ -f euler-blowup/lean-toolchain ] || { echo "FAIL: euler-blowup/lean-toolchain absent at $head"; exit 1; }
-          echo "toolchain: $(cat euler-blowup/lean-toolchain)"
+          [ -f ab-fluid/euler-blowup/lakefile.toml ] || { echo "FAIL: euler-blowup/lakefile.toml absent at $FLUID_SHA"; exit 1; }
+          [ -f ab-fluid/euler-blowup/lean-toolchain ] || { echo "FAIL: euler-blowup/lean-toolchain absent at $FLUID_SHA"; exit 1; }
+          echo "toolchain: $(cat ab-fluid/euler-blowup/lean-toolchain)"
 
       - name: Align toolchain with mathlib (cache requirement)
         # `lake update` runs mathlib's post-update hook, which fetches
@@ -195,14 +220,25 @@ jobs:
       - name: Leave shared checkout clean (meta-rule)
         if: always()
         run: |
-          # Self-heal: remove the scratch clone and never leave
-          # sparse-checkout (or other persistent git state) behind in the
-          # shared self-hosted workspace -- see the META-RULE comment on the
-          # checkout step above.
+          # Self-heal: never leave sparse-checkout (or other persistent git
+          # state) behind in the shared self-hosted workspace -- see the
+          # META-RULE comment on the checkout step above.
           # NOTE: never set `working-directory` on this step -- the default
           # step directory is already the repo checkout, so a repo-name value
           # re-roots under the checkout (fragile-proof-audit/fragile-proof-audit)
           # and the step dies before running anything (headline run #4).
-          rm -rf ab-fluid
+          #
+          # ab-fluid/ is removed ONLY when the whole job succeeded (build +
+          # forge green, evidence uploaded). On failure or cancellation it is
+          # KEPT so the next dispatch resumes the incremental `lake build`
+          # instead of redoing hours of work -- the runner has died mid-build
+          # before (run #5, 2026-10-12: lost communication 2.5h in). Disk is
+          # plentiful; a kept scratch dir is the lesser evil.
+          # `${{ job.status }}` is a GitHub-provided enum, never user input.
+          if [ "${{ job.status }}" = "success" ]; then
+            rm -rf ab-fluid
+          else
+            echo "keeping ab-fluid/ for resume (job status: ${{ job.status }})"
+          fi
           git sparse-checkout disable 2>/dev/null || true
           git checkout --force HEAD 2>/dev/null || true
