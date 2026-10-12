@@ -402,6 +402,37 @@
         "results/venn_simple_symmetric_gate_meta.json": "63cad27407ab8d161e2997ad855aa379c7d47909a11244501c40e39f037e7245"
       },
       "missing": []
+    },
+    "koval-strongly-regular-graphs.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/koval_srg_claim_manifest.json": "62c2d1caa9eab0ea278a25748cb3e4d219e30f2d83ae60a970353f147822635b",
+        "scripts/gates/koval_srg_control.py": "09f41b77db953117d770b7fbfd9b6fda5071002505268a8aa7d42fe1326d1bcc"
+      },
+      "output_sha256": {
+        "results/srg_verify_meta.json": "106f1865be77e24ce5d588a9771d2c51fc6ce8c0afc3c75c1996868b33726e80",
+        "results/srg_verify_out.txt": "9fba890994cc1a1554efd452d53ec164863a10400048c5421acd455947f94424",
+        "results/srg_verify_brief.md": "ffc3e1c4341abbf181989ffb81e13b5dd55cb737a1d7466033e5e57ebcd35a32",
+        "results/srg_control_receipt.md": "860ddff732e8a2425898e4e1ac07da647688980eb68eea70a4939ddec6d970b1",
+        "results/srg_control_petersen.g6": "6cc4ea0fc78d45af4648d54efe79ff367d51a5a7faf5fda5280bb84f5db2fa82",
+        "results/srg_control_path10.g6": "8747ef489d09d992d1e0a2ba6840077d5b12c62f76583153b413ae8d9bec6b22"
+      },
+      "missing": []
+    },
+    "shuffle-squares-smooth-words.md": {
+      "class": "computational-gate",
+      "script_sha256": {
+        "scripts/gates/shuffle_squares_independent.py": "c1db5658f52862e343a3eca1f70e5b61a29ae89ef48e8239272f214fbfabb9df",
+        "scripts/gates/shuffle_squares_certificate_check.py": "7af78aa2c109f24810c98a94028cca5b050dc13659b88907dbc3570159c1a0a1",
+        "scripts/gates/shuffle_squares_control.py": "09048499d260a115bcd678aabb8d1ef7652ffcb135a7443e61da20ab65c5ba04"
+      },
+      "output_sha256": {
+        "results/shuffle_squares_verify_meta.json": "c91550be62978be1b6336b6f26f4a639a5c7b3bac12fbeb766fba8ce232a9369",
+        "results/shuffle_squares_verify_out.txt": "51d5e4bb7c887e2a5d5fee6e4339bab57019ace115b63f70495933fb0ba13e6f",
+        "results/shuffle_squares_verify_brief.md": "83ebb30d8e149b67de899139b4979c657bc3b5f72fad92790e89c16899fb0108",
+        "results/shuffle_squares_control_receipt.md": "a24081ab24e752e1cbb1aa30ae844b9ba556913c628be891d8043a9d83a05e96"
+      },
+      "missing": []
     }
   }
 }

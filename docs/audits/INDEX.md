@@ -18,6 +18,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [Erdős–Straus covering (Phase 2(e))](es-covering.md) |  |
 | [ES-5 Ghermoul equation (35) — BREAK](es5-eq35.md) |  |
 | [FR-05 phase-retrieval injectivity, Lean formalization](fr-05-phase-retrieval-injectivity.md) | 2026-09-29 |
+| [five new strongly regular graphs (Kovaľ, Zenodo 23296158) — PASS on existence, GAP on prior-"?"](koval-strongly-regular-graphs.md) | 2026-10-12 |
 | [FRK-UC Demontis union-closed — proof GAP (type G)](frankl-uc-gap.md) |  |
 | [Audit: AEjonanonymous / Euler-Mascheroni (γ irrationality Lean claim)](gamma-aejonanonymous.md) |  |
 | [Goldbach semi-continuous (S.C.E.) model (arXiv:1909.13230v5)](gb-sce.md) |  |
@@ -45,6 +46,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [Salez–Youssef log-Sobolev conjecture (Track D#8)](salez-youssef-logsobolev.md) |  |
 | [Sárközy's mod-`p` sum-product conjecture (Track D#3)](sarkozy-sum-product.md) |  |
 | [simplex Gaussian maxima, Lean formalization](simplex-gaussian-maxima.md) | 2026-09-28 |
+| [shuffle squares in smooth binary words (arXiv:2610.02262) — PASS, "exactly 34" reproduced](shuffle-squares-smooth-words.md) | 2026-10-12 |
 | [SSS trace lower bound λ ≥ 1.80220](sss-trace-lower-bound.md) | 2026-09-28 |
 | [Suman ζ(5) (Phase 1(b))](suman-zeta5.md) |  |
 | [Tait's 1884 Hamiltonian conjecture (Tutte 1946)](tait-tutte.md) |  |
@@ -55,4 +57,4 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [TPC-GN evaluation display — BREAK](tpc-gn.md) |  |
 | [simple symmetric Venn diagrams, 17 and 19 curves](venn-simple-symmetric.md) | 2026-09-28 |
 
-_48 notes. Dispositions (BREAK / PASS / GAP / SKIP) live in the notes themselves; gates refute routes, not theorems._
+_50 notes. Dispositions (BREAK / PASS / GAP / SKIP) live in the notes themselves; gates refute routes, not theorems._

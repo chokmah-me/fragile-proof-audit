@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "schema": "cd-claim-gate/v1",
+  "project": "/home/hatch/workspace/fragile-proof-audit",
+  "manifest": null,
+  "claims": [
+    {
+      "id": "shuffle-squares-exceptions",
+      "ok": true,
+      "command": [
+        "python3",
+        "scripts/gates/shuffle_squares_independent.py"
+      ],
+      "exit_code": 0,
+      "duration_ms": 1250,
+      "log_tail": "length | smooth | tangram | negatives | table-ok\n     2 |      4 |       2 |         0 | True (table [4, 2, 0])\n     4 |     10 |       6 |         2 | True (table [10, 6, 2])\n     6 |     18 |       6 |         0 | True (table [18, 6, 0])\n     8 |     34 |      18 |         6 | True (table [34, 18, 6])\n    10 |     50 |      22 |         4 | True (table [50, 22, 4])\n    12 |     78 |      42 |        10 | True (table [78, 42, 10])\n    14 |    110 |      54 |         4 | True (table [110, 54, 4])\n    16 |    142 |      74 |         8 | True (table [142, 74, 8])\n\nmy exception count: 34; author count: 34\nexception sets match element-for-element: True\n\nPASS: exactly the author's 34 exceptions, all length <= 16; per-length counts match Table 1.",
+      "errors": [],
+      "golden_ok": null,
+      "golden_details": []
+    },
+    {
+      "id": "shuffle-squares-certificate",
+      "ok": true,
+      "command": [
+        "python3",
+        "scripts/gates/shuffle_squares_certificate_check.py"
+      ],
+      "exit_code": 0,
+      "duration_ms": 1906,
+      "log_tail": "regenerating smooth words through 40 (bottom-up on D)...\nnonempty smooth words through 40: 16146 (certificate says 16146)\nsmooth tangrams through 40: 4204 (certificate says 4204)\nbottom-up smooth sets agree with naive enumeration (n<=16): True\npositive smooth tangrams through 40: 4170; controls: 4170\ncontrol coverage is exact (no missing, no invented words)\nFIFO controls replayed: 4170/4170 valid empty-to-empty\n\nPASS: 16146 smooth words / 4204 smooth tangrams regenerated independently (nonempty; eps is smooth but uncounted by the author's convention); all 4170 FIFO controls valid and covering exactly the positive smooth tangrams through length 40.",
+      "errors": [],
+      "golden_ok": null,
+      "golden_details": []
+    }
+  ],
+  "errors": [],
+  "timestamp_utc": "2026-10-12T14:57:58.732029+00:00",
+  "policy": {
+    "default_timeout_sec": 600,
+    "self_certify_by_reading": false
+  },
+  "status": "pass"
+}
