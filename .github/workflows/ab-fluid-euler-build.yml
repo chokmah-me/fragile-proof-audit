@@ -56,7 +56,18 @@ jobs:
         # it cannot poison this checkout's config); removed on full success,
         # kept for resume on failure/cancellation (see the cleanup step --
         # the runner has died mid-build before).
+        #
+        # clean: false is REQUIRED for the resume policy: the checkout
+        # action's default `git clean -ffdx` would delete the ab-fluid/
+        # scratch clone (with its .lake progress) before the clone step
+        # runs, silently turning every dispatch into a fresh build (this is
+        # what happened on run #6 -- the "RESUME" path never had a chance).
+        # Tracked-file hygiene is still enforced by the cleanup step's
+        # `git checkout --force HEAD`; per-run logs are truncated by the
+        # steps that write them (see the clone step).
         uses: actions/checkout@v4
+        with:
+          clean: false
 
       - name: Install elan
         run: |
@@ -90,6 +101,13 @@ jobs:
           # -- the runner has died mid-build before (run #5, 2026-10-12:
           # lost communication 2.5h in), and a blind rm -rf would discard
           # hours of work every time. Any doubt -> fresh clone (fail-closed).
+          #
+          # NOTE: the checkout step runs with `clean: false` (see above) so
+          # that ab-fluid/ survives into this step; without that, the
+          # checkout's default `git clean -ffdx` deletes it first and every
+          # dispatch is silently a fresh build. Per-run evidence files are
+          # removed here so a resumed run never uploads a stale log.
+          rm -f FLUID_COMMIT lake-update.log build.log forge-report.json forge-err.log
           resumed=0
           if [ -d ab-fluid/.git ]; then
             if ( cd ab-fluid \
