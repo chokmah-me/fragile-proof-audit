@@ -24,7 +24,17 @@ jobs:
     runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || 'self-hosted' }}
     timeout-minutes: 180
     steps:
+      # clean: false -- do NOT revert this to the default. The default
+      # `git clean -ffdx` deletes the ab-fluid/ scratch clone (with its
+      # .lake incremental progress) that the ab-fluid-euler-build workflow
+      # keeps between dispatches for resume; a verify run landing between
+      # two euler dispatches would silently turn the next euler run into a
+      # fresh multi-hour build (this bit run #7, 2026-10-12). Side benefit:
+      # the repo's own .lake/ now persists too, making this job incremental
+      # instead of a full rebuild every push.
       - uses: actions/checkout@v4
+        with:
+          clean: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -39,7 +49,13 @@ jobs:
     runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || 'self-hosted' }}
     timeout-minutes: 360
     steps:
+      # clean: false -- see the gates job: the default `git clean -ffdx`
+      # would delete the ab-fluid-euler-build scratch clone between euler
+      # dispatches (this bit run #7, 2026-10-12). Also makes the lean build
+      # incremental instead of a full rebuild every push.
       - uses: actions/checkout@v4
+        with:
+          clean: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
