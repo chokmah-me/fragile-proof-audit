@@ -71,6 +71,37 @@ offline / rate-limiting (429), so no pre-2026-10-11 snapshot of the table
 pages could be retrieved. Recorded as **GAP**: the existence claim is verified,
 the "previously unknown" framing is not independently confirmed.
 
+### Addendum — 2026-10-12: "previously ?" framing, further corroboration
+
+At the user's direction ("search for the paper somewhere else"), two further
+checks were run after the initial audit:
+
+- The paper is Zenodo-only: not on arXiv (direct API query 2026-10-12
+  returned nothing), not yet indexed by Semantic Scholar. The author's
+  earlier deposit 10.5281/zenodo.23210829 (2026-10-07, *"New strongly regular
+  graphs on open parameter sets of Brouwer's table"*) claims nine *different*
+  parameter sets — (250,81,24,27), two (300,69,18,15), two (486,100,22,20),
+  two (486,97,16,20), and lower-bound counts for (320,87,22,24),
+  (320,88,24,24), (324,114,36,42), (324,133,52,56), (324,136,58,56) — and its
+  description states they "are now marked as realised in the table, on the
+  basis of this work".
+- Live table re-check (2026-10-12, the per-range pages under
+  `https://aeb.win.tue.nl/graphs/srg/`): all nine Oct-7 sets are marked
+  **"+"** with comment **"Kovaľ"** — the author's table-update claim verifies
+  exactly. All five sets from this audit carry the identical mark and comment
+  ("+"/"Kovaľ"; three with additional OA-design notes). No co-credit or
+  earlier existence reference appears on any of the fourteen rows.
+
+Assessment: the GAP is **narrowed, not closed**. The table demonstrably
+updates on the basis of this author's deposits and credits him alone — a
+consistent two-deposit pattern — and the independent existence verification
+above removes the only alternative reading under which the "+" marks would be
+wrong. What remains unobserved is the exact pre-2026-10-11 mark itself: no
+snapshot source yielded it (archive.org rate-limited; Wayback CDX empty for
+2026; archive.today rate-limited). Standing: existence PASS unchanged;
+"previously ?" framing plausible and pattern-supported, exact prior mark
+unobserved.
+
 ## Residual math (explicitly out of scope)
 
 - **The SAT-solving search** that found three of the graphs (the 306/576/1296
@@ -111,4 +142,5 @@ instrument.
 ## Verdict lock
 
 Untouched (32 gates: 17 BREAK / 15 PASS). Standalone verify/audit; not a gate
-verdict. The prior-"?" framing sub-claim is recorded GAP above.
+verdict. The prior-"?" framing sub-claim is recorded GAP above (narrowed by
+the 2026-10-12 addendum; exact prior mark unobserved).
