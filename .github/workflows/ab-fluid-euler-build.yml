@@ -1,0 +1,173 @@
+name: ab-fluid-euler-build
+
+# Full `lake build` of the Euler route of tristanbuckmaster/fluid_lean
+# (the EulerBlowup lake project) on the self-hosted WSL runner, followed by
+# the hardened forge source-scan + axiom audit
+# (scripts/forge/verify_lean_project.py).
+#
+# Why this exists: the agent VM reboots roughly every 2 hours, which keeps
+# killing the Euler build during its final two modules
+# (EulerBlowup/Ring/S4r/Recipe, EulerBlowup/Ring/Lr/Tower -- heavy,
+# memory-hungry: ~5GB between two workers on the VM's 8GB box). The build
+# sat at 9716/9769 units for a full day, reboot-killed before the tail
+# closed. DESKTOP-7HDI2D1 does not reboot under a build and proved itself
+# on the 12,321-module headline forge (3h14m).
+#
+# Scope is euler-blowup ONLY -- the audit's Euler route (PASS: Euler clean,
+# zero sorry/axiom outside Challenge). The boussinesq-blowup / affinecore
+# projects are not built here.
+#
+# Upstream repo is public; the commit pin is fail-closed (see the pin step).
+# NOTE on the expected outcome: fluid_lean contains a sorry in
+# EulerBlowup/Challenge.lean, which is inside the audit's Challenge
+# exemption. The forge does not know that exemption, so it will report its
+# verdict raw (expect FAILED, not VERIFIED) -- the evidence it uploads is
+# interpreted against the audit scope, not the raw verdict alone.
+#
+# Manual dispatch only. Runs on the self-hosted WSL runner.
+
+on:
+  workflow_dispatch:
+    inputs:
+      fluid_lean_commit:
+        description: 'fluid_lean commit SHA to build (40-hex, fail-closed)'
+        required: false
+        default: 'd0124689230b58b4f86e7b90ac59de06404b3b6b'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ab-fluid-euler-build
+  cancel-in-progress: false
+
+jobs:
+  euler:
+    runs-on: self-hosted
+    # Squat-guard: the runner does one job at a time, so a wedged build
+    # blocks verify. 9h is generous (headline forge: 12,321 modules in
+    # 3h14m on this box; euler-blowup is 1,114 own modules with deps cached).
+    timeout-minutes: 540
+    steps:
+      - name: Check out this repo
+        # META-RULE (2026-10-09): full checkout -- never sparse-checkout or
+        # any other persistent git-config change on the shared self-hosted
+        # checkout. Scratch work goes in ab-fluid/ (a SEPARATE git repo, so
+        # it cannot poison this checkout's config); removed if: always().
+        uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Validate the commit pin
+        # The input reaches the shell through `env:`, never through `${{ }}`
+        # substitution inside the `run:` block: a quoted substitution would
+        # still execute an input like `$(evil)` (command substitution runs
+        # inside double quotes -- the classic GHA script-injection hole).
+        # An env var's value is never re-parsed by the shell, and the regex
+        # below then rejects anything that is not a 40-hex SHA.
+        env:
+          PIN: ${{ inputs.fluid_lean_commit }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$PIN" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "FAIL: fluid_lean_commit is not a 40-hex SHA"
+            exit 1
+          fi
+          echo "FLUID_SHA=$PIN" >> "$GITHUB_ENV"
+
+      - name: Clone fluid_lean at the pinned commit
+        run: |
+          set -euo pipefail
+          # Clean slate first: ab-fluid/ persists between dispatches on the
+          # self-hosted runner, and cloning into an existing dir fails.
+          rm -rf ab-fluid
+          git clone https://github.com/tristanbuckmaster/fluid_lean.git ab-fluid
+          cd ab-fluid
+          # Fail-closed pin: no fallback to main. A wrong commit would
+          # silently build (and audit) the wrong formalization.
+          git fetch --depth 1 origin "$FLUID_SHA"
+          git checkout "$FLUID_SHA"
+          head="$(git rev-parse HEAD)"
+          [ "$head" = "$FLUID_SHA" ] || { echo "FAIL: HEAD $head != pinned $FLUID_SHA"; exit 1; }
+          echo "$head" | tee ../FLUID_COMMIT
+          # Sanity: the Euler project must exist at this commit (it uses
+          # lakefile.toml, not lakefile.lean -- check the right filename).
+          [ -f euler-blowup/lakefile.toml ] || { echo "FAIL: euler-blowup/lakefile.toml absent at $head"; exit 1; }
+          [ -f euler-blowup/lean-toolchain ] || { echo "FAIL: euler-blowup/lean-toolchain absent at $head"; exit 1; }
+          echo "toolchain: $(cat euler-blowup/lean-toolchain)"
+
+      - name: Fetch dependencies
+        # Resolves to <checkout>/ab-fluid/euler-blowup -- a real subdir, not
+        # a redundant re-root (cf. headline run #4). Fails fast if the clone
+        # step did not produce it.
+        working-directory: ab-fluid/euler-blowup
+        run: |
+          set -o pipefail
+          lake update 2>&1 | tee ../../lake-update.log
+          # Fail-fast (harness rule): 'pins different versions' means the
+          # satellite revs resolved wrong and cache-get would then compute
+          # wrong hashes -- die here, not hours into the build.
+          if grep -q "pins different versions" ../../lake-update.log; then
+            echo "FAIL: dependency satellite version conflict"
+            exit 1
+          fi
+
+      - name: Fetch mathlib prebuilt oleans
+        working-directory: ab-fluid/euler-blowup
+        run: lake exe cache get
+
+      - name: Build euler-blowup
+        working-directory: ab-fluid/euler-blowup
+        run: |
+          set -o pipefail
+          lake build 2>&1 | tee ../../build.log
+
+      - name: Hardened forge audit
+        # NOTE: no `working-directory` override -- the forge script lives in
+        # this repo's checkout (the step default); the project path is passed
+        # absolute so a re-rooting mistake cannot silently audit the wrong
+        # directory. No --skip-build: the forge re-verifies the build
+        # itself (incremental no-op) and --skip-build would skip the axiom
+        # audit entirely.
+        run: |
+          set -euo pipefail
+          [ -n "${GITHUB_WORKSPACE:-}" ] || { echo "FAIL: GITHUB_WORKSPACE unset"; exit 1; }
+          proj="$GITHUB_WORKSPACE/ab-fluid/euler-blowup"
+          [ -d "$proj" ] || { echo "FAIL: project dir missing: $proj"; exit 1; }
+          python3 scripts/forge/verify_lean_project.py \
+            --project "$proj" --timeout 3600 --json \
+            > forge-report.json 2>forge-err.log; code=$?
+          echo "forge exit code: $code"
+          cat forge-report.json
+          exit $code
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-fluid-euler-evidence
+          path: |
+            FLUID_COMMIT
+            lake-update.log
+            build.log
+            forge-report.json
+            forge-err.log
+            ab-fluid/euler-blowup/results/
+
+      - name: Leave shared checkout clean (meta-rule)
+        if: always()
+        run: |
+          # Self-heal: remove the scratch clone and never leave
+          # sparse-checkout (or other persistent git state) behind in the
+          # shared self-hosted workspace -- see the META-RULE comment on the
+          # checkout step above.
+          # NOTE: never set `working-directory` on this step -- the default
+          # step directory is already the repo checkout, so a repo-name value
+          # re-roots under the checkout (fragile-proof-audit/fragile-proof-audit)
+          # and the step dies before running anything (headline run #4).
+          rm -rf ab-fluid
+          git sparse-checkout disable 2>/dev/null || true
+          git checkout --force HEAD 2>/dev/null || true
