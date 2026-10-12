@@ -18,7 +18,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [Erdős–Straus covering (Phase 2(e))](es-covering.md) |  |
 | [ES-5 Ghermoul equation (35) — BREAK](es5-eq35.md) |  |
 | [FR-05 phase-retrieval injectivity, Lean formalization](fr-05-phase-retrieval-injectivity.md) | 2026-09-29 |
-| [five new strongly regular graphs (Kovaľ, Zenodo 23296158) — PASS on existence, GAP on prior-"?"](koval-strongly-regular-graphs.md) | 2026-10-12 |
+| [five new strongly regular graphs (Kovaľ, Zenodo 23296158) — PASS; prior-"?" confirmed via SageMath DB](koval-strongly-regular-graphs.md) | 2026-10-12 |
 | [FRK-UC Demontis union-closed — proof GAP (type G)](frankl-uc-gap.md) |  |
 | [Audit: AEjonanonymous / Euler-Mascheroni (γ irrationality Lean claim)](gamma-aejonanonymous.md) |  |
 | [Goldbach semi-continuous (S.C.E.) model (arXiv:1909.13230v5)](gb-sce.md) |  |

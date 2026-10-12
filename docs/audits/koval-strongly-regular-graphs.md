@@ -58,18 +58,32 @@ discriminates — the five PASS verdicts are not vacuous. Separate receipt:
 `results/srg_control_receipt.md` (control inputs
 `results/srg_control_petersen.g6`, `results/srg_control_path10.g6`).
 
-## Brouwer's table check: GAP on the prior-"?" sub-claim
+## Brouwer's table check: prior-"?" sub-claim CONFIRMED (GAP closed 2026-10-12)
 
 The live table (https://aeb.win.tue.nl/graphs/srg/srgtab.html, fetched
 2026-10-12; the old `www.win.tue.nl` URL 301-redirects here) now marks all
 five parameter sets **"+" (exists)** with the comment citing **Kovaľ** —
 i.e. the table has been updated to record this paper as the existence
 reference. The paper itself dates its "?" observation to 10–11 October 2026
-(paper tex, §1 and Table 1 caption). The pre-paper "?" state cannot be
-independently observed from this host: the Internet Archive is temporarily
-offline / rate-limiting (429), so no pre-2026-10-11 snapshot of the table
-pages could be retrieved. Recorded as **GAP**: the existence claim is verified,
-the "previously unknown" framing is not independently confirmed.
+(paper tex, §1 and Table 1 caption).
+
+The pre-paper "?" state is now independently confirmed via SageMath's
+`brouwer_srg_database.json` (the `graphs` data package,
+github.com/sagemath/data-graphs,
+`src/sage_data_graphs/data/brouwer_srg_database.json`, committed
+2026-08-24 as "Initial sage-data-graphs package" — i.e. parsed from
+Brouwer's website no later than 2026-08-24, before either Kovaľ deposit).
+Its 4,538 entries use statuses `exists` / `impossible` / `open`; all five
+of this audit's parameter sets are recorded **"open"** (Brouwer's "?"
+mark), with the same OA-design comments the live table still carries:
+
+- (306,55,4,11) → open; (400,171,74,72) → open, OA(20,9)?;
+  (576,253,112,110) → open, OA(24,11)?; (784,351,158,156) → open,
+  OA(28,13)?; (1296,595,274,272) → open, OA(36,17)?
+
+The nine parameter sets from the author's earlier 2026-10-07 deposit are
+likewise all "open" in the same snapshot. **GAP closed**: the "previously
+unknown" framing is confirmed by an independent, dated source.
 
 ### Addendum — 2026-10-12: "previously ?" framing, further corroboration
 
@@ -92,7 +106,8 @@ checks were run after the initial audit:
   ("+"/"Kovaľ"; three with additional OA-design notes). No co-credit or
   earlier existence reference appears on any of the fourteen rows.
 
-Assessment: the GAP is **narrowed, not closed**. The table demonstrably
+Assessment (superseded 2026-10-12 — see "GAP closed" above): the GAP is
+**narrowed, not closed**. The table demonstrably
 updates on the basis of this author's deposits and credits him alone — a
 consistent two-deposit pattern — and the independent existence verification
 above removes the only alternative reading under which the "+" marks would be
@@ -101,6 +116,11 @@ snapshot source yielded it (archive.org rate-limited; Wayback CDX empty for
 2026; archive.today rate-limited). Standing: existence PASS unchanged;
 "previously ?" framing plausible and pattern-supported, exact prior mark
 unobserved.
+
+**Update 2026-10-12:** the GAP is now closed — SageMath's
+`brouwer_srg_database.json` (committed 2026-08-24, parsed from Brouwer's
+website no later than that date) records all five sets as "open". See the
+"Brouwer's table check" section.
 
 ## Residual math (explicitly out of scope)
 
@@ -142,5 +162,6 @@ instrument.
 ## Verdict lock
 
 Untouched (32 gates: 17 BREAK / 15 PASS). Standalone verify/audit; not a gate
-verdict. The prior-"?" framing sub-claim is recorded GAP above (narrowed by
-the 2026-10-12 addendum; exact prior mark unobserved).
+verdict. The prior-"?" framing sub-claim was recorded GAP, then confirmed
+2026-10-12 via SageMath's dated `brouwer_srg_database.json` (all five sets
+"open" as of ≤2026-08-24).
