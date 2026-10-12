@@ -1,0 +1,319 @@
+{
+  "date": "2026-10-12",
+  "harvest_sha": "c724272e047fdf5ba2ca5efd79f73bb556ec0f396d154e4d1ade83ea8d601534",
+  "meta": {
+    "window": "2026-10-05..2026-10-12",
+    "source": "weekly harvest scan \u2014 two parallel sweeps: (a) arXiv gap window announced ~2026-10-04 eve..2026-10-06 am in math.CO/math.NT/math.PR/math.NA/cs.DM/cs.SC (re-resolving the 10-05 run's unretrievable Oct-5 IDs and partial NT list; all abs pages reachable), (b) math blogs (Tao, Gowers, Kalai) + fresh public GitHub math-claim repos. The 2026-10-06..10-12 core arXiv window was covered the same morning by the one-off 2026-10-12 shortlist (delivered separately as a PDF to the user; its nine candidates are recorded in seen_claims.md, and its #1, the zeta-zero record claim, is now under active audit and excluded here)."
+  },
+  "claims": [
+    {
+      "id": "three-sum-apsp-subquadratic",
+      "title": "Truly subquadratic 3SUM and truly subcubic APSP (Lean 4 formalization)",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.06783",
+        "title": "Truly Subquadratic 3SUM and Truly Subcubic APSP via Triangles in Sparse Lopsided Graphs",
+        "authors": [
+          "Josh Alman",
+          "Virginia Vassilevska Williams"
+        ],
+        "published": "2026-10-05",
+        "url": "https://arxiv.org/abs/2610.06783"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "anthropics/formal-math",
+        "branch": "main",
+        "size_kb": 3519,
+        "pushed_at": "2026-10-06",
+        "url": "https://github.com/anthropics/formal-math",
+        "head_sha": "e1a4e6508154ea59f030480661590a9fe3018011",
+        "head_date": "2026-10-06",
+        "lean_files": 760,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 760,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Truly subquadratic 3SUM and truly subcubic APSP (Lean 4 formalization). Deterministic O(n^1.9992) 3SUM, O(n^2.99942) APSP and (min,+)-product, O(n^{3-0.0017}) Exact Triangle, and O"
+      }
+    },
+    {
+      "id": "koval-strongly-regular-graphs",
+      "title": "Five new strongly regular graphs from multi-orbit coset fusion and Bush-type Hadamard matrices",
+      "score": 3,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://doi.org/10.5281/zenodo.23296158",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://doi.org/10.5281/zenodo.23296158"
+      },
+      "signals": [
+        "ai_generated",
+        "single_author"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [],
+      "formalization_coverage": null
+    },
+    {
+      "id": "split-cubic-dn-triples-census",
+      "title": "Split-Cubic Curves from D(n)-Triples: A Bounded Finite-Field Census",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.03121",
+        "title": "Split-Cubic Curves from D(n)-Triples: A Bounded Finite-Field Census",
+        "authors": [
+          "Sompong Chuysurichay",
+          "Sawian Jaidee",
+          "Chatchawan Panraksa",
+          "Teerapol Sukhonwimolmal"
+        ],
+        "published": "2026-10-02",
+        "url": "https://arxiv.org/abs/2610.03121"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "climb-problem-4-general-sets",
+      "title": "The climb problem for 4-general sets in PG(n,4)",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.03272",
+        "title": "The climb problem for $4$-general sets in PG(n,4)",
+        "authors": [
+          "Liangdong Lu",
+          "Ruipan Yang",
+          "Qiang Fu",
+          "Hao Song"
+        ],
+        "published": "2026-10-02",
+        "url": "https://arxiv.org/abs/2610.03272"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "shuffle-squares-smooth-binary-words",
+      "title": "Shuffle squares in smooth binary words and the Kolakoski sequence",
+      "score": 4,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.02262",
+        "title": "Shuffle squares in smooth binary words and the Kolakoski sequence",
+        "authors": [
+          "Kory Kilpatrick"
+        ],
+        "published": "2026-10-01",
+        "url": "https://arxiv.org/abs/2610.02262"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "single_author"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "orthogonal-multiplicity-f2",
+      "title": "The proportion of polynomials over F_2 with positive orthogonal multiplicity",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.02352",
+        "title": "The proportion of polynomials over F_2 with positive orthogonal multiplicity",
+        "authors": [
+          "David Niedbala Giraudin"
+        ],
+        "published": "2026-10-01",
+        "url": "https://arxiv.org/abs/2610.02352"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "vaught-conjecture-infinitary-counterexample",
+      "title": "Counterexample to Vaught's conjecture for infinitary logic L_{omega1,omega} (Lean 4 formalization)",
+      "score": -1,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://palomar-registry.org/entry?id=PALOMAR-2026-10-07-000001&version=1",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "cameronfreer/vaught-conjecture-palomar",
+        "branch": "main",
+        "size_kb": 3109,
+        "pushed_at": "2026-10-10",
+        "url": "https://github.com/cameronfreer/vaught-conjecture-palomar",
+        "head_sha": "c69ad137438e2f656dc057db7ec29c30d481f7b4",
+        "head_date": "2026-10-08",
+        "lean_files": 915,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
+      },
+      "signals": [
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc3"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 915,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0-rc3",
+        "declared_verification": [
+          "Palomar registration `PALOMAR-2026-10-07-000001` declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Counterexample to Vaught's conjecture for infinitary logic L_{omega1,omega} (Lean 4 formalization). A sentence in a countable relational language with exactly aleph_1 isomorphism c"
+      }
+    },
+    {
+      "id": "catalan-lean4-mihailescu",
+      "title": "Complete Lean 4 formalization of Catalan's conjecture (Mihailescu's theorem)",
+      "score": 1,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/cadamcat/catalan-lean4",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "cadamcat/catalan-lean4",
+        "branch": "main",
+        "size_kb": 9300,
+        "pushed_at": "2026-10-11",
+        "url": "https://github.com/cadamcat/catalan-lean4",
+        "head_sha": "3dc9375da48d13751fd291f3ee0fda8fa18be56d",
+        "head_date": "2026-10-11",
+        "lean_files": 1402,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
+      },
+      "signals": [
+        "disclosed_llm_help",
+        "single_author",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc3"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 1402,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0-rc3",
+        "declared_verification": [
+          "Palomar registration `PALOMAR-2026-10-06-000009` declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Complete Lean 4 formalization of Catalan's conjecture (Mihailescu's theorem). The only consecutive positive integers that are both proper perfect powers are 8 and 9 \u2014 formalized as"
+      }
+    }
+  ]
+}
