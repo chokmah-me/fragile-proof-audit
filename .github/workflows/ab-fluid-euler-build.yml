@@ -107,12 +107,12 @@ jobs:
         # without this alignment the update fails with
         # "error: mathlib: failed to fetch cache" (runs #1 and #3). The
         # alignment MUST precede `lake update` because the failing fetch is
-        # inside update's own post-update hook -- a post-update alignment
-        # (as in 8a98f88) never runs. mathlib's fixed toolchain is read from
-        # a shallow sparse fetch of just its lean-toolchain file at the rev
-        # euler-blowup/lakefile.toml requires -- derived, not hardcoded.
-        # The sparse config lives in the throwaway mathlib-tc clone's own
-        # .git/config (removed below); the shared checkout is never touched.
+        # inside update's own post-update hook. mathlib's fixed toolchain is
+        # read via plain HTTPS from raw.githubusercontent.com at the rev
+        # euler-blowup/lakefile.toml requires (derived via tomllib, not
+        # hardcoded) -- no extra clone, no sparse-checkout state anywhere.
+        # (The same host already serves the elan installer above, so it is
+        # proven reachable from this runner.)
         # Patch-level deviation (4.32.2 -> 4.32.0); sources compiled as-is.
         run: |
           set -euo pipefail
@@ -125,18 +125,14 @@ jobs:
           print(reqs[0]['rev'])
           ")"
           echo "mathlib rev required: $rev"
-          rm -rf mathlib-tc
-          git clone --filter=blob:none --sparse https://github.com/leanprover-community/mathlib4.git mathlib-tc
-          git -C mathlib-tc fetch --depth 1 origin "$rev"
-          git -C mathlib-tc checkout "$rev"
-          git -C mathlib-tc sparse-checkout set lean-toolchain
-          tc="mathlib-tc/lean-toolchain"
-          [ -f "$tc" ] || { echo "FAIL: lean-toolchain absent in mathlib@$rev"; exit 1; }
-          echo "mathlib fixed toolchain: $(cat "$tc")"
+          # -f: fail on HTTP error (unknown rev) -- never a silent empty file.
+          curl -fsSL "https://raw.githubusercontent.com/leanprover-community/mathlib4/$rev/lean-toolchain" -o mathlib-toolchain
+          [ -s mathlib-toolchain ] || { echo "FAIL: empty toolchain file fetched"; exit 1; }
+          echo "mathlib fixed toolchain: $(cat mathlib-toolchain)"
           echo "project toolchain before: $(cat euler-blowup/lean-toolchain)"
-          cp "$tc" euler-blowup/lean-toolchain
+          cp mathlib-toolchain euler-blowup/lean-toolchain
           echo "project toolchain after: $(cat euler-blowup/lean-toolchain)"
-          rm -rf mathlib-tc
+          rm -f mathlib-toolchain
 
       - name: Fetch dependencies
         # Resolves to <checkout>/ab-fluid/euler-blowup -- a real subdir, not
