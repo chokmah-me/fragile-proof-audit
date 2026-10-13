@@ -48,7 +48,7 @@ autoformalization-tool recon steps before deep gates:
    paper's theorem says?) and in the axiom audit (what do the proofs
    actually depend on?).
 
-### Statement-fidelity checklist (three modes)
+### Statement-fidelity checklist (four modes)
 
 Adopted 2026-10-08 from arXiv:2610.08144 (Bastounis–Circelli–Hansen,
 "Navier-Stokes lost in translation"): Lean acceptance certifies the formal
@@ -62,7 +62,7 @@ correct"; no fixed finite procedure can certify faithful translation (their
 SCI = ∞ result), so the checks below stay human-judgment, fail-closed.
 
 Every audit note that evaluates a Lean formalization — ours or a third
-party's — answers these three modes explicitly. Pure computational-replay
+party's — answers these four modes explicitly. Pure computational-replay
 gates (types A–F) that re-derive the quantity from scratch have no
 formalization under review; the note says so in one line.
 
@@ -83,6 +83,16 @@ formalization under review; the note says so in one line.
   is actually verified? Disclose sorrys, axioms, divergences, and scope
   limits; no over-claiming. (This is the existing Type-G
   verification-credit scan, e.g. the NLA notes.)
+- **M4 — Fine print** (Murray & van Oorschot, "BP: Formal Proofs, the Fine
+  Print and Side Effects," IEEE SecDev 2018, DOI 10.1109/SecDev.2018.00009;
+  adopted 2026-10-13, prospective only, no backfill). Inventory every
+  load-bearing assumption not in the theorem statement: model/definitional
+  choices, machine model, trusted base, exclusions. Dangling check: is the
+  conjunction of those assumptions satisfiable by an instance of the source
+  claim? Residual line per assumption: if it fails — survives / weakens
+  to ___ / evaporates, and which downstream claims inherit it. Tag each
+  proof-enabling change: source-faithful / convenience-only /
+  risk-inducing.
 
 ### Receipt requirement (adopted 2026-10-09)
 

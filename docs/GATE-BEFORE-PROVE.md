@@ -19,7 +19,7 @@ derivation supplied for it — not that the proposition is the one the source
 text states, that the derivation follows the source argument, or that the
 source argument is correct (arXiv:2610.08144; their SCI = ∞ result: no fixed
 finite procedure can certify faithful translation). The campaign's standing
-answer is the statement-fidelity checklist (M1–M3, `docs/harvest-loop.md`).
+answer is the statement-fidelity checklist (M1–M4, `docs/harvest-loop.md`).
 
 ## Protocol
 

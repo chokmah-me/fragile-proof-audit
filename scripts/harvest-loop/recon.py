@@ -239,7 +239,7 @@ def formalization_coverage(claim, code_chk):
                  cn, re.I):
         declared.append("AI-generated formalization — 2610.08144 exposure "
                         "(compilation does not certify the NL argument; "
-                        "M1–M3 statement-fidelity checklist post-pick)")
+                        "M1–M4 statement-fidelity checklist post-pick)")
     return {
         "lean_files": code_chk.get("lean_files"),
         "has_lakefile": bool(code_chk.get("has_lakefile")),
@@ -408,7 +408,7 @@ def render_recon(date, meta, claims, results, harvest_sha):
                          "LeanExplore retired API keys, no account needed; or use the website): "
                          "`leanexplore search \"%s\" --package Mathlib` — checks whether "
                          "the formalized statement or its key lemmas already exist in Mathlib; "
-                         "feeds the statement-fidelity checklist (three modes, docs/harvest-loop.md)." % cov["probe_query"])
+                         "feeds the statement-fidelity checklist (four modes, docs/harvest-loop.md)." % cov["probe_query"])
             lines.append("")
     lines.append("## Next step")
     lines.append("")
