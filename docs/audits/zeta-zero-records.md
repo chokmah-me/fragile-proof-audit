@@ -21,6 +21,10 @@ Upstream library: anthropics/formal-math `zeta23/` @
 **Agent provenance:** Muse (Meta) · model `Muse Spark 1.3` · skills
 `lean-proof-forge`, `computational-claim-gate` · run date `2026-10-12`.
 
+**Status:** CLOSED 2026-10-13 — verdict **PASS** (standalone verify/audit;
+the 32-gate verdict lock is untouched). Closure evidence: the full WSL
+replay recorded in the Receipt.
+
 ## M1 — statement correspondence: PASS
 
 The six `Challenge*.lean` files state the theorems from Mathlib alone (with
@@ -41,8 +45,9 @@ functions (`Ncount`, `Ndist`, `Nsimple`, `N0simple`, …) are defined in the
 Challenge files from Mathlib's `riemannZeta` as the README describes. The
 mechanical statement-fidelity check (`scripts/make_compare.py` +
 `scripts/Compare*.lean`, which replaces each Challenge `sorry` with the
-Solution theorem of the same name) is queued on the self-hosted run; the
-Challenge files themselves elaborate cleanly.
+Solution theorem of the same name) was re-run on the WSL replay: all five
+Compare scripts compiled, and every `Chal.*` axiom listing matches the
+author's recorded listing exactly (see Receipt).
 
 ## M2 — argument correspondence: PASS (modulo the disclosed computations)
 
@@ -70,7 +75,8 @@ any proof file (verified by scan; `sorry` occurs only in the five
 declarations in the author's developments; the two `axiom` declarations in
 the upstream library (`Zeta23/FromPNTPlus/Tactic/AdditiveCombination.lean`,
 tactic test scaffolding: `qc : ℚ`, `hqc : qc = 2*qc`) are outside the
-theorems' dependency closure.
+theorems' dependency closure — confirmed independently by the WSL axiom
+re-run: neither appears in any listing (see Receipt).
 
 ## M3 — credit honesty: PASS
 
@@ -93,36 +99,63 @@ licence (Apache-2.0) noted.
 | Six formal constants vs paper bounds | **all six strictly exceed** the claimed decimals (table above) |
 | Axiom structure (source read) | exactly three `native_decide` axioms, with the exact statements the paper claims: `checkAll kTabArray = true` (×2), `checkAllPar kTabArray 32 96 = true` (×1) |
 | C++ reference verifier rebuilt from source and re-run on certificate 1 | **PASS** — `PASS_COB_CONTINUUM`, 60,467,309 boxes / 30,233,655 accepted, byte-identical to the author's `cpp_verification.json` |
-| Lean build: 205 library modules (everything not needing the search) | **in progress** on the VM (see Honest scope) |
-| Full build + three `native_decide` evaluations + axiom-audit re-run | **queued** on the self-hosted WSL runner (`zeta-zero-verify` workflow, `9981b79`; gated on the Euler build finishing) |
+| Lean build: 205 library modules (everything not needing the search) | **stopped at 8708/8719** on the VM (reboot cut the logged run, no EXIT marker) — partial receipt, superseded by the WSL replay |
+| Full build + three `native_decide` evaluations + axiom-audit re-run | **COMPLETED — success**, WSL run `38311097053` (2026-10-12 21:30 UTC → 2026-10-13 05:46 UTC): searches re-executed (3,740 s / 9,396 s / 11,569 s), developments + all three kernel spot checks built, axiom audit + Compare re-run; evidence artifact read in full (see Receipt) |
 
 ## Honest scope
 
 - The three `native_decide` search evaluations (7 GB / 11 GB / 7 GB per the
-  author's README) cannot run on the agent VM (7 GB total RAM). They are the
-  precise, disclosed trust assumption: "This trusts the Lean compiler,
-  interpreter and runtime for these three computations" (paper §8). The
-  independent C++ re-run above corroborates the first search's outcome; the
-  WSL run will re-execute all three natively.
+  author's README) cannot run on the agent VM (7 GB total RAM), so they were
+  re-executed on the WSL runner (32 GB): all three `RunAll` builds completed
+  successfully. They remain the precise, disclosed trust assumption — "This
+  trusts the Lean compiler, interpreter and runtime for these three
+  computations" (paper §8). The replay re-executes them under that same
+  assumption; it does not convert them into kernel checks. The independent
+  C++ re-run corroborates the first search's outcome.
 - The kernel-evaluated spot checks (`Local/SpotChecks.lean`, `decide
-  +kernel`, 10–12 GB each) likewise exceed the VM; queued on the WSL run.
-- The author's `axioms.txt` (2026-10-06) is taken as the claimed axiom
-  report pending the independent re-run; the source-level structure was
-  verified instead (three axioms, exact statements, no others).
-- Certificates 2 and 3 were not re-run through the C++ verifier on the VM
-  (~9× the work each, beyond the VM's reboot window); the WSL run covers
-  the underlying searches directly.
+  +kernel`, 10–12 GB each) likewise exceed the VM; all three were built on
+  the WSL run (112 s / 125 s / 70 s).
+- The author's `axioms.txt` (2026-10-06) is no longer taken on trust: the
+  independent re-run's listings are content-identical to it (see Receipt).
+- Certificates 2 and 3 were not re-run through the C++ verifier (~9× the
+  work of certificate 1 each). The Lean searches they correspond to were
+  re-executed directly on the WSL run, which is what the theorems depend
+  on; the independent C++ cross-check remains certificate-1-only. This is
+  the audit's one residual gap — a cross-check gap, not a gap in the Lean
+  evidence.
+- The VM Lean partial build stopped at 8708/8719 and was not resumed: the
+  WSL replay covers the full dependency closure, including every module
+  the VM run did not reach.
 
 ## Receipt
 
-`incoming/zeta-zero-2610-08965/PIN.md` (repo SHA, paper source, checksum
-notes); `~/workspace/zeta-verify-build/verify-cert1.log` (independent C++
-re-run output); build logs under `~/workspace/zeta-verify-build/`
-(`vm-build.log` on completion); WSL evidence will land as the
-`zeta-zero-verify-evidence` workflow artifact.
+Inputs: `incoming/zeta-zero-2610-08965/PIN.md` (repo SHA
+`b280d51bef5ab32b3280b0955d040085ed522d59`, upstream
+`fbdc36bbf17d20af3fd0447c6d1a8a02773c9844`) and `CHECKSUMS.sha256`. VM
+partials (2026-10-12): the M1/M2/M3 source checks above; independent C++
+certificate-1 re-run PASS — `~/workspace/zeta-verify-build/verify-cert1.log`
+(`PASS_COB_CONTINUUM`, 60,467,309 boxes examined / 30,233,655 accepted,
+matching the author's `certificate/cpp_verification.json` exactly); VM Lean
+build log `~/workspace/zeta-verify-build/vm-build.log` (stopped at
+8708/8719, no EXIT marker). WSL full replay: `zeta-zero-verify` run
+`38311097053` (workflow @ `8f2fcab`), conclusion **success**; evidence
+artifact `zeta-zero-verify-evidence` (14,429 bytes) downloaded and read in
+full (copy under `~/workspace/zeta-verify-build/wsl-evidence/`): all three
+`RunAll` logs end "Build completed successfully"; the solutions log
+completes with only the by-design Challenge `sorry` warnings; all three
+SpotChecks logs complete; `zeta-axioms.txt` together with
+`zeta-compare.log` is content-identical to the author's `lean/axioms.txt` —
+the recorded `zeta-axioms.diff` consists solely of the author's
+hand-written header preamble, blank lines between sections, and the
+workflow's split of the PrintAxioms and Compare halves into two files;
+**zero axiom lines differ**, and neither upstream `qc`/`hqc` appears
+anywhere. Not covered: C++ verifier re-runs of certificates 2 and 3; the
+three `native_decide` evaluations are trusted computation by design
+(author-disclosed), re-executed here but not kernel-checked.
 
 ## Verdict lock
 
-Untouched (32 gates: 17 BREAK / 15 PASS). Standalone verify/audit; verdict
-to be recorded when the WSL run lands. Current standing on the evidence so
-far: every checkable claim confirmed, no discrepancy found.
+Untouched (32 gates: 17 BREAK / 15 PASS). Standalone verify/audit verdict:
+**PASS** — every checkable claim confirmed, no discrepancy found; the one
+residual gap (C++ cross-check of certificates 2 and 3) is named in Honest
+scope. Audit closed 2026-10-13.
