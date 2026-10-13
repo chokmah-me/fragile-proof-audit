@@ -201,6 +201,15 @@ jobs:
           set -o pipefail
           cd "$AB_FLUID/euler-blowup" || { echo "FAIL: project dir missing: $AB_FLUID/euler-blowup"; exit 1; }
           lake update 2>&1 | tee "$GITHUB_WORKSPACE/lake-update.log"
+          # Propagate lake update's own exit code: without this the step's
+          # exit is the grep check's, so a failed update would be masked
+          # and only surface indirectly in later steps (same exit-code
+          # class as the forge capture bug fixed below).
+          upd=$?
+          if [ "$upd" != 0 ]; then
+            echo "FAIL: lake update exited $upd"
+            exit "$upd"
+          fi
           # Fail-fast (harness rule): 'pins different versions' means the
           # satellite revs resolved wrong and cache-get would then compute
           # wrong hashes -- die here, not hours into the build.
@@ -232,11 +241,27 @@ jobs:
           [ -n "${GITHUB_WORKSPACE:-}" ] || { echo "FAIL: GITHUB_WORKSPACE unset"; exit 1; }
           proj="$AB_FLUID/euler-blowup"
           [ -d "$proj" ] || { echo "FAIL: project dir missing: $proj"; exit 1; }
+          # Capture the forge's exit code via `|| code=$?`, NEVER
+          # `cmd; code=$?`: a command followed by `;` is NOT exempt from
+          # `set -e`, so on a non-zero forge exit the shell died at the
+          # command itself and the verdict was never printed (run #10:
+          # build green, forge exit 1, zero evidence of what it found).
+          # The `||` list IS exempt -- the failure is handled, then the
+          # verdict is printed and uploaded before the step re-exits.
+          code=0
           python3 scripts/forge/verify_lean_project.py \
             --project "$proj" --timeout 3600 --json \
-            > forge-report.json 2>forge-err.log; code=$?
+            > forge-report.json 2>forge-err.log || code=$?
           echo "forge exit code: $code"
-          cat forge-report.json
+          if [ -f forge-report.json ]; then
+            cat forge-report.json
+          else
+            echo "(forge wrote no report)"
+          fi
+          if [ -s forge-err.log ]; then
+            echo "--- forge stderr (last 50 lines) ---"
+            tail -n 50 forge-err.log || true
+          fi
           exit $code
 
       - name: Stage scratch results for upload
