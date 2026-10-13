@@ -153,7 +153,8 @@ jobs:
           # lakefile.toml, not lakefile.lean -- check the right filename).
           [ -f "$AB_FLUID/euler-blowup/lakefile.toml" ] || { echo "FAIL: euler-blowup/lakefile.toml absent at $FLUID_SHA"; exit 1; }
           [ -f "$AB_FLUID/euler-blowup/lean-toolchain" ] || { echo "FAIL: euler-blowup/lean-toolchain absent at $FLUID_SHA"; exit 1; }
-          echo "toolchain: $(cat "$AB_FLUID/euler-blowup/lean-toolchain)"
+          tc="$(cat "$AB_FLUID/euler-blowup/lean-toolchain")"
+          echo "toolchain: $tc"
 
       - name: Align toolchain with mathlib (cache requirement)
         # `lake update` runs mathlib's post-update hook, which fetches
@@ -191,12 +192,14 @@ jobs:
           rm -f mathlib-toolchain
 
       - name: Fetch dependencies
-        # working-directory resolves under the repo checkout; the project
-        # itself lives in $AB_FLUID outside it (see the env block). Fails
-        # fast if the clone step did not produce it.
-        working-directory: ${{ github.workspace }}/../ab-fluid-euler-scratch/euler-blowup
+        # NOTE: no `working-directory` override -- the '${{ github.workspace }}/..'
+        # form it used until run #9 is untested against the runner's path
+        # validation (the same '..' construct is flatly rejected by
+        # upload-artifact), so the step cds into the project itself, like
+        # the Align step and step 5 already do with $AB_FLUID.
         run: |
           set -o pipefail
+          cd "$AB_FLUID/euler-blowup" || { echo "FAIL: project dir missing: $AB_FLUID/euler-blowup"; exit 1; }
           lake update 2>&1 | tee "$GITHUB_WORKSPACE/lake-update.log"
           # Fail-fast (harness rule): 'pins different versions' means the
           # satellite revs resolved wrong and cache-get would then compute
@@ -207,13 +210,14 @@ jobs:
           fi
 
       - name: Fetch mathlib prebuilt oleans
-        working-directory: ${{ github.workspace }}/../ab-fluid-euler-scratch/euler-blowup
-        run: lake exe cache get
+        run: |
+          cd "$AB_FLUID/euler-blowup" || { echo "FAIL: project dir missing: $AB_FLUID/euler-blowup"; exit 1; }
+          lake exe cache get
 
       - name: Build euler-blowup
-        working-directory: ${{ github.workspace }}/../ab-fluid-euler-scratch/euler-blowup
         run: |
           set -o pipefail
+          cd "$AB_FLUID/euler-blowup" || { echo "FAIL: project dir missing: $AB_FLUID/euler-blowup"; exit 1; }
           lake build 2>&1 | tee "$GITHUB_WORKSPACE/build.log"
 
       - name: Hardened forge audit
@@ -235,6 +239,18 @@ jobs:
           cat forge-report.json
           exit $code
 
+      - name: Stage scratch results for upload
+        if: always()
+        run: |
+          # upload-artifact patterns may not contain '..' (run #9 died
+          # here too: "Relative pathing '.' and '..' is not allowed"), so
+          # the scratch results (outside the checkout) are copied into the
+          # workspace first and uploaded from there.
+          if [ -d "$AB_FLUID/euler-blowup/results" ]; then
+            mkdir -p euler-results
+            cp -r "$AB_FLUID/euler-blowup/results/." euler-results/
+          fi
+
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -246,7 +262,7 @@ jobs:
             build.log
             forge-report.json
             forge-err.log
-            ${{ github.workspace }}/../ab-fluid-euler-scratch/euler-blowup/results/
+            euler-results/
 
       - name: Leave shared checkout clean (meta-rule)
         if: always()
