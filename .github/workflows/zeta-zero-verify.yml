@@ -14,10 +14,16 @@ name: zeta-zero-verify
 # has 32 GB.
 #
 # Queuing: the schedule polls every 30 min and the job proceeds only when the
-# Euler build has finished AND this workflow has neither a completed run nor
-# another live run. Single-shot by design -- after one finished run (any
-# conclusion) later schedule ticks exit in seconds. Manual dispatch bypasses
-# the gates. Delete this file after the audit note is written.
+# Euler build has finished SUCCESSFULLY (conclusion == 'success') AND this
+# workflow has neither a completed run nor another live run. Single-shot by
+# design -- after one finished run (any conclusion) later schedule ticks exit
+# in seconds. Manual dispatch bypasses the gates. Delete this file after the
+# audit note is written.
+#
+# 2026-10-12: the gate used to check the Euler run's status == 'completed',
+# which is also true for FAILED runs -- the full replay fired off a red Euler
+# run, and the default clean:true checkout then wiped ab-fluid/build.log on
+# the shared runner. Both fixed here (conclusion check + clean:false).
 #
 # Queued 2026-10-12 at the user's "queue the full WSL re-run the moment Euler
 # lands" (thumbs-up to the proposal). Euler run in flight at queue time:
@@ -70,9 +76,18 @@ jobs:
     timeout-minutes: 540
     steps:
       - name: Check out this repo
+        # clean: false -- do NOT revert to the default. Same rule as the
+        # Euler and verify workflows: the checkout action's default
+        # `git clean -ffdx` deletes the ab-fluid/ scratch tree (with its
+        # build.log) on the shared self-hosted runner -- this workflow's
+        # 2026-10-12 misfire wiped it. Nothing in this workflow modifies
+        # tracked files; the cleanup step removes zeta-verify/ and the
+        # per-run logs, and the Assemble step re-creates zeta-verify/.
         uses: actions/checkout@v4
+        with:
+          clean: false
 
-      - name: Gate — proceed only when Euler is done and no prior/live run
+      - name: Gate — proceed only when Euler succeeded and no prior/live run
         id: gate
         env:
           GH_TOKEN: ${{ github.token }}
@@ -91,7 +106,10 @@ jobs:
             | python3 -c "
           import json, sys
           runs = json.load(sys.stdin).get('workflow_runs', [])
-          print(runs[0]['status'] if runs else 'none')")"
+          r = runs[0] if runs else None
+          ok = bool(r and r.get('status') == 'completed'
+                    and r.get('conclusion') == 'success')
+          print('success' if ok else 'no')")"
           echo "euler latest status: $euler"
           zeta="$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
             "https://api.github.com/repos/$REPO/actions/workflows/zeta-zero-verify.yml/runs?per_page=10" \
@@ -103,7 +121,7 @@ jobs:
           live = any(str(r.get('id')) != me and r.get('status') != 'completed' for r in runs)
           print('done' if done else 'live' if live else 'none')")"
           echo "zeta prior: $zeta"
-          if [ "$euler" = "completed" ] && [ "$zeta" = "none" ]; then
+          if [ "$euler" = "success" ] && [ "$zeta" = "none" ]; then
             echo "proceed=true" >> "$GITHUB_OUTPUT"
           else
             echo "proceed=false" >> "$GITHUB_OUTPUT"
@@ -112,7 +130,7 @@ jobs:
       - name: Stop — gate closed
         if: steps.gate.outputs.proceed != 'true'
         run: |
-          echo "Gate closed (Euler not finished, or a zeta run already finished/is live). Exiting quietly."
+          echo "Gate closed (Euler not green, or a zeta run already finished/is live). Exiting quietly."
 
       - name: Validate the 839 pin
         if: steps.gate.outputs.proceed == 'true'
