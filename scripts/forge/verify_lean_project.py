@@ -234,9 +234,68 @@ def qualified_declarations(clean_text: str) -> list[tuple[str, int]]:
     return results
 
 
-def module_name_for(path: Path, root: Path) -> str:
-    rel = path.relative_to(root).with_suffix("")
-    return ".".join(rel.parts)
+def load_lib_src_dirs(root: Path) -> list[Path]:
+    """
+    Source directories of the project's `lean_lib`s, longest path first.
+
+    Lake maps a file's module name relative to its library's `srcDir`
+    (default: the project root), NOT relative to the project root. A
+    vendored library declared as
+
+        [[lean_lib]]
+        name = "Cm24"
+        srcDir = "vendor/cm24-r2"
+
+    therefore builds `vendor/cm24-r2/Cm24/Basic.lean` as module
+    `Cm24.Basic` — the hyphenated directory never becomes an identifier.
+    Deriving module names from the project root instead produces
+    `vendor.cm24-r2.Cm24.Basic`, trips the illegal-identifier guard in
+    check_axioms, and aborts the whole axiom audit (fluid_lean
+    euler-blowup, forge run 2026-10-13: 32 such paths, audit UNKNOWN).
+
+    Only `lakefile.toml` is parsed; `lakefile.lean` projects keep the
+    historical root-relative mapping. A malformed manifest, a non-string
+    srcDir, or a srcDir that is absolute or escapes the project root is
+    ignored — the fallback is the root mapping, and the illegal-name
+    guard in check_axioms stays fail-closed on anything that still does
+    not resolve to a legal identifier.
+    """
+    dirs: set[Path] = {Path(".")}
+    toml_path = root / "lakefile.toml"
+    if toml_path.is_file():
+        try:
+            import tomllib
+
+            data = tomllib.loads(toml_path.read_text(encoding="utf-8"))
+            libs = data.get("lean_lib", [])
+            if isinstance(libs, dict):  # a single table, not an array
+                libs = [libs]
+            for lib in libs:
+                if not isinstance(lib, dict):
+                    continue
+                sd = lib.get("srcDir")
+                if isinstance(sd, str) and sd.strip():
+                    p = Path(sd.strip())
+                    if not p.is_absolute() and ".." not in p.parts:
+                        dirs.add(p)
+        except Exception:
+            pass  # fall back to the root-only mapping; never crash the audit
+    # Longest (most specific) srcDir wins when directories nest.
+    return sorted(dirs, key=lambda p: len(p.parts), reverse=True)
+
+
+def module_name_for(path: Path, root: Path,
+                    src_dirs: list[Path] | None = None) -> str:
+    rel = path.relative_to(root)
+    for sd in src_dirs or ():
+        if sd == Path("."):
+            continue
+        try:
+            inner = rel.relative_to(sd)
+        except ValueError:
+            continue
+        return ".".join(inner.with_suffix("").parts)
+    return ".".join(rel.with_suffix("").parts)
 
 
 # --------------------------------------------------------------------------- #
@@ -431,6 +490,7 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
     """
     decls: list[str] = []
     modules: list[str] = []
+    src_dirs = load_lib_src_dirs(root)
     for f in files:
         try:
             clean = strip_lean_comments(f.read_text(encoding="utf-8", errors="replace"))
@@ -438,7 +498,7 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
             continue
         found = qualified_declarations(clean)
         if found:
-            modules.append(module_name_for(f, root))
+            modules.append(module_name_for(f, root, src_dirs))
             decls.extend(name for name, _ in found)
 
     decls = sorted(set(decls))
@@ -466,8 +526,9 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
             f"{len(bad_modules)} module path(s) are not legal Lean identifiers, "
             f"so the generated audit file would not parse and NOTHING would be "
             f"checked: {bad_modules[:3]}. This usually means find_sources walked "
-            f"into a directory that should be in SKIP_DIRS (a worktree, a vendor "
-            f"copy). Axioms NOT checked.",
+            f"into a directory that should be in SKIP_DIRS (a worktree, a stray "
+            f"copy), or a library whose srcDir the module mapping does not "
+            f"cover. Axioms NOT checked.",
         ), len(decls)
 
     lines = [f"import {m}" for m in sorted(set(modules))]
