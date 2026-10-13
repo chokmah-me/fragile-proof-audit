@@ -23,6 +23,11 @@ exists with the same sha, the script prints CHANGED=false and exits 0.
 Health-check mode (--health-check): re-runs identifier checks for the latest
 processed harvest and appends a dated note to recon.md only if something
 changed since the ledger was written.
+
+Fail-closed dates: an explicit date argument must be a real YYYY-MM-DD
+calendar date with a matching harvest file, or the script exits 2 without
+emitting output. Omitting the date (the push/schedule lanes) still selects
+the newest harvest.
 """
 import datetime
 import hashlib
@@ -476,21 +481,50 @@ def emit(date, outdir, changed):
         print(payload, end="")
 
 
+def fail(msg):
+    """Fail closed: error to stderr, nonzero exit, no GITHUB_OUTPUT emitted.
+
+    A caller that names a date gets that date or an error — never a silent
+    fallback to the latest harvest (the pre-2026-10-13 behaviour, which let
+    a mistyped workflow_dispatch date quietly recon the wrong harvest)."""
+    print("error: " + msg, file=sys.stderr)
+    return 2
+
+
 def main():
     args = sys.argv[1:]
     health = "--health-check" in args
     args = [a for a in args if a != "--health-check"]
+    if len(args) > 1:
+        return fail("expected at most one date argument, got %d (%s)"
+                    % (len(args), ", ".join(args)))
+    explicit = args[0] if args else None
+    if explicit is not None:
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", explicit):
+            return fail("bad date %r: expected YYYY-MM-DD" % explicit)
+        try:
+            datetime.date.fromisoformat(explicit)
+        except ValueError:
+            return fail("bad date %r: not a real calendar date" % explicit)
+        if not os.path.exists(os.path.join(HARVEST_DIR, explicit + ".md")):
+            return fail("no harvest file for %s (incoming/harvests/%s.md)"
+                        % (explicit, explicit))
     if health:
-        # latest processed harvest
-        dirs = sorted(d for d in os.listdir(OUT_BASE) if re.match(r"^harvest-\d{4}-\d{2}-\d{2}$", d))
-        if not dirs:
-            print("No processed harvest to health-check.")
-            return emit("none", OUT_BASE, False)
-        date = dirs[-1].replace("harvest-", "")
+        if explicit is not None:
+            date = explicit
+            dirname = "harvest-" + date
+            if not os.path.isdir(os.path.join(OUT_BASE, dirname)):
+                return fail("no processed harvest for %s to health-check" % date)
+            dirs = [dirname]
+        else:
+            # latest processed harvest
+            dirs = sorted(d for d in os.listdir(OUT_BASE) if re.match(r"^harvest-\d{4}-\d{2}-\d{2}$", d))
+            if not dirs:
+                return fail("no processed harvest to health-check.")
+            date = dirs[-1].replace("harvest-", "")
         path = os.path.join(HARVEST_DIR, date + ".md")
         if not os.path.exists(path):
-            print("Harvest file missing for", date)
-            return emit(date, os.path.join(OUT_BASE, dirs[-1]), False)
+            return fail("harvest file missing for %s" % date)
         with open(path, "rb") as f:
             harvest_sha = hashlib.sha256(f.read()).hexdigest()
         meta, claims = parse_harvest(path)
@@ -505,7 +539,8 @@ def main():
                     for c in old["claims"]]
         if new_ledger["claims"] == old_core:
             print("Health check: no identifier changes since last recon.")
-            return emit(date, outdir, False)
+            emit(date, outdir, False)
+            return 0
         # something changed: rewrite ledger, append note
         with open(os.path.join(outdir, "ledger.json"), "w", encoding="utf-8") as f:
             json.dump({**old, "claims": new_ledger["claims"],
@@ -519,18 +554,15 @@ def main():
                          "head": (new["code"].get("head_sha") or "?")[:7]})))
             f.write("\n")
         print("Health check: drift detected, recon.md updated.")
-        return emit(date, outdir, True)
+        emit(date, outdir, True)
+        return 0
 
-    path = None
-    if args:
-        cand = os.path.join(HARVEST_DIR, args[0] + ".md")
-        if os.path.exists(cand):
-            path = cand
-    if path is None:
+    if explicit is not None:
+        path = os.path.join(HARVEST_DIR, explicit + ".md")
+    else:
         path = newest_harvest()
     if path is None:
-        print("No harvest file found.")
-        return emit("none", OUT_BASE, False)
+        return fail("no harvest file found.")
     date = os.path.basename(path).replace(".md", "")
     with open(path, "rb") as f:
         harvest_sha = hashlib.sha256(f.read()).hexdigest()
@@ -540,16 +572,17 @@ def main():
         with open(recon_path, encoding="utf-8") as f:
             if harvest_sha in f.read():
                 print("Recon for %s already up to date; skipping." % date)
-                return emit(date, outdir, False)
+                emit(date, outdir, False)
+                return 0
     meta, claims = parse_harvest(path)
     if not claims:
-        print("No claims parsed from", path)
-        return emit(date, outdir, False)
+        return fail("no claims parsed from %s" % path)
     results = [analyze_claim(c) for c in claims]
     write_outputs(date, meta, claims, results, harvest_sha)
     print("Wrote recon for %d claims to %s" % (len(claims), outdir))
-    return emit(date, outdir, True)
+    emit(date, outdir, True)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
