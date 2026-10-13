@@ -52,9 +52,10 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [Tait's 1884 Hamiltonian conjecture (Tutte 1946)](tait-tutte.md) |  |
 | [Tang–Zhang Schatten-norm constant (Track D#4)](tang-zhang-schatten.md) |  |
 | [tetrahedron Turán upper bound](tetrahedron-turan.md) | 2026-09-28 |
+| [truly subquadratic 3SUM / truly subcubic APSP, Lean formalization — M1 PASS](three-sum-apsp-subquadratic.md) | 2026-10-13 |
 | [Thakur's Carlitz–Wieferich degree conjecture (Track D#5)](thakur-carlitz.md) |  |
 | [TPC-AREA Agama Theorem 2.3 — BREAK](tpc-area.md) |  |
 | [TPC-GN evaluation display — BREAK](tpc-gn.md) |  |
 | [simple symmetric Venn diagrams, 17 and 19 curves](venn-simple-symmetric.md) | 2026-09-28 |
 
-_50 notes. Dispositions (BREAK / PASS / GAP / SKIP) live in the notes themselves; gates refute routes, not theorems._
+_51 notes. Dispositions (BREAK / PASS / GAP / SKIP) live in the notes themselves; gates refute routes, not theorems._
