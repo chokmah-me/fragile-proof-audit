@@ -540,6 +540,19 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
     finally:
         scratch.unlink(missing_ok=True)
 
+    # The lean run's raw output is the only evidence when the audit cannot
+    # complete. Keep a truncated head/tail with the finding so a future
+    # UNKNOWN is diagnosable from the report alone — an audit that reports
+    # "0/N resolved" without saying what lean did is a dead end
+    # (euler-blowup run #12, 2026-10-13: 0/29241 resolved, no output kept).
+    out_lines = output.splitlines()
+    lean_evidence = {
+        "lean_exit_code": code,
+        "lean_output_lines": len(out_lines),
+        "lean_output_head": out_lines[:20],
+        "lean_output_tail": out_lines[-20:] if len(out_lines) > 20 else [],
+    }
+
     used: dict[str, list[str]] = {}
     for m in AXIOM_OUT_RE.finditer(output):
         name = m.group("name")
@@ -572,6 +585,10 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
         "expected": len(decls),
         "native_decide_exempted": nd_exempted,
     }
+    # On any non-PASS outcome the lean run's own output is load-bearing
+    # evidence; attach it so the report stands alone.
+    if not violations and unresolved:
+        hits["lean"] = lean_evidence
 
     if violations:
         return Finding(
