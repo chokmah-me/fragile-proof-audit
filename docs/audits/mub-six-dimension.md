@@ -218,3 +218,47 @@ discloses; **M2** not applicable (both statements end in `sorry`);
 formalization; **M4** inventoried above (the certified-computation
 machine model is the risk-inducing load-bearing assumption of the
 headline, entirely outside the formalization).
+
+## Correction (2026-10-14): solution-module re-check
+
+A follow-up re-check (same method as the family-227 note: the
+challenge files' sidecar JSON `solution_module` fields, read at
+openai/math@`adc7f1241b42e322a6451854ab7e4b4c146bf78a`) found
+solution modules for both challenges. The original note's
+"verified content zero" and "a build would not change any finding
+above" were scoped to the challenge files alone. This section
+appends the findings; the original text above is unchanged.
+
+**Findings.**
+- `lean/ComparatorChallenges/MUBSix.json` names
+  `OAI.Analysis.MutuallyUnbiased.Main`.
+  `lean/OAI/Analysis/MutuallyUnbiased/Main.lean` (33 lines,
+  `sorry` count 0) proves the exact challenge theorem
+  `fourier_and_family_bound` with a sorry-free proof body
+  (`constructor`; `exact fourier_vanishing …`; `exact
+  family_size_le_five`).
+- `lean/ComparatorChallenges/HadamardCubeFiber.json` names
+  `OAI.LinearAlgebra.Hadamard.Main`; its import chain includes
+  `lean/OAI/LinearAlgebra/Hadamard/CubeFibers.lean`, which
+  proves the challenge lemma `rowRatio_cubeFiber_sum_zero` at
+  line 172 (`sorry` count 0 at file level).
+- `family_size_le_five` is proved sorry-free in
+  `lean/OAI/Analysis/MutuallyUnbiased/Results/Bounds.lean`
+  (`sorry` count 0). The individual location/sorry status of
+  `fourier_vanishing` was not swept; the transitive sorry
+  status of everything the solutions import is a build
+  question — receipt stays GAP.
+
+**Corrected assessment.**
+- **M1 stands.** The solution proves the same statement the
+  challenge states — `∀ n, Attainable n → n ≤ 5` — so the
+  catalogue's `N(6) = 3` is still not established by the
+  formalization (no existence of three, no exclusion of four),
+  and the scope note remains accurate.
+- **"Verified content zero" is corrected to
+  unverified-but-substantially-developed.** The challenge
+  statements have sorry-free solution proofs at the top-file
+  level; transitive sorry-freeness is a build question
+  (Comparator run). M2 is therefore not strictly N/A: a
+  derivation exists (the solution proofs); its correctness is
+  pending a build. Receipt stays GAP.
