@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Pre-dispatch checks for the five failure modes banked 2026-10-09.
+"""Pre-dispatch checks for the failure modes banked 2026-10-09 through
+2026-10-14.
 
 Spec: docs/PRE-DISPATCH-CHECKS.md. Read-only: this script never dispatches,
 commits, or pushes. Exit 0 = all applicable checks pass; exit 1 = REFUSED.
@@ -9,7 +10,9 @@ import argparse
 import json
 import os
 import re
+import subprocess
 import sys
+import tempfile
 
 FAILURES = []
 
@@ -118,9 +121,97 @@ def check_vendor(vendor, root_module, expected_count):
                       f"expected {expected_count}")
 
 
+# --- K13/K14: workflow lint (D1 family) ---------------------------------
+# Historical failures: a dropped closing quote killed a run in 7s; ".." in
+# an action `path:` was rejected by upload-artifact; `cmd; code=$?` under
+# `set -euo pipefail` silently exited and lost the verdict.
+
+RUN_KEY_RE = re.compile(r"^(\s*)run:\s*(.*)$")
+RUN_BLOCK_IND_RE = re.compile(r"^\s*run:\s*(?:[|>]|[-+][|>])\s*$")
+PATH_KEY_RE = re.compile(r"^\s*(?:path|working-directory):\s*(.*)$")
+EXIT_CAPTURE_RE = re.compile(r";\s*[A-Za-z_][A-Za-z0-9_]*=\$\?")
+
+
+def extract_run_blocks(lines):
+    """Yield (lineno, script) for each run: block, stdlib line scan.
+
+    Handles block scalars (`run: |`) via indentation, plus plain one-line
+    scalars (`run: echo hi`).
+    """
+    i = 0
+    n = len(lines)
+    while i < n:
+        m = RUN_KEY_RE.match(lines[i])
+        if not m:
+            i += 1
+            continue
+        indent = len(m.group(1))
+        rest = m.group(2).strip()
+        lineno = i + 1
+        if RUN_BLOCK_IND_RE.match(lines[i]):
+            # block scalar: consume lines strictly deeper than `run:`
+            body = []
+            i += 1
+            while i < n and (not lines[i].strip()
+                            or len(lines[i]) - len(lines[i].lstrip()) > indent):
+                body.append(lines[i])
+                i += 1
+            indents = [len(b) - len(b.lstrip()) for b in body
+                       if b.strip()]
+            cut = min(indents) if indents else 0
+            yield lineno, "\n".join(b[cut:] for b in body)
+        elif rest:
+            # single-line scalar
+            yield lineno, rest
+            i += 1
+        else:
+            i += 1
+
+
+def check_workflow_lint(path):
+    lines = open(path, encoding="utf-8").read().splitlines()
+    ran_blocks = list(extract_run_blocks(lines))
+    if not ran_blocks:
+        print(f"NOTE: {path}: no run: blocks found")
+    for lineno, script in ran_blocks:
+        if not script.strip():
+            continue
+        with tempfile.NamedTemporaryFile("w", suffix=".sh",
+                                         delete=False) as tf:
+            tf.write(script)
+            tf.flush()
+            name = tf.name
+        try:
+            r = subprocess.run(["bash", "-n", name],
+                               capture_output=True, text=True, timeout=30)
+        except FileNotFoundError:
+            print(f"SKIP {path}:{lineno}: bash not available for -n check")
+            os.unlink(name)
+            continue
+        os.unlink(name)
+        if r.returncode != 0:
+            refuse("K13", f"{path}:{lineno} run: block fails `bash -n`: "
+                          f"{r.stderr.strip().splitlines()[0] if r.stderr.strip() else 'syntax error'}")
+        # The heuristic runs on full-line-comment-stripped text: a `;` in a
+        # full-line comment can never be shell code (the failure it documents
+        # names the forbidden pattern in prose).
+        stripped = "\n".join(l for l in script.splitlines()
+                             if not re.match(r"^\s*#", l))
+        if EXIT_CAPTURE_RE.search(stripped):
+            refuse("K14", f"{path}:{lineno} run: block captures an exit "
+                          "code with `; <var>=$?` under set -e; use the "
+                          "exempt form `cmd || code=$?` instead")
+    for i, line in enumerate(lines, 1):
+        pm = PATH_KEY_RE.match(line)
+        if pm and ".." in pm.group(1):
+            refuse("K13", f"{path}:{i} `..` in a path:/working-directory: "
+                          "value is rejected by action path validation")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--workflow")
+    ap.add_argument("--workflows", nargs="+")
     ap.add_argument("--lakefile")
     ap.add_argument("--project")
     ap.add_argument("--vendor")
@@ -134,6 +225,12 @@ def main():
         ran.append("FM3(workflow inputs)")
     else:
         print("SKIP FM3: no --workflow given")
+    if a.workflows:
+        for wf in a.workflows:
+            check_workflow_lint(wf)
+        ran.append(f"K13/K14(workflow lint of {len(a.workflows)} file(s))")
+    else:
+        print("SKIP K13/K14: no --workflows given")
     if a.lakefile:
         man = os.path.join(os.path.dirname(a.lakefile), "lake-manifest.json")
         check_lakefile(a.lakefile, man)

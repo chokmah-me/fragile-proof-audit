@@ -1,7 +1,8 @@
-# Pre-dispatch checks — the five banked failures, as gates
+# Pre-dispatch checks — the banked failures, as gates
 
 Standing rule: *no failure goes to waste* (SOUL.md #9). The five failure
-modes banked in `AGENTS.md` on 2026-10-09 each killed a run after dispatch.
+modes banked in `AGENTS.md` on 2026-10-09 and the dispatch-time family
+(D1/K13/K14) banked 2026-10-13 each killed a run after dispatch.
 This spec turns each banked catch into an executable check that refuses
 **before** dispatch. The checks live in `scripts/harness/pre_dispatch_checks.py`
 (stdlib only, read-only: the script never dispatches, commits, or pushes).
@@ -11,6 +12,7 @@ Run it on a workflow before dispatching:
 ```
 python3 scripts/harness/pre_dispatch_checks.py \
     --workflow .github/workflows/<name>.yml \
+    [--workflows .github/workflows/*.yml] \
     [--lakefile <dir>/lakefile.lean] \
     [--project <dir>] \
     [--vendor <dir> --root-module <Lib/Root.lean> --expected-count <N>]
@@ -20,7 +22,7 @@ Exit 0 = every applicable check passes. Exit 1 = **PRE-DISPATCH REFUSED**,
 one line per failure naming the mode. A check whose inputs were not supplied
 prints SKIP — never a silent pass.
 
-## The five modes
+## The modes
 
 **FM1 — Tar vendoring path bug** (vendored tree landed somewhere the build
 never looked; a directory listing was mistaken for a vendored library).
@@ -54,12 +56,38 @@ dependencies until an olean lookup failed). Check: no `lean_lib` block in
 the lakefile declares `roots` without a covering `globs`. Signal:
 `FM5 REFUSED: lean_lib <Name> restricts roots without globs`.
 
+## FM6 — dispatch-time construct semantics unverified (D1/K13/K14 family)
+
+Three sibling lessons banked 2026-10-13 each killed or nearly killed a run
+after dispatch because a shell/action construct was never verified before
+it: a dropped closing quote in a `run:` block (run #9 died in 7s); `..` in
+an `upload-artifact` `path:` (rejected by the action at runtime); and
+`cmd; code=$?` under `set -euo pipefail` (the shell exited at the command
+itself and the verdict was lost). `--workflows <files...>` turns the whole
+deploy-gate adversarial pass into one executable gate:
+(a) every `run:` block (block scalars via indentation, single-line scalars
+too) is extracted and `bash -n` syntax-checked;
+(b) `..` in any `path:`/`working-directory:` value refuses;
+(c) the `; <var>=$?` exit-capture pattern inside a run block refuses —
+the exempt form is `cmd || code=$?` (full-line comments are ignored by the
+heuristic; `bash -n` still checks them).
+Signals: `K13 REFUSED: <file>:<line> run: block fails bash -n` /
+`` `..` in a path:/working-directory: value `` /
+`K14 REFUSED: <file>:<line> run: block captures an exit code with ; <var>=$?`.
+
 ## Self-test
 
 Each check was proven against a fixture carrying its known-bad pattern
 (all five refused loudly) and against clean inputs (the repo's own
 `ab-fluid-euler-build.yml`, which passes its inputs via `env:`; a lakefile
-with mathlib required last and a bare `lean_lib`). Re-run the fixtures
-before trusting a change to the script. (The FM2 check earned this rule:
+with mathlib required last and a bare `lean_lib`). FM6's three sub-checks
+were proven against one bad fixture each (unterminated quote in a `run:`
+block; `..` in an `upload-artifact` `path:`; `python3 ...; code=$?` under
+`set -euo pipefail`) — all refused — and against the repo's current
+workflow files, which pass exit 0. (The full-line-comment carve-out in the
+K14 heuristic was earned here: `ab-fluid-euler-build.yml` names the
+forbidden pattern in prose inside a comment and was the fixture that
+proved the heuristic needed it.) Re-run the fixtures before trusting a
+change to the script. (The FM2 check earned this rule:
 it passed its first bad fixture twice — a fixture bug, then a regex bug —
 and was only trusted after it refused both variants.)
