@@ -1,0 +1,18 @@
+{
+ "family": "227",
+ "title": "Critical SK autocorrelation processes and dynamics across the temperature transition.",
+ "n_mss": 8,
+ "lean_doc": true,
+ "n_formalized": 1,
+ "n_challenges": 5,
+ "challenges": [
+  "SKHighTemperature",
+  "SKRatio",
+  "CriticalSKMixing",
+  "CriticalSK",
+  "SKBarriers"
+ ],
+ "reasoning_trace": false,
+ "desc": "For zero-field Gaussian SK heat-bath dynamics with rate-one updates per spin, proves worst-start cutoff on the $`\\log n`$ scale for fixed $`0\\le\\beta\\lt 1`$, mixing time $`n^{2/3+o(1)}`$ at <i>\u03b2</i> = 1, and stretched-exponential mixing from a Gibbs-sampled fixed starting configuration for <i>\u03b2</i> &gt; 1, in probability over disorder. At criticality, rescaled stationary and quench autocorrelation processes have universal random limits for Gaussian and Rademacher disorder; the quench limit relaxes to the stationary limit. ([Lean](lean/docs/227.md))",
+ "scope": "For every fixed inverse temperature $0<\\beta<1$, the formalization proves a dimension-independent Poincar\u00e9 inequality for the zero-field Gaussian Sherrington\u2013Kirkpatrick model with probability tending to one over the disorder. Equivalently, the unscaled single-site heat-bath spectral gap stays bounded away from zero. For dynamics that choose one site uniformly at each discrete step, the spectral gap is at least $1/(Cn)$ with probability tending to one, for a constant $C$ depending on $\\beta$. The formalized supporting result proves ratio cutoff for discrete single-site heat-bath dynamics in the zero-field Gaussian Sherrington\u2013Kirkpatrick model for $0\\le\\beta<1/2$. For every $0<\\varepsilon<1/2$ and $\\eta>0$, the probability over the disorder that $t_{\\mathrm{mix}}(\\varepsilon)/t_{\\mathrm{mix}}(1-\\varepsilon)>1+\\eta$ tends to zero as $n\\to\\infty$. The denominator is positive for all sufficiently large sizes. The paper's full range $\\beta<1$, explicit cutoff location, and continuous-time conclusion are outside this selected statement. At criticality in the zero-field Sherrington\u2013Kirkpatrick model, the formalization proves that for every fixed $\\varepsilon>0$, the continuous-time mixing time lies between $n^{2/3-\\varepsilon}$ and $e^{\\varepsilon n}$, and the discrete-time mixing count lies between $n^{5/3-\\varepsilon}$ and $e^{\\varepsilon n}$, with probability tending to one over the Gaussian disorder. The disorder has independent off-diagonal entries of variance $1/n$. Continuou"
+}
