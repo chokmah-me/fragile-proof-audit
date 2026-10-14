@@ -78,10 +78,15 @@ FORBIDDEN_TOKENS = {
 # `axiom Foo : ...` / `noncomputable axiom` etc. at declaration position.
 AXIOM_DECL_RE = re.compile(r"^\s*(?:@\[[^\]]*\]\s*)*(?:private\s+|protected\s+|noncomputable\s+)*axiom\s+([A-Za-z_][^\s:]*)")
 
-# Top-level theorem-like declarations we want to audit for axioms.
+# Top-level theorem-like declarations we want to audit for axioms. The
+# modifier chain is captured: a `private` declaration's environment name is
+# mangled by Lean (it is NOT stored under its source-level qualified name),
+# so it can never be resolved by a #print from another file — the audit
+# must know which declarations are private and leave them out of the print
+# list (see check_axioms).
 DECL_RE = re.compile(
     r"^\s*(?:@\[[^\]]*\]\s*)*"
-    r"(?:private\s+|protected\s+|noncomputable\s+|partial\s+|unsafe\s+)*"
+    r"((?:private\s+|protected\s+|noncomputable\s+|partial\s+|unsafe\s+)*)"
     r"(theorem|lemma)\s+"
     r"([A-Za-z_\u03b1-\u03c9][^\s:({\[⦃]*)"
 )
@@ -182,15 +187,15 @@ def strip_lean_comments(text: str) -> str:
     return "".join(out)
 
 
-def qualified_declarations(clean_text: str) -> list[tuple[str, int]]:
+def qualified_declarations(clean_text: str) -> list[tuple[str, int, bool]]:
     """
-    Return (fully_qualified_name, line_number) for theorem/lemma declarations,
-    tracking `namespace` / `end` so names resolve when printed.
+    Return (fully_qualified_name, line_number, is_private) for theorem/lemma
+    declarations, tracking `namespace` / `end` so names resolve when printed.
 
     Sections and anonymous `end`s are handled by only popping the stack when the
     `end` matches the innermost namespace name, which is what Lean requires.
     """
-    results: list[tuple[str, int]] = []
+    results: list[tuple[str, int, bool]] = []
     # stack entries are (kind, name) where kind is "namespace" or "section";
     # only namespace entries contribute to the qualified name, but sections must
     # be tracked so that an anonymous `end` closes the section rather than
@@ -227,10 +232,11 @@ def qualified_declarations(clean_text: str) -> list[tuple[str, int]]:
             continue
         m = DECL_RE.match(line)
         if m:
-            base = m.group(2).strip()
+            base = m.group(3).strip()
             if not base or base.startswith("_"):
                 continue
-            results.append((qualify(base), lineno))
+            is_private = "private" in m.group(1).split()
+            results.append((qualify(base), lineno, is_private))
     return results
 
 
@@ -497,8 +503,23 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
     which re-declares EulerBlowup-namespace structures also declared by the
     EulerBlowup library — importing both aborts the whole file with
     "environment already contains ...", zeroing the audit).
+
+    `private` declarations are left out of the #print list and recorded
+    separately. Lean stores a private constant under a mangled internal
+    name, so its source-level qualified name is an unknown constant from
+    any other file — printing it can only error. This loses no coverage
+    of the project's public claims: #print axioms reports the TRANSITIVE
+    axiom set, so a private lemma's axioms surface through every public
+    declaration that depends on it (verified synthetically: a public
+    theorem proved via a sorry-backed private lemma reports sorryAx).
+    A private declaration nothing public depends on cannot contaminate
+    any audited result. (euler-blowup run #14, 2026-10-13: 1,135 private
+    Cm24 declarations each errored "Unknown constant"; at error #100 lean
+    aborted the audit file, leaving 28,256 of 29,241 declarations —
+    nearly all public — never attempted.)
     """
     decls: list[str] = []
+    private_decls: list[str] = []
     modules: list[str] = []
     src_dirs = load_lib_src_dirs(root)
     excluded: set[str] = set(exclude_modules)
@@ -517,9 +538,17 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
                 excluded_decls += len(found)
                 continue
             modules.append(mod)
-            decls.extend(name for name, _ in found)
+            for name, _, is_private in found:
+                (private_decls if is_private else decls).append(name)
 
     decls = sorted(set(decls))
+    private_decls = sorted(set(private_decls) - set(decls))
+    total_decls = len(decls) + len(private_decls)
+    private_note = (
+        f"; {len(private_decls)} private declaration(s) not printed "
+        f"(Lean-mangled names; covered transitively via dependents)"
+        if private_decls else ""
+    )
     exclusion_note = ""
     if excluded:
         exclusion_note = (
@@ -531,15 +560,15 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
             exclusion_note += f"; unmatched exclusions (no such module): {unmatched}"
     if not decls:
         return Finding("axiom_audit", "UNKNOWN",
-                       "no theorem/lemma declarations discovered to audit"
-                       + exclusion_note), 0
+                       "no non-private theorem/lemma declarations discovered "
+                       "to audit" + exclusion_note + private_note), total_decls
 
     if shutil.which("lake") is None:
         return Finding(
             "axiom_audit", "UNKNOWN",
             f"{len(decls)} declaration(s) found but lake is unavailable — axioms "
             "NOT checked. Status is capability-limited, not verified.",
-        ), len(decls)
+        ), total_decls
 
     # A module name that is not a legal Lean identifier path produces a
     # syntax error on line 1 and silently zeroes the entire audit. Name the
@@ -557,14 +586,22 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
             f"into a directory that should be in SKIP_DIRS (a worktree, a stray "
             f"copy), or a library whose srcDir the module mapping does not "
             f"cover. Axioms NOT checked.",
-        ), len(decls)
+        ), total_decls
 
     lines = [f"import {m}" for m in sorted(set(modules))]
     lines += [f"#print axioms {d}" for d in decls]
     scratch = root / "_lpf_axiom_audit.lean"
     try:
         scratch.write_text("\n".join(lines) + "\n", encoding="utf-8")
-        code, output = run(["lake", "env", "lean", scratch.name], root, timeout)
+        # The frontend's error cap must never abort the audit early: one
+        # unresolvable name has to degrade to "that name unresolved", not
+        # zero out every later declaration. The cap is read from the
+        # STARTUP options — an in-file `set_option maxErrors` does NOT
+        # lift it (verified on lean v4.32.2: in-file values 0 and 1000000
+        # both still aborted at 100) — so it is passed via -D.
+        code, output = run(
+            ["lake", "env", "lean", "-D", "maxErrors=1000000", scratch.name],
+            root, timeout)
     finally:
         scratch.unlink(missing_ok=True)
 
@@ -614,6 +651,7 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
         "native_decide_exempted": nd_exempted,
         "excluded_modules": sorted(matched_exclusions),
         "excluded_declarations": excluded_decls,
+        "private_declarations": len(private_decls),
     }
     # On any non-PASS outcome the lean run's own output is load-bearing
     # evidence; attach it so the report stands alone.
@@ -625,7 +663,7 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
             "axiom_audit", "FAIL",
             f"{len(violations)} declaration(s) depend on axioms outside the allowlist",
             [hits],
-        ), len(decls)
+        ), total_decls
     if unresolved:
         return Finding(
             "axiom_audit", "UNKNOWN",
@@ -633,16 +671,17 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
             "resolve (namespace/section parsing or elaboration failure) — treat "
             "those as unchecked, not as clean",
             [hits],
-        ), len(decls)
+        ), total_decls
     detail = f"all {len(used)} declaration(s) within allowlist"
     if allow_native_decide and nd_exempted:
         detail += f" ({nd_exempted} native_decide axiom(s) exempted by --allow-native-decide)"
     detail += exclusion_note
+    detail += private_note
     return Finding(
         "axiom_audit", "PASS",
         detail,
         [hits],
-    ), len(decls)
+    ), total_decls
 
 
 # --------------------------------------------------------------------------- #
