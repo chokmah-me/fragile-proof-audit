@@ -95,6 +95,13 @@ NAMESPACE_RE = re.compile(r"^\s*namespace\s+([A-Za-z_][\w.']*)")
 SECTION_RE = re.compile(r"^\s*(?:noncomputable\s+)?section(?:\s+([A-Za-z_][\w.']*))?\s*$")
 END_RE = re.compile(r"^\s*end\s*([A-Za-z_][\w.']*)?\s*$")
 
+# A declaration modifier on its own line, e.g. `private` alone on the line
+# before the theorem it modifies (euler-blowup TimeRates.lean:76043). The
+# parser carries such dangling modifiers forward to the next declaration.
+_MOD_WORDS = r"(?:private|protected|noncomputable|partial|unsafe)"
+MODS_ONLY_RE = re.compile(rf"^\s*({_MOD_WORDS}(?:\s+{_MOD_WORDS})*)\s*$")
+ATTR_ONLY_RE = re.compile(r"^\s*@\[[^\]]*\]\s*$")
+
 # Lean quotes declaration names with single quotes, and Lean names may
 # themselves contain quotes (the fluid_lean `foo'` convention for variant
 # lemmas prints as `'Mod.foo'' depends on axioms: [...]`). The name group
@@ -208,19 +215,36 @@ def qualified_declarations(clean_text: str) -> list[tuple[str, int, bool]]:
     # be tracked so that an anonymous `end` closes the section rather than
     # silently popping the enclosing namespace.
     stack: list[tuple[str, str | None]] = []
+    # Modifiers dangling on their own line(s) (e.g. `private` alone on the
+    # line before the theorem it modifies), carried forward to the next
+    # declaration found. Any other real line — a `def`, a `variable`, a
+    # command, a namespace/section/end — ends the dangle: in Lean a modifier
+    # can only modify the declaration immediately following it, so letting
+    # it leak would mis-attribute privateness to an unrelated later theorem.
+    # Blank lines and attribute-only lines do not end the dangle.
+    pending_mods: list[str] = []
 
     def qualify(base: str) -> str:
         parts = [n for k, n in stack if k == "namespace" and n]
         return ".".join(parts + [base]) if parts else base
 
+    def clear_pending() -> None:
+        del pending_mods[:]
+
     for lineno, line in enumerate(clean_text.splitlines(), start=1):
+        m = MODS_ONLY_RE.match(line)
+        if m:
+            pending_mods.extend(m.group(1).split())
+            continue
         m = NAMESPACE_RE.match(line)
         if m:
             stack.append(("namespace", m.group(1)))
+            clear_pending()
             continue
         m = SECTION_RE.match(line)
         if m:
             stack.append(("section", m.group(1)))
+            clear_pending()
             continue
         m = END_RE.match(line)
         if m:
@@ -236,14 +260,20 @@ def qualified_declarations(clean_text: str) -> list[tuple[str, int, bool]]:
                     if sname and (sname == name or sname.endswith("." + name)):
                         del stack[i:]
                         break
+            clear_pending()
             continue
         m = DECL_RE.match(line)
         if m:
             base = m.group(3).strip()
             if not base or base.startswith("_"):
+                clear_pending()
                 continue
-            is_private = "private" in m.group(1).split()
+            is_private = "private" in m.group(1).split() or "private" in pending_mods
+            clear_pending()
             results.append((qualify(base), lineno, is_private))
+            continue
+        if line.strip() and not ATTR_ONLY_RE.match(line):
+            clear_pending()
     return results
 
 
