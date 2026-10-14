@@ -483,14 +483,27 @@ def check_build(root: Path, target: str | None, timeout: int) -> tuple[list[Find
 
 
 def check_axioms(root: Path, files: list[Path], allowlist: set[str],
-                 timeout: int, allow_native_decide: bool = False) -> tuple[Finding, int]:
+                 timeout: int, allow_native_decide: bool = False,
+                 exclude_modules: tuple[str, ...] = ()) -> tuple[Finding, int]:
     """
     Generate a scratch Lean file that imports every module and prints the axiom
     dependencies of each discovered theorem, then run it via `lake env lean`.
+
+    Modules named in exclude_modules are left out of the generated file's
+    imports AND their declarations are left out of the #print list, and the
+    exclusion is recorded in the report. They remain covered by the source
+    scans. This is for trusted statement modules that cannot share an
+    elaboration environment with the library (e.g. fluid_lean's Challenge,
+    which re-declares EulerBlowup-namespace structures also declared by the
+    EulerBlowup library — importing both aborts the whole file with
+    "environment already contains ...", zeroing the audit).
     """
     decls: list[str] = []
     modules: list[str] = []
     src_dirs = load_lib_src_dirs(root)
+    excluded: set[str] = set(exclude_modules)
+    matched_exclusions: set[str] = set()
+    excluded_decls = 0
     for f in files:
         try:
             clean = strip_lean_comments(f.read_text(encoding="utf-8", errors="replace"))
@@ -498,13 +511,28 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
             continue
         found = qualified_declarations(clean)
         if found:
-            modules.append(module_name_for(f, root, src_dirs))
+            mod = module_name_for(f, root, src_dirs)
+            if mod in excluded:
+                matched_exclusions.add(mod)
+                excluded_decls += len(found)
+                continue
+            modules.append(mod)
             decls.extend(name for name, _ in found)
 
     decls = sorted(set(decls))
+    exclusion_note = ""
+    if excluded:
+        exclusion_note = (
+            f"; excluded {len(matched_exclusions)} module(s) "
+            f"({excluded_decls} declarations) via --exclude-module"
+        )
+        unmatched = sorted(excluded - matched_exclusions)
+        if unmatched:
+            exclusion_note += f"; unmatched exclusions (no such module): {unmatched}"
     if not decls:
         return Finding("axiom_audit", "UNKNOWN",
-                       "no theorem/lemma declarations discovered to audit"), 0
+                       "no theorem/lemma declarations discovered to audit"
+                       + exclusion_note), 0
 
     if shutil.which("lake") is None:
         return Finding(
@@ -584,6 +612,8 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
         "audited": len(used),
         "expected": len(decls),
         "native_decide_exempted": nd_exempted,
+        "excluded_modules": sorted(matched_exclusions),
+        "excluded_declarations": excluded_decls,
     }
     # On any non-PASS outcome the lean run's own output is load-bearing
     # evidence; attach it so the report stands alone.
@@ -607,6 +637,7 @@ def check_axioms(root: Path, files: list[Path], allowlist: set[str],
     detail = f"all {len(used)} declaration(s) within allowlist"
     if allow_native_decide and nd_exempted:
         detail += f" ({nd_exempted} native_decide axiom(s) exempted by --allow-native-decide)"
+    detail += exclusion_note
     return Finding(
         "axiom_audit", "PASS",
         detail,
@@ -683,6 +714,12 @@ def main() -> int:
     ap.add_argument("--skip-build", action="store_true",
                     help="source scans only — produces a SCAN, never a proof")
     ap.add_argument("--skip-axioms", action="store_true", help="skip the axiom audit")
+    ap.add_argument("--exclude-module", action="append", default=[],
+                    help="module to leave out of the axiom audit's imports and "
+                         "#print list (repeatable). The module stays covered by "
+                         "the source scans; the exclusion is recorded in the "
+                         "report. For trusted statement modules that cannot "
+                         "share an elaboration environment with the library.")
     ap.add_argument("--timeout", type=int, default=3600, help="per-command timeout, seconds")
     ap.add_argument("--json", action="store_true", help="print the JSON report to stdout")
     args = ap.parse_args()
@@ -730,7 +767,8 @@ def main() -> int:
             "axiom audit needs a built project; skipped because --skip-build"))
     else:
         axf, ndecls = check_axioms(root, files, allowlist, args.timeout,
-                                   args.allow_native_decide)
+                                   args.allow_native_decide,
+                                   tuple(args.exclude_module))
         report.declarations_found = ndecls
         report.findings.append(axf)
 

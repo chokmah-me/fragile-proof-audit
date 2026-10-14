@@ -249,8 +249,20 @@ jobs:
           # The `||` list IS exempt -- the failure is handled, then the
           # verdict is printed and uploaded before the step re-exits.
           code=0
+          # --exclude-module Challenge: Challenge.lean is the project's own
+          # trusted comparator statement ("Mathlib-only and trusted" per
+          # euler-blowup/lakefile.toml), and the audit scope already exempts
+          # it (the anticipated sorry). It re-declares EulerBlowup-namespace
+          # structures (SmoothForce et al.) that the EulerBlowup library also
+          # declares, so importing both in the axiom audit's single
+          # environment is a fatal duplicate-declaration ("environment
+          # already contains ... from Challenge", run #13) that zeroes the
+          # whole audit. The exclusion covers only the axiom audit's imports
+          # and #print list; the source scans still see Challenge.lean, so
+          # the sorry finding is unaffected.
           python3 scripts/forge/verify_lean_project.py \
             --project "$proj" --timeout 3600 --json \
+            --exclude-module Challenge \
             > forge-report.json 2>forge-err.log || code=$?
           echo "forge exit code: $code"
           if [ -f forge-report.json ]; then
