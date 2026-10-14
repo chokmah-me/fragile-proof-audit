@@ -206,3 +206,49 @@ overstates the challenge statement's status; **M4** inventoried
 above (the consequence bridge evaporates from the
 formalization's inheritance chain; "radians" is moot without a
 series statement).
+
+## Correction (2026-10-14): solution-module re-check
+
+A follow-up re-check (same method as the family-227 note: the
+challenge file's sidecar JSON `solution_module` field, read at
+openai/math@`adc7f1241b42e322a6451854ab7e4b4c146bf78a`)
+found a solution module the original note did not read. The
+original text above is unchanged; this section supersedes its
+status-and-coverage claims.
+
+**Findings.**
+- `lean/ComparatorChallenges/PiExponent.json` names
+  `OAI.NumberTheory.PiExponent.Main`.
+  `lean/OAI/NumberTheory/PiExponent/Main.lean` (36 lines,
+  `sorry` count 0) proves `theorem main` with the full
+  μ(π) = 2 statement, sorry-free proof body (`refine ⟨…⟩`;
+  `change irrationalityExponent Real.pi = 2`; `exact
+  pi_irrationalityExponent_eq_two`).
+- The same module proves `theorem flint_hills_summable :
+  Summable (fun n : ℕ => 1 / (((n + 1 : ℕ) : ℝ)^3 *
+  Real.sin (n + 1 : ℕ)^2))` — convergence of
+  ∑_{n≥1} 1/(n³ sin²n) — via
+  `flintHills_positive_summable_of_eventual_lower_bound
+  pi_eventual_lower_bound`.
+- The transitive sorry status of the imported `Approximation`
+  modules is a build question — receipt stays GAP.
+
+**Corrected assessment.**
+- **M1 reverses on status.** The headline is not merely
+  stated-but-unproven: the solution module the catalogue
+  path leads to proves it, sorry-free at the top-file level.
+  The Flint–Hills convergence is **not** absent from the
+  formalization — the solution module proves exactly the
+  advertised consequence.
+- **M2 reverses.** A derivation exists (the solution proofs);
+  M2 moves from N/A to pending-a-build.
+- **M3 reverses on the central point.** The catalogue's "This
+  also proves convergence of the Flint–Hills series
+  ([Lean](lean/docs/017.md))" **is** substantiated by the
+  linked Lean. The original note's "statement-selection
+  problem" framing was scoped to the challenge file, not the
+  solution the catalog path leads to. What remains true: the
+  scope doc's "outside this selected statement" is accurate
+  only for the *selected statements* (the challenges); its
+  "The formalization *proves*…" phrasing is accurate at the
+  solution level.
