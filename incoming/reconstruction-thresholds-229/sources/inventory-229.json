@@ -1,0 +1,15 @@
+{
+ "family": "229",
+ "title": "Exact three- and four-state reconstruction thresholds and four-state tree capacity.",
+ "n_mss": 3,
+ "lean_doc": true,
+ "n_formalized": 0,
+ "n_challenges": 2,
+ "challenges": [
+  "ThreeStateSupercritical",
+  "ThreeStateTreeClauses"
+ ],
+ "reasoning_trace": false,
+ "desc": "Proves the exact reconstruction threshold $`d\\lambda^2\\gt 1`$, with nonreconstruction at equality, for three-state symmetric and four-state ferromagnetic broadcasting on regular trees (<i>d</i> \u2265 2) and observed Poisson trees (mean <i>d</i> &gt; 1 and <i>d</i> &gt; 0, respectively), with Poisson advantage averaged without conditioning on survival. The three-state theorem allows both signs of <i>\u03bb</i> and gives the exact weak-recovery threshold for the symmetric three-community stochastic block model. ([Lean](lean/docs/229.md))",
+ "scope": "The formalization proves the supercritical direction of reconstruction for the symmetric three-state broadcast channel, whose parameter satisfies $-1/2\\le\\lambda\\le1$. On a regular $b$-ary tree, reconstruction holds when $b\\lambda^2>1$; on an observed Poisson Galton\u2013Watson tree of mean $d$, it holds when $d\\lambda^2>1$. In each case the root-estimation advantage converges to a positive limit, with the Poisson advantage averaged over trees and spins. The selected statements cover reconstruction above the Kesten\u2013Stigum threshold. Non-reconstruction at or below the threshold and the stochastic-block-model consequences in the paper are outside them."
+}
