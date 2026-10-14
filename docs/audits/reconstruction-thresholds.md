@@ -320,3 +320,57 @@ substantiate, with the absence named nowhere on the
 catalogue→doc→challenge path; **M4** inventoried above (the
 four-state half dangles with no statement, no doc, no
 definition; the `d>0` Poisson regime belongs to it).
+
+## Correction (2026-10-14): solution-module re-check
+
+A follow-up re-check (same method as the family-227 note: the
+challenge files' sidecar JSON `solution_module` fields, read at
+openai/math@`adc7f1241b42e322a6451854ab7e4b4c146bf78a`)
+found solution modules the original note did not read. The
+original text above is unchanged; this section supersedes its
+status-and-coverage claims.
+
+**Findings.**
+- `ThreeStateSupercritical.json` names
+  `OAI.Probability.ThreeState.Main` (1-line import aggregator)
+  → `OAI.Probability.ThreeState.Region` and
+  `OAI.Probability.ThreeState.Supercritical`.
+  `Supercritical.lean` (373 lines, `sorry` count 0) proves
+  `regular_supercritical` and `poisson_supercritical` with the
+  exact challenge signatures, real proof bodies.
+- `ThreeStateTreeClauses.json` names
+  `OAI.Probability.ThreeStateClauses.Main` (import aggregator
+  over ~30 modules). Spot-checked: `RegularReconstruction.lean`
+  (114 lines, 0 sorry) and `PoissonReconstruction.lean`
+  (203 lines, 0 sorry) prove the above-threshold reconstruction
+  theorems.
+- `Region.lean` (139 lines, 0 sorry) proves
+  `regular_nonreconstruction_in_proved_region`,
+  `poisson_nonreconstruction_in_proved_region`, and
+  `regular/poisson_threshold_in_proved_region` — i.e.
+  **nonreconstruction in proved subregions** (nonnegative λ,
+  Dobrushin, small-negative λ hypotheses), plus threshold iff
+  statements over those regions.
+- The transitive sorry status of everything the solutions
+  import is a build question — receipt stays GAP.
+
+**Corrected assessment.**
+- **M1:** the scope doc's "non-reconstruction at or below the
+  threshold is outside the selected statements" is too broad:
+  the solutions prove nonreconstruction in the
+  nonnegative/Dobrushin/small-negative subregions. The
+  full equality-point claim (both signs of λ) remains partial,
+  and the three-state SBM consequences remain excluded-and-
+  admitted.
+- **M2:** derivations exist and are sorry-free at the top-file
+  level for the above-threshold theorems and the partial
+  nonreconstruction results; correctness is pending a build.
+- **M3 four-state absence STANDS, unaffected by this
+  correction.** The solution tree is three-state-only by
+  construction (`Spin := Fin 3`; all solution modules are
+  three-state): the four-state ferromagnetic thresholds and
+  tree capacity still have no home anywhere in the repo at
+  the pin.
+- **"Verified content zero for the catalogue claims" is
+  corrected to unverified-but-substantially-developed.**
+  Receipt stays GAP.
