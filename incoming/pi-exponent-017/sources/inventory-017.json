@@ -1,0 +1,14 @@
+{
+ "family": "017",
+ "title": "The irrationality exponent of <i>π</i> is 2.",
+ "n_mss": 1,
+ "lean_doc": true,
+ "n_formalized": 0,
+ "n_challenges": 1,
+ "challenges": [
+  "PiExponent"
+ ],
+ "reasoning_trace": true,
+ "desc": "Proves that the irrationality exponent of <i>π</i> is exactly 2: for every <i>ε</i> &gt; 0 and all sufficiently large denominators <i>q</i>, every rational $`p/q`$ satisfies $`|\\pi-p/q|\\ge q^{-2-\\varepsilon}`$. This also proves convergence of the Flint–Hills series $`\\sum_{n\\ge1}1/(n^3\\sin^2 n)`$, with angles in radians. ([Lean](lean/docs/017.md))",
+ "scope": "The formalization proves that the irrationality exponent of $\\pi$ is exactly two. For every $\\nu>2$, all sufficiently large positive denominators $q$ satisfy $|\\pi-p/q|\\ge q^{-\\nu}$ for every integer numerator $p$. It also states the exact supremum characterization using infinitely many rational approximations. The paper's convergence consequence for the Flint–Hills series is outside this selected statement."
+}
