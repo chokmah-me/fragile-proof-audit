@@ -1,0 +1,14 @@
+{
+ "family": "261",
+ "title": "Localization and delocalization in the Anderson model.",
+ "n_mss": 2,
+ "lean_doc": true,
+ "n_formalized": 0,
+ "n_challenges": 1,
+ "challenges": [
+  "PlanarAndersonSpectrum"
+ ],
+ "reasoning_trace": false,
+ "desc": "Resolves the predicted spectral contrast for the lattice Anderson model with independent uniform site potentials. In dimension two, every positive disorder strength gives almost surely pure-point spectrum. In every fixed dimension <i>d</i> \u2265 3, sufficiently weak positive disorder gives purely absolutely continuous spectrum on a fixed open interval with nonzero spectral weight. ([Lean](lean/docs/261.md))",
+ "scope": "The linked formalization proves a supporting spectral statement for the nearest-neighbor Anderson operator on $\\mathbb Z^2$. For every disorder strength $h>0$ with independent site potentials uniform on $[-h,h]$, it constructs the bounded self-adjoint operator almost surely and identifies its spectrum as the real interval $[-4-h,4+h]$. This selected statement identifies the spectral set. It does not assert the pure-point spectral type claimed in the accompanying paper."
+}
