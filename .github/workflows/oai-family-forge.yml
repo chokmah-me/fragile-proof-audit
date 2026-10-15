@@ -2,8 +2,11 @@ name: oai-family-forge
 
 # Parameterized independent axiom audit for openai/math Lean families.
 #
-# One dispatch per family. The build runs on a fresh GitHub-hosted runner
-# (ubuntu-latest), independent of any dev box: it vendors the family's OAI
+# One dispatch per family. The build runs on the runner chosen at dispatch
+# (default: a fresh GitHub-hosted runner, ubuntu-latest, independent of any
+# dev box; self-hosted is selectable for dev-box runs -- the scratch steps
+# clean up after themselves either way, per the shared-workspace meta-rule):
+# it vendors the family's OAI
 # subtree from a pinned openai/math commit into a scratch Lean v4.34.1
 # project, builds the family's root modules, and runs #print axioms on the
 # family's headline theorem, failing closed unless the axioms are within
@@ -61,6 +64,14 @@ on:
       theorem_name:
         description: 'Fully-qualified headline theorem for #print axioms'
         required: true
+      runner:
+        description: 'Runner to build on'
+        required: false
+        default: 'ubuntu-latest'
+        type: choice
+        options:
+          - ubuntu-latest
+          - self-hosted
 
 permissions:
   contents: read
@@ -71,7 +82,7 @@ concurrency:
 
 jobs:
   forge:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     timeout-minutes: 360
     steps:
       - name: Install elan
@@ -88,6 +99,13 @@ jobs:
       - name: Clone openai/math and pin commit
         run: |
           set -euo pipefail
+          # Clean slate: on the self-hosted runner the workspace persists
+          # between runs, so a previous run's scratch dirs would make the
+          # clone below fail (and a stale family-forge/.lake could
+          # contaminate the build). The Cache step further down restores
+          # this run's .lake under its own key after vendoring. Harmless
+          # on ephemeral GitHub-hosted runners.
+          rm -rf oai-math forge-stage family-forge
           git clone --filter=blob:none https://github.com/openai/math.git oai-math
           cd oai-math
           git checkout '${{ inputs.oai_commit }}'
@@ -280,3 +298,15 @@ jobs:
             OAI_COMMIT
             EXPECTED_COUNT
             PINS
+
+      - name: Leave shared workspace clean (self-hosted meta-rule)
+        if: always()
+        run: |
+          # On the self-hosted runner the workspace persists between runs;
+          # remove the clone/staging scratch so the next job starts clean.
+          # family-forge/ is deliberately left: the cache action saves
+          # family-forge/.lake in the post-job phase (after this step), and
+          # the Clone step's clean-slate rm -rf clears it at the start of
+          # the next run of this workflow. The evidence files live at the
+          # workspace root and were uploaded by the step above.
+          rm -rf oai-math forge-stage
