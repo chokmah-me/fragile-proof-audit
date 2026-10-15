@@ -254,7 +254,11 @@ jobs:
           import re, sys
           txt = open('axioms.txt').read()
           allow = {'propext', 'Quot.sound', 'Classical.choice'}
-          m = re.search(r"depends on axioms: \[(.*)\]", txt)
+          # DOTALL + non-greedy: `#print axioms` wraps long listings across
+          # lines, and a single-line regex then matches nothing (fail-closed
+          # but a false FAIL -- headline-forge run #5 class). The 281 audit
+          # listings were single-line, so this hardens future families only.
+          m = re.search(r"depends on axioms: \[(.*?)\]", txt, re.DOTALL)
           if not m:
               print('FAIL: no axiom listing found -- build or #print axioms did not produce output')
               print(txt[-3000:])
