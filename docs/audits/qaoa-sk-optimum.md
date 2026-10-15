@@ -134,8 +134,8 @@ sorry status is a build question — GAP):
   (`SupportDeterministic.Variation`), the moment identities
   first for the constructed diffusion, then transferred to
   every diffusion by a uniqueness theorem — over a 135-file
-  subtree (Backward, Diffusion, Foundations, Parabolic,
-  Regularity, Support).
+  subtree (Backward, Control, Density, Diffusion, Foundations,
+  Moments, Parabolic, Regularity, Support).
 
 Neither challenge file and neither solution module mentions
 QAOA, circuits, angles, depth, MaxCut, or graphs of any kind;

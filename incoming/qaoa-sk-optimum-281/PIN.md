@@ -41,8 +41,10 @@ reading of either path.
   repo — the 229 limitation): the `SKValue` subtree holds
   212 files, the `SKSupport` subtree 135 files — 347 files
   under the two solution trees, all in on-topic subdirectories
-  (Control/Equations/Evolution/Gaussian/GroundState;
-  Backward/Diffusion/Foundations/Parabolic/Regularity/Support).
+  (SKValue: Coercivity/Control/Equations/Evolution/Gaussian/
+  GroundState/Processes/Variation; SKSupport: Backward/Control/
+  Density/Diffusion/Foundations/Moments/Parabolic/Regularity/
+  Support).
   No file in either tree is named for QAOA, circuits, angles,
   or MaxCut.
 - Accompanying papers (read at the pin from `preprints/`):
