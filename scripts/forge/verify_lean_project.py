@@ -57,6 +57,22 @@ DEFAULT_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 SKIP_DIRS = {
     ".lake", "lake-packages", "build", ".git", ".github", "_target", "results",
     "incoming", "corpus", "docs", "scripts",
+    # Scratch trees other workflows create at the root of the shared
+    # self-hosted workspace (oai-family-forge / oai-headline-forge): they
+    # hold vendored foreign Lean projects, not this project's sources.
+    # family-forge/ in particular is DELIBERATELY left behind after a
+    # family-forge run (its .lake feeds the actions cache) and is cleared
+    # only at the start of the next family-forge run; headline-forge's
+    # end-of-run step heals git state but never removes its scratch dirs.
+    # Walking into them maps their files to hyphenated module names
+    # (family-forge.OAI.…), which trips the axiom audit's
+    # illegal-identifier guard and turns verify red on unrelated commits
+    # (verify run 38744148349, main@af56586 — AGENTS.md lesson (20)).
+    # Registration rule: any new workflow scratch dir that can persist
+    # in the shared workspace is added here in the same commit that
+    # introduces it.
+    "family-forge", "oai-math", "forge-stage",
+    "headline-forge", "headline-stage",
     # Agent worktrees under .claude/worktrees/ are full copies of the Lean
     # sources. Walking into one yields module names like
     # ".claude.worktrees.<id>.FragileProofAudit", whose `import` line is a
