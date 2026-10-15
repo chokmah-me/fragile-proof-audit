@@ -1,0 +1,14 @@
+{
+ "family": "280",
+ "title": "Unitary vertex operator algebras and conformal nets.",
+ "n_mss": 1,
+ "lean_doc": true,
+ "n_formalized": 0,
+ "n_challenges": 1,
+ "challenges": [
+  "VertexAlgebraNet"
+ ],
+ "reasoning_trace": false,
+ "desc": "Proves the strongly rational case of the strong-locality conjecture: every simple unitary strongly rational complex vertex operator algebra generates a completely rational conformal net. Its simple modules are unitarizable, and its representation category agrees with the net\u2019s finite-index sectors as a braided unitary tensor category. ([Lean](lean/docs/280.md))",
+ "scope": "The linked formalization proves the first construction step relating strongly rational unitary vertex operator algebras to conformal nets. For a simple unitary strongly rational vertex operator algebra, it establishes polynomial energy bounds and strong locality and constructs an irreducible conformal net with the stated covariance, vacuum, and positive-energy properties. The selected statement does not include complete rationality of the net, unitarizability of all simple modules, the braided tensor equivalence, or the classification of local extensions described in the paper."
+}
