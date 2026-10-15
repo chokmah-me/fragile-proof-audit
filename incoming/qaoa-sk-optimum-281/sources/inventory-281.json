@@ -1,0 +1,15 @@
+{
+ "family": "281",
+ "title": "QAOA attains the SK optimum in the thermodynamic-first limit.",
+ "n_mss": 2,
+ "lean_doc": true,
+ "n_formalized": 0,
+ "n_challenges": 2,
+ "challenges": [
+  "SKValue",
+  "SKFullSupport"
+ ],
+ "reasoning_trace": false,
+ "desc": "Proves that QAOA approaches the ground-state energy of the Gaussian zero-field Sherrington\u2013Kirkpatrick model when system size tends to infinity before circuit depth. For every accuracy, finite depth and deterministic angles independent of size and disorder achieve the required limiting expected energy per spin. This also yields leading-order optimal expected MaxCut values on large-degree random regular graphs, with size tending to infinity before degree. ([Lean](lean/docs/281.md))",
+ "scope": "The linked formalization supplies variational identities for the Gaussian zero-field Sherrington\u2013Kirkpatrick ground-state energy used in the paper's QAOA argument. Conditional on an admissible Parisi minimizer and its associated diffusion, it proves convergence of the finite-system ground-state energy, identifies its limit with the Parisi value, and gives equivalent terminal-martingale and integrated-curvature formulas. It also proves convergence of finite Gaussian coefficient sums to the curvature integral, which approaches the ground-state value as the terminal time tends to one. The selected statement covers these value and approximation results; it does not itself assert convergence of QAOA circuit energies. The formalization proves that every admissible integrable minimizer of the zero-temperature Parisi functional for the pure zero-field Sherrington\u2013Kirkpatrick model has full relative Stieltjes support on $[0,1)$. Equivalently, the order parameter increases strictly between every two overlap values below one, so its support has no gap. The covariance normalization is $\\xi(t)=t^2/2$. The statement also constructs the associated diffusion and proves its selected self-consistency moment identities. It is conditional on the order parameter being a minimizer and does not separately assert existence of a minimizer."
+}
