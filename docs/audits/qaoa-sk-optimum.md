@@ -381,3 +381,36 @@ builds at the pinned toolchain/Mathlib combination — which
 is exactly what a forge build would test; the note's GAP is
 narrowed accordingly, not closed. Original text above
 untouched.
+
+## Addendum (2026-10-15) — transitive build check, PASS
+
+The elaboration question left open by the text scan above was
+settled by two forge runs on the self-hosted WSL runner (family
+forge, main@af3970f, runs dispatched at the user's word):
+oai-family-forge #4 (run 38735758842, 40m 31s) and #5 (run
+38735817612, 48m 41s, queued behind #4; near-instant rebuild —
+the second run's build log is a single "Build completed
+successfully (9270 jobs)" line). Inputs both runs:
+oai_commit adc7f1241b42e322a6451854ab7e4b4c146bf78a,
+oai_subdirs "OAI/Probability/SKValue OAI/Probability/SKSupport",
+build_roots "OAI.Probability.SKValue.Main
+OAI.Probability.SKSupport.Main", toolchain v4.34.1, Mathlib
+d13f23b723b8a846827a245b89c10fc7d3f11612 (all recorded in each
+run's PINS; no extra deps, no patches). The vendoring step's
+fail-closed file-count check passed, so exactly the pinned
+347-file tree was built; the import-closure check passed, so
+no outside OAI dependency hid behind the trees.
+
+Both runs concluded success. The axiom audits (verbatim from
+the evidence artifacts' axioms.txt):
+- 'OAI.SKValue.value_consequences' depends on axioms: [propext, Classical.choice, Quot.sound]
+- 'OAI.ZeroTemperatureSK.full_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Both sets are exactly the sidecar-permitted axiom sets; no
+sorryAx, no native_decide hooks anywhere in either
+transitive closure. The GAP recorded above is now closed for
+family 281: the two solution modules build at the pinned
+toolchain/Mathlib and their transitive axiom footprints match
+the sidecars' claims exactly. The note's M1–M4 findings
+(above) stand unchanged — this addendum settles only the
+M2 transitive question, not the statement findings.
