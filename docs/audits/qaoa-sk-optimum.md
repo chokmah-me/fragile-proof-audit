@@ -363,3 +363,21 @@ modules; **M4** inventoried above (the minimizer/existence
 conditionality stack; the Brownian-space-relative value
 functional; `limUnder` modeling discharged in-statement;
 source-faithful Hamiltonian conventions; allowlist axioms).
+
+## Addendum (2026-10-15) — full-subtree text scan
+
+At the user's direction, the transitive question left as GAP
+above was narrowed by a full-text scan of both solution trees
+at the same pin (`adc7f1241b42e322a6451854ab7e4b4c146bf78a`,
+fetched fresh by sparse checkout and verified at that commit):
+all 347 files (SKValue 212, SKSupport 135; 50,201 lines)
+were searched for `sorry`, `admit`, `sorryAx`, the word
+`axiom` in any position, `native_decide`, and
+`Lean.ofReduceBool`/`ofReduceNat`. **Zero occurrences of
+every pattern.** There is no explicit sorry, admit, or stray
+axiom declaration anywhere in either tree. What remains open
+after this scan is elaboration only — whether every file
+builds at the pinned toolchain/Mathlib combination — which
+is exactly what a forge build would test; the note's GAP is
+narrowed accordingly, not closed. Original text above
+untouched.
