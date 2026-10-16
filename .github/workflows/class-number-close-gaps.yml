@@ -13,7 +13,7 @@ name: class-number-close-gaps
 #      type unchanged, REPLAY DONE);
 #   3. Comparator with nanoda, both configs (comparator/README.md):
 #      tools built at the author's pinned versions (comparator d03acab,
-#      lean4export 076e8e5, landrun v0.1.18, nanoda_lib 3a24072).
+#      lean4export 076e8e5, landrun v0.1.17 (deviation, below), nanoda_lib 3a24072).
 #      Primary path is the author's comparator/run.sh (systemd-run
 #      wrapper); if that fails specifically because the runner job has
 #      no user D-Bus session, the step retries by invoking the
@@ -30,6 +30,11 @@ name: class-number-close-gaps
 # path; the tarball itself verified live), after the 1h26m build and
 # the 13m kernel replay had already passed. One unretried fetch must
 # not be able to kill a run that long.
+#
+# 2026-10-16 (later): landrun pin v0.1.18 -> v0.1.17. With the download
+# fixed, run 38942457642 got past Go, rustup, comparator and
+# lean4export, then died at `git checkout v0.1.18`: the tag the
+# author's README documents does not exist in Zouuup/landrun.
 
 on:
   workflow_dispatch:
@@ -109,9 +114,13 @@ jobs:
           git -C "$T/lean4export" checkout 076e8e5
           echo "lean4export $(git -C "$T/lean4export" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
           (cd "$T/lean4export" && lake build)
-          # landrun (Go)
+          # landrun (Go) — DEVIATION: the author's README pins v0.1.18,
+          # but that tag does not exist in Zouuup/landrun (tags v0.1.0 to
+          # v0.1.17, verified by ls-remote 2026-10-16; run 38942457642
+          # died on this checkout). Nearest existing tag used; the
+          # deviation is also recorded in PINS.
           git clone https://github.com/Zouuup/landrun.git "$T/landrun"
-          git -C "$T/landrun" checkout v0.1.18
+          git -C "$T/landrun" checkout v0.1.17
           echo "landrun $(git -C "$T/landrun" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
           (cd "$T/landrun" && go build -o landrun .)
           # nanoda (Rust)
@@ -228,7 +237,8 @@ jobs:
           mathlib=d13f23b723b8a846827a245b89c10fc7d3f11612
           comparator_pin=d03acab
           lean4export_pin=076e8e5
-          landrun_pin=v0.1.18
+          landrun_pin=v0.1.17
+          landrun_pin_deviation=author README at target pin says v0.1.18; tag absent in Zouuup/landrun (tags v0.1.0-v0.1.17, verified 2026-10-16); nearest existing tag used
           nanoda_pin=3a24072
           runner=$RUNNER_NAME
           EOF
