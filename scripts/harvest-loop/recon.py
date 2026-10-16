@@ -35,6 +35,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -89,6 +90,34 @@ def http_get(url, headers=None, timeout=20):
         return -1, str(e).encode()
 
 
+ARXIV_USER_AGENT = (
+    "fragile-proof-audit-harvest-loop "
+    "(https://github.com/chokmah-me/fragile-proof-audit; mailto:chokmah-dyb@pm.me)"
+)
+ARXIV_MIN_INTERVAL = 3.0  # arXiv API terms: one connection, >=3s between requests
+_last_arxiv_request = 0.0
+
+
+def arxiv_get(url):
+    """GET the arXiv API with its terms honored: a real User-Agent, >=3s
+    spacing between requests, and exactly one retry when the transport
+    fails (http_get reports that as status -1, not an HTTP status).
+    The 2026-10-16 recon wrote API-ERROR http -1 for 5 of 10 papers when
+    the Actions runner burst unauthenticated calls at the API; the same
+    IDs, requested singly with spacing, verified 5/5."""
+    global _last_arxiv_request
+    status, body = -1, b""
+    for _attempt in range(2):
+        wait = ARXIV_MIN_INTERVAL - (time.monotonic() - _last_arxiv_request)
+        if _last_arxiv_request and wait > 0:
+            time.sleep(wait)
+        _last_arxiv_request = time.monotonic()
+        status, body = http_get(url, headers={"User-Agent": ARXIV_USER_AGENT})
+        if status != -1:
+            break
+    return status, body
+
+
 def gh_headers():
     h = {"Accept": "application/vnd.github+json", "User-Agent": "fragile-proof-audit-harvest-loop"}
     if GITHUB_TOKEN:
@@ -104,7 +133,7 @@ def check_paper(paper):
         r"arXiv:([\w.\-/]+)", paper, re.I)
     if m:
         aid = m.group(1).replace(".pdf", "")
-        status, body = http_get("https://export.arxiv.org/api/query?id_list=" + aid)
+        status, body = arxiv_get("https://export.arxiv.org/api/query?id_list=" + aid)
         if status != 200:
             return {"status": "API-ERROR", "arxiv_id": aid, "detail": "http %s" % status}
         try:
