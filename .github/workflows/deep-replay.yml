@@ -31,7 +31,18 @@ jobs:
     runs-on: [self-hosted, desktop]
     timeout-minutes: 360
     steps:
+      # clean: false -- do NOT revert this to the default. The default
+      # `git clean -ffdx` deletes results/.checkpoints/ (gitignored, so
+      # the -x flag takes it), which is this gate's own checkpoint
+      # journal: every run would restart the hours-long replay from
+      # zero instead of resuming. It would also wipe the shared
+      # checkout's .lake and untracked incoming/ material on the
+      # desktop runner. Same rule as verify and ab-fluid-euler-build;
+      # deep-replay was the holdout from the 2026-10-12 clean:false
+      # pass (euler 2af00fa, verify acf8e54, zeta 8f2fcab).
       - uses: actions/checkout@v4
+        with:
+          clean: false
 
       - uses: actions/setup-python@v5
         with:
