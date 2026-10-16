@@ -1,0 +1,247 @@
+name: class-number-close-gaps
+
+# One-shot gap-closing receipt for the class-number <= 2000 audit
+# (issue #6, arXiv:2610.21511, Kimura). NOT standing CI: delete this
+# file once the audit note's Receipt is updated.
+#
+# On dell-laptop only ([self-hosted, laptop]), against a fresh clone of
+# iwaokimura/cln-imq-2k @ 7133a32 (asserted before building):
+#   1. full `lake build` (same as class-number-forge run 38902574323);
+#   2. kernel replay: `lake env lean --run B4Replay.lean`, compared
+#      against the author's lean/B4Replay.txt expectations (closure
+#      123010 names, axioms within allowlist, 9 targets replayed with
+#      type unchanged, REPLAY DONE);
+#   3. Comparator with nanoda, both configs (comparator/README.md):
+#      tools built at the author's pinned versions (comparator d03acab,
+#      lean4export 076e8e5, landrun v0.1.18, nanoda_lib 3a24072).
+#      Primary path is the author's comparator/run.sh (systemd-run
+#      wrapper); if that fails specifically because the runner job has
+#      no user D-Bus session, the step retries by invoking the
+#      comparator binary directly (landrun sandbox still applies) and
+#      the receipt records the deviation.
+#
+# Harness rules: pins are literals (no dispatch inputs); scratch dirs
+# live in $HOME outside the shared checkout and are removed in an
+# always() step; no `lake update`; verdicts fail closed.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: class-number-close-gaps
+  cancel-in-progress: false
+
+jobs:
+  close-gaps:
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 360
+    steps:
+      - name: Install elan if missing
+        run: |
+          set -euo pipefail
+          if [ ! -x "$HOME/.elan/bin/elan" ]; then
+            curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          fi
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" --version
+
+      - name: Clone pinned target repo and build
+        timeout-minutes: 120
+        run: |
+          set -o pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          D="$HOME/cn-close-7133a32"
+          rm -rf "$D"
+          git clone https://github.com/iwaokimura/cln-imq-2k.git "$D"
+          git -C "$D" checkout 7133a32cfce5f541c98dc4d65c98c9704747c406
+          HEAD=$(git -C "$D" rev-parse HEAD)
+          echo "cloned HEAD: $HEAD"
+          [ "$HEAD" = "7133a32cfce5f541c98dc4d65c98c9704747c406" ] || { echo "FAIL: HEAD != pin"; exit 1; }
+          grep -qx 'leanprover/lean4:v4.34.1' "$D/lean/lean-toolchain" || { echo "FAIL: toolchain file mismatch"; exit 1; }
+          cd "$D/lean"
+          lake exe cache get 2>&1 | tee "$GITHUB_WORKSPACE/cache-get.log"
+          lake build 2>&1 | tee "$GITHUB_WORKSPACE/build.log"
+
+      - name: Kernel replay (B4Replay.lean)
+        timeout-minutes: 60
+        run: |
+          set -o pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/cn-close-7133a32/lean"
+          time lake env lean --run B4Replay.lean 2>&1 | tee "$GITHUB_WORKSPACE/replay-actual.txt"
+
+      - name: Build comparator tools at the author's pins
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$HOME/.cargo/bin:$HOME/.tooling/go/bin:$PATH"
+          T="$HOME/cn-tools"
+          rm -rf "$T"; mkdir -p "$T"
+          : > "$GITHUB_WORKSPACE/tools-pins.txt"
+          # Go (for landrun), if missing
+          if ! command -v go >/dev/null 2>&1; then
+            mkdir -p "$HOME/.tooling"
+            curl -sSfL https://go.dev/dl/go1.24.9.linux-amd64.tar.gz | tar -C "$HOME/.tooling" -xz
+          fi
+          go version
+          # Rust (for nanoda), if missing
+          if ! command -v cargo >/dev/null 2>&1; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+          fi
+          cargo --version
+          # comparator (Lean)
+          git clone https://github.com/leanprover/comparator.git "$T/comparator"
+          git -C "$T/comparator" checkout d03acab
+          echo "comparator $(git -C "$T/comparator" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
+          (cd "$T/comparator" && lake build)
+          # lean4export (Lean)
+          git clone https://github.com/leanprover/lean4export.git "$T/lean4export"
+          git -C "$T/lean4export" checkout 076e8e5
+          echo "lean4export $(git -C "$T/lean4export" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
+          (cd "$T/lean4export" && lake build)
+          # landrun (Go)
+          git clone https://github.com/Zouuup/landrun.git "$T/landrun"
+          git -C "$T/landrun" checkout v0.1.18
+          echo "landrun $(git -C "$T/landrun" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
+          (cd "$T/landrun" && go build -o landrun .)
+          # nanoda (Rust)
+          git clone https://github.com/ammkrn/nanoda_lib.git "$T/nanoda_lib"
+          git -C "$T/nanoda_lib" checkout 3a24072
+          echo "nanoda_lib $(git -C "$T/nanoda_lib" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
+          (cd "$T/nanoda_lib" && cargo build --release)
+          ls -la "$T/comparator/.lake/build/bin/comparator" "$T/lean4export/.lake/build/bin/lean4export" "$T/landrun/landrun" "$T/nanoda_lib/target/release/nanoda_bin"
+          cat "$GITHUB_WORKSPACE/tools-pins.txt"
+
+      - name: Comparator B4ClassNumber_nanoda
+        timeout-minutes: 120
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export COMPARATOR="$HOME/cn-tools/comparator/.lake/build/bin/comparator"
+          export COMPARATOR_LEAN4EXPORT="$HOME/cn-tools/lean4export/.lake/build/bin/lean4export"
+          export COMPARATOR_LANDRUN="$HOME/cn-tools/landrun/landrun"
+          export COMPARATOR_NANODA="$HOME/cn-tools/nanoda_lib/target/release/nanoda_bin"
+          cd "$HOME/cn-close-7133a32/lean"
+          bash comparator/run.sh B4ClassNumber_nanoda > "$GITHUB_WORKSPACE/comparator-classnumber.log" 2>&1
+          rc=$?
+          echo "run.sh exit: $rc"
+          if [ $rc -ne 0 ] && grep -qiE 'failed to connect to (bus|user session)|no medium found|user session is not available' "$GITHUB_WORKSPACE/comparator-classnumber.log"; then
+            echo "systemd-run user session unavailable on this runner; retrying comparator directly (landrun sandbox still applies)"
+            lake env "$COMPARATOR" comparator/B4ClassNumber_nanoda.json >> "$GITHUB_WORKSPACE/comparator-classnumber.log" 2>&1
+            rc=$?
+            echo "direct comparator exit: $rc"
+          fi
+          tail -5 "$GITHUB_WORKSPACE/comparator-classnumber.log"
+          exit $rc
+
+      - name: Comparator B4ZeroGap_nanoda
+        timeout-minutes: 120
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export COMPARATOR="$HOME/cn-tools/comparator/.lake/build/bin/comparator"
+          export COMPARATOR_LEAN4EXPORT="$HOME/cn-tools/lean4export/.lake/build/bin/lean4export"
+          export COMPARATOR_LANDRUN="$HOME/cn-tools/landrun/landrun"
+          export COMPARATOR_NANODA="$HOME/cn-tools/nanoda_lib/target/release/nanoda_bin"
+          cd "$HOME/cn-close-7133a32/lean"
+          bash comparator/run.sh B4ZeroGap_nanoda > "$GITHUB_WORKSPACE/comparator-zerogap.log" 2>&1
+          rc=$?
+          echo "run.sh exit: $rc"
+          if [ $rc -ne 0 ] && grep -qiE 'failed to connect to (bus|user session)|no medium found|user session is not available' "$GITHUB_WORKSPACE/comparator-zerogap.log"; then
+            echo "systemd-run user session unavailable on this runner; retrying comparator directly (landrun sandbox still applies)"
+            lake env "$COMPARATOR" comparator/B4ZeroGap_nanoda.json >> "$GITHUB_WORKSPACE/comparator-zerogap.log" 2>&1
+            rc=$?
+            echo "direct comparator exit: $rc"
+          fi
+          tail -5 "$GITHUB_WORKSPACE/comparator-zerogap.log"
+          exit $rc
+
+      - name: Verdict (fail-closed)
+        if: always()
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          ok = True
+          # --- replay ---
+          try:
+              rep = open('replay-actual.txt').read()
+          except FileNotFoundError:
+              rep = ''
+          m = re.search(r'closure: (\d+) names, (\d+) constants', rep)
+          if not m:
+              print('FAIL: replay closure line missing'); ok = False
+          else:
+              print(f'replay closure: {m.group(1)} names, {m.group(2)} constants')
+              if (m.group(1), m.group(2)) != ('123010', '123010'):
+                  print('FAIL: closure size != author B4Replay.txt (123010)'); ok = False
+          m = re.search(r'axioms in closure: #\[(.*?)\]', rep)
+          allow = {'propext', 'Classical.choice', 'Quot.sound'}
+          if not m:
+              print('FAIL: replay axioms line missing'); ok = False
+          else:
+              ax = {a.strip() for a in m.group(1).split(',') if a.strip()}
+              print('replay closure axioms:', sorted(ax))
+              if ax - allow:
+                  print('FAIL: replay closure axioms outside allowlist:', sorted(ax - allow)); ok = False
+          targets = ['classNumber_gt_100', 'classNumber_gt_200', 'classNumber_gt_500',
+                     'classNumber_gt_1000', 'classNumber_gt_2000', 'B4.Cert.zero_gap_all',
+                     're_LFunction_pos', 'zero_gap_all', 'zero_gap_large']
+          n_ok = len(re.findall(r'replayed, type unchanged', rep))
+          print(f'replay target lines: {n_ok} (expect 9)')
+          if n_ok != 9:
+              print('FAIL: replay target count != 9'); ok = False
+          if 'REPLAY DONE' not in rep:
+              print('FAIL: REPLAY DONE missing'); ok = False
+          # --- comparator ---
+          for label, fn in [('B4ClassNumber_nanoda', 'comparator-classnumber.log'),
+                            ('B4ZeroGap_nanoda', 'comparator-zerogap.log')]:
+              try:
+                  log = open(fn).read()
+              except FileNotFoundError:
+                  log = ''
+              if 'Your solution is okay!' in log:
+                  print(f'{label}: comparator OK')
+              else:
+                  print(f'FAIL: {label}: "Your solution is okay!" not found in log')
+                  ok = False
+          print('PASS: replay and comparator receipts closed' if ok else 'FAIL: see above')
+          sys.exit(0 if ok else 1)
+          EOF
+
+      - name: Write pins file
+        if: always()
+        run: |
+          cat > PINS <<EOF
+          target_repo=iwaokimura/cln-imq-2k
+          target_commit=7133a32cfce5f541c98dc4d65c98c9704747c406
+          toolchain=leanprover/lean4:v4.34.1
+          mathlib=d13f23b723b8a846827a245b89c10fc7d3f11612
+          comparator_pin=d03acab
+          lean4export_pin=076e8e5
+          landrun_pin=v0.1.18
+          nanoda_pin=3a24072
+          runner=$RUNNER_NAME
+          EOF
+          cat PINS
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: class-number-close-gaps-evidence
+          path: |
+            build.log
+            cache-get.log
+            replay-actual.txt
+            comparator-classnumber.log
+            comparator-zerogap.log
+            tools-pins.txt
+            PINS
+
+      - name: Remove scratch dirs (shared-runner meta-rule)
+        if: always()
+        run: |
+          rm -rf "$HOME/cn-close-7133a32" "$HOME/cn-tools"
