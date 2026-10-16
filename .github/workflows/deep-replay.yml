@@ -41,14 +41,45 @@ jobs:
       - name: Install Python deps
         run: pip install -r requirements.txt
 
-      - name: Clone Euler source at pinned commit
+      - name: Provision Euler source at pinned commit
         run: |
           set -euo pipefail
+          # Same provisioning as verify.yml's gates job. The clone at
+          # $HOME/workspace/ab-fluid-verify normally already exists on
+          # this runner (cloned by hand in Oct 2026, and the verify
+          # gates job now provisions it too); a bare `git clone` into
+          # the existing directory fails, which would kill this run
+          # before the gate starts. Provision idempotently instead:
+          # no-op at the pin, fetch+checkout when off-pin, a non-git
+          # leftover is moved aside, and the final HEAD is asserted.
+          case "$AB_FLUID_PIN" in
+            *[!0-9a-f]*)
+              echo "AB_FLUID_PIN is not lowercase hex: $AB_FLUID_PIN" >&2
+              exit 1
+              ;;
+          esac
+          if [ "${#AB_FLUID_PIN}" -ne 40 ]; then
+            echo "AB_FLUID_PIN must be a full 40-char sha" >&2
+            exit 1
+          fi
+          DEST="$HOME/workspace/ab-fluid-verify"
           mkdir -p "$HOME/workspace"
-          git clone --quiet https://github.com/tristanbuckmaster/fluid_lean \
-            "$HOME/workspace/ab-fluid-verify"
-          git -C "$HOME/workspace/ab-fluid-verify" checkout --quiet "$AB_FLUID_PIN"
-          git -C "$HOME/workspace/ab-fluid-verify" rev-parse HEAD
+          if [ -e "$DEST" ] && [ ! -d "$DEST/.git" ]; then
+            mv "$DEST" "$DEST.broken-$(date +%s)"
+            echo "moved aside a non-git leftover at $DEST"
+          fi
+          if [ -d "$DEST/.git" ]; then
+            if [ "$(git -C "$DEST" rev-parse HEAD)" != "$AB_FLUID_PIN" ]; then
+              git -C "$DEST" fetch --quiet origin
+              git -C "$DEST" checkout --quiet "$AB_FLUID_PIN"
+            fi
+          else
+            git clone --quiet https://github.com/tristanbuckmaster/fluid_lean "$DEST"
+            git -C "$DEST" checkout --quiet "$AB_FLUID_PIN"
+          fi
+          got="$(git -C "$DEST" rev-parse HEAD)"
+          echo "ab-fluid-verify at $got (want $AB_FLUID_PIN)"
+          [ "$got" = "$AB_FLUID_PIN" ]
 
       - name: Run ab_fluid gate (checkpointed)
         run: python scripts/gates/ab_fluid.py
