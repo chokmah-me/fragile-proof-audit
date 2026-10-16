@@ -17,6 +17,11 @@ concurrency:
   group: verify-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  # Must match PINNED in scripts/gates/ab_fluid.py and
+  # scripts/gates/ab_fluid_boussinesq.py (same convention as deep-replay).
+  AB_FLUID_PIN: d0124689230b58b4f86e7b90ac59de06404b3b6b
+
 jobs:
   gates:
     # External PRs keep the clean-room GitHub-hosted runner; pushes and
@@ -41,6 +46,44 @@ jobs:
           cache: pip
       - name: Install Python deps
         run: pip install -r requirements.txt
+      - name: Provision ab-fluid source (ab_fluid gates)
+        run: |
+          set -euo pipefail
+          # The ab_fluid gates read a pinned fluid_lean clone from
+          # $HOME/workspace/ab-fluid-verify (REPO in scripts/gates/
+          # ab_fluid.py and ab_fluid_boussinesq.py). That clone used to
+          # exist only because it was cloned by hand on the desktop
+          # runner; the first gates run on a clean runner (dell-laptop,
+          # run 38868711539) failed with "repo not found" verdict drift.
+          # Provision it here so any runner satisfies the dependency.
+          case "$AB_FLUID_PIN" in
+            *[!0-9a-f]*)
+              echo "AB_FLUID_PIN is not lowercase hex: $AB_FLUID_PIN" >&2
+              exit 1
+              ;;
+          esac
+          if [ "${#AB_FLUID_PIN}" -ne 40 ]; then
+            echo "AB_FLUID_PIN must be a full 40-char sha" >&2
+            exit 1
+          fi
+          DEST="$HOME/workspace/ab-fluid-verify"
+          mkdir -p "$HOME/workspace"
+          if [ -e "$DEST" ] && [ ! -d "$DEST/.git" ]; then
+            mv "$DEST" "$DEST.broken-$(date +%s)"
+            echo "moved aside a non-git leftover at $DEST"
+          fi
+          if [ -d "$DEST/.git" ]; then
+            if [ "$(git -C "$DEST" rev-parse HEAD)" != "$AB_FLUID_PIN" ]; then
+              git -C "$DEST" fetch --quiet origin
+              git -C "$DEST" checkout --quiet "$AB_FLUID_PIN"
+            fi
+          else
+            git clone --quiet https://github.com/tristanbuckmaster/fluid_lean "$DEST"
+            git -C "$DEST" checkout --quiet "$AB_FLUID_PIN"
+          fi
+          got="$(git -C "$DEST" rev-parse HEAD)"
+          echo "ab-fluid-verify at $got (want $AB_FLUID_PIN)"
+          [ "$got" = "$AB_FLUID_PIN" ]
       - name: Run numeric gates (fast suite)
         run: python scripts/gates/check.py --skip ab_fluid
 
