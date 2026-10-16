@@ -43,7 +43,7 @@ concurrency:
 
 jobs:
   euler:
-    runs-on: self-hosted
+    runs-on: [self-hosted, desktop]
     env:
       # Scratch clone lives OUTSIDE the git checkout, at
       # <runner _work>/<repo>/ab-fluid-euler-scratch. This is structural:

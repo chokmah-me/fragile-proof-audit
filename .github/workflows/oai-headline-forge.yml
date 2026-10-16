@@ -35,7 +35,7 @@ concurrency:
 
 jobs:
   forge:
-    runs-on: self-hosted
+    runs-on: [self-hosted, desktop]
     timeout-minutes: 360
     steps:
       - name: Check out this repo
