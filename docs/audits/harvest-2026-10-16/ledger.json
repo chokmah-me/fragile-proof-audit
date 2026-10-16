@@ -1,0 +1,439 @@
+{
+  "date": "2026-10-16",
+  "harvest_sha": "35e2aa2f33887e97381ec8b86fcccd3ac2a81558069a48a65cdcb11bf58bacb2",
+  "meta": {
+    "window": "2026-10-12..2026-10-16",
+    "source": "weekly harvest scan \u2014 three parallel sweeps: (a) arXiv math.CO/math.NT (submissions 2026-10-10..10-15, announcing 10-12..10-16: 256 CO + 187 NT entries fully read, cross-lists included, no gap); (b) arXiv math.PR/math.NA/cs.DM/cs.SC (PR: Fri/Thu fully scanned, Wed partial; NA: Fri/Thu fully, Wed morning + Mon not title-enumerated; DM: Fri/Thu/Wed-top scanned, Mon not; SC: all 12 recent entries covered); (c) math blogs (Tao, Gowers, Kalai, Baker, Aaronson, n-Category Cafe, Azimuth, bit-player, Goedel's Lost Letter \u2014 no checkable computational claims in window) + fresh public GitHub math-claim repos."
+  },
+  "claims": [
+    {
+      "id": "de-bruijn-newman-certified-strip",
+      "title": "Certified classical-strip comparison for the de Bruijn-Newman constant",
+      "score": 1,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2610.18214",
+        "detail": "http 429"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (exact rational object)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "unit-distance-lean-erdos-1070",
+      "title": "Every n points in the plane contain (m_1 + o(1))n points with no unit distance (Lean 4)",
+      "score": -1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.15424",
+        "title": "Every n points in the plane contain (m1 + o(1)) n points with no unit distance",
+        "authors": [
+          "Shisheng Li",
+          "Yong Su"
+        ],
+        "published": "2026-10-11",
+        "url": "https://arxiv.org/abs/2610.15424"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "pinned_toolchain"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "class-number-imaginary-quadratic-2000",
+      "title": "Exactly 16,453,493 imaginary quadratic fields of class number at most 2000",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.21511",
+        "title": "Imaginary quadratic fields of class number at most 2000",
+        "authors": [
+          "Iwao Kimura"
+        ],
+        "published": "2026-10-15",
+        "url": "https://arxiv.org/abs/2610.21511"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "iwaokimura/cln-imq-2k",
+        "branch": "main",
+        "size_kb": 57977,
+        "pushed_at": "2026-10-15",
+        "url": "https://github.com/iwaokimura/cln-imq-2k",
+        "head_sha": "e451afc7f277f6cbc1f197302689aef98df2c10c",
+        "head_date": "2026-10-15",
+        "lean_files": 353,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "disclosed_llm_help"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 353,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Exactly 16,453,493 imaginary quadratic fields of class number at most 2000. There are exactly 16,453,493 imaginary quadratic fields with class number at most 2000, unconditionally,"
+      }
+    },
+    {
+      "id": "erdos-206-explicit-counterexample",
+      "title": "Explicit computable counterexample to eventual greediness (Erdos Problem #206)",
+      "score": 1,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://doi.org/10.5281/zenodo.23283007",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "yuhangshi888/erdos-206-explicit-counterexample",
+        "branch": "main",
+        "size_kb": 93,
+        "pushed_at": "2026-10-11",
+        "url": "https://github.com/yuhangshi888/erdos-206-explicit-counterexample",
+        "head_sha": "520648e9f70f5408cf3b0a0e377b277e407e91a1",
+        "head_date": "2026-10-11",
+        "lean_files": 18,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "pinned_toolchain",
+        "single_author"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (exact rational object)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 18,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [
+          "Palomar registration `PALOMAR-2026-10-11-000014` declared",
+          "zero-sorry declared"
+        ],
+        "probe_query": "Explicit computable counterexample to eventual greediness (Erdos Problem #206). A deterministic computable transcendental real x with 1/4 < x < 1/3 whose best Egyptian underapproxi"
+      }
+    },
+    {
+      "id": "finite-sandpile-avalanches-2d",
+      "title": "Abelian sandpile avalanches on Z^2 are finite (Athreya-Jarai question, d=2)",
+      "score": 2,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2610.13940",
+        "detail": "http -1"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "nitromannitol/finite-avalanche",
+        "branch": "main",
+        "size_kb": 6766,
+        "pushed_at": "2026-10-14",
+        "url": "https://github.com/nitromannitol/finite-avalanche",
+        "head_sha": "49008a4cd8f54592858c1cdc0f6436194142ba00",
+        "head_date": "2026-10-14",
+        "lean_files": 899,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.32.0"
+      },
+      "signals": [
+        "formal_subset_of_claim",
+        "disclosed_llm_help",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.32.0"
+      ],
+      "lanes": [],
+      "formalization_coverage": {
+        "lean_files": 899,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.32.0",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Abelian sandpile avalanches on Z^2 are finite (Athreya-Jarai question, d=2). In the abelian sandpile model on Z^2 in its stationary state, adding a grain at the origin produces a f"
+      }
+    },
+    {
+      "id": "anderson-bernoulli-poisson-statistics",
+      "title": "Poisson local eigenvalue statistics for 1D Anderson-Bernoulli Schrodinger operators (Lean 4)",
+      "score": -1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.21268",
+        "title": "Poisson statistics for one-dimensional Anderson--Bernoulli Schr\u00f6dinger operators",
+        "authors": [
+          "Yi Han"
+        ],
+        "published": "2026-10-15",
+        "url": "https://arxiv.org/abs/2610.21268"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "hanyi162013-Yihan/Poisson_Statistic_1dAndersonBernoulli",
+        "branch": "main",
+        "size_kb": 487,
+        "pushed_at": "2026-10-16",
+        "url": "https://github.com/hanyi162013-Yihan/Poisson_Statistic_1dAndersonBernoulli",
+        "head_sha": "2c241307055645b2919ceefc7eec23e76d69ff25",
+        "head_date": "2026-10-16",
+        "lean_files": 198,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.33.0"
+      },
+      "signals": [
+        "single_author",
+        "pinned_toolchain",
+        "public_ci_green"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.33.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 198,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.33.0",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Poisson local eigenvalue statistics for 1D Anderson-Bernoulli Schrodinger operators (Lean 4). Local eigenvalue statistics of one-dimensional Schrodinger operators with nondegenerat"
+      }
+    },
+    {
+      "id": "landau-siegel-lean",
+      "title": "Third-party Lean formalization of uniform Landau-Siegel zero exclusion",
+      "score": -3,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/aolinhan/landau-siegel-lean",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "aolinhan/landau-siegel-lean",
+        "branch": "main",
+        "size_kb": 628,
+        "pushed_at": "2026-10-10",
+        "url": "https://github.com/AolinHAN/landau-siegel-lean",
+        "head_sha": "919e60f4630399ba27e1f3c3d4a39d754842cf9c",
+        "head_date": "2026-10-10",
+        "lean_files": 98,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.30.0"
+      },
+      "signals": [
+        "third_party_rebuild",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.30.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 98,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.30.0",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared",
+          "zero-sorry declared"
+        ],
+        "probe_query": "Third-party Lean formalization of uniform Landau-Siegel zero exclusion. A Lean 4 proof of uniform exclusion of Landau-Siegel zeros (exists c > 0 with c <= (1-beta) log q for all pr"
+      }
+    },
+    {
+      "id": "selection-7-of-16-exactly-28",
+      "title": "Selecting the 7th smallest of 16 elements takes exactly 28 comparisons",
+      "score": 1,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2610.18740",
+        "detail": "http -1"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://doi.org/10.5281/zenodo.23346948"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "thrackle-bound-1385",
+      "title": "Every thrackle on n>=4 vertices has m <= 1.385(n-1) edges",
+      "score": 1,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2610.17508",
+        "detail": "http 429"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "Peanut-soup/thrackle-db682-computation",
+        "branch": "main",
+        "size_kb": 2954,
+        "pushed_at": "2026-10-12",
+        "url": "https://github.com/Peanut-soup/thrackle-db682-computation",
+        "head_sha": "6615721de64ae83beb6168a6ee3f9d4e4cff3188",
+        "head_date": "2026-10-12",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "ising-magnetization-crossing-bessel-bounds",
+      "title": "Uniform Bessel bounds for magnetization crossings in finite Ising chains",
+      "score": 2,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2610.06935",
+        "detail": "http 429"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "apemm/Kagey-Problems",
+        "branch": "main",
+        "size_kb": 100369,
+        "pushed_at": "2026-10-16",
+        "url": "https://github.com/apemm/Kagey-Problems",
+        "head_sha": "30d8fe6606600f06ba7d3a3d77d7701289d4d0cb",
+        "head_date": "2026-10-16",
+        "lean_files": 81,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (interval certificate)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 81,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Uniform Bessel bounds for magnetization crossings in finite Ising chains. In a finite zero-field Ising chain the all-up/zero-magnetization crossing coupling grows as ~(1/2)log N - "
+      }
+    }
+  ]
+}
