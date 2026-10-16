@@ -23,6 +23,13 @@ name: class-number-close-gaps
 # Harness rules: pins are literals (no dispatch inputs); scratch dirs
 # live in $HOME outside the shared checkout and are removed in an
 # always() step; no `lake update`; verdicts fail closed.
+#
+# 2026-10-16: tool downloads (elan, Go, rustup) retry with
+# --retry-all-errors. Run 38918484356 died 3s into the tools step when
+# the Dell's go.dev download returned a one-off 404 (Proton VPN exit
+# path; the tarball itself verified live), after the 1h26m build and
+# the 13m kernel replay had already passed. One unretried fetch must
+# not be able to kill a run that long.
 
 on:
   workflow_dispatch:
@@ -43,7 +50,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ ! -x "$HOME/.elan/bin/elan" ]; then
-            curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+            curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf --retry 5 --retry-delay 10 --retry-all-errors | sh -s -- -y --default-toolchain none
           fi
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           "$HOME/.elan/bin/elan" --version
@@ -84,12 +91,12 @@ jobs:
           # Go (for landrun), if missing
           if ! command -v go >/dev/null 2>&1; then
             mkdir -p "$HOME/.tooling"
-            curl -sSfL https://go.dev/dl/go1.24.9.linux-amd64.tar.gz | tar -C "$HOME/.tooling" -xz
+            curl -sSfL --retry 5 --retry-delay 10 --retry-all-errors https://go.dev/dl/go1.24.9.linux-amd64.tar.gz | tar -C "$HOME/.tooling" -xz
           fi
           go version
           # Rust (for nanoda), if missing
           if ! command -v cargo >/dev/null 2>&1; then
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+            curl --proto '=https' --tlsv1.2 -sSf --retry 5 --retry-delay 10 --retry-all-errors https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
           fi
           cargo --version
           # comparator (Lean)
