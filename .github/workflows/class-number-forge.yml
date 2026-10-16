@@ -1,0 +1,192 @@
+name: class-number-forge
+
+# One-shot independent build receipt for the class-number <= 2000 audit
+# (issue #6 pick, arXiv:2610.21511, Kimura). NOT part of the standing CI:
+# delete this file once the audit note lands.
+#
+# Builds the pinned companion repo iwaokimura/cln-imq-2k @ 7133a32
+# (lean/ project, toolchain leanprover/lean4:v4.34.1, Mathlib d13f23b)
+# on the Dell runner only ([self-hosted, laptop]), then runs an
+# independent #print axioms audit of the eight user-facing theorems,
+# failing closed unless every listing is within
+# {propext, Quot.sound, Classical.choice}.
+#
+# Harness rules baked in:
+#   - all pins are literals in this file (no dispatch inputs at all, so
+#     there is no shell-injection surface); the clone step asserts HEAD
+#     and the toolchain file against the pins before building;
+#   - the scratch clone lives OUTSIDE the shared checkout ($HOME), so
+#     verify's forge source walk can never see it, and an always() step
+#     removes it (shared-runner meta-rule);
+#   - no `lake update` anywhere: the repo's committed lake-manifest.json
+#     is the pin set;
+#   - the axiom parser searches per theorem with the name as a literal
+#     (a generic greedy name group can span two listings; a charset
+#     group breaks on names containing ", ") and fails closed on any
+#     missing listing.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: class-number-forge
+  cancel-in-progress: false
+
+jobs:
+  forge:
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 350
+    steps:
+      - name: Install elan if missing
+        run: |
+          set -euo pipefail
+          if [ ! -x "$HOME/.elan/bin/elan" ]; then
+            curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          fi
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" --version
+
+      - name: Clone pinned target repo (scratch outside the checkout)
+        run: |
+          set -euo pipefail
+          D="$HOME/cn-forge-7133a32"
+          rm -rf "$D"
+          df -h "$HOME" | tail -1
+          git clone https://github.com/iwaokimura/cln-imq-2k.git "$D"
+          git -C "$D" checkout 7133a32cfce5f541c98dc4d65c98c9704747c406
+          HEAD=$(git -C "$D" rev-parse HEAD)
+          echo "cloned HEAD: $HEAD"
+          [ "$HEAD" = "7133a32cfce5f541c98dc4d65c98c9704747c406" ] || { echo "FAIL: HEAD != pin"; exit 1; }
+          grep -qx 'leanprover/lean4:v4.34.1' "$D/lean/lean-toolchain" || { echo "FAIL: toolchain file mismatch"; exit 1; }
+          cd "$D"
+          sha256sum lean/B4ClassNumber.lean lean/B4Chi8.lean lean/B4ZeroGap.lean lean/lake-manifest.json | tee "$GITHUB_WORKSPACE/pins-actual.txt"
+
+      - name: Fetch Mathlib prebuilt oleans
+        run: |
+          set -o pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/cn-forge-7133a32/lean"
+          lake exe cache get 2>&1 | tee "$GITHUB_WORKSPACE/cache-get.log"
+
+      - name: Build (default target B4 and its vendor libs)
+        timeout-minutes: 300
+        run: |
+          set -o pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/cn-forge-7133a32/lean"
+          lake build 2>&1 | tee "$GITHUB_WORKSPACE/build.log"
+
+      - name: Sorry/native_decide scan of the author's own files (informational)
+        if: always()
+        run: |
+          set -uo pipefail
+          cd "$HOME/cn-forge-7133a32/lean" || exit 0
+          grep -nE 'sorry|admit|native_decide' B4*.lean > "$GITHUB_WORKSPACE/sorry-scan.txt" || true
+          echo "scan hits (build's axiom gate is the fail-closed net):"
+          cat "$GITHUB_WORKSPACE/sorry-scan.txt" || true
+
+      - name: Axiom audit (independent #print axioms, 9 theorems)
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/cn-forge-7133a32/lean"
+          cat > AxiomCheck.lean <<'EOF'
+          import B4ClassNumber
+          import B4Chi8
+          #print axioms B4.ClassNumber.classNumber_gt_100
+          #print axioms B4.ClassNumber.classNumber_gt_200
+          #print axioms B4.ClassNumber.classNumber_gt_500
+          #print axioms B4.ClassNumber.classNumber_gt_1000
+          #print axioms B4.ClassNumber.classNumber_gt_2000
+          #print axioms B4.Chi8.zero_gap_all
+          #print axioms B4.Chi8.zero_gap_large
+          #print axioms B4.Chi8.re_LFunction_pos
+          #print axioms B4.Chi8.zero_gap_for_h2000
+          EOF
+          lake env lean -D maxErrors=1000000 AxiomCheck.lean > "$GITHUB_WORKSPACE/axioms.txt" 2>&1
+          echo "lean exit: $?"
+          cat "$GITHUB_WORKSPACE/axioms.txt"
+
+      - name: Verdict (fail-closed)
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          txt = open('axioms.txt').read()
+          allow = {'propext', 'Quot.sound', 'Classical.choice'}
+          expected = [
+              'B4.ClassNumber.classNumber_gt_100',
+              'B4.ClassNumber.classNumber_gt_200',
+              'B4.ClassNumber.classNumber_gt_500',
+              'B4.ClassNumber.classNumber_gt_1000',
+              'B4.ClassNumber.classNumber_gt_2000',
+              'B4.Chi8.zero_gap_all',
+              'B4.Chi8.zero_gap_large',
+              'B4.Chi8.re_LFunction_pos',
+              'B4.Chi8.zero_gap_for_h2000',
+          ]
+          # Printed listings look like:
+          #   'NAME' depends on axioms: [a, b]
+          # possibly wrapped across lines, or:
+          #   'NAME' does not depend on any axioms
+          # Search per expected name with the name as a regex-escaped
+          # literal: a generic greedy name group can span two listings,
+          # and a charset-restricted group breaks on quoted names that
+          # contain ", " (AGENTS.md forge lesson, Catalan run #12). The
+          # axiom list itself never contains a nested ']'.
+          found = {}
+          for name in expected:
+              m = re.search("'" + re.escape(name) + r"' depends on axioms: \[(?P<ax>.*?)\]", txt, re.DOTALL)
+              if m:
+                  found[name] = {a.strip().strip("'") for a in m.group('ax').split(',') if a.strip()}
+                  continue
+              if re.search("'" + re.escape(name) + r"' does not depend on any axioms", txt):
+                  found[name] = set()
+          ok = True
+          for name in expected:
+              if name not in found:
+                  print(f'FAIL: no axiom listing for {name}')
+                  ok = False
+                  continue
+              extra = found[name] - allow
+              print(f"{name}: {sorted(found[name])}")
+              if extra:
+                  print(f'FAIL: {name} has axioms outside allowlist: {sorted(extra)}')
+                  ok = False
+          if not ok:
+              print(txt[-3000:])
+              sys.exit(1)
+          print('PASS: all 9 theorems built; every axiom listing within {propext, Quot.sound, Classical.choice}')
+          EOF
+
+      - name: Write pins file
+        if: always()
+        run: |
+          cat > PINS <<EOF
+          target_repo=iwaokimura/cln-imq-2k
+          target_commit=7133a32cfce5f541c98dc4d65c98c9704747c406
+          toolchain=leanprover/lean4:v4.34.1
+          mathlib=d13f23b723b8a846827a245b89c10fc7d3f11612
+          runner=$RUNNER_NAME
+          EOF
+          cat PINS
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: class-number-forge-evidence
+          path: |
+            axioms.txt
+            build.log
+            cache-get.log
+            pins-actual.txt
+            sorry-scan.txt
+            PINS
+
+      - name: Remove scratch clone (shared-runner meta-rule)
+        if: always()
+        run: |
+          rm -rf "$HOME/cn-forge-7133a32"
