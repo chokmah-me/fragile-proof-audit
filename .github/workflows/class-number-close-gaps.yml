@@ -35,6 +35,12 @@ name: class-number-close-gaps
 # fixed, run 38942457642 got past Go, rustup, comparator and
 # lean4export, then died at `git checkout v0.1.18`: the tag the
 # author's README documents does not exist in Zouuup/landrun.
+#
+# 2026-10-17: landrun build path. Run 38965336844 checked out v0.1.17
+# fine, then died at `go build -o landrun .`: v0.1.17 has no Go files
+# at the repo root; the main package is ./cmd/landrun. The tools step
+# now builds ./cmd/landrun (verified locally with go1.24.9: the binary
+# builds and runs).
 
 on:
   workflow_dispatch:
@@ -119,10 +125,15 @@ jobs:
           # v0.1.17, verified by ls-remote 2026-10-16; run 38942457642
           # died on this checkout). Nearest existing tag used; the
           # deviation is also recorded in PINS.
+          # Second deviation (2026-10-17): v0.1.17 keeps its main
+          # package in ./cmd/landrun, so a root `go build .` finds no
+          # Go files (run 38965336844 died on this). Build the
+          # ./cmd/landrun package instead; same binary, same output
+          # path. Verified locally with go1.24.9 before this dispatch.
           git clone https://github.com/Zouuup/landrun.git "$T/landrun"
           git -C "$T/landrun" checkout v0.1.17
           echo "landrun $(git -C "$T/landrun" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
-          (cd "$T/landrun" && go build -o landrun .)
+          (cd "$T/landrun" && go build -o landrun ./cmd/landrun)
           # nanoda (Rust)
           git clone https://github.com/ammkrn/nanoda_lib.git "$T/nanoda_lib"
           git -C "$T/nanoda_lib" checkout 3a24072
@@ -239,6 +250,7 @@ jobs:
           lean4export_pin=076e8e5
           landrun_pin=v0.1.17
           landrun_pin_deviation=author README at target pin says v0.1.18; tag absent in Zouuup/landrun (tags v0.1.0-v0.1.17, verified 2026-10-16); nearest existing tag used
+          landrun_build_note=go build -o landrun ./cmd/landrun (v0.1.17 entry point; no Go files at repo root)
           nanoda_pin=3a24072
           runner=$RUNNER_NAME
           EOF
