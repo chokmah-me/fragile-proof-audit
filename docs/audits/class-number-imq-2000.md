@@ -146,7 +146,7 @@ estimate."
   (`sha256sum --quiet -c SHA256SUMS` in `lean/vendor/`: clean); the
   upstream byte-compare script (`vendor/check.sh`) needs network and
   was not re-run here — its claims are declarations (see Receipt).
-## M3 — Credit honesty: PASS on disclosure, with the receipts recorded as GAPs below
+## M3 — Credit honesty: PASS on disclosure, with the receipt gaps recorded below (closed 2026-10-18, see Receipt)
 
 - **AI contributions.** The paper's §8 (sec:ai) states: the OpenAI model
   produced [SZ] and its Lean formalization (taken unmodified at
@@ -343,9 +343,32 @@ the parts.
   lines (B4ClassNumber.lean:261–265, B4Chi8.lean:236–239) agree.
   Build log + `axioms.txt` uploaded as run artifact
   `class-number-forge-evidence`.
-  Remaining receipt gaps (explicit): kernel replay (B4Replay.lean) and
-  the Comparator were NOT re-run independently; their in-repo logs
-  stay declarations. qsieve full re-run stays out of scope by design.
+  At landing, kernel replay (B4Replay.lean) and the Comparator had
+  not been re-run independently; both were closed 2026-10-18 (next
+  bullet). qsieve full re-run stays out of scope by design.
+- **Close-gaps receipt (closed 2026-10-18):** kernel replay and
+  Comparator re-run independently on runner `dell-laptop` via
+  one-shot workflow `class-number-close-gaps`
+  (fragile-proof-audit main@`d74a327`; file deleted after this
+  update). Run 39111076699, concluded **success** (finished
+  2026-10-18 06:27 EDT), all steps green on a fresh clone asserted
+  at `7133a32cfce5f541c98dc4d65c98c9704747c406`: full `lake build`;
+  kernel replay reproduced the author's numbers exactly (closure
+  123,010 names / 123,010 constants, axioms exactly
+  {propext, Classical.choice, Quot.sound}, 9/9 targets replayed
+  type-unchanged, REPLAY DONE); the Comparator (nanoda checker)
+  printed "Your solution is okay!" for both configs
+  (B4ClassNumber_nanoda, B4ZeroGap_nanoda) under the workflow's
+  fail-closed verdict parser. Tool pins: comparator `d03acab`,
+  lean4export `076e8e5`, nanoda_lib `3a24072`. Recorded deviations
+  from the author's comparator README: landrun v0.1.17 in place
+  of the documented v0.1.18 (that tag does not exist upstream);
+  landrun modules fetched with GOPROXY=direct (module proxy
+  unreachable from the runner); comparator and lean4export built
+  under the target's toolchain v4.34.1 in place of their own
+  v4.34.0 (Lean's olean format is version-locked; a v4.34.0-built
+  comparator cannot read the target's oleans). Evidence artifact
+  `class-number-close-gaps-evidence` on run 39111076699.
 - **GAP (explicit):** qsieve full re-run not attempted — out of
   scope (188 processes / Threadripper-class box); the shipped
   logs were checked for completeness instead (188/188 finished,
@@ -365,8 +388,9 @@ conclusion for the box proved by a multiplicity estimate), and
 the upstream OAI final theorem confirmed absent from the B4
 import closure; **M3 PASS on disclosure** — AI contributions,
 the Comparator caveat, and the non-formalized parts are all
-stated where they are, in-repo logs recorded as declarations,
-in-repo receipt GAPs named above; **M4 PASS** — fine print
+stated where they are, in-repo logs recorded as declarations at
+landing and reproduced independently 2026-10-18 (see Receipt);
+**M4 PASS** — fine print
 cataloged with residual lines (the standing risks are the
 unverified sieve program and the external MJ tables, both
 explicitly out of the formalization by the paper's own split).
