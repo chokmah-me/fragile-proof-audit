@@ -41,6 +41,13 @@ name: class-number-close-gaps
 # at the repo root; the main package is ./cmd/landrun. The tools step
 # now builds ./cmd/landrun (verified locally with go1.24.9: the binary
 # builds and runs).
+#
+# 2026-10-17 (later): landrun module fetch. Run 39080123857 ran the
+# ./cmd/landrun build, then died downloading the go-landlock module:
+# proxy.golang.org is unreachable from dell-laptop (IPv6 dial, network
+# unreachable; git and go.dev work over IPv4). The build now sets
+# GOPROXY=direct GOSUMDB=off (modules fetched over git); identical
+# binary verified locally with go1.24.9.
 
 on:
   workflow_dispatch:
@@ -130,10 +137,17 @@ jobs:
           # Go files (run 38965336844 died on this). Build the
           # ./cmd/landrun package instead; same binary, same output
           # path. Verified locally with go1.24.9 before this dispatch.
+          # Third deviation (2026-10-17): run 39080123857 ran the
+          # ./cmd/landrun build, then Go died downloading the
+          # go-landlock module: proxy.golang.org is unreachable from
+          # this runner (IPv6 dial, network unreachable; git and go.dev
+          # work over IPv4). The build now uses GOPROXY=direct
+          # GOSUMDB=off, fetching modules over git instead; identical
+          # binary verified locally with go1.24.9 before this dispatch.
           git clone https://github.com/Zouuup/landrun.git "$T/landrun"
           git -C "$T/landrun" checkout v0.1.17
           echo "landrun $(git -C "$T/landrun" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
-          (cd "$T/landrun" && go build -o landrun ./cmd/landrun)
+          (cd "$T/landrun" && GOPROXY=direct GOSUMDB=off go build -o landrun ./cmd/landrun)
           # nanoda (Rust)
           git clone https://github.com/ammkrn/nanoda_lib.git "$T/nanoda_lib"
           git -C "$T/nanoda_lib" checkout 3a24072
@@ -250,7 +264,7 @@ jobs:
           lean4export_pin=076e8e5
           landrun_pin=v0.1.17
           landrun_pin_deviation=author README at target pin says v0.1.18; tag absent in Zouuup/landrun (tags v0.1.0-v0.1.17, verified 2026-10-16); nearest existing tag used
-          landrun_build_note=go build -o landrun ./cmd/landrun (v0.1.17 entry point; no Go files at repo root)
+          landrun_build_note=GOPROXY=direct GOSUMDB=off go build -o landrun ./cmd/landrun (v0.1.17 entry point; go module proxy unreachable from runner, modules fetched over git)
           nanoda_pin=3a24072
           runner=$RUNNER_NAME
           EOF
