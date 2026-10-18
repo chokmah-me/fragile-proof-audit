@@ -106,3 +106,32 @@ question; the swap is not viable.
 **Decision (2026-10-05): keep `native_decide`, documented here as a known
 checker-coverage decline.** The mathematics is unaffected; the external
 checker simply does not cover this axiom family yet.
+
+## Pin-bump test and v4.35.0 spike (2026-10-14 / 2026-10-18)
+
+**Pin-bump test (2026-10-14): does a newer con-leche accept the six
+`native_decide` auxiliary axioms? No.** Checked against upstream head
+`dd695ca` (2026-10-13; pin is `c431b1c`, 2026-09-13): the acceptance rule
+is unchanged — the standard axioms and the compiler-trust family, each
+matched by exact name-and-type pin. The six
+`<decl>._native.native_decide.ax_<i>_<j>` records embed this repo's own
+declaration names and match no pin at any revision; no upstream branch
+handles the family. The exit-2 decline therefore stands as a
+checker-coverage decline, not a rejected proof: the six certificates are
+kernel-valid, and the repo's own forge permits them under
+`--allow-native-decide` with the exemption recorded. Decision: keep
+`native_decide`, keep the pin, revisit if upstream's coverage changes.
+
+**v4.35.0 paranoid spike (2026-10-18).** Lean v4.35.0 ships
+`lake check --paranoid`, rechecking an export with the bundled kernels
+leanchecker-paranoid, lean4lean, nanoda, con-leche, and con-ron. On a
+minimal no-dependency project carrying two `native_decide` theorems
+(v4.35.0, commit `eb6cafb`), leanchecker-paranoid, lean4lean, and the
+default kernel accept; nanoda panics on the aux-axiom record
+(src/tc.rs, exit 101), con-leche reports "not implemented yet:
+non-standard axiom", and con-ron declines the same
+`._native.native_decide.ax_1_1` record. A control project without
+`native_decide` is accepted by all six kernels with exactly the three
+standard axioms. The coverage decline is therefore unchanged in
+v4.35.0, and a toolchain migration would not end it. Decision stands:
+keep `native_decide`, keep the pin.
