@@ -58,6 +58,16 @@ name: class-number-close-gaps
 # (an || list is exempt from -e), for the run.sh call and for the
 # direct-comparator retry alike, so the retry and the log tail run
 # under any shell flags and the real run.sh error reaches the log.
+#
+# 2026-10-18 (later): tools toolchain override. Run 39103421375 ran
+# the comparator for real and it died reading the target's oleans:
+# "incompatible header". comparator@d03acab and lean4export@076e8e5
+# both declare leanprover/lean4:v4.34.0 in their lean-toolchain,
+# while the target repo pins v4.34.1, and Lean's olean format is
+# version-locked. The tools step now overwrites both tools'
+# lean-toolchain with the target's v4.34.1 before building them.
+# The author's repo pins (d03acab, 076e8e5) are unchanged; only the
+# build toolchain is overridden, and PINS records it.
 
 on:
   workflow_dispatch:
@@ -127,14 +137,22 @@ jobs:
             curl --proto '=https' --tlsv1.2 -sSf --retry 5 --retry-delay 10 --retry-all-errors https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
           fi
           cargo --version
-          # comparator (Lean)
+          # comparator (Lean) — DEVIATION (2026-10-18): this repo at
+          # d03acab declares leanprover/lean4:v4.34.0, but the target
+          # repo pins v4.34.1 and Lean's olean format is version-locked;
+          # run 39103421375's comparator died on "incompatible header"
+          # reading the target's oleans. Build under the target's
+          # toolchain instead; the repo pin is unchanged.
           git clone https://github.com/leanprover/comparator.git "$T/comparator"
           git -C "$T/comparator" checkout d03acab
+          echo 'leanprover/lean4:v4.34.1' > "$T/comparator/lean-toolchain"
           echo "comparator $(git -C "$T/comparator" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
           (cd "$T/comparator" && lake build)
-          # lean4export (Lean)
+          # lean4export (Lean) — same toolchain override as the
+          # comparator above (076e8e5 also declares v4.34.0).
           git clone https://github.com/leanprover/lean4export.git "$T/lean4export"
           git -C "$T/lean4export" checkout 076e8e5
+          echo 'leanprover/lean4:v4.34.1' > "$T/lean4export/lean-toolchain"
           echo "lean4export $(git -C "$T/lean4export" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
           (cd "$T/lean4export" && lake build)
           # landrun (Go) — DEVIATION: the author's README pins v0.1.18,
@@ -272,6 +290,7 @@ jobs:
           mathlib=d13f23b723b8a846827a245b89c10fc7d3f11612
           comparator_pin=d03acab
           lean4export_pin=076e8e5
+          tools_toolchain_override=leanprover/lean4:v4.34.1 (both tool repos declare v4.34.0 at their pins; olean format is version-locked to the target's v4.34.1; run 39103421375 died on incompatible header)
           landrun_pin=v0.1.17
           landrun_pin_deviation=author README at target pin says v0.1.18; tag absent in Zouuup/landrun (tags v0.1.0-v0.1.17, verified 2026-10-16); nearest existing tag used
           landrun_build_note=GOPROXY=direct GOSUMDB=off go build -o landrun ./cmd/landrun (v0.1.17 entry point; go module proxy unreachable from runner, modules fetched over git)
