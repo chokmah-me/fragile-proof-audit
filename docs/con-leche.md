@@ -135,3 +135,10 @@ non-standard axiom", and con-ron declines the same
 standard axioms. The coverage decline is therefore unchanged in
 v4.35.0, and a toolchain migration would not end it. Decision stands:
 keep `native_decide`, keep the pin.
+
+Upstream confirmation (2026-10-18): the spike's kernel-disagreement
+report was emailed to the Lean FRO the same day. Joachim Breitner
+replied that con-leche and con-ron do not support non-standard axioms,
+including those produced by `native_decide` — the decline is by
+design, not a pending coverage fix. (In the same reply the nanoda
+panic on the same export was acknowledged as unexplained.)
