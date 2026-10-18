@@ -48,6 +48,16 @@ name: class-number-close-gaps
 # unreachable; git and go.dev work over IPv4). The build now sets
 # GOPROXY=direct GOSUMDB=off (modules fetched over git); identical
 # binary verified locally with go1.24.9.
+#
+# 2026-10-18: comparator steps exit-code capture. Run 39088032955
+# was the first with steps 1-5 green, then step 6 died in ~34 ms:
+# the runner forces `bash -e`, and the step's own `set -uo pipefail`
+# does not disable it, so a failing run.sh aborted the script before
+# `rc=$?` ran; the D-Bus retry block and the log tail were dead code.
+# Both comparator steps now capture with `rc=0` + `cmd || rc=$?`
+# (an || list is exempt from -e), for the run.sh call and for the
+# direct-comparator retry alike, so the retry and the log tail run
+# under any shell flags and the real run.sh error reaches the log.
 
 on:
   workflow_dispatch:
@@ -166,13 +176,13 @@ jobs:
           export COMPARATOR_LANDRUN="$HOME/cn-tools/landrun/landrun"
           export COMPARATOR_NANODA="$HOME/cn-tools/nanoda_lib/target/release/nanoda_bin"
           cd "$HOME/cn-close-7133a32/lean"
-          bash comparator/run.sh B4ClassNumber_nanoda > "$GITHUB_WORKSPACE/comparator-classnumber.log" 2>&1
-          rc=$?
+          rc=0
+          bash comparator/run.sh B4ClassNumber_nanoda > "$GITHUB_WORKSPACE/comparator-classnumber.log" 2>&1 || rc=$?
           echo "run.sh exit: $rc"
           if [ $rc -ne 0 ] && grep -qiE 'failed to connect to (bus|user session)|no medium found|user session is not available' "$GITHUB_WORKSPACE/comparator-classnumber.log"; then
             echo "systemd-run user session unavailable on this runner; retrying comparator directly (landrun sandbox still applies)"
-            lake env "$COMPARATOR" comparator/B4ClassNumber_nanoda.json >> "$GITHUB_WORKSPACE/comparator-classnumber.log" 2>&1
-            rc=$?
+            rc=0
+            lake env "$COMPARATOR" comparator/B4ClassNumber_nanoda.json >> "$GITHUB_WORKSPACE/comparator-classnumber.log" 2>&1 || rc=$?
             echo "direct comparator exit: $rc"
           fi
           tail -5 "$GITHUB_WORKSPACE/comparator-classnumber.log"
@@ -188,13 +198,13 @@ jobs:
           export COMPARATOR_LANDRUN="$HOME/cn-tools/landrun/landrun"
           export COMPARATOR_NANODA="$HOME/cn-tools/nanoda_lib/target/release/nanoda_bin"
           cd "$HOME/cn-close-7133a32/lean"
-          bash comparator/run.sh B4ZeroGap_nanoda > "$GITHUB_WORKSPACE/comparator-zerogap.log" 2>&1
-          rc=$?
+          rc=0
+          bash comparator/run.sh B4ZeroGap_nanoda > "$GITHUB_WORKSPACE/comparator-zerogap.log" 2>&1 || rc=$?
           echo "run.sh exit: $rc"
           if [ $rc -ne 0 ] && grep -qiE 'failed to connect to (bus|user session)|no medium found|user session is not available' "$GITHUB_WORKSPACE/comparator-zerogap.log"; then
             echo "systemd-run user session unavailable on this runner; retrying comparator directly (landrun sandbox still applies)"
-            lake env "$COMPARATOR" comparator/B4ZeroGap_nanoda.json >> "$GITHUB_WORKSPACE/comparator-zerogap.log" 2>&1
-            rc=$?
+            rc=0
+            lake env "$COMPARATOR" comparator/B4ZeroGap_nanoda.json >> "$GITHUB_WORKSPACE/comparator-zerogap.log" 2>&1 || rc=$?
             echo "direct comparator exit: $rc"
           fi
           tail -5 "$GITHUB_WORKSPACE/comparator-zerogap.log"
