@@ -43,10 +43,23 @@ jobs:
       - name: Set up python3 venv
         run: |
           set -euo pipefail
+          command -v python3 >/dev/null 2>&1 || { echo "FAIL: python3 not found on runner"; exit 1; }
           python3 -c 'import sys; assert sys.version_info >= (3, 9), sys.version'
           V="$HOME/sat-venv"
           rm -rf "$V"
-          python3 -m venv "$V"
+          if ! python3 -m venv "$V"; then
+            echo "NOTE: python3 -m venv failed (this runner's python3 lacks the venv module); attempting to install python3-venv via apt"
+            installed=0
+            if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+              if sudo -n apt-get update -qq && sudo -n apt-get install -y -qq python3-venv; then installed=1; fi
+            elif [ "$(id -u)" = 0 ]; then
+              if apt-get update -qq && apt-get install -y -qq python3-venv; then installed=1; fi
+            fi
+            if [ "$installed" -ne 1 ]; then
+              echo "FAIL: python3 venv module unavailable and python3-venv could not be installed (no passwordless sudo, not root). On the Dell WSL box run: sudo apt install -y python3-venv"; exit 1
+            fi
+            python3 -m venv "$V" || { echo "FAIL: venv creation still fails after python3-venv install"; exit 1; }
+          fi
           "$V/bin/pip" install --quiet "python-sat==1.9.dev16" || "$V/bin/pip" install --quiet python-sat
           "$V/bin/pip" show python-sat | grep -E '^Version:'
           echo "$V/bin" >> "$GITHUB_PATH"
