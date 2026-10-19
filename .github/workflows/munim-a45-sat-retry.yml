@@ -1,0 +1,174 @@
+name: munim-a45-sat-retry
+
+# One-shot Dell retry of the two open (t,d) UNSAT instances from the
+# 2026-10-19 harvest claim-gate batch (a5-exact-5 / a4-exact-4):
+#   (4,5) -> UNSAT independently closes A(4)=4's upper bound
+#   (5,6) -> UNSAT independently closes A(5)=5's upper bound
+# NOT standing CI: delete this file and scratch/munim-a45-sat/ once the
+# receipts are recorded (same one-shot precedent as
+# class-number-close-gaps.yml, deleted in 5d7e402).
+#
+# On dell-laptop only ([self-hosted, laptop]):
+#   1. setup: python3 venv in $HOME (python-sat, same API as the VM batch);
+#      cadical 3.0.1 binary vendored in scratch/munim-a45-sat/ (built from
+#      source on Ubuntu 24.04, the runner's WSL OS) -- asserted runnable and
+#      hash-pinned below;
+#   2. control: (4,4) must return a brute-force-verified model, else the job
+#      fails before any open instance is touched;
+#   3. (4,5) with a 3h hard wall clock, cadical LRAT proof logging ON;
+#   4. (5,6) with a 3h hard wall clock, cadical LRAT proof logging ON.
+# SAT on (4,5) would break A(4)=4 (resp. (5,6) breaks A(5)=5): the driver
+# decodes and brute-force-verifies any model before recording it.
+#
+# Harness rules: pins are literals (no dispatch inputs); scratch work lives
+# in $HOME outside the shared checkout and is removed in an always() step;
+# verdicts fail closed; the committed scratch harness is deleted with this
+# file after the receipts land.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: munim-a45-sat-retry
+  cancel-in-progress: false
+
+jobs:
+  sat-retry:
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 420
+    steps:
+      - name: Set up python3 venv
+        run: |
+          set -euo pipefail
+          python3 -c 'import sys; assert sys.version_info >= (3, 9), sys.version'
+          V="$HOME/sat-venv"
+          rm -rf "$V"
+          python3 -m venv "$V"
+          "$V/bin/pip" install --quiet "python-sat==1.9.dev16" || "$V/bin/pip" install --quiet python-sat
+          "$V/bin/pip" show python-sat | grep -E '^Version:'
+          echo "$V/bin" >> "$GITHUB_PATH"
+
+      - name: Assert cadical binary runs and matches pin
+        run: |
+          set -euo pipefail
+          BIN="$GITHUB_WORKSPACE/scratch/munim-a45-sat/cadical"
+          echo "9849ec93ab98e7a3307c13a339ecace95a9dbd5c40c338080f1d0d256f851de4  $BIN" | sha256sum -c -
+          "$BIN" --version
+          echo "cadical OK"
+
+      - name: Copy harness to scratch and check pins
+        run: |
+          set -euo pipefail
+          S="$GITHUB_WORKSPACE/scratch/munim-a45-sat"
+          D="$HOME/sat-scratch"
+          rm -rf "$D"; mkdir -p "$D"
+          cp "$S/indep_sat.py" "$S/run_cert.py" "$D/"
+          (cd "$D" && sha256sum -c - <<'EOF'
+          aafa27ab017ade4a04274c23dcbf0937aff094b6f60695aea32a6e4a050157a3  indep_sat.py
+          1985afe52880f649ae3c4ce2af01fa49b053d14c374f8db9979abe38b75cd65e  run_cert.py
+          EOF
+          )
+          echo "harness pins OK"
+
+      - name: Control (4,4) must return a verified model
+        timeout-minutes: 15
+        run: |
+          set -uo pipefail
+          D="$HOME/sat-scratch"; cd "$D"
+          "$HOME/sat-venv/bin/python" run_cert.py 44 "$GITHUB_WORKSPACE/scratch/munim-a45-sat/cadical" 1 . > "$GITHUB_WORKSPACE/control-44.log" 2>&1
+          rc=$?
+          cat "$GITHUB_WORKSPACE/control-44.log"
+          [ $rc -eq 0 ] || { echo "FAIL: driver exited $rc"; exit 1; }
+          grep -q 'brute-force-verify=(True, ' "$GITHUB_WORKSPACE/control-44.log" || { echo "FAIL: control did not verify"; exit 1; }
+          cp result-4-4.txt "$GITHUB_WORKSPACE/"
+          echo "CONTROL PASS: (4,4) SAT with brute-force-verified model"
+
+      - name: Instance (4,5), 3h hard wall
+        timeout-minutes: 190
+        run: |
+          set -uo pipefail
+          D="$HOME/sat-scratch"; cd "$D"
+          timeout 10800 "$HOME/sat-venv/bin/python" run_cert.py 45 "$GITHUB_WORKSPACE/scratch/munim-a45-sat/cadical" 1 . > "$GITHUB_WORKSPACE/inst-45.log" 2>&1
+          rc=$?
+          cat "$GITHUB_WORKSPACE/inst-45.log"
+          if [ $rc -eq 124 ]; then
+            echo "(4,5) NOTE: hit the 3h wall clock (timeout 124); instance unresolved" | tee "$GITHUB_WORKSPACE/result-4-5.txt"
+            exit 0
+          fi
+          [ $rc -eq 0 ] || { echo "FAIL: driver exited $rc"; exit 1; }
+          grep -q 'SOLVER-FAIL' "$GITHUB_WORKSPACE/inst-45.log" && { echo "FAIL: solver error on (4,5)"; exit 1; }
+          cp result-4-5.txt "$GITHUB_WORKSPACE/"
+          cp proof-4-5.lrat "$GITHUB_WORKSPACE/" 2>/dev/null || true
+          cp inst-4-5.cnf "$GITHUB_WORKSPACE/" 2>/dev/null || true
+          echo "(4,5) step done"
+
+      - name: Instance (5,6), 3h hard wall
+        timeout-minutes: 190
+        run: |
+          set -uo pipefail
+          D="$HOME/sat-scratch"; cd "$D"
+          timeout 10800 "$HOME/sat-venv/bin/python" run_cert.py 56 "$GITHUB_WORKSPACE/scratch/munim-a45-sat/cadical" 1 . > "$GITHUB_WORKSPACE/inst-56.log" 2>&1
+          rc=$?
+          cat "$GITHUB_WORKSPACE/inst-56.log"
+          if [ $rc -eq 124 ]; then
+            echo "(5,6) NOTE: hit the 3h wall clock (timeout 124); instance unresolved" | tee "$GITHUB_WORKSPACE/result-5-6.txt"
+            exit 0
+          fi
+          [ $rc -eq 0 ] || { echo "FAIL: driver exited $rc"; exit 1; }
+          grep -q 'SOLVER-FAIL' "$GITHUB_WORKSPACE/inst-56.log" && { echo "FAIL: solver error on (5,6)"; exit 1; }
+          cp result-5-6.txt "$GITHUB_WORKSPACE/"
+          cp proof-5-6.lrat "$GITHUB_WORKSPACE/" 2>/dev/null || true
+          cp inst-5-6.cnf "$GITHUB_WORKSPACE/" 2>/dev/null || true
+          echo "(5,6) step done"
+
+      - name: Write result summary and pins
+        if: always()
+        run: |
+          set -uo pipefail
+          {
+            echo "=== munim-a45-sat-retry results ==="
+            for f in result-4-4.txt result-4-5.txt result-5-6.txt; do
+              if [ -f "$f" ]; then cat "$f"; else echo "$f: MISSING (step did not complete)"; fi
+            done
+            echo "=== pins ==="
+            echo "workflow=munim-a45-sat-retry"
+            echo "repo_commit=$GITHUB_SHA"
+            echo "munim_repo=munimtechnologies/kakeya-small-fields"
+            echo "munim_head=3671dfce4b5a42de65b531873fab9dc431f0fe26"
+            echo "indep_sat_sha256=aafa27ab017ade4a04274c23dcbf0937aff094b6f60695aea32a6e4a050157a3"
+            echo "run_cert_sha256=1985afe52880f649ae3c4ce2af01fa49b053d14c374f8db9979abe38b75cd65e"
+            echo "cadical_sha256=9849ec93ab98e7a3307c13a339ecace95a9dbd5c40c338080f1d0d256f851de4"
+            echo "cadical=3.0.1 (rel-3.0.1, built from source on Ubuntu 24.04)"
+            echo "solver_cmd=cadical --lrat --no-binary <cnf> <proof>"
+            echo "symmetry_break=flag (s_i[r]=0 for r>i, proved sound, validated on (4,4) control)"
+            echo "python_sat=$("$HOME/sat-venv/bin/pip" show python-sat | grep -E '^Version:' || echo unknown)"
+            echo "runner=$RUNNER_NAME"
+          } > "$GITHUB_WORKSPACE/RESULTS.txt" 2>&1 || true
+          cat "$GITHUB_WORKSPACE/RESULTS.txt"
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: munim-a45-sat-retry-evidence
+          if-no-files-found: warn
+          path: |
+            control-44.log
+            inst-45.log
+            inst-56.log
+            result-4-4.txt
+            result-4-5.txt
+            result-5-6.txt
+            RESULTS.txt
+            proof-4-5.lrat
+            proof-5-6.lrat
+            inst-4-5.cnf
+            inst-5-6.cnf
+
+      - name: Remove scratch dirs (shared-runner meta-rule)
+        if: always()
+        run: |
+          rm -rf "$HOME/sat-scratch" "$HOME/sat-venv"
