@@ -1,0 +1,384 @@
+{
+  "date": "2026-10-19",
+  "harvest_sha": "9c98df5603f207b31f6f53655e3aa769e42e331b8d6506c4f65ccabdc05065ca",
+  "meta": {
+    "window": "2026-10-16..2026-10-19",
+    "source": "weekly harvest scan \u2014 two parallel sweeps: (a) arXiv math.CO/math.NT/math.PR/math.NA/cs.DM/cs.SC (all 2026-10-16 announcement listings, ~130 entries: 80 CO + 80 NT + 80 PR + 80 NA + 80 DM + 80 SC fetched newest-first, all in-window entries read; v2 revisions in window checked; Oct 17/18/19 announcements not yet in the API index \u2014 weekend, Monday mail goes out ~20:00 ET, so effective coverage is the 10-16 mail); (b) math blogs (Tao, Gowers, Kalai Oct 16-19 posts \u2014 AI-and-math meta commentary only, no checkable claims) + fresh public GitHub math-claim repos (created 2026-10-16..19) + dev.to claim series discovered via web search. Overlap note: the 2026-10-16 run's near-miss/cut lists stop at 2610.22299; both arXiv claims below are 2610.22764+ and appear in none of its lists \u2014 treated as fresh. kakeya-k33-exact-13's post is dated 2026-10-14 but its backing repo was pushed 2026-10-15 and no prior scan harvested it."
+  },
+  "claims": [
+    {
+      "id": "kakeya-k33-exact-13",
+      "title": "K(3,3) = 13 exactly \u2014 first exact finite-field Kakeya number in dimension >=3 over a field with >2 elements",
+      "score": 3,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://dev.to/munimv2/the-kakeya-conjecture-in-october-2026-what-is-proved-what-changed-in-2025-2026-what-is-open-35kc",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "munimtechnologies/kakeya-conjecture",
+        "branch": "main",
+        "size_kb": 131,
+        "pushed_at": "2026-10-15",
+        "url": "https://github.com/munimtechnologies/kakeya-conjecture",
+        "head_sha": "f33fd7f21ab8affdbb9233e696d489ffea77fe6e",
+        "head_date": "2026-10-15",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "ai_generated",
+        "ai_only_review"
+      ],
+      "adjustments": [
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "four-new-binary-codes-a163",
+      "title": "Four new single-error-correcting binary codes \u2014 A(16..19,3) lower bounds",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.23626",
+        "title": "Four New Single-Error-Correcting Binary Codes",
+        "authors": [
+          "Moshe Milshtein"
+        ],
+        "published": "2026-10-16",
+        "url": "https://arxiv.org/abs/2610.23626"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://doi.org/10.5281/zenodo.21633500"
+      },
+      "signals": [
+        "single_author",
+        "anonymous_or_unaffiliated"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "verttra-dsrg-census-39",
+      "title": "Census of vertex-transitive directed strongly regular graphs to order 39",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.22938",
+        "title": "Enumeration of small vertex-transitive directed strongly regular graphs",
+        "authors": [
+          "A. E. Brouwer",
+          "\u0160. Gy\u00fcrki"
+        ],
+        "published": "2026-10-16",
+        "url": "https://arxiv.org/abs/2610.22938"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://homepages.cwi.nl/~aeb/math/dsrg/verttra_dsrg_list"
+      },
+      "signals": [],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "a6-upper-bound-7",
+      "title": "A(6) <= 7 and M(6) <= 7 \u2014 no anisotropic quadratic system over F_2^6 has dim V = 8",
+      "score": 3,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://dev.to/munimv2/a6-7-398-solver-answers-empty-the-last-case-at-t-6-5675",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "munimtechnologies/kakeya-small-fields",
+        "branch": "main",
+        "size_kb": 720,
+        "pushed_at": "2026-10-18",
+        "url": "https://github.com/munimtechnologies/kakeya-small-fields",
+        "head_sha": "3671dfce4b5a42de65b531873fab9dc431f0fe26",
+        "head_date": "2026-10-18",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "ai_generated",
+        "ai_only_review"
+      ],
+      "adjustments": [
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "a5-exact-5",
+      "title": "A(5) = 5 \u2014 the largest anisotropic system over F_2^5 has dim V = 5",
+      "score": 3,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://dev.to/munimv2/a5-5-four-matrices-finish-the-case-t-5-5aek",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "munimtechnologies/kakeya-small-fields",
+        "branch": "main",
+        "size_kb": 720,
+        "pushed_at": "2026-10-18",
+        "url": "https://github.com/munimtechnologies/kakeya-small-fields",
+        "head_sha": "3671dfce4b5a42de65b531873fab9dc431f0fe26",
+        "head_date": "2026-10-18",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "ai_generated",
+        "ai_only_review"
+      ],
+      "adjustments": [
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "kakeya-rank2-f2-optimal",
+      "title": "Rank-2 Kakeya sets in F_2^n need at least 2^(3n/4) points; growth base exactly 2^(1-2^(-r))",
+      "score": 3,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://dev.to/munimv2/kakeya-sets-of-rank-r-over-f2-why-23n4-is-optimal-3lka",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "munimtechnologies/kakeya-small-fields",
+        "branch": "main",
+        "size_kb": 720,
+        "pushed_at": "2026-10-18",
+        "url": "https://github.com/munimtechnologies/kakeya-small-fields",
+        "head_sha": "3671dfce4b5a42de65b531873fab9dc431f0fe26",
+        "head_date": "2026-10-18",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "ai_generated",
+        "ai_only_review"
+      ],
+      "adjustments": [
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [],
+      "formalization_coverage": null
+    },
+    {
+      "id": "kakeya-growth-upper-bound",
+      "title": "Universal Kakeya growth-base upper bound q * 2^(-(q-1)/q) for every q >= 4",
+      "score": 3,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://dev.to/munimv2/smaller-kakeya-sets-over-small-finite-fields-a-new-upper-bound-for-every-q-4-1d1n",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "munimtechnologies/kakeya-small-fields",
+        "branch": "main",
+        "size_kb": 720,
+        "pushed_at": "2026-10-18",
+        "url": "https://github.com/munimtechnologies/kakeya-small-fields",
+        "head_sha": "3671dfce4b5a42de65b531873fab9dc431f0fe26",
+        "head_date": "2026-10-18",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "ai_generated",
+        "ai_only_review"
+      ],
+      "adjustments": [
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "a4-exact-4",
+      "title": "A(4) = 4 \u2014 the largest anisotropic system over F_2^4 has dim V = 4",
+      "score": 3,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://dev.to/munimv2/a4-4-one-more-vector-settles-z49-x-z22-54ie",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "munimtechnologies/kakeya-small-fields",
+        "branch": "main",
+        "size_kb": 720,
+        "pushed_at": "2026-10-18",
+        "url": "https://github.com/munimtechnologies/kakeya-small-fields",
+        "head_sha": "3671dfce4b5a42de65b531873fab9dc431f0fe26",
+        "head_date": "2026-10-18",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "ai_generated",
+        "ai_only_review"
+      ],
+      "adjustments": [
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [],
+      "formalization_coverage": null
+    },
+    {
+      "id": "turan-stability-lean",
+      "title": "Lean 4 formalization of Furedi's stability theorem + clique counting/removal/embedding lemmas + Erdos-Simonovits stability",
+      "score": 0,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/jtraverso/turan-stability",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "jtraverso/turan-stability",
+        "branch": "main",
+        "size_kb": 46,
+        "pushed_at": "2026-10-16",
+        "url": "https://github.com/jtraverso/turan-stability",
+        "head_sha": "3eb99033cc931add291781f77b7446dcba8f5f9d",
+        "head_date": "2026-10-16",
+        "lean_files": 7,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
+      },
+      "signals": [
+        "single_author",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc3"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 7,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0-rc3",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Lean 4 formalization of Furedi's stability theorem + clique counting/removal/embedding lemmas + Erdos-Simonovits stability. A Lean 4 formalization of Furedi's stability theorem and"
+      }
+    },
+    {
+      "id": "strong-six-exponentials-lean",
+      "title": "Lean 4 formalization of the strong six exponentials theorem",
+      "score": 0,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/telaviv/strong-six-exponentials",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "telaviv/strong-six-exponentials",
+        "branch": "main",
+        "size_kb": 261,
+        "pushed_at": "2026-10-18",
+        "url": "https://github.com/telaviv/strong-six-exponentials",
+        "head_sha": "1625bdf3c0a7d9222bacd876d738d7540109bea6",
+        "head_date": "2026-10-18",
+        "lean_files": 78,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0"
+      },
+      "signals": [
+        "single_author",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 78,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Lean 4 formalization of the strong six exponentials theorem. A Lean 4 formalization of the strong six exponentials theorem in transcendental number theory (Roy/Wustholz machinery p"
+      }
+    }
+  ]
+}
