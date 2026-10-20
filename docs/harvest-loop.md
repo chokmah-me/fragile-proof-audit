@@ -48,6 +48,45 @@ autoformalization-tool recon steps before deep gates:
    paper's theorem says?) and in the axiom audit (what do the proofs
    actually depend on?).
 
+### Effectivity screen for QRH-instantiated claims (triage, adopted 2026-10-20)
+
+Origin: check A6 of the Frei–Sofos–Widmer audit
+(`docs/audits/frei-sofos-widmer.md`), generalized at the user's word
+the same day. Applies to any harvest claim whose unconditionality is
+instantiated by citing a zero-free region QRH(δ) (no zeros of the
+relevant Dedekind zeta functions with Re s > 1 − δ; note the
+parametrization: the region Re s > 31/32 is δ = 1/32) and whose proof
+consumes that region through an effective Chebotarev or
+prime-splitting step with a threshold of the standard shape
+x ≥ c(δ)·(log Δ)^(a/δ)·(log log Δ)^(b/δ), while the consuming
+argument needs primes at norm ≤ Δ^η.
+
+Run `scripts/harvest-loop/qrh_effectivity_screen.py --delta <δ>
+--eta <η>` (defaults a = 1, b = 2, c = 1; set a and b from the
+claim's own corollary when they differ). It returns the crossover:
+the discriminant digit count from which the threshold first drops
+below Δ^η, classified EFFECTIVE (≤ 100 digits), LARGE-ONLY
+(≤ 10,000 digits), or NIL (> 10,000 digits). c = 1 is a best case
+most papers do not supply (FSW's c(δ) is pure existence), so every
+crossover is a lower bound on the true one. `--fsw-grid` replays the
+validation: the script reproduces the FSW audit's 16-cell grid
+(395,225 at (ℓ,d) = (2,3) up to 2,757,773 at (5,6)) to within 0.5
+log₁₀ units, and discriminates on controls at η = 1/8
+(δ = 1/2 → 56 digits, δ = 1/12 → 451, δ = 1/32 → 1,359,
+δ = 1/6000 → 395,225, δ = 10⁻⁶ → 86,912,155).
+
+What the screen is and is not: it measures the **effective content
+of the instantiation**, not the claim's truth; an asymptotic bound
+can be true with an astronomically large implied constant, and the
+exceptional-set absorption that keeps such corollaries true is
+standard. A NIL or LARGE-ONLY flag is recorded on the claim's recon
+card as an effectivity qualification (it caps what "unconditional"
+can mean in practice, and it decided V-B's grade in the FSW audit);
+it is not a verdict and never a kill by itself. If the claim's
+consumption does not go through a threshold of this shape, the
+screen does not apply; say so on the card rather than forcing the
+fit.
+
 ### Statement-fidelity checklist (four modes)
 
 Adopted 2026-10-08 from arXiv:2610.08144 (Bastounis–Circelli–Hansen,
