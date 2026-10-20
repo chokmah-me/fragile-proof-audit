@@ -25,6 +25,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [GW biased-random-walk speed monotonicity](gw-speed.md) | 2026-09-28 |
 | [Kimura class number ≤ 2000 (arXiv:2610.21511), Lean formalization — M1 PASS, M2 qualified, M3 PASS, M4 catalog](class-number-imq-2000.md) | 2026-10-16 |
 | [Planat de Bruijn–Newman Λ ≤ 0.148611789321711 (arXiv:2610.18214), conditional on (A1)–(A3) — M1 PASS, M2 qualified, M3 PASS, M4 catalog](de-bruijn-newman-planat.md) | 2026-10-18 |
+| [Frei–Sofos–Widmer quasi-Riemann applications (arXiv:2610.18491v2) — V-A conditional core PARTIAL, V-B unconditional instantiation PARTIAL, Lean build GAP](frei-sofos-widmer.md) | 2026-10-20 |
 | [quantum Hedetniemi (Zeiss arXiv:2609.20690)](hedetniemi-q.md) |  |
 | [JAC-2D Yucai Su 2D Jacobian proof — Type-G prose/logical-gap audit: PASS](jac-2d-typeg.md) |  |
 | [JAC-2D (Su's claimed 2D Jacobian conjecture proof)](jac-2d.md) |  |
