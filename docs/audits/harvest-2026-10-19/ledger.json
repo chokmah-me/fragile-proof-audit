@@ -1,6 +1,6 @@
 {
   "date": "2026-10-19",
-  "harvest_sha": "9c98df5603f207b31f6f53655e3aa769e42e331b8d6506c4f65ccabdc05065ca",
+  "harvest_sha": "29f8b656704317617f2d5cf4048a487b7c1e0127f15a0d12b20a6f9d8b80a088",
   "meta": {
     "window": "2026-10-16..2026-10-19",
     "source": "weekly harvest scan \u2014 two parallel sweeps: (a) arXiv math.CO/math.NT/math.PR/math.NA/cs.DM/cs.SC (all 2026-10-16 announcement listings, ~130 entries: 80 CO + 80 NT + 80 PR + 80 NA + 80 DM + 80 SC fetched newest-first, all in-window entries read; v2 revisions in window checked; Oct 17/18/19 announcements not yet in the API index \u2014 weekend, Monday mail goes out ~20:00 ET, so effective coverage is the 10-16 mail); (b) math blogs (Tao, Gowers, Kalai Oct 16-19 posts \u2014 AI-and-math meta commentary only, no checkable claims) + fresh public GitHub math-claim repos (created 2026-10-16..19) + dev.to claim series discovered via web search. Overlap note: the 2026-10-16 run's near-miss/cut lists stop at 2610.22299; both arXiv claims below are 2610.22764+ and appear in none of its lists \u2014 treated as fresh. kakeya-k33-exact-13's post is dated 2026-10-14 but its backing repo was pushed 2026-10-15 and no prior scan harvested it."
@@ -367,6 +367,10 @@
         [
           "G",
           "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
         ]
       ],
       "formalization_coverage": {
@@ -375,7 +379,8 @@
         "toolchain": "leanprover/lean4:v4.35.0",
         "declared_verification": [
           "Palomar registration (id not parsed) declared",
-          "multi-kernel / comparator replay declared"
+          "multi-kernel / comparator replay declared",
+          "clean axiom audit declared"
         ],
         "probe_query": "Lean 4 formalization of the strong six exponentials theorem. A Lean 4 formalization of the strong six exponentials theorem in transcendental number theory (Roy/Wustholz machinery p"
       }
