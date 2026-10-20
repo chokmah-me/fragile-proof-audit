@@ -2,8 +2,9 @@
 """Harvest-loop recon analyzer.
 
 Reads the newest (or --date-selected) harvest file from incoming/harvests/,
-verifies each claim's identifiers against public APIs (arXiv, GitHub),
-scores fragility per the documented rubric, suggests attack lanes from the
+verifies each claim's identifiers against public APIs (arXiv, GitHub, and
+OpenAlex as an independent second axis for arXiv-verified papers), scores
+fragility per the documented rubric, suggests attack lanes from the
 A-G taxonomy, and writes dated recon output to docs/audits/harvest-<date>/.
 
 Boundaries (deliberate):
@@ -37,6 +38,7 @@ import re
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
@@ -116,6 +118,84 @@ def arxiv_get(url):
         if status != -1:
             break
     return status, body
+
+
+OPENALEX_MIN_INTERVAL = 1.0  # courtesy spacing; the API allows far more
+_last_openalex_request = 0.0
+
+
+def openalex_get(url):
+    """GET the OpenAlex API with the same discipline as arxiv_get: a real
+    User-Agent, spacing between requests, exactly one retry when the
+    transport fails (status -1). HTTP statuses are never retried."""
+    global _last_openalex_request
+    status, body = -1, b""
+    for _attempt in range(2):
+        wait = OPENALEX_MIN_INTERVAL - (time.monotonic() - _last_openalex_request)
+        if _last_openalex_request and wait > 0:
+            time.sleep(wait)
+        _last_openalex_request = time.monotonic()
+        status, body = http_get(url, headers={"User-Agent": ARXIV_USER_AGENT})
+        if status != -1:
+            break
+    return status, body
+
+
+def _surname(name):
+    parts = re.findall(r"[a-zà-ÿ'’-]+", (name or "").lower())
+    return parts[-1] if parts else ""
+
+
+def check_openalex(paper_chk):
+    """Second-axis check for an arXiv-verified paper: look the work up in
+    OpenAlex by its arXiv DOI (10.48550/arXiv.<id>) and compare title,
+    authors, and year against the arXiv record. OpenAlex is an independent
+    index (Crossref/MAG lineage), so agreement is a real second axis and
+    disagreement is a citation flag — the 2026-10-19 catch requires two
+    axes before any identity or negative claim is recorded.
+
+    Absence is never evidence: OpenAlex lags new preprints, so ABSENT
+    carries no score. A MISMATCH can also be index lag (on 2026-10-16
+    OpenAlex held a stale v1 title for one paper while arXiv was at v2),
+    so both titles are recorded verbatim for a human to classify."""
+    if paper_chk.get("status") != "VERIFIED":
+        return {"status": "NOT-APPLICABLE"}
+    aid = re.sub(r"v\d+$", "", paper_chk.get("arxiv_id", ""))
+    if not re.match(r"^\d{4}\.\d{4,5}$", aid):
+        return {"status": "NOT-APPLICABLE", "detail": "non-standard arXiv id: %s" % aid}
+    url = "https://api.openalex.org/works/doi:10.48550/arXiv." + aid
+    mailto = os.environ.get("OPENALEX_MAILTO", "")
+    if mailto:
+        url += "?mailto=" + urllib.parse.quote(mailto)
+    status, body = openalex_get(url)
+    if status == 404:
+        return {"status": "ABSENT", "arxiv_id": aid,
+                "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"}
+    if status != 200:
+        return {"status": "API-ERROR", "arxiv_id": aid, "detail": "http %s" % status}
+    try:
+        w = json.loads(body)
+    except Exception as e:
+        return {"status": "PARSE-ERROR", "arxiv_id": aid, "detail": str(e)}
+    oa_title = w.get("title") or w.get("display_name") or ""
+    oa_authors = [((a.get("author") or {}).get("display_name") or "")
+                  for a in (w.get("authorships") or [])]
+    oa_date = w.get("publication_date") or ""
+    title_ok = title_match(paper_chk.get("title", ""), oa_title)
+    ax_surnames = {_surname(a) for a in paper_chk.get("authors", [])} - {""}
+    oa_surnames = {_surname(a) for a in oa_authors} - {""}
+    author_overlap = sorted(ax_surnames & oa_surnames)
+    ax_year = (paper_chk.get("published") or "")[:4]
+    oa_year = oa_date[:4]
+    year_ok = (not ax_year) or (not oa_year) or abs(int(ax_year) - int(oa_year)) <= 1
+    out = {"status": "AGREE" if (title_ok and author_overlap and year_ok) else "MISMATCH",
+           "arxiv_id": aid, "title": oa_title, "authors": oa_authors,
+           "publication_date": oa_date, "title_ok": title_ok,
+           "author_overlap": author_overlap, "year_ok": year_ok,
+           "openalex_id": w.get("id")}
+    if out["status"] == "MISMATCH":
+        out["arxiv_title"] = paper_chk.get("title", "")
+    return out
 
 
 def gh_headers():
@@ -314,6 +394,7 @@ def parse_harvest(path):
 
 def analyze_claim(claim):
     paper_chk = check_paper(claim.get("paper", ""))
+    axis2_chk = check_openalex(paper_chk)
     code_chk = check_github_repo(claim.get("code", "none"))
     signals = [s.strip() for s in claim.get("signals", "").split(",") if s.strip()]
     score = 0
@@ -340,10 +421,22 @@ def analyze_claim(claim):
         adjustments.append("+1: paper identifier did not resolve (%s)" % paper_chk["status"])
     elif paper_chk.get("status") == "URL-BLOCKED":
         adjustments.append("paper URL bot-blocked (http 403); human-reachable, not loop-verified")
+    if axis2_chk.get("status") == "MISMATCH":
+        score += 1
+        adjustments.append("+1: OpenAlex second axis disagrees with the arXiv record "
+                           "(title_ok=%s, author_overlap=%s, year_ok=%s) — classify before citing: "
+                           "real citation error or OpenAlex version lag"
+                           % (axis2_chk.get("title_ok"), axis2_chk.get("author_overlap"),
+                              axis2_chk.get("year_ok")))
+    elif axis2_chk.get("status") == "ABSENT":
+        adjustments.append("OpenAlex: no record yet (index lag possible; absence is not evidence)")
+    elif axis2_chk.get("status") in ("API-ERROR", "PARSE-ERROR"):
+        adjustments.append("OpenAlex second axis unavailable (%s: %s)"
+                           % (axis2_chk["status"], axis2_chk.get("detail", "")))
     lanes = suggest_lanes(" ".join([claim.get("title", ""), claim.get("claim", ""),
                                     claim.get("code_note", "")]))
     coverage = formalization_coverage(claim, code_chk)
-    return {"paper": paper_chk, "code": code_chk, "signals": signals,
+    return {"paper": paper_chk, "axis2": axis2_chk, "code": code_chk, "signals": signals,
             "score": score, "adjustments": adjustments, "lanes": lanes,
             "coverage": coverage}
 
@@ -362,8 +455,8 @@ def render_recon(date, meta, claims, results, harvest_sha):
     lines.append("")
     lines.append("## Verification ledger")
     lines.append("")
-    lines.append("| # | Claim | Paper | Code |")
-    lines.append("|---|---|---|---|")
+    lines.append("| # | Claim | Paper | OpenAlex (axis 2) | Code |")
+    lines.append("|---|---|---|---|---|")
     ranked = sorted(zip(claims, results), key=lambda cr: (-cr[1]["score"], cr[0]["id"]))
     for i, (c, r) in enumerate(ranked, 1):
         p = r["paper"]
@@ -372,13 +465,14 @@ def render_recon(date, meta, claims, results, harvest_sha):
                  "NOT-FOUND": "NOT-FOUND", "UNPARSEABLE": "UNPARSEABLE",
                  "URL-BLOCKED": "URL-BLOCKED", "URL-FAILED": "URL-FAILED",
                  "API-ERROR": "API-ERROR", "PARSE-ERROR": "PARSE-ERROR"}.get(p["status"], p["status"])
+        acell = r.get("axis2", {}).get("status", "NOT-APPLICABLE")
         k = r["code"]
         if k["status"] == "PUBLIC":
             ref7 = (k.get("pinned_in_harvest") or k.get("head_sha") or "?")[:7]
             kcell = "PUBLIC %s@%s (%d lean files)" % (k["slug"], ref7, k.get("lean_files", 0))
         else:
             kcell = k["status"]
-        lines.append("| %d | %s | %s | %s |" % (i, c["title"], pcell, kcell))
+        lines.append("| %d | %s | %s | %s | %s |" % (i, c["title"], pcell, acell, kcell))
     lines.append("")
     lines.append("## Ranked queue")
     lines.append("")
@@ -402,6 +496,19 @@ def render_recon(date, meta, claims, results, harvest_sha):
             lines.append("- %s" % p.get("detail", ""))
         elif p.get("detail"):
             lines.append("- detail: %s" % p["detail"])
+        a2 = r.get("axis2") or {}
+        if a2.get("status") == "AGREE":
+            lines.append("- OpenAlex (axis 2): AGREE — *%s* · %s · overlap: %s"
+                         % (a2.get("title", ""), a2.get("publication_date", ""),
+                            ", ".join(a2.get("author_overlap", []))))
+        elif a2.get("status") == "MISMATCH":
+            lines.append("- OpenAlex (axis 2): MISMATCH — OpenAlex title: *%s* · arXiv title: *%s* "
+                         "· date %s · author overlap: %s (classify: citation error or version lag)"
+                         % (a2.get("title", ""), a2.get("arxiv_title", ""),
+                            a2.get("publication_date", ""),
+                            ", ".join(a2.get("author_overlap", [])) or "none"))
+        elif a2.get("status") in ("ABSENT", "API-ERROR", "PARSE-ERROR"):
+            lines.append("- OpenAlex (axis 2): %s — %s" % (a2["status"], a2.get("detail", "")))
         lines.append("")
         lines.append("**Code/data.** status=%s" % k["status"])
         if k["status"] == "PUBLIC":
@@ -485,7 +592,7 @@ def write_outputs(date, meta, claims, results, harvest_sha):
         f.write(recon)
     ledger = {"date": date, "harvest_sha": harvest_sha, "meta": meta,
               "claims": [{"id": c["id"], "title": c["title"], "score": r["score"],
-                          "paper": r["paper"], "code": r["code"],
+                          "paper": r["paper"], "axis2": r.get("axis2"), "code": r["code"],
                           "signals": r["signals"], "adjustments": r["adjustments"],
                           "lanes": r["lanes"],
                           "formalization_coverage": r.get("coverage")}

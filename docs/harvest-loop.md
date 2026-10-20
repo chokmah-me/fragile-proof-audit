@@ -11,6 +11,11 @@ Weekly pipeline: fresh-claim harvest in → recon analysis out → target pick.
    harvest file, weekly on Mondays (~09:17 ET), or manually. It runs
    `scripts/harvest-loop/recon.py`, which for each claim:
    - verifies the paper identifier against the arXiv API (title/author/date),
+   - for arXiv-verified papers, runs a second-axis check against the
+     OpenAlex API (lookup by arXiv DOI; title/author/year compared with the
+     arXiv record) — agreement is recorded in the recon ledger, disagreement
+     is flagged for classification (citation error vs index error or lag),
+     and absence is recorded as no signal, never as non-existence,
    - verifies the code repo against the GitHub API (public, HEAD pin,
      Lean-file count, lakefile, `lean-toolchain` pin),
    - for claims with a Lean formalization, writes a **formalization coverage
