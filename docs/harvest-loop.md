@@ -111,6 +111,22 @@ generated as a matter of course, not as an optional extra:
 - A receipt that does not exist is reported as such — a missing receipt is a
   GAP in the note, never silently omitted.
 
+### Companion prompts (adopted 2026-10-20)
+
+Two Stunspot "Prompt of the Day" prompts are paired with this loop
+(prospective only, no backfill; texts in the local Stunspot library,
+`local-stunspot-potd`):
+
+- **Grandmaster's Methods** (2025-08-16) runs at the recon step: reconstruct
+  the author's actual working method from primary sources (the paper, the
+  artifact, process evidence), weighted unvarnished-over-polished and
+  high-stakes-over-promotional, with skeptic filters (survivorship,
+  success-myth reconstruction, ghosted authorship) run continuously.
+- **DEEPEN** (2025-10-10) runs as a pre-verdict challenge pass alongside the
+  M1–M4 checklist: a reflect-and-challenge cascade over assumptions,
+  theoretical basis, drawbacks, failure contexts, and alternatives, applied
+  to the draft verdict before it is recorded.
+
 ## Boundaries
 
 - The loop never clones code, never runs builds, never downloads artifacts.
