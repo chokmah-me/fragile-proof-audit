@@ -414,3 +414,21 @@ structural claims describe v2's mathematics.
 4. OAI78's own PDF was not fetched; its QRH(1/8) region is recorded
    from FSW's line 155 and bibliography only. It is intro context
    for FSW and load-bearing nowhere in this audit's verdicts.
+
+## Correction (2026-10-20, later the same day)
+
+In M2 (A6), the sentence "At δ = 31/32 the same computation collapses
+to trivial sizes" is wrong in two ways. First, the parametrization:
+QRH(δ) means no zeros with Re s > 1 − δ, so the Hexagon v2 region
+Re s > 31/32 corresponds to **δ = 1/32**, not 31/32. Second, the
+number: at δ = 1/32, η = 1/8, c = 1, the crossover recomputes to
+log₁₀ Δ ≈ 1,359, i.e. a discriminant of roughly 1,400 digits. That
+is far below the cited region's 395,225 and far above trivial. The
+qualitative point the sentence carried stands (the widened region is
+much more effective than the cited one, and it is still not the
+region the paper cites); the label and the word "trivial" do not.
+The recomputation is by `scripts/harvest-loop/qrh_effectivity_screen.py`
+(added to this repo the same day), which reproduces this note's A6
+grid to within 0.5 log₁₀ units on all 16 cells; control values at
+η = 1/8, c = 1: δ = 1/2 → 56 digits, δ = 1/12 → 451 digits,
+δ = 1/32 → 1,359 digits, δ = 1/6000 → 395,225 digits.
