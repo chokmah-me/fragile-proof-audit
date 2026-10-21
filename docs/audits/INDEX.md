@@ -45,6 +45,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [odd-zeta preprint 202601.1609 (Phase 2(d), corrected 2026-09-20)](odd-zeta-202601.md) |  |
 | [PDN1 congruences (Phase 2(g))](pdn1.md) |  |
 | [Pólya's conjecture counterexample (canonization, not refutation)](polya.md) |  |
+| [QCryptLean BB84 (Ben Shahar–Morag–Englund–Sulimany, arXiv:2610.17286), Lean formalization: PASS, M1/M2 qualified, M3 PASS, M4 catalog with provenance GAP (re-landed 2026-10-21; original 2026-10-18)](qcryptlean-bb84.md) | 2026-10-18 |
 | [RR / HJO q-expansion (Phase 2(f))](rr-qexpand.md) |  |
 | [Salez–Youssef log-Sobolev conjecture (Track D#8)](salez-youssef-logsobolev.md) |  |
 | [Sárközy's mod-`p` sum-product conjecture (Track D#3)](sarkozy-sum-product.md) |  |
