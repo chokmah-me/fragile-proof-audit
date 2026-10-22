@@ -178,6 +178,9 @@ estimate."
   `T_1000 = 334757/10000 → 33` →
   "...do not match: 'B4.ClassNumber.classNumber_gt_1000'"). The log
   is author-generated — a declaration, not a receipt (see Receipt).
+  Both negative controls have since been reproduced independently
+  (2026-10-22; see the negative-control receipt below) and are
+  receipts from that date.
 - **Kernel replay and build logs.** `lean/B4Build.txt` (build log +
   `#print axioms` on the B4 declarations) and `lean/B4Replay.txt`
   (`lake env lean --run B4Replay.lean`: dependency closure of the
@@ -369,6 +372,34 @@ the parts.
   v4.34.0 (Lean's olean format is version-locked; a v4.34.0-built
   comparator cannot read the target's oleans). Evidence artifact
   `class-number-close-gaps-evidence` on run 39111076699.
+- **Negative-control receipt (closed 2026-10-22):** the author's two
+  Comparator negative controls (M3) reproduced independently on
+  runner `DESKTOP-7HDI2D1` via one-shot workflow
+  `class-number-neg-controls` (fragile-proof-audit main@`8ab5b9d`;
+  file deleted in the landing that adds this bullet). Run
+  39812037681, concluded **success** (finished 2026-10-22 14:36
+  EDT), all steps green on a fresh clone asserted at
+  `7133a32cfce5f541c98dc4d65c98c9704747c406`: full `lake build`;
+  tools at the close-gaps pins (comparator `d03acab`, lean4export
+  `076e8e5`, landrun `v0.1.17`, nanoda_lib `3a24072`, v4.34.1
+  toolchain override); both positive configs printed "Your solution
+  is okay!"; each challenge was then mutated in turn
+  (`Challenge/B4ZeroGap.lean`: 5811/10000000 → 5812/10000000;
+  `Challenge/B4ClassNumber.lean`: T_1000 334757/10000 → 33), and
+  the nanoda Comparator rejected each with the exact exception
+  "Challenge and solution theorem statement do not match" naming
+  `B4.Chi8.zero_gap_all` / `B4.ClassNumber.classNumber_gt_1000` at
+  a non-zero exit; both challenge files were sha256-verified
+  restored to their pre-mutation hashes, and the workflow's
+  fail-closed verdict parser returned PASS. Evidence artifact
+  `class-number-neg-controls-evidence` on run 39812037681. First
+  attempt (run 39793015875, main@`8b00820`, same day) failed in
+  the tools step before any Comparator ran: the desktop runner
+  ships go1.22.2, the workflow's presence-only Go check skipped
+  the pinned go1.24.9 install, and the auto-downloaded go1.24.0
+  toolchain failed checksum verification under GOSUMDB=off;
+  post-mortem and fix (version-gated install, GOTOOLCHAIN=local)
+  are recorded in the deleted workflow's header at main@`8ab5b9d`.
 - **GAP (explicit):** qsieve full re-run not attempted — out of
   scope (188 processes / Threadripper-class box); the shipped
   logs were checked for completeness instead (188/188 finished,
