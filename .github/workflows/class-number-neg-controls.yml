@@ -1,0 +1,305 @@
+name: class-number-neg-controls
+
+# One-shot negative-control reproduction for the class-number <= 2000
+# audit (issue #6, arXiv:2610.21511, Kimura). NOT standing CI: delete
+# this file once the receipt is recorded.
+#
+# Why: the audit note (docs/audits/class-number-imq-2000.md, M3) records
+# the author's two Comparator negative controls from the author's log
+# (lean/comparator/B4Comparator.txt) as declarations, not receipts: a
+# one-digit change in the challenge statements (5811 -> 5812 in
+# zero_gap_all; T_1000 334757/10000 -> 33 in classNumber_gt_1000) is
+# rejected with "Challenge and solution theorem statement do not match".
+# The 2026-10-18 close-gaps run (39111076699) reproduced the positive
+# configs and the kernel replay only. This run reproduces the negative
+# controls independently, on the runner-first primary lane
+# ([self-hosted, desktop]):
+#   1. fresh clone of iwaokimura/cln-imq-2k @ 7133a32 (asserted), full
+#      `lake build` (target toolchain v4.34.1);
+#   2. Comparator tools at the author's pins (comparator d03acab,
+#      lean4export 076e8e5, landrun v0.1.17, nanoda_lib 3a24072), with
+#      the close-gaps deviations carried over verbatim (see PINS step);
+#   3. positive baseline: both *_nanoda configs on the pristine
+#      challenge files must print "Your solution is okay!";
+#   4. negative controls: mutate one challenge constant per config,
+#      re-run, require a non-zero comparator exit AND the exact
+#      mismatch exception naming the mutated theorem; restore the file
+#      and require its sha256 to match the pre-mutation hash;
+#   5. fail-closed verdict over all of the above.
+#
+# Harness rules: pins are literals (no dispatch inputs); scratch dirs
+# live in $HOME outside the shared checkout and are removed in an
+# always() step; no `lake update`; every comparator invocation captures
+# its exit code with `rc=0` + `cmd || rc=$?` (the runner forces bash -e;
+# close-gaps run 39088032955 died before `rc=$?` could run).
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: class-number-neg-controls
+  cancel-in-progress: false
+
+jobs:
+  neg-controls:
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 600
+    steps:
+      - name: Install elan if missing
+        run: |
+          set -euo pipefail
+          if [ ! -x "$HOME/.elan/bin/elan" ]; then
+            curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf --retry 5 --retry-delay 10 --retry-all-errors | sh -s -- -y --default-toolchain none
+          fi
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" --version
+
+      - name: Clone pinned target repo and build
+        timeout-minutes: 180
+        run: |
+          set -o pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          D="$HOME/cn-negctl-7133a32"
+          rm -rf "$D"
+          git clone https://github.com/iwaokimura/cln-imq-2k.git "$D"
+          git -C "$D" checkout 7133a32cfce5f541c98dc4d65c98c9704747c406
+          HEAD=$(git -C "$D" rev-parse HEAD)
+          echo "cloned HEAD: $HEAD"
+          [ "$HEAD" = "7133a32cfce5f541c98dc4d65c98c9704747c406" ] || { echo "FAIL: HEAD != pin"; exit 1; }
+          grep -qx 'leanprover/lean4:v4.34.1' "$D/lean/lean-toolchain" || { echo "FAIL: toolchain file mismatch"; exit 1; }
+          cd "$D/lean"
+          sha256sum Challenge/B4ZeroGap.lean Challenge/B4ClassNumber.lean | tee "$GITHUB_WORKSPACE/challenge-shas-before.txt"
+          lake exe cache get 2>&1 | tee "$GITHUB_WORKSPACE/cache-get.log"
+          lake build 2>&1 | tee "$GITHUB_WORKSPACE/build.log"
+
+      - name: Build comparator tools at the author's pins
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$HOME/.cargo/bin:$HOME/.tooling/go/bin:$PATH"
+          T="$HOME/cn-negctl-tools"
+          rm -rf "$T"; mkdir -p "$T"
+          : > "$GITHUB_WORKSPACE/tools-pins.txt"
+          if ! command -v go >/dev/null 2>&1; then
+            mkdir -p "$HOME/.tooling"
+            curl -sSfL --retry 5 --retry-delay 10 --retry-all-errors https://go.dev/dl/go1.24.9.linux-amd64.tar.gz | tar -C "$HOME/.tooling" -xz
+          fi
+          go version
+          if ! command -v cargo >/dev/null 2>&1; then
+            curl --proto '=https' --tlsv1.2 -sSf --retry 5 --retry-delay 10 --retry-all-errors https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+          fi
+          cargo --version
+          # comparator: build under the target's v4.34.1 (repo declares
+          # v4.34.0 at the pin; olean format is version-locked;
+          # close-gaps run 39103421375 died on "incompatible header").
+          git clone https://github.com/leanprover/comparator.git "$T/comparator"
+          git -C "$T/comparator" checkout d03acab
+          echo 'leanprover/lean4:v4.34.1' > "$T/comparator/lean-toolchain"
+          echo "comparator $(git -C "$T/comparator" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
+          (cd "$T/comparator" && lake build)
+          # lean4export: same toolchain override (076e8e5 declares v4.34.0).
+          git clone https://github.com/leanprover/lean4export.git "$T/lean4export"
+          git -C "$T/lean4export" checkout 076e8e5
+          echo 'leanprover/lean4:v4.34.1' > "$T/lean4export/lean-toolchain"
+          echo "lean4export $(git -C "$T/lean4export" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
+          (cd "$T/lean4export" && lake build)
+          # landrun v0.1.17 (README's v0.1.18 tag does not exist upstream);
+          # build ./cmd/landrun with GOPROXY=direct (close-gaps deviations).
+          git clone https://github.com/Zouuup/landrun.git "$T/landrun"
+          git -C "$T/landrun" checkout v0.1.17
+          echo "landrun $(git -C "$T/landrun" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
+          (cd "$T/landrun" && GOPROXY=direct GOSUMDB=off go build -o landrun ./cmd/landrun)
+          # nanoda
+          git clone https://github.com/ammkrn/nanoda_lib.git "$T/nanoda_lib"
+          git -C "$T/nanoda_lib" checkout 3a24072
+          echo "nanoda_lib $(git -C "$T/nanoda_lib" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
+          (cd "$T/nanoda_lib" && cargo build --release)
+          ls -la "$T/comparator/.lake/build/bin/comparator" "$T/lean4export/.lake/build/bin/lean4export" "$T/landrun/landrun" "$T/nanoda_lib/target/release/nanoda_bin"
+          cat "$GITHUB_WORKSPACE/tools-pins.txt"
+
+      - name: Comparator positive B4ClassNumber_nanoda
+        timeout-minutes: 60
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export COMPARATOR="$HOME/cn-negctl-tools/comparator/.lake/build/bin/comparator"
+          export COMPARATOR_LEAN4EXPORT="$HOME/cn-negctl-tools/lean4export/.lake/build/bin/lean4export"
+          export COMPARATOR_LANDRUN="$HOME/cn-negctl-tools/landrun/landrun"
+          export COMPARATOR_NANODA="$HOME/cn-negctl-tools/nanoda_lib/target/release/nanoda_bin"
+          cd "$HOME/cn-negctl-7133a32/lean"
+          rc=0
+          bash comparator/run.sh B4ClassNumber_nanoda > "$GITHUB_WORKSPACE/comparator-classnumber.log" 2>&1 || rc=$?
+          echo "run.sh exit: $rc"
+          if [ $rc -ne 0 ] && grep -qiE 'failed to connect to (bus|user session)|no medium found|user session is not available' "$GITHUB_WORKSPACE/comparator-classnumber.log"; then
+            echo "systemd-run user session unavailable on this runner; retrying comparator directly (landrun sandbox still applies)"
+            rc=0
+            lake env "$COMPARATOR" comparator/B4ClassNumber_nanoda.json >> "$GITHUB_WORKSPACE/comparator-classnumber.log" 2>&1 || rc=$?
+            echo "direct comparator exit: $rc"
+          fi
+          tail -5 "$GITHUB_WORKSPACE/comparator-classnumber.log"
+          exit $rc
+
+      - name: Comparator positive B4ZeroGap_nanoda
+        timeout-minutes: 60
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export COMPARATOR="$HOME/cn-negctl-tools/comparator/.lake/build/bin/comparator"
+          export COMPARATOR_LEAN4EXPORT="$HOME/cn-negctl-tools/lean4export/.lake/build/bin/lean4export"
+          export COMPARATOR_LANDRUN="$HOME/cn-negctl-tools/landrun/landrun"
+          export COMPARATOR_NANODA="$HOME/cn-negctl-tools/nanoda_lib/target/release/nanoda_bin"
+          cd "$HOME/cn-negctl-7133a32/lean"
+          rc=0
+          bash comparator/run.sh B4ZeroGap_nanoda > "$GITHUB_WORKSPACE/comparator-zerogap.log" 2>&1 || rc=$?
+          echo "run.sh exit: $rc"
+          if [ $rc -ne 0 ] && grep -qiE 'failed to connect to (bus|user session)|no medium found|user session is not available' "$GITHUB_WORKSPACE/comparator-zerogap.log"; then
+            echo "systemd-run user session unavailable on this runner; retrying comparator directly (landrun sandbox still applies)"
+            rc=0
+            lake env "$COMPARATOR" comparator/B4ZeroGap_nanoda.json >> "$GITHUB_WORKSPACE/comparator-zerogap.log" 2>&1 || rc=$?
+            echo "direct comparator exit: $rc"
+          fi
+          tail -5 "$GITHUB_WORKSPACE/comparator-zerogap.log"
+          exit $rc
+
+      - name: Negative control B4ZeroGap (5811 -> 5812 in challenge)
+        timeout-minutes: 60
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export COMPARATOR="$HOME/cn-negctl-tools/comparator/.lake/build/bin/comparator"
+          export COMPARATOR_LEAN4EXPORT="$HOME/cn-negctl-tools/lean4export/.lake/build/bin/lean4export"
+          export COMPARATOR_LANDRUN="$HOME/cn-negctl-tools/landrun/landrun"
+          export COMPARATOR_NANODA="$HOME/cn-negctl-tools/nanoda_lib/target/release/nanoda_bin"
+          D="$HOME/cn-negctl-7133a32"
+          cd "$D/lean"
+          F=Challenge/B4ZeroGap.lean
+          n=$(grep -c '5811/10000000' "$F" || true)
+          [ "$n" = "1" ] || { echo "FAIL: expected exactly one 5811/10000000 in $F, found $n"; exit 1; }
+          sed -i 's|5811/10000000|5812/10000000|' "$F"
+          grep -q '5812/10000000' "$F" || { echo "FAIL: mutation did not land"; git -C "$D" checkout -- lean/$F; exit 1; }
+          rc=0
+          bash comparator/run.sh B4ZeroGap_nanoda > "$GITHUB_WORKSPACE/neg-zerogap.log" 2>&1 || rc=$?
+          echo "run.sh exit (non-zero expected): $rc"
+          if [ $rc -ne 0 ] && ! grep -q 'do not match' "$GITHUB_WORKSPACE/neg-zerogap.log" && grep -qiE 'failed to connect to (bus|user session)|no medium found|user session is not available' "$GITHUB_WORKSPACE/neg-zerogap.log"; then
+            echo "systemd-run user session unavailable; retrying comparator directly (landrun sandbox still applies)"
+            rc=0
+            lake env "$COMPARATOR" comparator/B4ZeroGap_nanoda.json >> "$GITHUB_WORKSPACE/neg-zerogap.log" 2>&1 || rc=$?
+            echo "direct comparator exit (non-zero expected): $rc"
+          fi
+          echo "$rc" > "$GITHUB_WORKSPACE/neg-zerogap.rc"
+          tail -5 "$GITHUB_WORKSPACE/neg-zerogap.log"
+          git -C "$D" checkout -- lean/$F
+          after=$(sha256sum "$F" | cut -d' ' -f1)
+          before=$(grep 'B4ZeroGap.lean' "$GITHUB_WORKSPACE/challenge-shas-before.txt" | cut -d' ' -f1)
+          [ "$after" = "$before" ] || { echo "FAIL: $F not restored to pre-mutation sha"; exit 1; }
+          echo "restored: $F sha matches pre-mutation"
+
+      - name: Negative control B4ClassNumber (T_1000 334757/10000 -> 33 in challenge)
+        timeout-minutes: 60
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export COMPARATOR="$HOME/cn-negctl-tools/comparator/.lake/build/bin/comparator"
+          export COMPARATOR_LEAN4EXPORT="$HOME/cn-negctl-tools/lean4export/.lake/build/bin/lean4export"
+          export COMPARATOR_LANDRUN="$HOME/cn-negctl-tools/landrun/landrun"
+          export COMPARATOR_NANODA="$HOME/cn-negctl-tools/nanoda_lib/target/release/nanoda_bin"
+          D="$HOME/cn-negctl-7133a32"
+          cd "$D/lean"
+          F=Challenge/B4ClassNumber.lean
+          n=$(grep -c '334757/10000' "$F" || true)
+          [ "$n" = "1" ] || { echo "FAIL: expected exactly one 334757/10000 in $F, found $n"; exit 1; }
+          sed -i 's|334757/10000|33|' "$F"
+          if grep -q '334757' "$F"; then echo "FAIL: mutation did not land"; git -C "$D" checkout -- lean/$F; exit 1; fi
+          m=$(grep -c '(33 :' "$F" || true)
+          [ "$m" = "1" ] || { echo "FAIL: mutated (33 : ...) line not found exactly once, found $m"; git -C "$D" checkout -- lean/$F; exit 1; }
+          rc=0
+          bash comparator/run.sh B4ClassNumber_nanoda > "$GITHUB_WORKSPACE/neg-classnumber.log" 2>&1 || rc=$?
+          echo "run.sh exit (non-zero expected): $rc"
+          if [ $rc -ne 0 ] && ! grep -q 'do not match' "$GITHUB_WORKSPACE/neg-classnumber.log" && grep -qiE 'failed to connect to (bus|user session)|no medium found|user session is not available' "$GITHUB_WORKSPACE/neg-classnumber.log"; then
+            echo "systemd-run user session unavailable; retrying comparator directly (landrun sandbox still applies)"
+            rc=0
+            lake env "$COMPARATOR" comparator/B4ClassNumber_nanoda.json >> "$GITHUB_WORKSPACE/neg-classnumber.log" 2>&1 || rc=$?
+            echo "direct comparator exit (non-zero expected): $rc"
+          fi
+          echo "$rc" > "$GITHUB_WORKSPACE/neg-classnumber.rc"
+          tail -5 "$GITHUB_WORKSPACE/neg-classnumber.log"
+          git -C "$D" checkout -- lean/$F
+          after=$(sha256sum "$F" | cut -d' ' -f1)
+          before=$(grep 'B4ClassNumber.lean' "$GITHUB_WORKSPACE/challenge-shas-before.txt" | cut -d' ' -f1)
+          [ "$after" = "$before" ] || { echo "FAIL: $F not restored to pre-mutation sha"; exit 1; }
+          echo "restored: $F sha matches pre-mutation"
+
+      - name: Verdict (fail-closed)
+        if: always()
+        run: |
+          python3 - <<'EOF'
+          import sys
+          ok = True
+          def need(cond, msg):
+              global ok
+              print(('OK: ' if cond else 'FAIL: ') + msg)
+              if not cond: ok = False
+          def read(fn):
+              try: return open(fn).read()
+              except FileNotFoundError: return ''
+          for label, fn in [('B4ClassNumber_nanoda', 'comparator-classnumber.log'),
+                            ('B4ZeroGap_nanoda', 'comparator-zerogap.log')]:
+              need('Your solution is okay!' in read(fn), f'{label} positive config prints okay')
+          for label, fn, rcfn, thm in [
+                  ('B4ZeroGap_nanoda', 'neg-zerogap.log', 'neg-zerogap.rc', 'B4.Chi8.zero_gap_all'),
+                  ('B4ClassNumber_nanoda', 'neg-classnumber.log', 'neg-classnumber.rc', 'B4.ClassNumber.classNumber_gt_1000')]:
+              log = read(fn)
+              try: rc = int(read(rcfn).strip())
+              except Exception: rc = 0
+              need(rc != 0, f'{label} negative control: comparator exit non-zero (got {rc})')
+              need('Challenge and solution theorem statement do not match' in log,
+                   f'{label} negative control: mismatch exception present in log')
+              need(thm in log, f'{label} negative control: exception names {thm}')
+          print('PASS: both negative controls reproduced' if ok else 'FAIL: see above')
+          sys.exit(0 if ok else 1)
+          EOF
+
+      - name: Write pins file
+        if: always()
+        run: |
+          cat > PINS <<EOF
+          target_repo=iwaokimura/cln-imq-2k
+          target_commit=7133a32cfce5f541c98dc4d65c98c9704747c406
+          toolchain=leanprover/lean4:v4.34.1
+          comparator_pin=d03acab
+          lean4export_pin=076e8e5
+          tools_toolchain_override=leanprover/lean4:v4.34.1 (both tool repos declare v4.34.0 at their pins; olean format is version-locked to the target's v4.34.1; close-gaps run 39103421375 died on incompatible header)
+          landrun_pin=v0.1.17
+          landrun_pin_deviation=author README at target pin says v0.1.18; tag absent in Zouuup/landrun (tags v0.1.0-v0.1.17, verified 2026-10-16); nearest existing tag used
+          landrun_build_note=GOPROXY=direct GOSUMDB=off go build -o landrun ./cmd/landrun (v0.1.17 entry point)
+          nanoda_pin=3a24072
+          negative_controls=Challenge/B4ZeroGap.lean 5811/10000000->5812/10000000; Challenge/B4ClassNumber.lean 334757/10000->33
+          runner=$RUNNER_NAME
+          EOF
+          cat PINS
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: class-number-neg-controls-evidence
+          path: |
+            build.log
+            cache-get.log
+            comparator-classnumber.log
+            comparator-zerogap.log
+            neg-zerogap.log
+            neg-zerogap.rc
+            neg-classnumber.log
+            neg-classnumber.rc
+            challenge-shas-before.txt
+            tools-pins.txt
+            PINS
+
+      - name: Remove scratch dirs (shared-runner meta-rule)
+        if: always()
+        run: |
+          rm -rf "$HOME/cn-negctl-7133a32" "$HOME/cn-negctl-tools"
