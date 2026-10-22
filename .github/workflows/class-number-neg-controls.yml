@@ -32,6 +32,20 @@ name: class-number-neg-controls
 # always() step; no `lake update`; every comparator invocation captures
 # its exit code with `rc=0` + `cmd || rc=$?` (the runner forces bash -e;
 # close-gaps run 39088032955 died before `rc=$?` could run).
+#
+# 2026-10-22: run 39793015875 (first dispatch, desktop lane) died in the
+# tools step in 27 s, after the full target build had passed (1h17m).
+# Root cause: the desktop runner ships go1.22.2, the install-if-missing
+# check saw *a* go and skipped the pinned go1.24.9 install, and
+# landrun v0.1.17's go.mod requires go >= 1.24, so Go tried to
+# auto-download the go1.24.0 toolchain, whose checksum verification
+# GOSUMDB=off (the module-proxy deviation) forbids. Two stacked
+# assumptions: presence treated as sufficiency (version never checked),
+# and an env flag set for module fetching silently governing toolchain
+# fetching too. Fix: version-gate the Go install (>= 1.24.0, else
+# install the pinned 1.24.9 into ~/.tooling and prepend it), and build
+# landrun with GOTOOLCHAIN=local so a future shortfall fails closed
+# instead of reaching for the network.
 
 on:
   workflow_dispatch:
@@ -83,9 +97,14 @@ jobs:
           T="$HOME/cn-negctl-tools"
           rm -rf "$T"; mkdir -p "$T"
           : > "$GITHUB_WORKSPACE/tools-pins.txt"
-          if ! command -v go >/dev/null 2>&1; then
+          # Go >= 1.24 required (landrun v0.1.17 go.mod); version-gated,
+          # not presence-gated (run 39793015875 post-mortem in the header).
+          gov=$( (go env GOVERSION 2>/dev/null || echo) | sed 's/^go//')
+          if [ -z "$gov" ] || [ "$(printf '%s\n' 1.24.0 "$gov" | sort -V | head -n1)" != "1.24.0" ]; then
             mkdir -p "$HOME/.tooling"
             curl -sSfL --retry 5 --retry-delay 10 --retry-all-errors https://go.dev/dl/go1.24.9.linux-amd64.tar.gz | tar -C "$HOME/.tooling" -xz
+            export PATH="$HOME/.tooling/go/bin:$PATH"
+            hash -r
           fi
           go version
           if ! command -v cargo >/dev/null 2>&1; then
@@ -111,7 +130,7 @@ jobs:
           git clone https://github.com/Zouuup/landrun.git "$T/landrun"
           git -C "$T/landrun" checkout v0.1.17
           echo "landrun $(git -C "$T/landrun" rev-parse HEAD)" >> "$GITHUB_WORKSPACE/tools-pins.txt"
-          (cd "$T/landrun" && GOPROXY=direct GOSUMDB=off go build -o landrun ./cmd/landrun)
+          (cd "$T/landrun" && GOPROXY=direct GOSUMDB=off GOTOOLCHAIN=local go build -o landrun ./cmd/landrun)
           # nanoda
           git clone https://github.com/ammkrn/nanoda_lib.git "$T/nanoda_lib"
           git -C "$T/nanoda_lib" checkout 3a24072
@@ -274,7 +293,7 @@ jobs:
           tools_toolchain_override=leanprover/lean4:v4.34.1 (both tool repos declare v4.34.0 at their pins; olean format is version-locked to the target's v4.34.1; close-gaps run 39103421375 died on incompatible header)
           landrun_pin=v0.1.17
           landrun_pin_deviation=author README at target pin says v0.1.18; tag absent in Zouuup/landrun (tags v0.1.0-v0.1.17, verified 2026-10-16); nearest existing tag used
-          landrun_build_note=GOPROXY=direct GOSUMDB=off go build -o landrun ./cmd/landrun (v0.1.17 entry point)
+          landrun_build_note=GOPROXY=direct GOSUMDB=off GOTOOLCHAIN=local go build -o landrun ./cmd/landrun (v0.1.17 entry point; GOTOOLCHAIN=local added after run 39793015875)
           nanoda_pin=3a24072
           negative_controls=Challenge/B4ZeroGap.lean 5811/10000000->5812/10000000; Challenge/B4ClassNumber.lean 334757/10000->33
           runner=$RUNNER_NAME
