@@ -1,0 +1,256 @@
+name: thomgame-build
+
+# One-shot external Lean build + axiom audit: Gao, Yu, Zhi, "An Explicit
+# Counterexample to Tsirelson's Problem via a Linear System Game"
+# (arXiv:2610.10248), formalization repo
+# leanhnhe091221-boop/explicit-linear-system-game-formalization at a
+# pinned commit. Commissioned 2026-10-21 at the user's word ("distribute
+# this to the wsl or dell or desktop") after the build OOM-killed twice
+# (Lean exit 137) on the 7.7 GiB / 2-core Muse VM: the
+# ThomGame.Certificates.Lambda* certificate modules need more memory
+# than the VM has when anything else compiles beside them.
+#
+# Runs on the self-hosted desktop WSL runner (27 GiB WSL cap), the same
+# lane as ab-fluid-euler-build. The heavy certificate modules are built
+# one at a time as single-module targets before the parallel stages,
+# because lake has no jobs/parallelism knob on this toolchain.
+#
+# Manual dispatch only.
+
+on:
+  workflow_dispatch:
+    inputs:
+      thomgame_commit:
+        description: "external repo commit SHA to build (40-hex, fail-closed)"
+        required: false
+        default: "216c052eafb48cc89ef2c7d7061800b18962d72c"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: thomgame-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: [self-hosted, desktop]
+    env:
+      # Scratch clone lives OUTSIDE the git checkout, at
+      # <runner _work>/<repo>/../thomgame-scratch, so no other workflow's
+      # `git clean -ffdx` can delete it between dispatches, and a failed
+      # or cancelled run keeps its .lake progress for resume (same
+      # structural rule as ab-fluid-euler-build's AB_FLUID).
+      THOMGAME: ${{ github.workspace }}/../thomgame-scratch
+    # Euler precedent on this box: 540. ThomGame is ~5,300 modules
+    # including Mathlib deps (deps arrive as prebuilt oleans), with a
+    # handful of very heavy certificate modules built serially first.
+    timeout-minutes: 540
+    steps:
+      - name: Check out this repo
+        # META-RULE (2026-10-09): full checkout, clean: false -- never
+        # sparse-checkout or any other persistent git-config change on
+        # the shared self-hosted checkout. The scratch clone lives
+        # outside this checkout (see the THOMGAME env above).
+        uses: actions/checkout@v4
+        with:
+          clean: false
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Validate the commit pin
+        # The input reaches the shell through `env:`, never through
+        # `${{ }}` substitution inside a run: block (script-injection
+        # hole; same pattern as ab-fluid-euler-build).
+        env:
+          PIN: ${{ inputs.thomgame_commit }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$PIN" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "FAIL: thomgame_commit is not a 40-hex SHA"
+            exit 1
+          fi
+          echo "THOMGAME_SHA=$PIN" >> "$GITHUB_ENV"
+
+      - name: Clone (or resume) the formalization at the pinned commit
+        run: |
+          set -euo pipefail
+          # Per-run evidence files live in the checkout; remove stale
+          # ones so a resumed run never uploads an old log.
+          rm -f THOMGAME_COMMIT thomgame-*.log
+          resumed=0
+          if [ -d "$THOMGAME/.git" ]; then
+            if ( cd "$THOMGAME" \
+                 && [ "$(git remote get-url origin 2>/dev/null)" = "https://github.com/leanhnhe091221-boop/explicit-linear-system-game-formalization.git" ] \
+                 && git fetch --depth 1 origin "$THOMGAME_SHA" \
+                 && git checkout "$THOMGAME_SHA" \
+                 && [ "$(git rev-parse HEAD)" = "$THOMGAME_SHA" ] ); then
+              resumed=1
+              echo "RESUME: existing scratch re-pinned to $THOMGAME_SHA; keeping .lake build progress"
+            else
+              echo "RESUME failed (unexpected scratch state) -- falling back to fresh clone"
+            fi
+          fi
+          if [ "$resumed" != 1 ]; then
+            rm -rf "$THOMGAME"
+            git clone https://github.com/leanhnhe091221-boop/explicit-linear-system-game-formalization.git "$THOMGAME"
+            ( cd "$THOMGAME" \
+              && git fetch --depth 1 origin "$THOMGAME_SHA" \
+              && git checkout "$THOMGAME_SHA" \
+              && [ "$(git rev-parse HEAD)" = "$THOMGAME_SHA" ] ) \
+              || { echo "FAIL: fresh clone could not be pinned to $THOMGAME_SHA"; exit 1; }
+            echo "FRESH: cloned formalization at $THOMGAME_SHA"
+          fi
+          # Fail-closed pin: no fallback to a branch head. A wrong commit
+          # would silently build (and audit) the wrong formalization.
+          [ "$(git -C "$THOMGAME" rev-parse HEAD)" = "$THOMGAME_SHA" ] || { echo "FAIL: HEAD mismatch vs $THOMGAME_SHA"; exit 1; }
+          git -C "$THOMGAME" rev-parse HEAD | tee THOMGAME_COMMIT
+          [ -f "$THOMGAME/lakefile.toml" ] || { echo "FAIL: lakefile.toml absent at $THOMGAME_SHA"; exit 1; }
+          [ -f "$THOMGAME/lean-toolchain" ] || { echo "FAIL: lean-toolchain absent at $THOMGAME_SHA"; exit 1; }
+          echo "toolchain: $(cat "$THOMGAME/lean-toolchain")"
+
+      - name: Static source scan (sorry / axiom / native_decide)
+        run: |
+          set -euo pipefail
+          cd "$THOMGAME"
+          {
+            echo "== sorry (word) =="
+            grep -rnw --include='*.lean' 'sorry' ThomGame ThomGame.lean || true
+            echo "== axiom declarations =="
+            grep -rnE '^[[:space:]]*axiom[[:space:]]' --include='*.lean' ThomGame ThomGame.lean || true
+            echo "== native_decide =="
+            grep -rn --include='*.lean' 'native_decide' ThomGame ThomGame.lean || true
+          } | tee "$GITHUB_WORKSPACE/thomgame-static-scan.log"
+          # The three greps above print matches only; anything between a
+          # header and the next header is a finding. Count finding lines:
+          findings="$(grep -vcE '^(==|$)' "$GITHUB_WORKSPACE/thomgame-static-scan.log" || true)"
+          echo "static scan finding lines: $findings"
+          [ "$findings" = "0" ] || { echo "FAIL: static scan found $findings line(s)"; exit 1; }
+
+      - name: Fetch mathlib prebuilt oleans
+        run: |
+          set -o pipefail
+          cd "$THOMGAME" || { echo "FAIL: scratch missing: $THOMGAME"; exit 1; }
+          # No `lake update`: the repo commits lake-manifest.json with
+          # exact pins, and `lake exe cache get` alone fetched all 8,960
+          # Mathlib files at these pins on the Muse VM (2026-10-21).
+          lake exe cache get 2>&1 | tee "$GITHUB_WORKSPACE/thomgame-cache-get.log"
+
+      - name: Build heavy certificate modules one at a time
+        run: |
+          set -o pipefail
+          cd "$THOMGAME" || { echo "FAIL: scratch missing: $THOMGAME"; exit 1; }
+          # Sequential by construction: one `lake build <module>` per
+          # line, each waited on before the next starts. These are the
+          # modules that OOM-killed on the VM (file size >1.7 MB for the
+          # three Lambda data modules; LambdaRaw fails while checking
+          # their certificates; the NetzerThom data modules are the next
+          # size tier). Deps of each target build first inside its own
+          # invocation, so order here is preference, not correctness.
+          for m in \
+            ThomGame.Certificates.LambdaRawData \
+            ThomGame.Certificates.LambdaWords \
+            ThomGame.Certificates.LambdaRaw \
+            ThomGame.Certificates.LambdaCleanData \
+            ThomGame.Certificates.LambdaSortData \
+            ThomGame.Certificates.NetzerThomData \
+            ThomGame.Certificates.NetzerThomGram \
+            ThomGame.Certificates.NetzerThomResidualData
+          do
+            echo "=== building $m ==="
+            lake build "$m" 2>&1 | tee -a "$GITHUB_WORKSPACE/thomgame-heavy.log" \
+              || { echo "FAIL: heavy module $m"; exit 1; }
+          done
+
+      - name: Build the minimal separation target
+        run: |
+          set -o pipefail
+          cd "$THOMGAME" || { echo "FAIL: scratch missing: $THOMGAME"; exit 1; }
+          lake --fail-fast build ThomGame.Construction.NonlocalGameSeparation 2>&1 | tee "$GITHUB_WORKSPACE/thomgame-min-build.log"
+
+      - name: Run CheckSeparation and verify its pass message
+        run: |
+          set -o pipefail
+          cd "$THOMGAME" || { echo "FAIL: scratch missing: $THOMGAME"; exit 1; }
+          lake env lean scripts/CheckSeparation.lean 2>&1 | tee "$GITHUB_WORKSPACE/thomgame-check-separation.log"
+          if ! grep -q "Separation check passed" "$GITHUB_WORKSPACE/thomgame-check-separation.log"; then
+            echo "FAIL: separation pass message absent"
+            exit 1
+          fi
+
+      - name: Full build
+        run: |
+          set -o pipefail
+          cd "$THOMGAME" || { echo "FAIL: scratch missing: $THOMGAME"; exit 1; }
+          lake --fail-fast build 2>&1 | tee "$GITHUB_WORKSPACE/thomgame-full-build.log"
+
+      - name: Run the remaining check scripts
+        run: |
+          set -o pipefail
+          cd "$THOMGAME" || { echo "FAIL: scratch missing: $THOMGAME"; exit 1; }
+          for s in CheckMain CheckPOVM CheckCorollaries; do
+            echo "=== $s ==="
+            lake env lean "scripts/$s.lean" 2>&1 | tee "$GITHUB_WORKSPACE/thomgame-$(echo "$s" | tr '[:upper:]' '[:lower:]').log" \
+              || { echo "FAIL: check script $s"; exit 1; }
+          done
+
+      - name: Axiom audit (AuditAxioms.lean) with allowlist scan
+        run: |
+          set -o pipefail
+          cd "$THOMGAME" || { echo "FAIL: scratch missing: $THOMGAME"; exit 1; }
+          lake env lean scripts/AuditAxioms.lean 2>&1 | tee "$GITHUB_WORKSPACE/thomgame-audit-axioms.log"
+          log="$GITHUB_WORKSPACE/thomgame-audit-axioms.log"
+          if grep -q "sorryAx" "$log"; then
+            echo "FAIL: sorryAx present in axiom audit output"
+            grep -n "sorryAx" "$log" | head -20
+            exit 1
+          fi
+          # Allowlist: propext, Classical.choice, Quot.sound (any subset,
+          # any order), or no axioms at all. Any other line is a finding.
+          bad="$(grep 'depends on axioms:' "$log" \
+            | grep -vE 'depends on axioms: \[(propext|Classical\.choice|Quot\.sound)(, (propext|Classical\.choice|Quot\.sound))*\]' || true)"
+          if [ -n "$bad" ]; then
+            echo "FAIL: declarations depending on axioms outside the allowlist:"
+            echo "$bad" | head -20
+            exit 1
+          fi
+          checked=$(( $(grep -c 'depends on axioms:' "$log" || true) + $(grep -c 'does not depend on any axioms' "$log" || true) ))
+          echo "axiom audit declarations checked: $checked"
+          [ "$checked" -gt 0 ] || { echo "FAIL: axiom audit checked zero declarations (empty audit is not a pass)"; exit 1; }
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: thomgame-evidence
+          path: |
+            THOMGAME_COMMIT
+            thomgame-static-scan.log
+            thomgame-cache-get.log
+            thomgame-heavy.log
+            thomgame-min-build.log
+            thomgame-check-separation.log
+            thomgame-full-build.log
+            thomgame-checkmain.log
+            thomgame-checkpovm.log
+            thomgame-checkcorollaries.log
+            thomgame-audit-axioms.log
+
+      - name: Leave shared checkout clean (meta-rule)
+        if: always()
+        run: |
+          # $THOMGAME is removed ONLY when the whole job succeeded. On
+          # failure or cancellation it is KEPT so the next dispatch
+          # resumes the incremental build (same policy as
+          # ab-fluid-euler-build). `${{ job.status }}` is a GitHub
+          # enum, never user input.
+          if [ "${{ job.status }}" = "success" ]; then
+            rm -rf "$THOMGAME"
+          else
+            echo "keeping $THOMGAME for resume (job status: ${{ job.status }})"
+          fi
+          git sparse-checkout disable 2>/dev/null || true
+          git checkout --force HEAD 2>/dev/null || true
