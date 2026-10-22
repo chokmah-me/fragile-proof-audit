@@ -210,7 +210,12 @@ jobs:
           fi
           # Allowlist: propext, Classical.choice, Quot.sound (any subset,
           # any order), or no axioms at all. Any other line is a finding.
-          bad="$(grep 'depends on axioms:' "$log" \
+          # Lean wraps long axiom lists across physical lines; join the
+          # continuation lines first (an unclosed list at EOF is printed
+          # as-is and therefore flagged, fail-closed). Run 39701948118
+          # concluded failure on this wrap false positive.
+          bad="$(awk '{ if (buf=="") { if ($0 ~ /depends on axioms:/) { buf=$0; if ($0 ~ /\]/) { print buf; buf="" } } } else { line=$0; sub(/^[ \t]+/,"",line); buf=buf" "line; if ($0 ~ /\]/) { print buf; buf="" } } } END { if (buf != "") print buf }' "$log" \
+            | grep 'depends on axioms:' \
             | grep -vE 'depends on axioms: \[(propext|Classical\.choice|Quot\.sound)(, (propext|Classical\.choice|Quot\.sound))*\]' || true)"
           if [ -n "$bad" ]; then
             echo "FAIL: declarations depending on axioms outside the allowlist:"
