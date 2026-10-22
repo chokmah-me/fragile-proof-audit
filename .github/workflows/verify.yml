@@ -25,8 +25,10 @@ env:
 jobs:
   gates:
     # External PRs keep the clean-room GitHub-hosted runner; pushes and
-    # manual runs use the self-hosted runner (persistent elan/pip cache).
-    runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || 'self-hosted' }}
+    # manual runs use the desktop self-hosted runner, pinned by label
+    # (persistent elan/pip cache; bare self-hosted could land on the
+    # laptop, whose clean state failed this job before, run 38868711539).
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-latest"]' || '["self-hosted", "desktop"]') }}
     timeout-minutes: 180
     steps:
       # clean: false -- do NOT revert this to the default. The default
@@ -88,8 +90,9 @@ jobs:
         run: python scripts/gates/check.py --skip ab_fluid
 
   lean:
-    # Same routing as gates: PRs on hosted, everything else on self-hosted.
-    runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || 'self-hosted' }}
+    # Same routing as gates: PRs on hosted, everything else pinned to
+    # the desktop self-hosted runner by label.
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-latest"]' || '["self-hosted", "desktop"]') }}
     timeout-minutes: 360
     steps:
       # clean: false -- see the gates job: the default `git clean -ffdx`
