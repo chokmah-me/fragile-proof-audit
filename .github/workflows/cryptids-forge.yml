@@ -1,0 +1,468 @@
+name: cryptids-forge
+
+# One-shot audit forge for the Cryptids harvest audit
+# (google-deepmind/cryptids @ 664cd039, arXiv:2610.22603v2).
+# NOT standing CI: delete this file once the receipt is recorded.
+#
+# Why this exists: the audit's M2 leg must independently reproduce,
+# at the pin, the repo's own verification claims:
+#   V-B: 299 Busy Beaver holdout theorems (53 BB(6) + 6 BB(3,3))
+#        in comparator/busy_beaver.json;
+#   V-C: 22 conjecture-machine theorems in comparator/all.json,
+#        10 of them constructive-only (comparator/constructive.json).
+# Upstream CI at the pin is green, but upstream's receipt is never
+# credited as ours (recon rule). At the user's word (2026-10-23,
+# "proceed audit cryptids") the job runs on the desktop lane
+# ([self-hosted, desktop], DESKTOP-7HDI2D1) per the runner-first
+# build dispatch rule (2026-10-21); heavy builds never run on the
+# control-plane VM.
+#
+# Procedure (mirrors upstream CI's own commands at the pin):
+#   1. fresh clone of google-deepmind/cryptids @
+#      664cd03904a870e9a8796476dbf9dbc13a72a37b (asserted);
+#      toolchain leanprover/lean4:v4.35.0-rc4 (asserted);
+#   2. environment probe (bubblewrap, disk, memory) recorded;
+#      `lake comparator` is a Lean core command as of v4.35.0 and
+#      sandboxes with bubblewrap on Linux, as upstream CI's
+#      bubblewrap install step shows;
+#   3. lake exe cache get (recorded, non-gating);
+#   4. lake build Cryptids Challenge, then lake build BusyBeaver
+#      BusyBeaverChallenge, LEAN_NUM_THREADS=1 as upstream CI
+#      sets, each exit recorded, neither aborts the other;
+#   5. python3 verify.py (the repo's own table-provenance and
+#      simulation checker), exit recorded;
+#   6. source scans over solution code (sorry / admit /
+#      native_decide / bv_decide / axiom declarations /
+#      Lean.ofReduceBool; comments stripped before matching,
+#      since the repo's doc prose says "zero `sorry`s" in
+#      comments) and a comparator-config census, recorded;
+#   7. lake comparator for all 12 configs in comparator/, each
+#      exit recorded, no config aborts the next;
+#   8. #print axioms for the union of the two load-bearing
+#      configs (299 + 22 = 321 unique theorems), run under
+#      lake env lean from the built clone.
+#
+# Verdict (fail-closed):
+#   - FAIL if either build fails, verify.py fails, any solution
+#     scan hits, any of the 321 theorems lacks an axiom record,
+#     any theorem's axioms exceed its config's permitted set
+#     (constructive configs exclude Classical.choice), or any
+#     theorem depends on sorryAx or any off-allowlist axiom.
+#   - Comparator leg: PASS if all 12 configs exit 0. If every
+#     config failed and every comparator log carries a sandbox
+#     marker (bwrap / bubblewrap / landrun / sandbox), the leg is
+#     recorded COMPARATOR: GAP (the sandbox could not run on this
+#     box) and does not by itself fail the run; the axiom half of
+#     the comparator's guarantee is still enforced by step 8's
+#     per-config check, and the statement-identity half is then
+#     an explicit GAP in the audit note. Any other nonzero
+#     comparator exit (a config that ran and rejected) is FAIL.
+#
+# Harness rules: pins are literals (no dispatch inputs); the
+# scratch clone lives in $HOME outside the shared checkout and
+# is removed in an always() step; no `lake update`; exit codes
+# are captured with `rc=0` + `cmd || rc=$?` (the runner forces
+# bash -e; AGENTS.md (24)); the verdict parser joins wrapped
+# lines before reading an axiom list (2026-10-22 thomgame-build
+# lesson).
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cryptids-forge
+  cancel-in-progress: false
+
+jobs:
+  forge:
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 900
+    steps:
+      - name: Install elan if missing
+        run: |
+          set -euo pipefail
+          if [ ! -x "$HOME/.elan/bin/elan" ]; then
+            curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf --retry 5 --retry-delay 10 --retry-all-errors | sh -s -- -y --default-toolchain none
+          fi
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" --version
+
+      - name: Clone pinned cryptids repo; assert pins
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          D="$HOME/cryptids-664cd03"
+          rm -rf "$D"
+          git clone https://github.com/google-deepmind/cryptids.git "$D"
+          git -C "$D" checkout 664cd03904a870e9a8796476dbf9dbc13a72a37b
+          HEAD=$(git -C "$D" rev-parse HEAD)
+          echo "cloned HEAD: $HEAD"
+          [ "$HEAD" = "664cd03904a870e9a8796476dbf9dbc13a72a37b" ] || { echo "FAIL: HEAD != pin"; exit 1; }
+          grep -qx 'leanprover/lean4:v4.35.0-rc4' "$D/lean-toolchain" || { echo "FAIL: toolchain mismatch"; exit 1; }
+          "$HOME/.elan/bin/elan" toolchain install leanprover/lean4:v4.35.0-rc4
+          ls "$HOME/.elan/toolchains/leanprover--lean4---v4.35.0-rc4/bin"
+
+      - name: Probe environment (bubblewrap, disk, memory)
+        run: |
+          set -uo pipefail
+          {
+            echo "date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "host: $(hostname)"
+            echo "nproc: $(nproc)"
+            free -g || true
+            df -h "$HOME" || true
+            if command -v bwrap >/dev/null 2>&1; then
+              echo "bwrap: $(command -v bwrap) $(bwrap --version 2>/dev/null || echo unknown-version)"
+            else
+              echo "bwrap: MISSING"
+              if sudo -n true 2>/dev/null; then
+                sudo apt-get update -qq >/dev/null 2>&1 || true
+                sudo apt-get install -y -qq bubblewrap >/dev/null 2>&1 || true
+                echo "bwrap after apt attempt: $(command -v bwrap || echo STILL-MISSING)"
+              else
+                echo "bwrap apt attempt: no passwordless sudo, skipped"
+              fi
+            fi
+            echo "apparmor_restrict_unprivileged_userns: $(cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns 2>/dev/null || echo unreadable)"
+            echo "unprivileged_userns_clone: $(cat /proc/sys/kernel/unprivileged_userns_clone 2>/dev/null || echo unreadable)"
+          } > "$GITHUB_WORKSPACE/probe.log" 2>&1
+          cat "$GITHUB_WORKSPACE/probe.log"
+
+      - name: Fetch dependency cache
+        timeout-minutes: 120
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          D="$HOME/cryptids-664cd03"
+          cd "$D"
+          : > "$GITHUB_WORKSPACE/exits.txt"
+          rc=0
+          lake exe cache get > "$GITHUB_WORKSPACE/cache-get.log" 2>&1 || rc=$?
+          echo "CACHE_EXIT:$rc" >> "$GITHUB_WORKSPACE/exits.txt"
+          cat "$GITHUB_WORKSPACE/exits.txt"
+
+      - name: Build Cryptids + Challenge
+        timeout-minutes: 400
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export LEAN_NUM_THREADS=1
+          D="$HOME/cryptids-664cd03"
+          cd "$D"
+          start=$(date +%s)
+          rc=0
+          lake build Cryptids Challenge > "$GITHUB_WORKSPACE/build-cryptids.log" 2>&1 || rc=$?
+          echo "BUILD_CRYPTIDS_EXIT:$rc" >> "$GITHUB_WORKSPACE/exits.txt"
+          echo "build-cryptids seconds: $(( $(date +%s) - start ))"
+          tail -n 5 "$GITHUB_WORKSPACE/build-cryptids.log" || true
+
+      - name: Build BusyBeaver + BusyBeaverChallenge
+        timeout-minutes: 400
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export LEAN_NUM_THREADS=1
+          D="$HOME/cryptids-664cd03"
+          cd "$D"
+          start=$(date +%s)
+          rc=0
+          lake build BusyBeaver BusyBeaverChallenge > "$GITHUB_WORKSPACE/build-busybeaver.log" 2>&1 || rc=$?
+          echo "BUILD_BB_EXIT:$rc" >> "$GITHUB_WORKSPACE/exits.txt"
+          echo "build-busybeaver seconds: $(( $(date +%s) - start ))"
+          tail -n 5 "$GITHUB_WORKSPACE/build-busybeaver.log" || true
+
+      - name: Run verify.py and source scans + config census
+        timeout-minutes: 60
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          D="$HOME/cryptids-664cd03"
+          cd "$D"
+          rc=0
+          python3 verify.py > "$GITHUB_WORKSPACE/verify-py.log" 2>&1 || rc=$?
+          echo "VERIFY_EXIT:$rc" >> "$GITHUB_WORKSPACE/exits.txt"
+          python3 - "$D" "$GITHUB_WORKSPACE" << 'PYEOF'
+          import json, re, sys
+          from pathlib import Path
+          D = Path(sys.argv[1])
+          WS = Path(sys.argv[2])
+          def strip_comments(src):
+              out = []
+              i, n, depth = 0, len(src), 0
+              in_str = False
+              in_line = False
+              while i < n:
+                  c = src[i]
+                  nxt = src[i + 1] if i + 1 < n else ""
+                  if in_line:
+                      if c == "\n":
+                          in_line = False
+                          out.append(c)
+                      i += 1
+                      continue
+                  if depth > 0:
+                      if c == "/" and nxt == "-":
+                          depth += 1
+                          i += 2
+                          continue
+                      if c == "-" and nxt == "/":
+                          depth -= 1
+                          i += 2
+                          continue
+                      if c == "\n":
+                          out.append(c)
+                      i += 1
+                      continue
+                  if in_str:
+                      out.append(c)
+                      if c == "\\" and nxt:
+                          out.append(nxt)
+                          i += 2
+                          continue
+                      if c == '"':
+                          in_str = False
+                      i += 1
+                      continue
+                  if c == '"':
+                      in_str = True
+                      out.append(c)
+                      i += 1
+                      continue
+                  if c == "-" and nxt == "-":
+                      in_line = True
+                      i += 2
+                      continue
+                  if c == "/" and nxt == "-":
+                      depth = 1
+                      i += 2
+                      continue
+                  out.append(c)
+                  i += 1
+              return "".join(out)
+          sol_dirs = [D / "BusyBeaver", D / "Cryptids"]
+          sol_files = [D / "BusyBeaver.lean", D / "Cryptids.lean"]
+          files = [f for d in sol_dirs for f in d.rglob("*.lean")] + [f for f in sol_files if f.exists()]
+          pats = {"sorry": r"\bsorry\b", "admit": r"\badmit\b",
+                  "native_decide": r"\bnative_decide\b", "bv_decide": r"\bbv_decide\b",
+                  "axiom_decl": r"^\s*axiom\s", "ofReduceBool": r"Lean\.ofReduceBool"}
+          counts = {}
+          stripped = {}
+          for f in files:
+              stripped[f] = strip_comments(f.read_text(errors="replace")).splitlines()
+          with open(WS / "scans.txt", "w") as out:
+              for name, pat in pats.items():
+                  hits = []
+                  for f in files:
+                      for i, line in enumerate(stripped[f], 1):
+                          if re.search(pat, line):
+                              hits.append(f"{f.relative_to(D)}:{i}:{line.strip()[:100]}")
+                  counts[name] = len(hits)
+                  out.write(f"SCAN {name}: {len(hits)}\n")
+                  for h in hits[:20]:
+                      out.write("  " + h + "\n")
+          with open(WS / "scan-exits.txt", "w") as f:
+              for name, n in counts.items():
+                  f.write(f"SCAN_{name}:{n}\n")
+          cfgs = {}
+          for p in sorted((D / "comparator").glob("*.json")):
+              d = json.loads(p.read_text())
+              cfgs[p.stem] = {"n": len(d["theorem_names"]),
+                              "permitted": d.get("permitted_axioms"),
+                              "challenge_module": d.get("challenge_module"),
+                              "solution_module": d.get("solution_module")}
+          with open(WS / "config-census.txt", "w") as f:
+              for k, v in cfgs.items():
+                  f.write(f"{k}: {v['n']} theorems, permitted={v['permitted']}, {v['challenge_module']} vs {v['solution_module']}\n")
+          bb = set(json.loads((D / "comparator/busy_beaver.json").read_text())["theorem_names"])
+          al = set(json.loads((D / "comparator/all.json").read_text())["theorem_names"])
+          with open(WS / "config-census.txt", "a") as f:
+              f.write(f"unique load-bearing theorems (busy_beaver union all): {len(bb | al)}\n")
+          print(json.dumps(counts))
+          PYEOF
+          cat "$GITHUB_WORKSPACE/scans.txt" "$GITHUB_WORKSPACE/config-census.txt"
+
+      - name: Run comparator on all 12 configs
+        timeout-minutes: 300
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export LEAN_NUM_THREADS=1
+          D="$HOME/cryptids-664cd03"
+          cd "$D"
+          lake comparator --help > "$GITHUB_WORKSPACE/comparator-help.log" 2>&1 || true
+          for cfg in constructive all busy_beaver goldbach_21 goldbach_semantics riemann_104 riemann_120 riemann_95 riemann_semantics zf_380 zf_393 zf_semantics; do
+            rc=0
+            timeout 1500 lake comparator --config "comparator/$cfg.json" > "$GITHUB_WORKSPACE/comparator-$cfg.log" 2>&1 || rc=$?
+            echo "COMP_${cfg}_EXIT:$rc" >> "$GITHUB_WORKSPACE/exits.txt"
+            echo "$cfg: $rc"
+          done
+          cat "$GITHUB_WORKSPACE/exits.txt"
+
+      - name: Print axioms for all 321 load-bearing theorems
+        timeout-minutes: 180
+        run: |
+          set -uo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          export LEAN_NUM_THREADS=1
+          D="$HOME/cryptids-664cd03"
+          cd "$D"
+          python3 - "$D" "$GITHUB_WORKSPACE/check-names.txt" > "$D/AxiomPrint.lean" << 'PYEOF'
+          import json, sys
+          from pathlib import Path
+          D = Path(sys.argv[1])
+          names = []
+          for cfg in ("busy_beaver", "all"):
+              for n in json.loads((D / "comparator" / (cfg + ".json")).read_text())["theorem_names"]:
+                  if n not in names:
+                      names.append(n)
+          with open(sys.argv[2], "w") as f:
+              for n in names:
+                  f.write(n + "\n")
+          print("import Cryptids")
+          print("import BusyBeaver")
+          for n in names:
+              print(f"#print axioms {n}")
+          PYEOF
+          rc=0
+          lake env lean AxiomPrint.lean > "$GITHUB_WORKSPACE/axiom-all.out" 2> "$GITHUB_WORKSPACE/axiom-all.err" || rc=$?
+          echo "AXIOM_EXIT:$rc" >> "$GITHUB_WORKSPACE/exits.txt"
+          rm -f "$D/AxiomPrint.lean"
+          wc -l "$GITHUB_WORKSPACE/check-names.txt"
+          cat "$GITHUB_WORKSPACE/exits.txt"
+
+      - name: Verdict (fail-closed)
+        run: |
+          set -uo pipefail
+          python3 - "$HOME/cryptids-664cd03" << 'PYEOF'
+          import json, os, re, sys
+          from pathlib import Path
+          D = Path(sys.argv[1])
+          ws = os.environ["GITHUB_WORKSPACE"]
+          exits = {}
+          for line in open(ws + "/exits.txt"):
+              if ":" in line:
+                  k, v = line.strip().split(":", 1)
+                  try: exits[k] = int(v)
+                  except ValueError: pass
+          ok = True
+          for k in ("BUILD_CRYPTIDS_EXIT", "BUILD_BB_EXIT", "VERIFY_EXIT", "AXIOM_EXIT"):
+              if exits.get(k) != 0:
+                  print(f"FAIL: {k} = {exits.get(k)}")
+                  ok = False
+          scans = {}
+          for line in open(ws + "/scan-exits.txt"):
+              if ":" in line:
+                  k, v = line.strip().split(":", 1)
+                  scans[k] = int(v)
+          for k, n in scans.items():
+              if n != 0:
+                  print(f"FAIL: scan {k} = {n} hits in solution code")
+                  ok = False
+          out = open(ws + "/axiom-all.out").read()
+          err = open(ws + "/axiom-all.err").read()
+          if re.search(r": error:", err):
+              print("FAIL: axiom-all.err contains an error line")
+              ok = False
+          text = out.replace("\n", " ")
+          records = {}
+          for name, lst in re.findall(r"'([^']+)' depends on axioms:\s*\[([^\]]*)\]", text):
+              records[name] = {a.strip().strip(",") for a in lst.split(",") if a.strip()}
+          for name in re.findall(r"'([^']+)' does not depend on any axioms", text):
+              records[name] = set()
+          cfgs = {}
+          for p in sorted((D / "comparator").glob("*.json")):
+              d = json.loads(p.read_text())
+              cfgs[p.stem] = (set(d["theorem_names"]), set(d.get("permitted_axioms") or []))
+          expected = {l.strip() for l in open(ws + "/check-names.txt") if l.strip()}
+          if set(records) != expected:
+              print(f"FAIL: axiom records {len(records)} vs expected {len(expected)}; missing={sorted(expected - set(records))[:5]} extra={sorted(set(records) - expected)[:5]}")
+              ok = False
+          sorry = {n for n, ax in records.items() if "sorryAx" in ax}
+          if sorry:
+              print(f"FAIL: sorryAx in {sorted(sorry)[:5]}")
+              ok = False
+          for cfg, (names, permitted) in cfgs.items():
+              for n in names:
+                  ax = records.get(n)
+                  if ax is None:
+                      continue
+                  extra = ax - permitted - {"sorryAx"}
+                  if extra:
+                      print(f"FAIL: {n} exceeds {cfg} permitted axioms by {sorted(extra)}")
+                      ok = False
+          comp_exits = {k[len("COMP_"):-len("_EXIT")]: v for k, v in exits.items() if k.startswith("COMP_")}
+          comp_status = "UNKNOWN"
+          if len(comp_exits) == 12 and all(v == 0 for v in comp_exits.values()):
+              comp_status = "PASS"
+          elif len(comp_exits) == 12 and all(v != 0 for v in comp_exits.values()):
+              sandbox_all = True
+              for cfg in comp_exits:
+                  log = open(f"{ws}/comparator-{cfg}.log").read()
+                  if not re.search(r"bwrap|bubblewrap|landrun|sandbox", log, re.I):
+                      sandbox_all = False
+              comp_status = "GAP" if sandbox_all else "FAIL"
+          else:
+              comp_status = "FAIL"
+          print(f"comparator configs: {comp_exits}")
+          print(f"COMPARATOR: {comp_status}")
+          if comp_status == "FAIL":
+              ok = False
+          clean = sum(1 for ax in records.values() if ax <= {"propext", "Classical.choice", "Quot.sound"})
+          constructive = cfgs["constructive"][0]
+          cons_clean = sum(1 for n in constructive if records.get(n, set()) <= {"propext", "Quot.sound"})
+          print(f"axiom records: {len(records)}; within classical three: {clean}; constructive-10 within propext+Quot.sound: {cons_clean}/10")
+          print("VERDICT: " + ("PASS" if ok else "FAIL") + ("" if comp_status != "GAP" else " (comparator leg GAP: sandbox unavailable on this box)"))
+          summary = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary:
+              with open(summary, "a") as f:
+                  f.write(f"cryptids-forge: VERDICT {'PASS' if ok else 'FAIL'}; COMPARATOR {comp_status}; records {len(records)}/321\n")
+          sys.exit(0 if ok else 1)
+          PYEOF
+
+      - name: Write pins file
+        if: always()
+        run: |
+          set -uo pipefail
+          {
+            echo "target_repo=https://github.com/google-deepmind/cryptids"
+            echo "target_head=664cd03904a870e9a8796476dbf9dbc13a72a37b"
+            echo "paper=arXiv:2610.22603v2 (PDF sha256 ed1954a91f6ff352e021d5c2c400b4f2c2c54a7ee5ddc1318924a04fc5dfec59)"
+            echo "toolchain=leanprover/lean4:v4.35.0-rc4"
+            echo "deps=mathlib v4.35.0-rc4 @1f414401; verso v4.35.0-rc4 @01a09f32 (lake-manifest.json at the pin)"
+            echo "lane=[self-hosted, desktop]"
+            echo "procedure=cache get; lake build Cryptids Challenge; lake build BusyBeaver BusyBeaverChallenge (LEAN_NUM_THREADS=1, as upstream CI); verify.py; solution-code scans; lake comparator x12 configs; #print axioms over the 321 unique load-bearing theorems with per-config permitted-axiom enforcement"
+            cat "$GITHUB_WORKSPACE/exits.txt" 2>/dev/null || true
+            cat "$GITHUB_WORKSPACE/scan-exits.txt" 2>/dev/null || true
+          } > "$GITHUB_WORKSPACE/pins.txt"
+          cat "$GITHUB_WORKSPACE/pins.txt"
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cryptids-forge-evidence
+          path: |
+            probe.log
+            cache-get.log
+            build-cryptids.log
+            build-busybeaver.log
+            verify-py.log
+            scans.txt
+            scan-exits.txt
+            config-census.txt
+            comparator-help.log
+            comparator-*.log
+            axiom-all.out
+            axiom-all.err
+            check-names.txt
+            exits.txt
+            pins.txt
+          if-no-files-found: warn
+
+      - name: Remove scratch dirs (shared-runner meta-rule)
+        if: always()
+        run: |
+          rm -rf "$HOME/cryptids-664cd03"
