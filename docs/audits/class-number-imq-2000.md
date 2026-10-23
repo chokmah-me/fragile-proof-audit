@@ -305,10 +305,19 @@ convenience-only / risk-inducing.
     shared boundary of tables and sieve — *no gap*; the
     `e^T_N` recomputations match the printed table
     (2.8510e12, 1.2364e13, 7.9422e13, 3.4539e14 to the printed
-    digits). Tag: source-faithful. Note the paper's prose
-    "all of which have |d| < 2³⁰" for the tables (§1) is weaker
-    than the actual boundary used (6·2²⁸) — convenience-only
-    rounding, not load-bearing.
+    digits). Tag: source-faithful. Note on the paper's prose
+    "all of which have |d| < 2³⁰" (§1): the phrase attaches to
+    the fields with h ≤ 2000 found in the tables, not to the
+    tables' range (d < 6·2²⁸ in the paper's use), and it is
+    exact — the largest |d| among them is 1,062,350,083 <
+    2³⁰ = 1,073,741,824; §4 says the same of the extracted
+    pairs. **Correction (2026-10-23):** as landed, this item
+    misattached the phrase to the tables' boundary and called
+    it convenience-only rounding. The author clarified the
+    referent by email (2026-10-23); his reading checks out
+    against the shipped list (last line `1062350083 1978`;
+    cf. item 1 and the dangling check). The seam arithmetic
+    above is unaffected.
 12. **Banks 2026 not used.** TeX lines 80–82: "His proof is not
     formalized, and we do not use it"; Lean has no Banks/LZZ2026
     reference (grep-clean). One line, no gate.
@@ -400,6 +409,18 @@ the parts.
   toolchain failed checksum verification under GOSUMDB=off;
   post-mortem and fix (version-gated install, GOTOOLCHAIN=local)
   are recorded in the deleted workflow's header at main@`8ab5b9d`.
+- **Author correspondence (2026-10-23):** Kimura replied to the
+  feedback note. (i) Item 11's "all of which have |d| < 2³⁰"
+  note corrected per his clarification (see item 11). (ii) His
+  Comparator runs used landrun commit `811cfff` (four commits
+  after v0.1.17; the binary self-reports 0.1.18, which is what
+  his README cited — there is no upstream v0.1.18 tag). He has
+  corrected `lean/comparator/README.md` and the
+  `B4Comparator.txt` header (his commit `ebe6953`, 2026-10-23,
+  verified on GitHub). The 2026-10-18 and 2026-10-22 runs in
+  this Receipt used the v0.1.17 tag and agreed with his on all
+  Comparator outcomes (both positive configs accepted; both
+  negative controls rejected).
 - **GAP (explicit):** qsieve full re-run not attempted — out of
   scope (188 processes / Threadripper-class box); the shipped
   logs were checked for completeness instead (188/188 finished,
