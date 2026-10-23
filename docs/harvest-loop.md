@@ -138,6 +138,64 @@ formalization under review; the note says so in one line.
   proof-enabling change: source-faithful / convenience-only /
   risk-inducing.
 
+### Non-vacuity vectors (Stellar BB6, adopted 2026-10-23)
+
+Adopted verbatim at the user's word from the adversarial
+verifier prompt in Appendix E of Dos Santos et al.,
+arXiv:2610.22603v2 (the DeepMind Busy Beaver paper; source PDF
+sha256 ed1954a91f6ff352e021d5c2c400b4f2c2c54a7ee5ddc1318924a04fc5dfec59;
+transcription verified against the p. 24 page image). Scope:
+harvest audits of Lean formalizations whose proofs rest on a
+closed invariant / pattern system or on agent-rewritten
+statements. Name mapping: macro-step rules = the target's
+accelerated or transition rules; pattern set = its invariant
+family; entry theorem = its canonical-start reachability
+result. The audit note records each vector as PASS / FAIL /
+N-A with the object named; N-A is a recorded answer, not a
+skip. The four pipeline checks under §3 duplicate the Receipt
+requirement below and are kept for fidelity; the Receipt
+requirement governs.
+
+> ### 2. Anti-Cheating & Non-Vacuity Auditing (Stellar BB6 Protocol)
+> Every proof must pass all 5 verification gates:
+>
+> - Vector A (Satisfiable Hypotheses): Preconditions on macro-step rules must
+>   be mutually satisfiable over Nat and logically consistent. Any premise
+>   simplifying to False (omega/cases contra exploits) results in immediate
+>   DISQUALIFICATION.
+> - Vector B (Structural Non-Empty Invariants): The pattern set ps in
+>   rules_closed / cryptid must be non-empty (ps != []) and evaluate to the
+>   canonical configuration family (Config_*). Trivial 1-step unrolling or
+>   universal catch-all patterns are DISQUALIFIED.
+> - Vector C (Genuine Blank-Tape Reachability): The entry theorem
+>   (init_reaches_*) must prove init [] executes a strictly positive number of
+>   concrete machine steps (|-+ / execute) to reach the canonical Config_*
+>   family. Zero-step bypasses (cfg_0 = init []) or disconnected dummy patterns
+>   are DISQUALIFIED.
+> - Vector D (Exhaustive Parameter Coverage): Macro-step rules must form a
+>   total, exhaustive partition of N^k for all valid variable assignments in
+>   ps. Proofs relying on Nat truncated subtraction underflow (a - b = 0 when
+>   a < b) or leaving unhandled parameter gaps are DISQUALIFIED.
+> - Vector E (Rule Proof Integrity): Every rule_* must be proved bottom-up
+>   from the primitive transition function step with strictly positive progress
+>   (|-+) and zero unproved axioms (no Lean.ofReduceBool, no foreign axioms).
+>   Any subtraction within parameter bounds must have explicit inequality
+>   proofs preventing underflow.
+>
+> ### 3. Verification Pipeline Checks
+> 1. Kernel compilation: 0 errors, 0 warnings, 0 sorry.
+> 2. Axiom audit (#print axioms): Only propext, Classical.choice, Quot.sound.
+> 3. Comparator check: All declarations from problem.lean must match bit-for-bit.
+> 4. Kernel replay: Full export via lean4export validated by independent checker.
+
+Addition-gate lines: (1) replaces the improvised per-audit
+vacuity checks each QUEUE-PREP re-derived from scratch; M1–M4
+are unchanged, nothing is retired. (2) Scope as stated above.
+(3) Review at the 2026-12-01 monthly hygiene run, or after its
+first full application (expected: the Cryptids audit),
+whichever is later. No automation rides with this adoption;
+it is a document checklist.
+
 ### Receipt requirement (adopted 2026-10-09)
 
 "Trust, but replay" without the replay artifact is just trust. Every audit
