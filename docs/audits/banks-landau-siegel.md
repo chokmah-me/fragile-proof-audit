@@ -38,6 +38,15 @@ audits) was run on the draft verdicts before they were finalized;
 it changed two framings (V-B is stated as a consumption verdict
 with its two-link chain inside the verdict line; the Lean
 artifacts moved from a footnote into the GAP list) and no verdict.
+
+**Harness pin** (`scripts/harness_pin.py`, run date
+2026-10-20): agent Muse (Meta), model `Muse Spark 1.3`;
+skills dir mtime 2026-10-09T20:02:43Z. (Restyled 2026-10-23
+from the Agent provenance paragraph above, which carries the
+same data in prose form; the pin's generation timestamp was
+not recorded in the original note, and no data has been added
+beyond what that paragraph records.)
+
 A Grandmaster's Methods pass at recon (harvest 2026-10-20) framed
 this paper's method family: validation-then-compression of an AI
 proof drop, where the audit edge is the cuts and the
@@ -353,3 +362,15 @@ Every assumption a reader of the headline inherits:
    explicit Mertens), and no step read in either place
    contradicts its statement; a full re-derivation is the
    remaining depth this audit did not buy.
+
+## Verdict lock
+
+**Verdict: PASS.** Both scoped verdicts stand as stated under
+`## Verdicts` above: V-A on the explicit theorem, V-B as a
+consumption verdict on the Lu–Zaman–Zhao chain. The surviving
+gaps named in the section above are qualifications on those
+verdicts, not exceptions to them. (Section added 2026-10-23,
+restyle only: the note previously carried its verdicts as the
+scoped bullets under `## Verdicts` and had no closing verdict
+line; no verdict, finding or wording above this section has
+been changed.)
