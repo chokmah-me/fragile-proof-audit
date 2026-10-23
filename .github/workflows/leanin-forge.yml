@@ -1,0 +1,246 @@
+name: leanin-forge
+
+# One-shot independent build leg for the LeanIn harvest audit
+# (scidonia/leanin @ a7e8e9ca4fef75b6eff665925ff17aaf9ff35029).
+# Deleted after the receipt is recorded. Fail-closed verdict:
+# PASS iff pin ok + library build 0 + source scans zero +
+# axiom-audit lines all classified + dynamics probe 0
+# (+ BT1/SC1 green when libuv is present on the runner).
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  forge:
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 240
+    env:
+      LEAN_NUM_THREADS: "8"
+    steps:
+      - name: Probe runner
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p "$HOME/leanin-evidence"
+          { echo "date: $(date -u +%FT%TZ)"
+            echo "runner: $RUNNER_NAME"
+            uname -a
+            (command -v elan && elan --version) || echo "elan: MISSING"
+            ls "$HOME/.elan/toolchains" 2>/dev/null || true
+            (test -f /usr/include/uv.h && echo "uv.h: present") || \
+              (ls /usr/include/uv.h 2>/dev/null || echo "uv.h: ABSENT")
+            (command -v node && node --version) || echo "node: MISSING"
+          } | tee "$HOME/leanin-evidence/probe.log"
+
+      - name: Clone target at pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$HOME"
+          rm -rf leanin-target
+          git clone https://github.com/scidonia/leanin.git leanin-target
+          cd leanin-target
+          head_sha="$(git rev-parse HEAD)"
+          echo "cloned_head=$head_sha"
+          test "$head_sha" = "a7e8e9ca4fef75b6eff665925ff17aaf9ff35029"
+
+      - name: Pins and toolchain
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/leanin-target"
+          EV="$HOME/leanin-evidence"
+          tc="$(cat lean-toolchain)"
+          { echo "target_repo=https://github.com/scidonia/leanin"
+            echo "target_head=$(git rev-parse HEAD)"
+            echo "toolchain_file=$tc"
+            echo "bench_commit_full=$(git rev-parse 554e3b0)"
+            echo "manifest:"
+            cat lake-manifest.json
+            echo "bridge_sha256:"
+            sha256sum LeanIn/Theory/Bridge.lean
+            echo "world_sha256:"
+            sha256sum LeanIn/Theory/World.lean
+            echo "lane=[self-hosted, desktop]"
+          } | tee "$EV/pins.txt"
+          test "$tc" = "leanprover/lean4:v4.35.0" \
+            && echo "pin_ok=ok" > "$EV/pin.txt" \
+            || echo "pin_ok=FAIL" > "$EV/pin.txt"
+          export PATH="$HOME/.elan/bin:$PATH"
+          elan toolchain install leanprover/lean4:v4.35.0 \
+            > "$EV/toolchain-install.log" 2>&1 || true
+          lake --version 2>&1 | tee "$EV/lake-version.log" || true
+
+      - name: Build library (captures the #print axioms audit)
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/leanin-target"
+          export PATH="$HOME/.elan/bin:$PATH"
+          EV="$HOME/leanin-evidence"
+          rc=0
+          lake build > "$EV/build.log" 2>&1 || rc=$?
+          echo "BUILD_EXIT:$rc" | tee "$EV/build-exit.txt"
+          grep -c "depends on axioms" "$EV/build.log" \
+            | sed 's/^/axiom_lines:/' | tee "$EV/axiom-count.txt" || true
+
+      - name: Source scans (scope = LeanIn/ + tests/, no .lake inside)
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/leanin-target"
+          EV="$HOME/leanin-evidence"
+          python3 - > "$EV/scans.txt" 2>&1 <<'PYEOF'
+          import re
+          from pathlib import Path
+          roots = [Path("LeanIn"), Path("tests")]
+          files = sorted(p for r in roots for p in r.rglob("*.lean"))
+          lake_hits = [str(p) for p in files if ".lake" in p.parts]
+          print(f"scan_scope=LeanIn/,tests/ (dependency tree .lake/ is at repo root, outside scope)")
+          print(f"files_scanned={len(files)}")
+          print(f"files_under_dot_lake={len(lake_hits)}")
+          pats = {k: re.compile(r"\b" + k + r"\b") for k in
+                  ("sorry", "admit", "native_decide", "bv_decide")}
+          counts = {k: 0 for k in pats}
+          hits = []
+          for p in files:
+              text = p.read_text(errors="replace")
+              text = re.sub(r"/-.*?-/", "", text, flags=re.S)
+              text = re.sub(r"--[^\n]*", "", text)
+              for k, pat in pats.items():
+                  n = len(pat.findall(text))
+                  if n:
+                      counts[k] += n
+                      hits.append(f"HIT {p}: {k} x{n}")
+          for k, v in counts.items():
+              print(f"SCAN {k}: {v}")
+          for h in hits:
+              print(h)
+          ax = []
+          for p in files:
+              raw = p.read_text(errors="replace")
+              raw = re.sub(r"/-.*?-/", "", raw, flags=re.S)
+              raw = re.sub(r"--[^\n]*", "", raw)
+              for i, line in enumerate(raw.splitlines(), 1):
+                  if re.match(r"\s*axiom\s", line):
+                      ax.append(f"AXIOM {p}:{i}: {line.strip()[:110]}")
+          print(f"axiom_decls={len(ax)}")
+          for a in ax:
+              print(a)
+          PYEOF
+          cat "$EV/scans.txt"
+
+      - name: Dynamics probe (non-vacuity)
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/leanin-target"
+          export PATH="$HOME/.elan/bin:$PATH"
+          EV="$HOME/leanin-evidence"
+          rc=0
+          timeout 1800 lake exe dynamics > "$EV/dynamics.log" 2>&1 || rc=$?
+          echo "DYNAMICS_EXIT:$rc" | tee "$EV/dynamics-exit.txt"
+          tail -5 "$EV/dynamics.log" || true
+
+      - name: Bridge controls + executor scenario (libuv-gated)
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/leanin-target"
+          export PATH="$HOME/.elan/bin:$PATH"
+          EV="$HOME/leanin-evidence"
+          brc=0
+          timeout 1800 lake exe bridgecontrols > "$EV/bridgecontrols.log" 2>&1 || brc=$?
+          echo "BRIDGECONTROLS_EXIT:$brc" | tee "$EV/controls-exits.txt"
+          bt=0
+          timeout 900 bash tests/bridge-contract.sh BT1 > "$EV/bt1.log" 2>&1 || bt=$?
+          echo "BT1_EXIT:$bt" | tee -a "$EV/controls-exits.txt"
+          if test -f /usr/include/uv.h; then
+            crc=0
+            timeout 1800 lake exe controls > "$EV/controls-build.log" 2>&1 || crc=$?
+            echo "CONTROLS_BUILD_EXIT:$crc" | tee -a "$EV/controls-exits.txt"
+            sc=0
+            timeout 900 bash tests/executor-contract.sh SC1 > "$EV/sc1.log" 2>&1 || sc=$?
+            echo "SC1_EXIT:$sc" | tee -a "$EV/controls-exits.txt"
+          else
+            echo "CONTROLS: libuv absent, skipped" | tee -a "$EV/controls-exits.txt"
+          fi
+
+      - name: Verdict (fail-closed)
+        if: always()
+        shell: bash
+        run: |
+          set -uo pipefail
+          EV="$HOME/leanin-evidence"
+          cd "$EV"
+          python3 - <<'PYEOF'
+          import re
+          from pathlib import Path
+          ev = Path(".")
+          def read(name):
+              p = ev / name
+              return p.read_text(errors="replace") if p.exists() else ""
+          out = {}
+          out["pin_ok"] = "ok" if "pin_ok=ok" in read("pin.txt") else "FAIL"
+          m = re.search(r"BUILD_EXIT:(\d+)", read("build-exit.txt"))
+          out["build"] = "ok" if (m and m.group(1) == "0") else "FAIL"
+          scans = read("scans.txt")
+          sm = dict(re.findall(r"SCAN (\w+): (\d+)", scans))
+          out["scan_zero"] = "ok" if all(sm.get(k) == "0" for k in
+              ("sorry", "admit", "native_decide", "bv_decide")) else "FAIL"
+          build_log = read("build.log")
+          allowed = {"propext", "Classical.choice", "Quot.sound"} | {
+              "LeanIn.newMutex_spec", "LeanIn.newCondvar_spec",
+              "LeanIn.lock_spec", "LeanIn.tryLock_spec",
+              "LeanIn.unlock_spec", "LeanIn.wait_spec",
+              "LeanIn.notifyOne_spec", "LeanIn.notifyAll_spec",
+              "LeanIn.clock_spec"}
+          bad = []
+          spans = re.findall(r"depends on axioms:\s*\[(.*?)\]",
+                             build_log, re.S)
+          clean = build_log.count("does not depend on any axioms")
+          nlines = len(spans) + clean
+          for span in spans:
+              if "sorryAx" in span or "ofReduceBool" in span:
+                  bad.append("forbidden axiom in: " + span.strip()[:160])
+                  continue
+              toks = {t.strip() for t in span.split(",") if t.strip()}
+              extra = toks - allowed
+              if extra:
+                  bad.append(f"unclassified {sorted(extra)}")
+          out["axiom_lines"] = str(nlines)
+          out["axiom_audit"] = "ok" if (nlines >= 10 and not bad) else "FAIL"
+          m = re.search(r"DYNAMICS_EXIT:(\d+)", read("dynamics-exit.txt"))
+          out["dynamics"] = "ok" if (m and m.group(1) == "0") else "FAIL"
+          ce = read("controls-exits.txt")
+          out["bridgecontrols"] = "ok" if "BRIDGECONTROLS_EXIT:0" in ce else "FAIL"
+          out["bt1"] = "ok" if "BT1_EXIT:0" in ce else "FAIL"
+          if "CONTROLS_BUILD_EXIT:0" in ce:
+              out["sc1"] = "ok" if "SC1_EXIT:0" in ce else "FAIL"
+          else:
+              out["sc1"] = "libuv_absent"
+          core = [out["pin_ok"], out["build"], out["scan_zero"],
+                  out["axiom_audit"], out["dynamics"],
+                  out["bridgecontrols"], out["bt1"]]
+          verdict = "PASS" if all(v == "ok" for v in core) and \
+              out["sc1"] in ("ok", "libuv_absent") else "FAIL"
+          lines = [f"{k}={v}" for k, v in out.items()]
+          if bad:
+              lines.append("axiom_problems:")
+              lines += bad[:10]
+          lines.append(f"VERDICT: {verdict}")
+          Path("verdict.txt").write_text("\n".join(lines) + "\n")
+          print("\n".join(lines))
+          raise SystemExit(0 if verdict == "PASS" else 1)
+          PYEOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: leanin-forge-evidence
+          path: ~/leanin-evidence/
+          if-no-files-found: warn
