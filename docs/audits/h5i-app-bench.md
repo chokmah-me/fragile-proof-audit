@@ -33,7 +33,11 @@ gate-theorem axioms, certificate currency), M3 credit honesty, M4
 fine-print inventory. No author contact (standing policy). The
 32-gate verdict lock is untouched.
 
-**Status:** CLOSED 2026-10-23 — verdict **PARTIAL** (see M2).
+**Status:** CLOSED 2026-10-23 — verdict **PASS**, with
+qualifications (see M1–M4). Closed PARTIAL the same morning over the
+13 stale rustfs certificates; at the user's word they were re-graded
+13/13 re-pass the same day (Dell run 39953188148, see M2), and the
+verdict moved to PASS.
 
 ## The claim and its three denominators
 
@@ -125,13 +129,42 @@ across certificates); statement and task-entry hashes were
 recomputed with the project's own formulas (cross-validated by
 the 86 passes).
 
-**What PARTIAL means here:** nothing false was proved, no axiom
-smuggling (0 off-allowlist), the 2 missing are honestly missing.
-But the headline "99/101 accepted", read at the pin as a present
-accomplishment, is 86-current + 13-stale by the project's own
-certificate semantics. The recheck outcome for the 13 (would
-they re-pass?) is not established — that is the remaining GAP,
-and it is the author's one-command `--check-all` away.
+**What this settles (re-grade, Dell, run 39953188148, 2026-10-23):**
+at the user's word, the 13 stale certificates were re-graded with the
+project's own grader (`prove/harness/bench.py` `bench.build` +
+`bench.grade` at the pin; docker isolation replaced by an identical
+local subprocess, with only the two mount paths rewritten in the
+generated lakefile/manifest/symlink). Each task's committed
+`Solution.lean` was sha256-checked against its `certificate.json`
+before grading, then graded in a fresh workspace built from the
+pinned sources. **Result: 13/13 re-pass** — every grade `passed:
+true`, statement defeq `STATEMENT_OK`, axioms exactly the classical
+three, grade times 6.0–22.7 s. Machinery controls all behaved:
+POS `nora-digest` (a certificate current at the pin) passed, a
+sorry-template solution for `rustfs-wildcard` failed with
+`sorryAx`, and the same solution plus an appended
+`axiom cheat : False` failed at the forbidden scan. The run's
+verdict step exited 0 with MACHINERY VALID; an independently
+verified cross-check (local `regrade-results.json` against the
+committed certificates) found all 14 graded artifacts identical
+to their certificates in solution LOC, axiom set, and pass.
+The re-grade evidence is at `~/workspace/h5i-recon/regrade-evidence/`
+(local copy of the `h5i-regrade-evidence` artifact).
+
+**Revised disposition:** the PARTIAL verdict above was scoped to the
+stale-13 GAP — the question whether the 13 would re-pass at the pin.
+That question is now answered: yes, 13/13, under the project's own
+grader and certificate semantics. The ledger's "99/101 accepted" is
+now 99-current at the pin, with the 2 missing totality specs
+honestly missing. Nothing was silently re-stamped: the certificates
+are the author's own one-command `--check` semantics, executed at
+the pin. The audit verdict moves to **PASS**, with the qualifications
+in M1/M3/M4 standing unchanged (backported resolver scope,
+documented statement narrowings, article/repo authorship gap,
+DEVIATIONS inventory). The 51 `Properties.lean` sorries remain the
+project's documented work surface in the strict-gate denominator —
+they are not certificates, and the project's own gate panel agrees
+with this reading. This does not touch the 32-gate verdict lock.
 
 ## M3 — Credit honesty: PASS on disclosure, with qualifications
 
@@ -221,6 +254,18 @@ inputs, form-difference table with reasons. Classification:
   rustfs stale (output `~/workspace/h5i-recon/
   cert_recheck_out.txt`). The 2 missing specs have no accepted
   certificate.
+- **Re-grade receipt (2026-10-23):** one-shot workflow
+  `h5i-regrade` (fragile-proof-audit main@`8816a55`; file deleted after
+  this note landed, per the one-shot pattern). Dell lane, run
+  39953188148, concluded **success**. Evidence artifact
+  `h5i-regrade-evidence` (8 files; local copy
+  `~/workspace/h5i-recon/regrade-evidence/`): all 13 stale rustfs
+  certificates re-graded and re-passed with the project's own
+  grader; controls POS/NEG-sorry/NEG-forbidden all behaved. Dispatch
+  gate PASS 2026-10-23T12:24:41Z. An adversarial pre-dispatch pass
+  covered the workflow file (YAML parse, `bash -n` per block, verdict
+  unit tests on synthetic data, driver substitutions tested against
+  the pinned `bench.py` on the control VM).
 - **Harness pin** (`scripts/harness_pin.py`,
   2026-10-23T09:41:47Z): agent Muse (Meta), model `Muse Spark
   1.3`; skills dir `~/workspace/skills` (mtime
@@ -233,5 +278,8 @@ inputs, form-difference table with reasons. Classification:
 
 ## Verdict lock
 
-Untouched (17 BREAK / 15 PASS). This audit's verdict is
-**PARTIAL**, scoped to the h5i-app-bench claim artifact above.
+Untouched (17 BREAK / 15 PASS). This audit's verdict was **PARTIAL**
+at close-out on 2026-10-23 (scoped to the 13 stale certificates);
+on the same day, at the user's word, the 13 were re-graded 13/13
+re-pass (receipt above) and the verdict moved to **PASS** with the
+M1/M3/M4 qualifications standing.
