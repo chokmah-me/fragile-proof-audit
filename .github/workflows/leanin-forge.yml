@@ -43,6 +43,8 @@ jobs:
           rm -rf leanin-target
           git clone https://github.com/scidonia/leanin.git leanin-target
           cd leanin-target
+          echo "tip_at_dispatch=$(git rev-parse HEAD)"
+          git checkout a7e8e9ca4fef75b6eff665925ff17aaf9ff35029
           head_sha="$(git rev-parse HEAD)"
           echo "cloned_head=$head_sha"
           test "$head_sha" = "a7e8e9ca4fef75b6eff665925ff17aaf9ff35029"
@@ -56,6 +58,7 @@ jobs:
           tc="$(cat lean-toolchain)"
           { echo "target_repo=https://github.com/scidonia/leanin"
             echo "target_head=$(git rev-parse HEAD)"
+            echo "target_tip_at_dispatch=$(git rev-parse origin/HEAD 2>/dev/null || echo unknown)"
             echo "toolchain_file=$tc"
             echo "bench_commit_full=$(git rev-parse 554e3b0)"
             echo "manifest:"
