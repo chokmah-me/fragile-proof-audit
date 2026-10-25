@@ -34,13 +34,6 @@ the note is synthetic and says so in its title.
 Present for the smoke. The one assumption: a complete note
 shape produces a success check.
 
-## Receipt
-
-Smoke run 2026-10-25, fragile-proof-audit branch
-replaygate-smoke-2026-10-25, bundle sha256 as pinned above,
-opened as the ReplayGate M2 live smoke pull request.
-Branch cut from fragile-proof-audit main @ b6cd35195ddd39434a90255066b42045155fc6a9.
-
 ## Verdict lock
 
 **Verdict: PASS.** The smoke note is complete in shape; if this
