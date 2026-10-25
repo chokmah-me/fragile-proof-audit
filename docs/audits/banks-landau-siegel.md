@@ -374,3 +374,5 @@ restyle only: the note previously carried its verdicts as the
 scoped bullets under `## Verdicts` and had no closing verdict
 line; no verdict, finding or wording above this section has
 been changed.)
+
+<!-- ReplayGate past-work live test, 2026-10-25: no content change. -->

@@ -446,3 +446,5 @@ landing and reproduced independently 2026-10-18 (see Receipt);
 cataloged with residual lines (the standing risks are the
 unverified sieve program and the external MJ tables, both
 explicitly out of the formalization by the paper's own split).
+
+<!-- ReplayGate past-work live test, 2026-10-25: no content change. -->
