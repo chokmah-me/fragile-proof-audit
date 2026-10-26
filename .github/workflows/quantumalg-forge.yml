@@ -1,0 +1,285 @@
+name: quantumalg-forge
+
+# One-shot independent build leg for the Lean-QuantumAlg harvest audit
+# (QudeLeap/Lean-QuantumAlg @ 3d8829fe23d394173e2850e629b26e4f5cccf241,
+# arXiv:2610.30216v1). Deleted after the receipt is recorded.
+# Fail-closed verdict: PASS iff pin ok + comment-stripped sorry/admit
+# scan zero + library build exit 0 + all nine endpoint `main` theorems
+# present in the axiom audit and every axiom set inside the classical
+# allowlist [propext, Classical.choice, Quot.sound].
+# Heavy lane per the runner-first rule: [self-hosted, desktop] only.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  forge:
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 330
+    env:
+      PIN: "3d8829fe23d394173e2850e629b26e4f5cccf241"
+      LEAN_NUM_THREADS: "8"
+    steps:
+      - name: Probe runner
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p "$HOME/quantumalg-evidence"
+          { echo "date: $(date -u +%FT%TZ)"
+            echo "runner: $RUNNER_NAME"
+            uname -a
+            df -h "$HOME" | tail -1
+            free -g | head -2 || true
+            (command -v elan && elan --version) || echo "elan: MISSING"
+            ls "$HOME/.elan/toolchains" 2>/dev/null || true
+          } | tee "$HOME/quantumalg-evidence/probe.log"
+
+      - name: Clone target at pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$PIN" in
+            *[!0-9a-f]*|"") echo "PIN not 40-hex" >&2; exit 1;;
+          esac
+          test "${#PIN}" -eq 40
+          cd "$HOME"
+          rm -rf quantumalg-target
+          git clone https://github.com/QudeLeap/Lean-QuantumAlg.git quantumalg-target
+          cd quantumalg-target
+          echo "tip_at_dispatch=$(git rev-parse HEAD)" | tee "$HOME/quantumalg-evidence/tip.txt"
+          git checkout "$PIN"
+          head_sha="$(git rev-parse HEAD)"
+          echo "cloned_head=$head_sha"
+          test "$head_sha" = "$PIN"
+
+      - name: Pins and toolchain
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/quantumalg-target"
+          EV="$HOME/quantumalg-evidence"
+          tc="$(cat lean-toolchain)"
+          { echo "target_repo=https://github.com/QudeLeap/Lean-QuantumAlg"
+            echo "target_head=$(git rev-parse HEAD)"
+            echo "toolchain_file=$tc"
+            echo "manifest_sha256:"
+            sha256sum lake-manifest.json
+            echo "lane=[self-hosted, desktop]"
+          } | tee "$EV/pins.txt"
+          if test "$tc" = "leanprover/lean4:v4.33.1"; then
+            echo "pin_ok=ok" > "$EV/pin.txt"
+          else
+            echo "pin_ok=FAIL" > "$EV/pin.txt"
+          fi
+          export PATH="$HOME/.elan/bin:$PATH"
+          elan toolchain install leanprover/lean4:v4.33.1 > "$EV/toolchain-install.log" 2>&1 || true
+          lake --version 2>&1 | tee "$EV/lake-version.log" || true
+
+      - name: Source scans (pre-build, source tree only)
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/quantumalg-target"
+          EV="$HOME/quantumalg-evidence"
+          python3 - "$EV" <<'PYEOF'
+          import os, re, sys
+          ev = sys.argv[1]
+          roots = ["QuantumAlg", "QuantumAlg.lean"]
+          def strip_comments(src):
+              out = []
+              i, n, depth = 0, len(src), 0
+              in_str = False
+              while i < n:
+                  c = src[i]
+                  nxt = src[i+1] if i + 1 < n else ""
+                  if depth > 0:
+                      if c == "/" and nxt == "-":
+                          depth += 1; i += 2; continue
+                      if c == "-" and nxt == "/":
+                          depth -= 1; i += 2; continue
+                      if c == "\n": out.append("\n")
+                      i += 1; continue
+                  if in_str:
+                      out.append(c)
+                      if c == "\\": 
+                          if i + 1 < n: out.append(src[i+1]); i += 2; continue
+                      elif c == '"': in_str = False
+                      i += 1; continue
+                  if c == "/" and nxt == "-":
+                      depth = 1; i += 2; continue
+                  if c == "-" and nxt == "-":
+                      while i < n and src[i] != "\n": i += 1
+                      continue
+                  if c == '"': in_str = True
+                  out.append(c); i += 1
+              return "".join(out)
+          sorry_hits, escape_hits = [], []
+          esc = re.compile(r"@\[extern|implemented_by|\bunsafe\b|partial\s+def|ofReduceBool|native_decide")
+          files = []
+          for r in roots:
+              if os.path.isfile(r): files.append(r)
+              else:
+                  for dp, dn, fn in os.walk(r):
+                      dn[:] = [d for d in dn if d != ".lake"]
+                      for f in fn:
+                          if f.endswith(".lean"): files.append(os.path.join(dp, f))
+          for path in files:
+              src = open(path, encoding="utf-8", errors="ignore").read()
+              code = strip_comments(src)
+              for m in re.finditer(r"\b(sorry|admit)\b", code):
+                  line = code[:m.start()].count("\n") + 1
+                  sorry_hits.append(f"{path}:{line}:{m.group(1)}")
+              for m in esc.finditer(code):
+                  line = code[:m.start()].count("\n") + 1
+                  escape_hits.append(f"{path}:{line}:{m.group(0)}")
+          with open(os.path.join(ev, "scan.txt"), "w") as fh:
+              fh.write(f"files_scanned={len(files)}\n")
+              fh.write(f"sorry_hits={len(sorry_hits)}\n")
+              for h in sorry_hits: fh.write("SORRY " + h + "\n")
+              fh.write(f"escape_hits={len(escape_hits)}\n")
+              for h in escape_hits: fh.write("ESCAPE " + h + "\n")
+          print(f"files={len(files)} sorry={len(sorry_hits)} escapes={len(escape_hits)}")
+          PYEOF
+          cat "$EV/scan.txt" | head -20
+
+      - name: Fetch Mathlib cache
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/quantumalg-target"
+          export PATH="$HOME/.elan/bin:$PATH"
+          EV="$HOME/quantumalg-evidence"
+          lake exe cache get > "$EV/cache-get.log" 2>&1 || true
+          tail -3 "$EV/cache-get.log" || true
+
+      - name: Build library
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/quantumalg-target"
+          export PATH="$HOME/.elan/bin:$PATH"
+          EV="$HOME/quantumalg-evidence"
+          rc=0
+          start=$(date +%s)
+          lake build > "$EV/build.log" 2>&1 || rc=$?
+          echo "build_seconds=$(( $(date +%s) - start ))" | tee -a "$EV/build-exit.txt"
+          echo "BUILD_EXIT:$rc" | tee "$EV/build-exit.txt"
+          tail -5 "$EV/build.log" || true
+
+      - name: Axiom audit (nine endpoint mains)
+        shell: bash
+        run: |
+          set -uo pipefail
+          cd "$HOME/quantumalg-target"
+          export PATH="$HOME/.elan/bin:$PATH"
+          EV="$HOME/quantumalg-evidence"
+          cat > AuditAxioms.lean <<'LEANEOF'
+          module
+          public import QuantumAlg.Algorithms.DeutschJozsa.Endpoint
+          public import QuantumAlg.Algorithms.BernsteinVazirani.Endpoint
+          public import QuantumAlg.Algorithms.Grover.Endpoint
+          public import QuantumAlg.Algorithms.QPE.Endpoint
+          public import QuantumAlg.Algorithms.AmplitudeEstimation.Endpoint
+          public import QuantumAlg.Algorithms.OrderFinding.General.NativeEndpoint.Canonical
+          public import QuantumAlg.Algorithms.FiniteCyclicDLP.Binary.Endpoint
+          public import QuantumAlg.Algorithms.Factoring.RSA2048
+          public import QuantumAlg.Algorithms.EllipticCurve.P256
+          #print axioms QuantumAlg.DeutschJozsa.main
+          #print axioms QuantumAlg.BernsteinVazirani.main
+          #print axioms QuantumAlg.GroverSearch.main
+          #print axioms QuantumAlg.QuantumPhaseEstimation.main
+          #print axioms QuantumAlg.AmplitudeEstimation.main
+          #print axioms QuantumAlg.OrderFinding.ShorSourceJoint.SourceNativeEndpoint.Canonical.main
+          #print axioms QuantumAlg.FiniteCyclicDLP.BinaryEndpoint.main
+          #print axioms QuantumAlg.Factoring.RSA2048.main
+          #print axioms QuantumAlg.EllipticCurve.P256LogicalResources.main
+          LEANEOF
+          lake build QuantumAlg.Algorithms.DeutschJozsa.Endpoint \
+            QuantumAlg.Algorithms.BernsteinVazirani.Endpoint \
+            QuantumAlg.Algorithms.Grover.Endpoint \
+            QuantumAlg.Algorithms.QPE.Endpoint \
+            QuantumAlg.Algorithms.AmplitudeEstimation.Endpoint \
+            QuantumAlg.Algorithms.OrderFinding.General.NativeEndpoint.Canonical \
+            QuantumAlg.Algorithms.FiniteCyclicDLP.Binary.Endpoint \
+            QuantumAlg.Algorithms.Factoring.RSA2048 \
+            QuantumAlg.Algorithms.EllipticCurve.P256 \
+            > "$EV/endpoint-build.log" 2>&1 || true
+          rc=0
+          lake env lean AuditAxioms.lean > "$EV/axioms.log" 2>&1 || rc=$?
+          echo "AXIOM_AUDIT_EXIT:$rc" | tee "$EV/axiom-audit-exit.txt"
+          cat "$EV/axioms.log"
+
+      - name: Verdict (fail-closed)
+        shell: bash
+        run: |
+          set -uo pipefail
+          EV="$HOME/quantumalg-evidence"
+          python3 - "$EV" <<'PYEOF'
+          import os, re, sys
+          ev = sys.argv[1]
+          def read(name, default=""):
+              p = os.path.join(ev, name)
+              return open(p).read() if os.path.exists(p) else default
+          fails = []
+          if "pin_ok=ok" not in read("pin.txt"): fails.append("pin")
+          scan = read("scan.txt")
+          m = re.search(r"sorry_hits=(\d+)", scan)
+          if not m or int(m.group(1)) != 0: fails.append("sorry_scan")
+          m = re.search(r"escape_hits=(\d+)", scan)
+          if not m or int(m.group(1)) != 0: fails.append("escape_scan")
+          if "BUILD_EXIT:0" not in read("build-exit.txt"): fails.append("build")
+          if "AXIOM_AUDIT_EXIT:0" not in read("axiom-audit-exit.txt"): fails.append("axiom_audit_run")
+          log = read("axioms.log")
+          # Join wrapped lines: #print axioms output wraps long lists.
+          flat = re.sub(r"\n\s+", " ", log)
+          names = [
+            "QuantumAlg.DeutschJozsa.main",
+            "QuantumAlg.BernsteinVazirani.main",
+            "QuantumAlg.GroverSearch.main",
+            "QuantumAlg.QuantumPhaseEstimation.main",
+            "QuantumAlg.AmplitudeEstimation.main",
+            "QuantumAlg.OrderFinding.ShorSourceJoint.SourceNativeEndpoint.Canonical.main",
+            "QuantumAlg.FiniteCyclicDLP.BinaryEndpoint.main",
+            "QuantumAlg.Factoring.RSA2048.main",
+            "QuantumAlg.EllipticCurve.P256LogicalResources.main",
+          ]
+          allow = {"propext", "Classical.choice", "Quot.sound"}
+          found = {}
+          for mm in re.finditer(r"'([^']+)' depends on axioms: \[([^\]]*)\]", flat):
+              found[mm.group(1)] = {a.strip() for a in mm.group(2).split(",") if a.strip()}
+          for mm in re.finditer(r"'([^']+)' does not depend on any axioms", flat):
+              found[mm.group(1)] = set()
+          for n in names:
+              if n not in found:
+                  fails.append(f"axioms_missing:{n}")
+              elif not found[n] <= allow:
+                  fails.append(f"axioms_offlist:{n}:{sorted(found[n] - allow)}")
+          verdict = "PASS" if not fails else "BREAK"
+          with open(os.path.join(ev, "verdict.txt"), "w") as fh:
+              fh.write(f"verdict={verdict}\n")
+              for f in fails: fh.write(f"fail={f}\n")
+              for n in names:
+                  if n in found: fh.write(f"axioms {n} = {sorted(found[n])}\n")
+          print(verdict, fails)
+          sys.exit(0 if not fails else 1)
+          PYEOF
+
+      - name: Stage evidence into workspace
+        if: always()
+        shell: bash
+        run: |
+          set -uo pipefail
+          rm -rf "$GITHUB_WORKSPACE/quantumalg-evidence"
+          cp -r "$HOME/quantumalg-evidence" "$GITHUB_WORKSPACE/quantumalg-evidence" || true
+          ls "$GITHUB_WORKSPACE/quantumalg-evidence" || true
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantumalg-forge-evidence
+          path: quantumalg-evidence
+          if-no-files-found: warn
