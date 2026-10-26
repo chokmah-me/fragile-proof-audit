@@ -10,6 +10,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [Agoh–Giuga oracle (Phase 3(h) first milestone)](agoh-giuga.md) |  |
 | [Baste–Fürst–Henning–Mohr–Rautenbach domination inequality (Track D#2)](baste-domination.md) |  |
 | [Binder–Ivrii–Prause–Smirnov Brennan / universal integral means spectrum (arXiv:2610.23853) — V-A non-strict bound PASS, V-B strictness GAP (proof deferred by the authors)](brennan-integral-means.md) | 2026-10-25 |
+| [Zhang–Jing–Zhao–Liu–Wang Lean-QuantumAlg (arXiv:2610.30216) — V-A build + axioms PASS (run 40323638441), V-B statement fidelity PASS at the contract layer, Table 1 measurement scripts GAP](lean-quantumalg.md) | 2026-10-26 |
 | [biplanar graphs with independence number two are 9-colorable](biplanar-alpha2-9-colorable.md) | 2026-09-28 |
 | [Borsuk dimension 63 (Grinsztajn 2026)](borsuk-63.md) |  |
 | [CAT-G polynomial claim between (2.3) and (2.4) — BREAK](cat-g.md) |  |
