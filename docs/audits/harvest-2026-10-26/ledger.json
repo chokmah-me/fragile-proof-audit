@@ -8,15 +8,17 @@
   "claims": [
     {
       "id": "schur-number-6-537",
-      "title": "Sixth Schur number S(6) >= 537 -- first improvement since 2000",
-      "score": 0,
       "paper": {
-        "status": "API-ERROR",
+        "status": "VERIFIED",
         "arxiv_id": "2610.31362",
-        "detail": "http 429"
-      },
-      "axis2": {
-        "status": "NOT-APPLICABLE"
+        "title": "A new lower bound for the sixth Schur number: $S(6)\\ge 537$",
+        "authors": [
+          "Zhiyang Chen",
+          "Ligeng Zhu",
+          "Fan Long"
+        ],
+        "published": "2026-10-22",
+        "url": "https://arxiv.org/abs/2610.31362"
       },
       "code": {
         "status": "PUBLIC",
@@ -30,79 +32,45 @@
         "lean_files": 0,
         "tree_truncated": false,
         "has_lakefile": false
-      },
-      "signals": [],
-      "adjustments": [],
-      "lanes": [
-        [
-          "E",
-          "CAS-transcript replay (certificate)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ],
-      "formalization_coverage": null
+      }
     },
     {
       "id": "minimum-autocorrelation-0410377",
-      "title": "Minimum-autocorrelation constant A >= 0.4103779774321214877852987...",
-      "score": 1,
       "paper": {
-        "status": "API-ERROR",
+        "status": "VERIFIED",
         "arxiv_id": "2610.18888",
-        "detail": "http 429"
-      },
-      "axis2": {
-        "status": "NOT-APPLICABLE"
+        "title": "An improved lower bound for the minimum-autocorrelation constant",
+        "authors": [
+          "Shenai Chen",
+          "EnHao Gu"
+        ],
+        "published": "2026-10-08",
+        "url": "https://arxiv.org/abs/2610.18888"
       },
       "code": {
         "status": "NONE-GIVEN"
-      },
-      "signals": [
-        "formal_subset_of_claim",
-        "pinned_toolchain"
-      ],
-      "adjustments": [],
-      "lanes": [
-        [
-          "E",
-          "CAS-transcript replay (interval certificate)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ],
-      "formalization_coverage": null
+      }
     },
     {
       "id": "lehmer-mahler-high-degree-barrier",
-      "title": "Generalized Boyd construction breaks the high-degree barrier in Lehmer's problem",
-      "score": 2,
       "paper": {
-        "status": "API-ERROR",
+        "status": "VERIFIED",
         "arxiv_id": "2610.30277",
-        "detail": "http -1"
-      },
-      "axis2": {
-        "status": "NOT-APPLICABLE"
+        "title": "Breaking the high-degree barrier in Lehmer's problem with a human-AI discovery loop",
+        "authors": [
+          "Yuri Chervonyi",
+          "Sergei Gukov",
+          "Thang Luong"
+        ],
+        "published": "2026-10-21",
+        "url": "https://arxiv.org/abs/2610.30277"
       },
       "code": {
         "status": "NONE-GIVEN"
-      },
-      "signals": [
-        "ai_generated"
-      ],
-      "adjustments": [],
-      "lanes": [],
-      "formalization_coverage": null
+      }
     },
     {
       "id": "one-extension-algebraic-lean",
-      "title": "Lean 4 formalization of the algebraic proof of 1-extension",
-      "score": 2,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2610.31212",
@@ -114,42 +82,11 @@
         "published": "2026-10-22",
         "url": "https://arxiv.org/abs/2610.31212"
       },
-      "axis2": {
-        "status": "AGREE",
-        "arxiv_id": "2610.31212",
-        "title": "An algebraic proof of 1-extension",
-        "authors": [
-          "Alexander Heaton",
-          "Martin Winter"
-        ],
-        "publication_date": "2026-10-22",
-        "title_ok": true,
-        "author_overlap": [
-          "heaton",
-          "winter"
-        ],
-        "year_ok": true,
-        "openalex_id": "https://openalex.org/W7223300257"
-      },
       "code": {
         "status": "NON-GITHUB",
         "detail": "https://doi.org/10.5281/zenodo.23503394"
-      },
-      "signals": [
-        "disclosed_llm_help",
-        "formal_subset_of_claim",
-        "pinned_toolchain"
-      ],
-      "adjustments": [
-        "code repo check: NON-GITHUB"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ]
-      ],
-      "formalization_coverage": null
+      }
     }
-  ]
+  ],
+  "last_health_check": "2026-10-26"
 }
