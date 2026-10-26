@@ -102,7 +102,7 @@ at [4029/6270] of the build graph, the preserved build.log
 clean and the step's exit file never written. Both are
 infrastructure deaths; receipts in the recon workdir.
 
-## V-B, the contract read (M1/M4, from FIDELITY.md)
+## M1 — statement fidelity: the contract read (V-B, from FIDELITY.md)
 
 `Solves` is a 7-field structure (success, states, borrowed,
 events, resident, auxiliary, time) over all admitted
@@ -114,6 +114,22 @@ RSA is 1 − batchFailure^totalRounds; P-256 runs 4,714
 repetitions at 1/100 failure, matching code and paper
 §C.4. BB6 non-vacuity vectors A–D pass at the contract
 layer; vector E is the build leg and closes with V-A.
+
+## M2 — argument fidelity
+
+For a formalization target the argument leg is the kernel,
+not a re-derivation: this audit does not redo the nine
+algorithms' mathematics. It checks that the shipped
+statements are the ones the sources require (M1, above)
+and that every proof in the development was checked by
+the Lean kernel at the pin, with no escape hatches and
+no extra axioms (V-A). The paper's own Appendix D is a
+vacuity memo naming the failure modes that would break
+the argument (narrowed `valid`, `accepts := True`,
+budget-from-candidate, gate relabeling); the contract
+read tested for each of them by name.
+
+## M4 — fine-print inventory (soft spots, opacity, scope)
 
 Soft spots, both visible in the shipped problems, neither
 a finding against soundness: (1) `initialization := True`
@@ -172,8 +188,32 @@ reproducibility GAP, not a defect in the formalization.
 The V-A scans independently confirm the zero-sorry,
 zero-escape facts the table's accounting presupposes.
 
+## Receipt — full pins
+
+Full sha256 pins curing the truncated pins used in the
+prose above (house Receipt style: source named, bare hash
+printed):
+
+- Paper PDF (arXiv:2610.30216v1):
+  1c4862d9a9f2ceee6e2547d4da027b2c6e362b81b8ceef5f018ae6d8600f2091
+- arXiv e-print tarball:
+  230845069789d5d55099b8548f557474e2723c07a6932485015ce60595a65760
+- lake-manifest.json at the repo pin:
+  888ee829542ff4f39d2da2734009167dd59756cbbcad3c1f45abaa5bb076b8b7
+- Forge run 3 early evidence zip (run 40323638441):
+  4c8dc2c771bb31bd6f2336eeadc228e3e108f827369597dac70979bf033883dd
+- Forge run 3 final evidence zip (run 40323638441):
+  b2eb98f4f86b9208e40c36ad7a3578b019e0868e110a148940523982ca7377e6
+- Repo pin (commit): 3d8829fe23d394173e2850e629b26e4f5cccf241;
+  forge workflow at this repo's main
+  a24fdc84810344fb3691e974c987015abc2ab49b.
+
 ## Verdict lock
 
 This note's verdicts: **V-A PASS · V-B PASS (contract
 layer) · Table 1 GAP**. The 32-gate verdict lock
 (17 BREAK / 15 PASS) is untouched.
+
+**Verdict: PASS.** Both scoped verdicts stand as stated
+above; the Table 1 reproducibility exception is recorded
+in this section.
