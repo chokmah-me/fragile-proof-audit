@@ -3,14 +3,48 @@ name: quantumalg-forge
 # One-shot independent build leg for the Lean-QuantumAlg harvest audit
 # (QudeLeap/Lean-QuantumAlg @ 3d8829fe23d394173e2850e629b26e4f5cccf241,
 # arXiv:2610.30216v1). Deleted after the receipt is recorded.
-# Fail-closed verdict: PASS iff pin ok + comment-stripped sorry/admit
-# scan zero + library build exit 0 + all nine endpoint `main` theorems
-# present in the axiom audit and every axiom set inside the classical
-# allowlist [propext, Classical.choice, Quot.sound].
+# Fail-closed verdict: PASS iff pin ok + toolchain ok + runner clock
+# verified twice + comment-stripped sorry/admit scan zero + Mathlib cache
+# verified landed + library build exit 0 + endpoint build exit 0 + all
+# nine endpoint `main` theorems present in the axiom audit and every
+# axiom set inside the classical allowlist
+# [propext, Classical.choice, Quot.sound].
 # Heavy lane per the runner-first rule: [self-hosted, desktop] only.
+#
+# V2 (prepared locally 2026-10-26, NOT dispatched; run 1 = 40251813868
+# failed with no verdict). Changes vs run 1, mapped to FORGE-RUN-1-LOG.md:
+#  R1 cache fetch failed (git exit 128) but the step showed success via
+#     `|| true` -> cache step now captures the exit code, retries once,
+#     counts Mathlib oleans, writes cache-exit.txt, and FAILS the step;
+#     the verdict requires CACHE_EXIT:0 and mathlib_oleans >= 1000.
+#  R2 runner stamps ran ~+4h37m against GitHub's server window -> probe
+#     and pre-build steps compare the runner clock against the github.com
+#     Date header and fail the run if |skew| > 600s or unverifiable.
+#  R3 evidence upload refused at the end ("job is completed", 403) ->
+#     early evidence (probe/pins/scan) is uploaded as its own artifact
+#     before the build; build and cache tails are echoed into the Actions
+#     log itself; $HOME/quantumalg-evidence stays the primary receipt.
+#  R4 verdict and axiom steps were skipped after the cancelled build ->
+#     verdict now runs on always() and writes verdict.txt (BREAK with
+#     named fails) even when earlier steps did not complete.
+#  Also: build-exit.txt overwrite bug fixed (run 1 lost its first line);
+#  endpoint-build exit code is now captured and gated; the verdict also
+#  requires the installed lean to actually report version 4.33.1.
+#  Breaker pass (2026-10-26, local): probe wipes the evidence dir so a
+#  re-run can never pass on stale files; exit-code checks in the verdict
+#  are line-anchored; the verdict step exits with the classifier's own
+#  code (trailing cat no longer masks it); an empty github.com Date
+#  header forces clock FAIL (GNU date parses "" as midnight); a
+#  post-build clock reading is recorded in verdict.txt (not gated).
 
 on:
   workflow_dispatch:
+
+# Serialize dispatches of this one-shot forge: two runs must never share
+# the runner's $HOME evidence/target directories at the same time.
+concurrency:
+  group: quantumalg-forge-desktop
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -23,19 +57,41 @@ jobs:
       PIN: "3d8829fe23d394173e2850e629b26e4f5cccf241"
       LEAN_NUM_THREADS: "8"
     steps:
-      - name: Probe runner
+      - name: Probe runner + clock check
         shell: bash
         run: |
           set -uo pipefail
-          mkdir -p "$HOME/quantumalg-evidence"
+          EV="$HOME/quantumalg-evidence"
+          rm -rf "$EV"
+          mkdir -p "$EV"
+          srv_hdr="$(curl -sI --max-time 30 https://github.com | tr -d '\r' | sed -n 's/^[Dd]ate: //p' | head -1)"
+          run_epoch="$(date -u +%s)"
+          srv_epoch=0
+          if test -n "$srv_hdr"; then
+            srv_epoch="$(date -u -d "$srv_hdr" +%s 2>/dev/null || echo 0)"
+          fi
+          skew=$(( run_epoch - srv_epoch ))
+          abs_skew=$(( skew < 0 ? -skew : skew ))
+          clock_ok=FAIL
+          if test "$srv_epoch" -gt 0 && test "$abs_skew" -le 600; then clock_ok=ok; fi
+          { echo "clock_ok=$clock_ok"
+            echo "skew_seconds=$skew"
+            echo "runner_epoch=$run_epoch"
+            echo "server_epoch=$srv_epoch"
+          } | tee "$EV/clock.txt"
           { echo "date: $(date -u +%FT%TZ)"
+            echo "server_date: $srv_hdr"
             echo "runner: $RUNNER_NAME"
             uname -a
             df -h "$HOME" | tail -1
             free -g | head -2 || true
             (command -v elan && elan --version) || echo "elan: MISSING"
             ls "$HOME/.elan/toolchains" 2>/dev/null || true
-          } | tee "$HOME/quantumalg-evidence/probe.log"
+          } | tee "$EV/probe.log"
+          if test "$clock_ok" != "ok"; then
+            echo "RUNNER CLOCK UNVERIFIED OR SKEWED (skew=${skew}s); failing closed" >&2
+            exit 1
+          fi
 
       - name: Clone target at pin
         shell: bash
@@ -61,7 +117,7 @@ jobs:
           set -uo pipefail
           cd "$HOME/quantumalg-target"
           EV="$HOME/quantumalg-evidence"
-          tc="$(cat lean-toolchain)"
+          tc="$(tr -d '\r' < lean-toolchain)"
           { echo "target_repo=https://github.com/QudeLeap/Lean-QuantumAlg"
             echo "target_head=$(git rev-parse HEAD)"
             echo "toolchain_file=$tc"
@@ -76,6 +132,13 @@ jobs:
           fi
           export PATH="$HOME/.elan/bin:$PATH"
           elan toolchain install leanprover/lean4:v4.33.1 > "$EV/toolchain-install.log" 2>&1 || true
+          lean --version 2>&1 | tee "$EV/lean-version.log" || true
+          if grep -qE "version 4\.33\.1," "$EV/lean-version.log"; then
+            echo "toolchain_ok=ok" >> "$EV/pin.txt"
+          else
+            echo "toolchain_ok=FAIL" >> "$EV/pin.txt"
+          fi
+          grep -q "FAIL" "$EV/pin.txt" && echo "::error::pin/toolchain check FAILED (verdict will BREAK)" || true
           lake --version 2>&1 | tee "$EV/lake-version.log" || true
 
       - name: Source scans (pre-build, source tree only)
@@ -104,7 +167,7 @@ jobs:
                       i += 1; continue
                   if in_str:
                       out.append(c)
-                      if c == "\\": 
+                      if c == "\\":
                           if i + 1 < n: out.append(src[i+1]); i += 2; continue
                       elif c == '"': in_str = False
                       i += 1; continue
@@ -144,16 +207,90 @@ jobs:
           print(f"files={len(files)} sorry={len(sorry_hits)} escapes={len(escape_hits)}")
           PYEOF
           cat "$EV/scan.txt" | head -20
+          grep -Eq '^(sorry_hits|escape_hits)=[1-9]' "$EV/scan.txt" && echo "::error::scan hits present (verdict will BREAK)" || true
 
-      - name: Fetch Mathlib cache
+      - name: Stage early evidence
+        if: always()
+        shell: bash
+        run: |
+          set -uo pipefail
+          rm -rf "$GITHUB_WORKSPACE/quantumalg-evidence-early"
+          mkdir -p "$GITHUB_WORKSPACE/quantumalg-evidence-early"
+          for f in probe.log clock.txt tip.txt pins.txt pin.txt lean-version.log lake-version.log toolchain-install.log scan.txt; do
+            cp "$HOME/quantumalg-evidence/$f" "$GITHUB_WORKSPACE/quantumalg-evidence-early/" 2>/dev/null || true
+          done
+          ls "$GITHUB_WORKSPACE/quantumalg-evidence-early" || true
+
+      - name: Upload early evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantumalg-forge-evidence-early
+          path: quantumalg-evidence-early
+          if-no-files-found: warn
+
+      - name: Fetch Mathlib cache (fail-closed)
         shell: bash
         run: |
           set -uo pipefail
           cd "$HOME/quantumalg-target"
           export PATH="$HOME/.elan/bin:$PATH"
           EV="$HOME/quantumalg-evidence"
-          lake exe cache get > "$EV/cache-get.log" 2>&1 || true
-          tail -3 "$EV/cache-get.log" || true
+          rc=1
+          attempt=0
+          while test "$attempt" -lt 2; do
+            attempt=$(( attempt + 1 ))
+            rc=0
+            echo "=== cache attempt $attempt $(date -u +%FT%TZ) ===" >> "$EV/cache-get.log"
+            lake exe cache get >> "$EV/cache-get.log" 2>&1 || rc=$?
+            echo "cache attempt $attempt exit=$rc"
+            if test "$rc" -eq 0; then break; fi
+            sleep 30
+          done
+          mathlib_oleans=0
+          if test -d .lake/packages/mathlib; then
+            mathlib_oleans="$(find .lake/packages/mathlib -name '*.olean' | wc -l)"
+          fi
+          total_oleans="$(find .lake -name '*.olean' | wc -l)"
+          { echo "CACHE_EXIT:$rc"
+            echo "cache_attempts=$attempt"
+            echo "mathlib_oleans=$mathlib_oleans"
+            echo "total_oleans=$total_oleans"
+          } | tee "$EV/cache-exit.txt"
+          tail -10 "$EV/cache-get.log" || true
+          if test "$rc" -ne 0; then
+            echo "CACHE FETCH FAILED (exit $rc); failing closed" >&2
+            exit 1
+          fi
+          if test "$mathlib_oleans" -lt 1000; then
+            echo "CACHE INCOMPLETE (mathlib_oleans=$mathlib_oleans < 1000); failing closed" >&2
+            exit 1
+          fi
+
+      - name: Clock check (pre-build)
+        shell: bash
+        run: |
+          set -uo pipefail
+          EV="$HOME/quantumalg-evidence"
+          srv_hdr="$(curl -sI --max-time 30 https://github.com | tr -d '\r' | sed -n 's/^[Dd]ate: //p' | head -1)"
+          run_epoch="$(date -u +%s)"
+          srv_epoch=0
+          if test -n "$srv_hdr"; then
+            srv_epoch="$(date -u -d "$srv_hdr" +%s 2>/dev/null || echo 0)"
+          fi
+          skew=$(( run_epoch - srv_epoch ))
+          abs_skew=$(( skew < 0 ? -skew : skew ))
+          clock_ok=FAIL
+          if test "$srv_epoch" -gt 0 && test "$abs_skew" -le 600; then clock_ok=ok; fi
+          { echo "clock_ok=$clock_ok"
+            echo "skew_seconds=$skew"
+            echo "runner_epoch=$run_epoch"
+            echo "server_epoch=$srv_epoch"
+          } | tee "$EV/clock2.txt"
+          if test "$clock_ok" != "ok"; then
+            echo "RUNNER CLOCK UNVERIFIED OR SKEWED (skew=${skew}s); failing closed" >&2
+            exit 1
+          fi
 
       - name: Build library
         shell: bash
@@ -165,9 +302,37 @@ jobs:
           rc=0
           start=$(date +%s)
           lake build > "$EV/build.log" 2>&1 || rc=$?
-          echo "build_seconds=$(( $(date +%s) - start ))" | tee -a "$EV/build-exit.txt"
-          echo "BUILD_EXIT:$rc" | tee "$EV/build-exit.txt"
+          { echo "build_seconds=$(( $(date +%s) - start ))"
+            echo "BUILD_EXIT:$rc"
+          } | tee "$EV/build-exit.txt"
+          if test "$rc" -ne 0; then echo "::error::BUILD FAILED rc=$rc (verdict will BREAK)"; fi
           tail -5 "$EV/build.log" || true
+
+      - name: Show build + cache tails
+        if: always()
+        shell: bash
+        run: |
+          set -uo pipefail
+          EV="$HOME/quantumalg-evidence"
+          srv_hdr="$(curl -sI --max-time 30 https://github.com | tr -d '\r' | sed -n 's/^[Dd]ate: //p' | head -1)"
+          run_epoch="$(date -u +%s)"
+          srv_epoch=0
+          if test -n "$srv_hdr"; then
+            srv_epoch="$(date -u -d "$srv_hdr" +%s 2>/dev/null || echo 0)"
+          fi
+          if test "$srv_epoch" -gt 0; then
+            echo "skew_seconds=$(( run_epoch - srv_epoch ))" | tee "$EV/clock3.txt"
+          else
+            echo "skew_seconds=unverified" | tee "$EV/clock3.txt"
+          fi
+          echo "=== cache-exit.txt ==="
+          cat "$EV/cache-exit.txt" || echo "cache-exit.txt MISSING"
+          echo "=== cache-get.log (tail 10) ==="
+          tail -10 "$EV/cache-get.log" || echo "cache-get.log MISSING"
+          echo "=== build-exit.txt ==="
+          cat "$EV/build-exit.txt" || echo "build-exit.txt MISSING (build step did not complete)"
+          echo "=== build.log (tail 30) ==="
+          tail -30 "$EV/build.log" || echo "build.log MISSING"
 
       - name: Axiom audit (nine endpoint mains)
         shell: bash
@@ -197,6 +362,7 @@ jobs:
           #print axioms QuantumAlg.Factoring.RSA2048.main
           #print axioms QuantumAlg.EllipticCurve.P256LogicalResources.main
           LEANEOF
+          erc=0
           lake build QuantumAlg.Algorithms.DeutschJozsa.Endpoint \
             QuantumAlg.Algorithms.BernsteinVazirani.Endpoint \
             QuantumAlg.Algorithms.Grover.Endpoint \
@@ -206,13 +372,17 @@ jobs:
             QuantumAlg.Algorithms.FiniteCyclicDLP.Binary.Endpoint \
             QuantumAlg.Algorithms.Factoring.RSA2048 \
             QuantumAlg.Algorithms.EllipticCurve.P256 \
-            > "$EV/endpoint-build.log" 2>&1 || true
+            > "$EV/endpoint-build.log" 2>&1 || erc=$?
+          echo "ENDPOINT_BUILD_EXIT:$erc" | tee "$EV/endpoint-build-exit.txt"
           rc=0
           lake env lean AuditAxioms.lean > "$EV/axioms.log" 2>&1 || rc=$?
           echo "AXIOM_AUDIT_EXIT:$rc" | tee "$EV/axiom-audit-exit.txt"
+          if test "$erc" -ne 0; then echo "::error::ENDPOINT BUILD FAILED rc=$erc (verdict will BREAK)"; fi
+          if test "$rc" -ne 0; then echo "::error::AXIOM AUDIT FAILED rc=$rc (verdict will BREAK)"; fi
           cat "$EV/axioms.log"
 
       - name: Verdict (fail-closed)
+        if: always()
         shell: bash
         run: |
           set -uo pipefail
@@ -222,16 +392,32 @@ jobs:
           ev = sys.argv[1]
           def read(name, default=""):
               p = os.path.join(ev, name)
-              return open(p).read() if os.path.exists(p) else default
+              return open(p, encoding="utf-8", errors="replace").read() if os.path.exists(p) else default
+          def has_line(name, line):
+              return re.search(r"^" + re.escape(line) + r"$", read(name), re.M) is not None
           fails = []
-          if "pin_ok=ok" not in read("pin.txt"): fails.append("pin")
+          if not has_line("clock.txt", "clock_ok=ok"): fails.append("clock_probe")
+          if not has_line("clock2.txt", "clock_ok=ok"): fails.append("clock_prebuild")
+          if not has_line("pin.txt", "pin_ok=ok"): fails.append("pin")
+          if not has_line("pin.txt", "toolchain_ok=ok"): fails.append("toolchain")
+          pin_env = os.environ.get("PIN", "")
+          if not pin_env or not has_line("pins.txt", f"target_head={pin_env}"): fails.append("pin_head")
           scan = read("scan.txt")
-          m = re.search(r"sorry_hits=(\d+)", scan)
+          m = re.search(r"^files_scanned=(\d+)$", scan, re.M)
+          if not m or int(m.group(1)) < 1000: fails.append("scan_vacuity")
+          m = re.search(r"^sorry_hits=(\d+)$", scan, re.M)
           if not m or int(m.group(1)) != 0: fails.append("sorry_scan")
-          m = re.search(r"escape_hits=(\d+)", scan)
+          m = re.search(r"^escape_hits=(\d+)$", scan, re.M)
           if not m or int(m.group(1)) != 0: fails.append("escape_scan")
-          if "BUILD_EXIT:0" not in read("build-exit.txt"): fails.append("build")
-          if "AXIOM_AUDIT_EXIT:0" not in read("axiom-audit-exit.txt"): fails.append("axiom_audit_run")
+          cache = read("cache-exit.txt")
+          if not has_line("cache-exit.txt", "CACHE_EXIT:0"): fails.append("cache_exit")
+          m = re.search(r"^mathlib_oleans=(\d+)$", cache, re.M)
+          if not m or int(m.group(1)) < 1000: fails.append("cache_oleans")
+          m3 = re.search(r"^skew_seconds=(-?\d+)$", read("clock3.txt"), re.M)
+          if m3 and abs(int(m3.group(1))) > 3600: fails.append("clock_postbuild")
+          if not has_line("build-exit.txt", "BUILD_EXIT:0"): fails.append("build")
+          if not has_line("endpoint-build-exit.txt", "ENDPOINT_BUILD_EXIT:0"): fails.append("endpoint_build")
+          if not has_line("axiom-audit-exit.txt", "AXIOM_AUDIT_EXIT:0"): fails.append("axiom_audit_run")
           log = read("axioms.log")
           # Join wrapped lines: #print axioms output wraps long lists.
           flat = re.sub(r"\n\s+", " ", log)
@@ -247,25 +433,43 @@ jobs:
             "QuantumAlg.EllipticCurve.P256LogicalResources.main",
           ]
           allow = {"propext", "Classical.choice", "Quot.sound"}
-          found = {}
+          # Merge, never overwrite: a forged clean line must not be able to
+          # erase a real dirty one (and a forged dirty one only BREAKs).
+          depends, noax = {}, set()
           for mm in re.finditer(r"'([^']+)' depends on axioms: \[([^\]]*)\]", flat):
-              found[mm.group(1)] = {a.strip() for a in mm.group(2).split(",") if a.strip()}
+              depends.setdefault(mm.group(1), set()).update(
+                  a.strip() for a in mm.group(2).split(",") if a.strip())
           for mm in re.finditer(r"'([^']+)' does not depend on any axioms", flat):
-              found[mm.group(1)] = set()
+              noax.add(mm.group(1))
+          found = {}
+          for n in set(depends) | noax:
+              if n in depends and n in noax:
+                  fails.append(f"axioms_conflict:{n}")
+                  found[n] = depends[n]
+              elif n in depends:
+                  found[n] = depends[n]
+              else:
+                  found[n] = set()
           for n in names:
               if n not in found:
                   fails.append(f"axioms_missing:{n}")
               elif not found[n] <= allow:
                   fails.append(f"axioms_offlist:{n}:{sorted(found[n] - allow)}")
           verdict = "PASS" if not fails else "BREAK"
+          m3 = re.search(r"skew_seconds=(-?\d+)", read("clock3.txt"))
           with open(os.path.join(ev, "verdict.txt"), "w") as fh:
               fh.write(f"verdict={verdict}\n")
+              fh.write(f"clock_postbuild_skew_seconds={m3.group(1) if m3 else 'unknown'}\n")
               for f in fails: fh.write(f"fail={f}\n")
               for n in names:
                   if n in found: fh.write(f"axioms {n} = {sorted(found[n])}\n")
           print(verdict, fails)
           sys.exit(0 if not fails else 1)
           PYEOF
+          vrc=$?
+          echo "=== verdict.txt ==="
+          cat "$EV/verdict.txt" || true
+          exit $vrc
 
       - name: Stage evidence into workspace
         if: always()
@@ -282,4 +486,4 @@ jobs:
         with:
           name: quantumalg-forge-evidence
           path: quantumalg-evidence
-          if-no-files-found: warn
+          if-no-files-found: error
