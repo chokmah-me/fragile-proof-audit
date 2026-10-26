@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-26",
+  "harvest_sha": "c4b5a44f0879e00e9797b9d2950eef2d0c63d12fa7a6a2c1e3937689765e7c29",
+  "meta": {
+    "window": "2026-10-19..2026-10-26",
+    "source": "weekly harvest scan -- two parallel sweeps: (a) arXiv math.CO/math.NT plus flagged carryovers 2610.18888 and 2610.20079; (b) arXiv math.PR/math.NA/cs.DM/cs.SC plus math blogs and public GitHub repos. arXiv IDs below verified on their abs pages; the Schur repo page and the 1-extension Zenodo record verified live. Coverage caveats: Oct 24-26 listings were not yet visible in the sources checked (latest seen Oct 23), and the math.PR/math.NA/cs.DM/cs.SC sweep was search-depth-limited rather than an exhaustive listing enumeration. The autocorrelation claim is a flagged carryover from the 2026-10-19 run (submitted Oct 8, outside this window) and is ranked here because no prior scan harvested it."
+  },
+  "claims": [
+    {
+      "id": "schur-number-6-537",
+      "title": "Sixth Schur number S(6) >= 537 -- first improvement since 2000",
+      "score": 0,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2610.31362",
+        "detail": "http 429"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "jeffchen006/Schur-Number-6",
+        "branch": "main",
+        "size_kb": 4392,
+        "pushed_at": "2026-10-23",
+        "url": "https://github.com/jeffchen006/Schur-Number-6",
+        "head_sha": "92a9d5f1336a5a064b2bfe6597d967f59191e365",
+        "head_date": "2026-10-23",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "minimum-autocorrelation-0410377",
+      "title": "Minimum-autocorrelation constant A >= 0.4103779774321214877852987...",
+      "score": 1,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2610.18888",
+        "detail": "http 429"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (interval certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "lehmer-mahler-high-degree-barrier",
+      "title": "Generalized Boyd construction breaks the high-degree barrier in Lehmer's problem",
+      "score": 2,
+      "paper": {
+        "status": "API-ERROR",
+        "arxiv_id": "2610.30277",
+        "detail": "http -1"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "NONE-GIVEN"
+      },
+      "signals": [
+        "ai_generated"
+      ],
+      "adjustments": [],
+      "lanes": [],
+      "formalization_coverage": null
+    },
+    {
+      "id": "one-extension-algebraic-lean",
+      "title": "Lean 4 formalization of the algebraic proof of 1-extension",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.31212",
+        "title": "An algebraic proof of 1-extension",
+        "authors": [
+          "Alexander Heaton",
+          "Martin Winter"
+        ],
+        "published": "2026-10-22",
+        "url": "https://arxiv.org/abs/2610.31212"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.31212",
+        "title": "An algebraic proof of 1-extension",
+        "authors": [
+          "Alexander Heaton",
+          "Martin Winter"
+        ],
+        "publication_date": "2026-10-22",
+        "title_ok": true,
+        "author_overlap": [
+          "heaton",
+          "winter"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7223300257"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://doi.org/10.5281/zenodo.23503394"
+      },
+      "signals": [
+        "disclosed_llm_help",
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": null
+    }
+  ]
+}
