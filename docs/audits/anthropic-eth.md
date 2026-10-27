@@ -66,9 +66,13 @@ independent re-verification of the evidence.
   inventory, which is recorded in M4. The repo's own
   Comparator/nanoda check was not run (its tool builds,
   go/cargo, are absent on the runner; the probe records
-  tool_go=no, tool_cargo=no); the corpus + axiom audit is
-  the transparent equivalent for statement identity, as in
-  the OpenAI ETH audit.
+  tool_go=no, tool_cargo=no); the corpus + axiom audit
+  checks the same two properties the comparator checks
+  (theorem-type identity, axiom footprint) directly, but
+  it is not an independent kernel replay: verification
+  trusts the standard Lean 4.33.1 kernel via `lake build`,
+  without nanoda's external re-checking of exported proof
+  terms or landrun sandboxing, as in the OpenAI ETH audit.
 
 ## M1 — one shared statement file
 
@@ -88,6 +92,19 @@ importing Solution, C importing MainResults alone) print all
 21 definitions, with a `#check` of both theorems in A and B
 only (the theorems do not exist in C). After whitespace
 normalization the corpora agree exactly (receipt below).
+The load-bearing definitions, verbatim in substance:
+`encClauses k φ` is `List.replicate n true ++ false ::`
+the clauses' slot numbers written as bit strings
+(`slot`: 0 for an empty position, 2i+1 for ¬xᵢ, 2i+2 for
+xᵢ, each in `Nat.log2 (2n)+1` bits); `encInput k φ` is
+`List.replicate k true ++ false :: encClauses k φ`;
+`s k` is the infimum over δ of `InTime k δ` (a machine
+deciding k-SAT within ⌊c·2^{δn}⌋ steps), `ETH` is
+`0 < s 3`, and `ETHIsFalse` is its negation. Both
+encodings are fixed syntactic transcriptions with no
+computational content, read at recon; the step counter
+that the theorems bound counts machine steps on these
+encodings, so no work is hidden in the encoding layer.
 
 ## M2 — what the proof establishes
 
@@ -169,7 +186,8 @@ footprint, are checked directly here); one combined verdict
 (rejected at the pick); treating the Appendix E bridging
 steps as a GAP in the claim (rejected: they are outside the
 formalized statement and author-declared; grading them would
-grade the paper, which this audit did not open). The pass
+grade the paper, which is outside the formal verification
+scope of this audit). The pass
 also confirmed the verdict file's 195 s "clock skew" is the
 elapsed time between the probe and post-cache clock reads,
 not a clock error (probe: NTP synchronized), and that it
@@ -210,7 +228,12 @@ verdict or added a finding.
   solution env): `MainResults.ethIsFalse` and
   `MainResults.mainTheorem` each depend on exactly
   [propext, Classical.choice, Quot.sound]; no sorryAx, no
-  native_decide, no ofReduceBool.
+  native_decide, no ofReduceBool. The script itself is
+  two genuine `#print axioms` commands and nothing else
+  (full text inspected post-verdict, 2026-10-27, sha256
+  `2cee91aad13365865fbf239db74c3a05588d6721717d94720674bb260cfe2406`);
+  its output is kernel-generated, and its own header
+  disclaims any trust-check role.
 - Verdict step (fail-closed classifier, evidence file
   08-verdict.txt): verdict=PASS; total_files=1052
   total_sorry=2 total_escapes=0; module_sorry=0
@@ -229,6 +252,28 @@ verdict or added a finding.
   exit, toolchain, Mathlib rev, and the five file hashes
   re-read from the evidence files. All agree with the
   verdict step.
+
+## Post-verdict stress test (2026-10-27)
+
+At the user's word, an independent model (Gemini 4 Argon
+via OpenRouter, contract-breaker brief, this note as its
+only fact pack) attacked the verdict on four axes; bottom
+line UPHOLD WITH REPAIRS. Adjudication by the auditor:
+the attack on the claimant-authored axiom reporter fails
+on the facts once the script is inspected (receipt above,
+amended), and the attack that the in-Lean encodings might
+smuggle computation fails on the definitions (M1,
+amended). Two wording repairs stand and are applied
+above: the corpus + axiom audit is no longer called an
+"equivalent" of Comparator/nanoda (scope section), and
+the DEEPEN quote no longer says the paper was "not
+opened" (it was outside the formal verification scope).
+One completeness repair stands: the load-bearing
+definitions are now quoted in M1, since the corpus
+receipt alone proves identity, not fidelity. No attack
+moved the verdict. Run record:
+`~/workspace/argon-verdict-stress-2026-10-27/` (payload,
+response, adjudication inputs).
 
 Closing verdict: PASS. The 32-gate verdict lock is
 untouched (17 BREAK / 15 PASS).
