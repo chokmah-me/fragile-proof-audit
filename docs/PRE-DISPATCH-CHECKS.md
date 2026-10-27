@@ -75,6 +75,26 @@ Signals: `K13 REFUSED: <file>:<line> run: block fails bash -n` /
 `` `..` in a path:/working-directory: value `` /
 `K14 REFUSED: <file>:<line> run: block captures an exit code with ; <var>=$?`.
 
+## FM7 — probe measures a directory before the step that creates it
+
+Banked 2026-10-27: eth-forge run #1 (40471027485) died in 4s on its first
+dispatch. The Runner probe ran `df -h "$ETH_TARGET"`; `$ETH_TARGET` is
+first created by `mkdir -p` in the *next* step (sparse clone). On a fresh
+runner the directory does not exist, `df` exited 1, and because the probe
+block ends with that pipeline, `pipefail` turned an informational command
+into the step verdict despite `set +e`. Both earlier families missed it:
+the file is syntactically valid (K13) and captures no exit code (K14).
+`--workflows` refuses when:
+(a) a `$VAR` passed to `df` has not been created by an earlier
+`mkdir -p "$VAR"` in file order and the df pipeline is not guarded with
+`|| true` / `|| echo`;
+(b) a step whose name contains "probe" can gate the job — it must carry
+`continue-on-error: true` or its run block must end with `exit 0`.
+Signals: `FM7 REFUSED: <file>:<line> df on $<VAR> before any mkdir -p
+creates it` / `step '<name>' is a probe (informational) but can gate
+the job`. Scope note: tracking is in file order (steps run in written
+order); only `df` arguments are tracked, not every filesystem read.
+
 ## Self-test
 
 Each check was proven against a fixture carrying its known-bad pattern
@@ -91,3 +111,11 @@ proved the heuristic needed it.) Re-run the fixtures before trusting a
 change to the script. (The FM2 check earned this rule:
 it passed its first bad fixture twice — a fixture bug, then a regex bug —
 and was only trusted after it refused both variants.)
+FM7 was proven the same way on 2026-10-27: the checker as it stood before
+FM7 passed the buggy eth-forge workflow (the gap); with FM7 it refuses that
+exact file twice (df use-before-create; probe can gate), passes the fixed
+file and the full 14-workflow corpus, and synthetic variants behave as
+designed (continue-on-error probe passes; df-guard alone still refuses on
+the probe check; `${VAR}` mkdir/df forms pass; a one-line probe run
+refuses twice). The fixed probe script was also run locally under
+`bash -e -o pipefail` with the target absent: exit 0, df line printed.

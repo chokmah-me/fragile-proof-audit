@@ -32,13 +32,14 @@ jobs:
         shell: bash
         run: |
           set +e
-          mkdir -p "$ETH_DIR"
+          mkdir -p "$ETH_DIR" "$ETH_TARGET"
           {
             echo "host=$(hostname) os=$OSTYPE"
             echo "now_utc=$(date -u +%FT%TZ) now_epoch=$(date +%s)"
             echo "ntp_synchronized=$(timedatectl show -p NTPSynchronized --value 2>/dev/null || echo unknown)"
-            nproc; free -g | head -2; df -h "$ETH_TARGET" | tail -1
+            nproc; free -g | head -2; df -h "$ETH_TARGET" | tail -1 || true
           } | tee "$ETH_DIR/00-probe.txt"
+          exit 0
 
       - name: Sparse clone at pin (retry x3)
         shell: bash

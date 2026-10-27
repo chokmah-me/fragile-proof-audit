@@ -206,6 +206,77 @@ def check_workflow_lint(path):
         if pm and ".." in pm.group(1):
             refuse("K13", f"{path}:{i} `..` in a path:/working-directory: "
                           "value is rejected by action path validation")
+    check_fm7(path, lines)
+
+
+# --- FM7: probe gating + df use-before-create (eth-forge run #1, 2026-10-27) --
+# Run #1 died in 4s: the Runner probe ran `df -h "$ETH_TARGET"` before the
+# step that creates $ETH_TARGET (the clone step, later). df exited 1 on the
+# missing directory; the probe block ends with that pipeline, so under
+# `pipefail` its exit code became the step's, despite `set +e`. Two checks:
+# (a) a $VAR passed to `df` must be created by an earlier `mkdir -p "$VAR"`
+#     (in file order) or the df pipeline must be guarded with `|| true/echo`;
+# (b) a step named *probe* is informational by definition: it must be
+#     structurally non-gating (continue-on-error: true, or its run block
+#     ends with `exit 0`).
+
+STEP_NAME_RE = re.compile(r"^(\s*)-\s*name:\s*(.+?)\s*$")
+CONTINUE_ON_ERROR_RE = re.compile(r"^\s*continue-on-error:\s*true\s*$", re.I)
+MKDIR_VAR_RE = re.compile(
+    r'\bmkdir\b[^;|&]*?"?\$\{?([A-Za-z_][A-Za-z0-9_]*)\}?')
+DF_VAR_RE = re.compile(
+    r'\bdf\b[^;|&]*?"?\$\{?([A-Za-z_][A-Za-z0-9_]*)\}?')
+
+
+def check_fm7(path, lines):
+    blocks = list(extract_run_blocks(lines))
+    created = set()
+    for lineno, script in blocks:
+        for raw in script.splitlines():
+            if re.match(r"^\s*#", raw):
+                continue
+            events = [(m.start(), "mkdir", m.group(1))
+                      for m in MKDIR_VAR_RE.finditer(raw)]
+            events += [(m.start(), "df", m.group(1))
+                       for m in DF_VAR_RE.finditer(raw)]
+            for pos, kind, var in sorted(events):
+                if kind == "mkdir":
+                    created.add(var)
+                elif var not in created and not re.search(
+                        r"\|\|\s*(true|echo)\b", raw[pos:]):
+                    refuse("FM7", f"{path}:{lineno} df on ${var} before "
+                                  f"any mkdir -p creates it and unguarded: "
+                                  f"on a fresh runner the path does not "
+                                  f"exist, df exits 1, and a trailing probe "
+                                  f"pipeline leaks that as the step verdict")
+    for idx, line in enumerate(lines):
+        m = STEP_NAME_RE.match(line)
+        if not m or "probe" not in m.group(2).lower():
+            continue
+        dash_indent = len(m.group(1))
+        end = len(lines)
+        for j in range(idx + 1, len(lines)):
+            stripped = lines[j].strip()
+            if not stripped:
+                continue
+            indent = len(lines[j]) - len(lines[j].lstrip())
+            if indent < dash_indent or (
+                    indent == dash_indent and stripped.startswith("- ")):
+                end = j
+                break
+        step_lines = lines[idx:end]
+        if any(CONTINUE_ON_ERROR_RE.match(l) for l in step_lines):
+            continue
+        step_blocks = list(extract_run_blocks(step_lines))
+        if not step_blocks:
+            continue
+        meaningful = [l.strip() for l in step_blocks[0][1].splitlines()
+                      if l.strip() and not l.strip().startswith("#")]
+        if not meaningful or meaningful[-1] != "exit 0":
+            refuse("FM7", f"{path}:{idx + 1} step '{m.group(2)}' is a "
+                          f"probe (informational) but can gate the job: "
+                          f"no continue-on-error: true and its run block "
+                          f"does not end with `exit 0`")
 
 
 def main():
