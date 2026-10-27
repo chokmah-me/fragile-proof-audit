@@ -98,9 +98,10 @@ Addendum (2026-10-27, at close): the fast runner completed
 in full (exit 0, output identical to the supplied log after
 timing normalization). The SymPy alternative runner's
 scripts 1–8 completed; its strict-face cross-check reached
-3 of 21 faces (all PASS) across two attempts, each killed
-by a VM reboot, the full script being ~2h of symbolic
-expansion against this VM's ~2h reboot cycle. The
+3 of 21 faces (all PASS) across two attempts (the first
+killed by a VM reboot, the second by an agent-runtime
+restart ~19 min in), the full script being an estimated
+~2h of symbolic expansion at ~5–6 min per face. The
 strict-face obligation itself is discharged by the
 pure-Python implementation inside the fast runner (all 21
 faces, RESULT: PASS). One environment repair was needed:

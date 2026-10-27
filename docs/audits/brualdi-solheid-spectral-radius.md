@@ -58,15 +58,25 @@ pre-verdict deepening was a DEEPEN challenge pass (below).
   certificate (four cones; 1,766 exact Sturm exclusions
   for 4 ≤ e ≤ 1769), and the three exact ties all pass.
 - **V-B (independent spot recomputation): PASS.** The
-  auditor's own code, built from the paper's definitions:
-  the three ties verify exactly (ρ(D) = ρ(V) = 9, 8, 9 at
-  (n, e) = (80, 6), (60, 10), (68, 21), from equitable
-  quotient matrices constructed for the purpose), ω_e at
+  auditor's own code: the three ties verify exactly
+  (ρ(D) = ρ(V) = 9, 8, 9 at (n, e) = (80, 6), (60, 10),
+  (68, 21), from equitable quotient matrices constructed
+  for the purpose from the paper's definitions), ω_e at
   those e equals 80, 60, 68 by an exact gcd check against
   eqs. (1)–(2), and 7 of the 1,766 virtual-star Sturm
   exclusions (e = 4, 5, 17, 100, 500, 1000, 1769) re-verify
   with an auditor-written Sturm implementation (0 roots
   in the excluded interval, positive endpoint value).
+  Two provenance fences: the Sturm sample's polynomial
+  numV is built from the archive's `common.py` formulas
+  for nR/DenR (whose identity with the graph-level walk
+  functions is itself checked inside V-A by
+  templates_check.py against explicitly constructed
+  adjacency matrices); the auditor's independent leg
+  there is the root counting and the endpoint bounds.
+  And (J), (K1), (K2) received no independent
+  recomputation in V-B; they rest on the V-A replay plus
+  the partial SymPy cross-check recorded in M4.
 - **Scope (not a GAP in the audited claim):** the
   certificates are the machine-carried leg of the paper,
   exactly as its dependency map draws it. The Bellman
@@ -143,17 +153,33 @@ not two.
   attempt died on the import in seconds; with numpy
   2.5.4 installed, the suite passes in full. An
   install-instruction defect in the archive, recorded
-  here; it does not touch any certificate.
+  here. What numpy does in that script (inspected
+  post-verdict, 2026-10-27): a single helper `rho(A)`
+  returning the float largest eigenvalue
+  (`numpy.linalg.eigvalsh`), used once to cross-check
+  that the exact largest root of Den_R matches the
+  numeric spectral radius of the explicitly constructed
+  R_e adjacency matrix to 1e-9. The script's
+  load-bearing checks (the walk-function identities) are
+  exact rational/symbolic; the float line is a
+  consistency cross-check that fails closed, not a
+  certificate step.
 - The SymPy alternative runner (`run_proof_only.sh`,
   designated by the README as an alternative construction
   of the same obligations) was run as corroboration:
   scripts 1–8 completed (including the full virtual-star
   certificate), and its strict-face cross-check passed
   the Bernstein identity recheck and faces B_0, B_1, B_2
-  (3 of 21) before two VM reboots killed successive
-  attempts; the script is ~2h of symbolic expansion and
-  does not fit this VM's ~2h reboot cycle in one process.
-  The strict-face obligation itself is discharged in
+  (3 of 21) before two successive attempts were killed:
+  the first by a VM reboot (uptime evidence: fresh boot
+  at the kill, consistent with this VM's ~2h reboot
+  cycle), the second by an agent-runtime restart ~19 min
+  in with no VM reboot (uptime then read 18 min). The
+  full script is an estimated ~2h of symbolic expansion
+  (per-face timings ~5–6 min over 21 faces, estimate from
+  the landed faces), and the observed survival windows
+  here were shorter and variable. The strict-face
+  obligation itself is discharged in
   full by the pure-Python implementation inside the
   completed fast runner (all 21 faces, RESULT: PASS
   strict (MA) on the face t = k−1). The SymPy strict-face
@@ -192,7 +218,12 @@ Nothing in the pass moved a verdict.
 
 - Replay host: this VM (2 vCPU), 2026-10-27. Evidence
   index: `~/workspace/brualdi-solheid-recon/EVIDENCE.md`
-  (sha256 of every run log below). Package
+  (sha256 `e4998d27dd1f1ee194b0b17b4a0a7a213eb7635306ea810bc6b1cc6d6de92473`;
+  the fast-runner log `run-fast2.log` sha256
+  `5b55f4c170cf18dcad799531be7f02fd3259cf188c3e7e2e5c47587af8dac247`,
+  the auditor's `my_checks.py` sha256
+  `3273d7dfec526525244a47c926f65dc50c4bc6fa9cf11c040c9102a0dc347f00`).
+  Package
   integrity first: `sha256sum -c SHA256SUMS.txt` from
   `anc/`, 43/43 OK.
 - Attempt 1 of the fast runner died in ~6 s:
@@ -209,8 +240,9 @@ Nothing in the pass moved a verdict.
   completed in the first attempt (analytic identities
   through vstar, RESULT (V*) present); strict-face
   cross-check progress B_0, B_1, B_2 OK plus the Bernstein
-  identity recheck across two attempts, each killed by
-  a runtime restart at ~20 min; reported as partial
+  identity recheck across two attempts (first killed by
+  a VM reboot, second by an agent-runtime restart ~19 min
+  in, per M4); reported as partial
   corroboration per M4, not rerun to completion.
 - Auditor's checks (`my_checks.py`, exit 0): ties and
   omega per V-B (first version of the omega test wrongly
@@ -221,6 +253,24 @@ Nothing in the pass moved a verdict.
   1769}: 0 roots in (ell, hi] and numV(hi) > 0 each time,
   with ell and hi recomputed by the auditor's own
   bisection/Sturm code.
+
+## Post-verdict stress test (2026-10-27)
+
+At the user's word, an independent model (Gemini 4 Argon
+via OpenRouter, contract-breaker brief, this note as its
+only fact pack) attacked the verdict on four axes; bottom
+line UPHOLD WITH REPAIRS. Adjudication by the auditor:
+the sharpest attack stands as a factual correction and
+is applied in M4 and the receipt — the two SymPy-run
+kills were not both VM reboots (the second was an
+agent-runtime restart inside a live VM), and the ~2h
+script figure is an estimate from per-face timings, not
+a measurement. The remaining attacks are disclosure
+repairs, all applied above: what numpy actually does in
+templates_check.py (M4), the numV provenance and the
+(J)/(K1)/(K2) independence fence (V-B), and inline
+evidence hashes (receipt). No attack moved the verdict.
+Run record: `~/workspace/argon-verdict-stress-2026-10-27/`.
 
 Closing verdict: PASS. The 32-gate verdict lock is
 untouched (17 BREAK / 15 PASS).
