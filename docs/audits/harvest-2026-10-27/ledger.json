@@ -1,0 +1,410 @@
+{
+  "date": "2026-10-27",
+  "harvest_sha": "be2dc8091bd2ee642c6e0fd3d3bf74c9bbd46766c57b025dc31cc028c637416c",
+  "meta": {
+    "window": "2026-10-24..2026-10-27",
+    "source": "fresh harvest scan at the user's tap 2026-10-27 -- three parallel sweeps: (a) arXiv math.CO/math.NT; (b) arXiv math.PR/math.NA/math.GM/cs.DM/cs.SC; (c) math blogs, public GitHub repos, Zenodo records and lab announcements. arXiv IDs below verified on their abs pages; the CFSG repo, the Anthropic formal-math ETH folder, the lattice-packing repo, the Coleman repo, the weighing-matrices repo/Zenodo archive and the E8/T32 Zenodo record verified live. Coverage caveats: arXiv submissions dated Oct 27 were not yet announced at scan time (announcements ~20:00 ET), so the Oct 27 submission slice is unswept, not empty; math.PR screening was search-based rather than a full listing enumeration; three math.NT IDs (2610.34973, 2610.34912, 2610.34822) could not be identified after arXiv 429s, with pure-theory neighbours, so residual risk is low but nonzero. Note on claim 2: it is a DISTINCT Anthropic artifact for the same theorem as the OpenAI ETH disproof audited CLOSED PASS 2026-10-27 -- different claimant, repo, commit and provenance; it is harvested at claimant level, and the independence question (both labs date the discovery to Oct 16) is a recon question, not a settled fact."
+  },
+  "claims": [
+    {
+      "id": "axiom-cfsg-lean-formalization",
+      "title": "Axiom Math / AxiomProver -- first complete computer-checked formalization of the Classification of Finite Simple Groups (CFSG)",
+      "score": 2,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://axiommath.ai/research/the-enormous-theorem-formalized/",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "AxiomMath/CFSG",
+        "branch": "main",
+        "size_kb": 6071207,
+        "pushed_at": "2026-10-27",
+        "url": "https://github.com/AxiomMath/CFSG",
+        "head_sha": "69cb972f587a3ecc035e092253167ff2e303c962",
+        "head_date": "2026-10-27",
+        "lean_files": 58044,
+        "tree_truncated": true,
+        "has_lakefile": false,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc3"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 58044,
+        "has_lakefile": false,
+        "toolchain": "leanprover/lean4:v4.35.0-rc3",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Axiom Math / AxiomProver -- first complete computer-checked formalization of the Classification of Finite Simple Groups (CFSG). Every finite simple group is cyclic of prime order, "
+      }
+    },
+    {
+      "id": "anthropic-claude-3sat-subexponential-eth",
+      "title": "Anthropic / Claude -- a 2^o(n) time algorithm for 3-SAT (ETH is false)",
+      "score": 3,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://hexagonmath.org/2610.00577",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "anthropics/formal-math",
+        "branch": "main",
+        "size_kb": 7071,
+        "pushed_at": "2026-10-27",
+        "url": "https://github.com/anthropics/formal-math",
+        "pinned_in_harvest": "16a5ce41304fcdaea4e0be7c132e1c361dc26da5",
+        "head_sha": "16a5ce41304fcdaea4e0be7c132e1c361dc26da5",
+        "head_date": "2026-10-27",
+        "lean_files": 1812,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found",
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 1812,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Anthropic / Claude -- a 2^o(n) time algorithm for 3-SAT (ETH is false). A deterministic algorithm solves 3-SAT on n variables in 2^o(n) time and the harder counting problem #3-SAT "
+      }
+    },
+    {
+      "id": "improved-lattice-packing-bounds-small-dimensions",
+      "title": "Improved lattice-packing bounds in small dimensions",
+      "score": 5,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.35830",
+        "title": "Improved lattice-packing bounds in small dimensions",
+        "authors": [
+          "Nina Zubrilina"
+        ],
+        "published": "2026-10-26",
+        "url": "https://arxiv.org/abs/2610.35830"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2610.35830",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "AstroNinja389/lattice-packing-bound",
+        "branch": "main",
+        "size_kb": 910,
+        "pushed_at": "2026-10-26",
+        "url": "https://github.com/AstroNinja389/lattice-packing-bound",
+        "head_sha": "340a0e93bb95942c2b1b80092be43149504970eb",
+        "head_date": "2026-10-26",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "single_author",
+        "anonymous_or_unaffiliated"
+      ],
+      "adjustments": [
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "rainbow-maps-graceful-labelings-trees",
+      "title": "Rainbow maps and the number of graceful labelings of trees (Lean formalization)",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.34877",
+        "title": "Rainbow maps and the number of graceful labelings of trees",
+        "authors": [
+          "Shisheng Li"
+        ],
+        "published": "2026-10-26",
+        "url": "https://arxiv.org/abs/2610.34877"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2610.34877",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2610.34877"
+      },
+      "signals": [
+        "formal_subset_of_claim",
+        "pinned_toolchain",
+        "single_author"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "maximum-spectral-radius-connected-graphs-order-size",
+      "title": "The maximum spectral radius of connected graphs with prescribed order and size",
+      "score": 3,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.34905",
+        "title": "The maximum spectral radius of connected graphs with prescribed order and size",
+        "authors": [
+          "Dragan Stevanovi\u0107"
+        ],
+        "published": "2026-10-26",
+        "url": "https://arxiv.org/abs/2610.34905"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2610.34905",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2610.34905"
+      },
+      "signals": [
+        "formal_subset_of_claim",
+        "single_author"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [
+        [
+          "B",
+          "base-case kill"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "explicit-weighing-matrices-w-n-k",
+      "title": "Explicit weighing matrices W(n,k) for all n = 0 mod 4 with 4 <= n <= 108, and all 1 <= k <= n",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.33976",
+        "title": "Explicit weighing matrices $W(n,k)$ for all $n \\equiv 0 \\pmod 4$ with $4 \\le n \\le 108$, and all $1 \\le k \\le n$",
+        "authors": [
+          "Adri\u00e1n Mac\u00edas-Quintero"
+        ],
+        "published": "2026-10-25",
+        "url": "https://arxiv.org/abs/2610.33976"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2610.33976",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "adrianmaciasquintero/weighing-matrices",
+        "branch": "main",
+        "size_kb": 2756,
+        "pushed_at": "2026-10-19",
+        "url": "https://github.com/adrianmaciasquintero/weighing-matrices",
+        "head_sha": "9edd3d907886e41d60640eade69efa6b2be07338",
+        "head_date": "2026-10-19",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [],
+      "formalization_coverage": null
+    },
+    {
+      "id": "wang-planar-d-coloring",
+      "title": "A proof of Wang's planar D-coloring conjecture",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.33322",
+        "title": "A proof of Wang's planar D-coloring conjecture",
+        "authors": [
+          "Harshit Verma"
+        ],
+        "published": "2026-10-23",
+        "url": "https://arxiv.org/abs/2610.33322"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2610.33322",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2610.33322"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "coleman-integrals-local-fields-cai-keller",
+      "title": "Explicit Coleman integration over finite extensions of Q_p",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.33970",
+        "title": "Explicit Coleman integration over finite extensions of $\\mathbb{Q}_p$",
+        "authors": [
+          "Yulin Cai",
+          "Timo Keller"
+        ],
+        "published": "2026-10-25",
+        "url": "https://arxiv.org/abs/2610.33970"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2610.33970",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "TimoKellerMath/ColemanIntegralsLocalFields",
+        "branch": "main",
+        "size_kb": 580,
+        "pushed_at": "2026-10-25",
+        "url": "https://github.com/TimoKellerMath/ColemanIntegralsLocalFields",
+        "head_sha": "683e080bbb616f7904632343b3b355957ad55f6c",
+        "head_date": "2026-10-25",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [],
+      "adjustments": [
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "e8-t32-zero-divisor-census",
+      "title": "High-order dispersion isotropy on the discrete E8 root lattice and exact sparse zero-divisor kernel projectors in T32",
+      "score": 1,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://zenodo.org/records/23687616",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://zenodo.org/records/23687616"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [],
+      "formalization_coverage": null
+    }
+  ]
+}
