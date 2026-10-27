@@ -29,8 +29,8 @@ against the archive's own `anc/SHA256SUMS.txt` (43/43).
 There is no separate code repository; the reserved
 Zenodo DOI 10.5281/zenodo.23650385 is stated unpublished,
 so the arXiv ancillary is the only public copy. Evidence
-in `~/workspace/brualdi-solheid-recon/` (`my_checks.py`,
-`DEEPEN.md`, run logs `run-*.log`).
+in `~/workspace/brualdi-solheid-recon/` (`EVIDENCE.md`,
+`my_checks.py`, `DEEPEN.md`, run logs `run-*.log`).
 
 **Agent provenance:** Muse (Meta) · model `Muse Spark 1.3` ·
 run date `2026-10-27` · harness pin via
@@ -190,7 +190,9 @@ Nothing in the pass moved a verdict.
 
 ## Receipt
 
-- Replay host: this VM (2 vCPU), 2026-10-27. Package
+- Replay host: this VM (2 vCPU), 2026-10-27. Evidence
+  index: `~/workspace/brualdi-solheid-recon/EVIDENCE.md`
+  (sha256 of every run log below). Package
   integrity first: `sha256sum -c SHA256SUMS.txt` from
   `anc/`, 43/43 OK.
 - Attempt 1 of the fast runner died in ~6 s:
