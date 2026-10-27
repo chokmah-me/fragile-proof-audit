@@ -5,8 +5,27 @@
 Spec: docs/PRE-DISPATCH-CHECKS.md. Read-only: this script never dispatches,
 commits, or pushes. Exit 0 = all applicable checks pass; exit 1 = REFUSED.
 Checks whose inputs were not supplied print SKIP, never a silent pass.
+A finding can be waived per dispatch with --waive MODE=REASON: the finding
+prints as WAIVED with its reason and does not count toward refusal. A
+waiver is one dispatch only and is never silent; see the spec's waiver
+section.
+Waivers can also be recorded ahead of a dispatch in a waivers file
+(--waivers-file PATH): JSON lines, one record per line, of the form
+{"fm": MODE, "reason": "...", "date": "YYYY-MM-DD", "workflow": NAME}.
+The checker reads the file at startup; a record waives its mode for this
+dispatch only when it names one of the workflows being checked (by the
+path as given, by basename, or "*" for any), so a waiver recorded for
+one workflow can never silently waive a finding in another. When --waive
+is used together with --waivers-file, each CLI waiver is appended to the
+file as a record (fm, reason, today's date, the first workflow being
+checked), so waiver use stays countable at the monthly hygiene review.
+A waivers file that cannot be parsed, or a CLI waiver that cannot be
+recorded, is a usage error (exit 2): a waiver that leaves no record must
+not waive. With no --waivers-file, behavior is exactly the per-dispatch
+--waive above and nothing is persisted.
 """
 import argparse
+import datetime
 import json
 import os
 import re
@@ -15,10 +34,85 @@ import sys
 import tempfile
 
 FAILURES = []
+WAIVERS = {}
+WAIVER_SOURCES = {}
+WAIVED = []
 
 
 def refuse(mode, msg):
+    if mode in WAIVERS:
+        note = f"waiver: {WAIVERS[mode]}"
+        if mode in WAIVER_SOURCES:
+            note += f"; {WAIVER_SOURCES[mode]}"
+        WAIVED.append(f"{mode} WAIVED: {msg} ({note})")
+        return
     FAILURES.append(f"{mode} REFUSED: {msg}")
+
+
+# --- Waivers file: recorded, workflow-scoped waivers --------------------
+def checked_workflow_names(a):
+    names = []
+    if a.workflow:
+        names.append(a.workflow)
+    names += list(a.workflows or [])
+    return names
+
+
+def waiver_record_applies(record, names):
+    wf = (record.get("workflow") or "").strip()
+    if wf == "*":
+        return True
+    if not names:
+        return False
+    return any(wf == n or os.path.basename(wf) == os.path.basename(n)
+               for n in names)
+
+
+def load_waivers_file(path):
+    """Read a waivers file. Returns (records, error): one JSON object
+    per non-blank line, each with fm and a non-empty reason."""
+    records = []
+    if not os.path.exists(path):
+        return records, None
+    for i, line in enumerate(open(path, encoding="utf-8"), 1):
+        if not line.strip():
+            continue
+        try:
+            record = json.loads(line)
+        except ValueError:
+            return None, f"{path}:{i} is not valid JSON"
+        if not isinstance(record, dict) or not record.get("fm") \
+                or not (record.get("reason") or "").strip():
+            return None, (f"{path}:{i} needs an fm and a non-empty "
+                          f"reason")
+        records.append(record)
+    return records, None
+
+
+def record_cli_waivers(path, records, cli_waivers, names):
+    """Append one record per CLI waiver not already in the file.
+    Returns an error string, or None."""
+    workflow = names[0] if names else ""
+    existing = {(r.get("fm"), r.get("reason"), r.get("workflow"))
+                for r in records}
+    new = []
+    for mode, reason in cli_waivers.items():
+        key = (mode, reason, workflow)
+        if key in existing:
+            continue
+        existing.add(key)
+        new.append({"fm": mode, "reason": reason,
+                    "date": datetime.date.today().isoformat(),
+                    "workflow": workflow})
+    if not new:
+        return None
+    try:
+        with open(path, "a", encoding="utf-8") as f:
+            for record in new:
+                f.write(json.dumps(record) + "\n")
+    except OSError as e:
+        return f"could not record waiver(s) in {path}: {e}"
+    return None
 
 
 # --- FM3: workflow inputs must never reach a run: block unquoted ----------
@@ -288,7 +382,54 @@ def main():
     ap.add_argument("--vendor")
     ap.add_argument("--root-module")
     ap.add_argument("--expected-count", type=int)
+    ap.add_argument("--waive", action="append", default=[],
+                    metavar="MODE=REASON",
+                    help="waive one failure mode for this dispatch only, "
+                         "with a recorded one-line reason, e.g. "
+                         "--waive FM7=\"first run on a pre-provisioned "
+                         "runner\". Repeatable. Waived findings print as "
+                         "WAIVED and never count toward refusal.")
+    ap.add_argument("--waivers-file", metavar="PATH",
+                    help="JSON-lines waivers file (records of fm, "
+                         "reason, date, workflow). Records naming one "
+                         "of the workflows being checked waive their "
+                         "mode for this dispatch and print as WAIVED "
+                         "with their recorded date; --waive waivers "
+                         "are appended to the file as new records.")
     a = ap.parse_args()
+
+    cli_waivers = {}
+    for w in a.waive:
+        mode, sep, reason = w.partition("=")
+        mode, reason = mode.strip(), reason.strip()
+        if not sep or not mode or not reason:
+            print(f"error: --waive needs MODE=REASON with a non-empty "
+                  f"reason, got {w!r}", file=sys.stderr)
+            return 2
+        cli_waivers[mode] = reason
+        WAIVERS[mode] = reason
+
+    if a.waivers_file:
+        names = checked_workflow_names(a)
+        records, err = load_waivers_file(a.waivers_file)
+        if err:
+            print(f"error: --waivers-file {err}", file=sys.stderr)
+            return 2
+        for record in records:
+            if not waiver_record_applies(record, names):
+                continue
+            mode = record["fm"]
+            if mode in cli_waivers:
+                continue  # the CLI waiver for this dispatch wins
+            WAIVERS[mode] = record["reason"].strip()
+            WAIVER_SOURCES[mode] = (
+                f"recorded {record.get('date', '?')} for workflow "
+                f"{record.get('workflow', '')} in {a.waivers_file}")
+        err = record_cli_waivers(a.waivers_file, records, cli_waivers,
+                                 names)
+        if err:
+            print(f"error: {err}", file=sys.stderr)
+            return 2
 
     ran = []
     if a.workflow:
@@ -319,12 +460,21 @@ def main():
     else:
         print("SKIP FM1: no --vendor/--root-module given")
 
+    for wline in WAIVED:
+        print(wline)
+    used = {wline.split(" ", 1)[0] for wline in WAIVED}
+    for mode in WAIVERS:
+        if mode not in used:
+            print(f"NOTE: waiver for {mode} matched no finding")
     if FAILURES:
         print("\n*** PRE-DISPATCH REFUSED ***", file=sys.stderr)
         for f in FAILURES:
             print(f, file=sys.stderr)
         return 1
-    print(f"PRE-DISPATCH OK: {'; '.join(ran) if ran else 'nothing to check'}")
+    ok = f"PRE-DISPATCH OK: {'; '.join(ran) if ran else 'nothing to check'}"
+    if WAIVED:
+        ok += f" ({len(WAIVED)} waived: {', '.join(sorted(used))})"
+    print(ok)
     return 0
 
 

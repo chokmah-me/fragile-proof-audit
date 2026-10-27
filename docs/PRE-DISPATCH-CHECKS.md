@@ -56,6 +56,21 @@ dependencies until an olean lookup failed). Check: no `lean_lib` block in
 the lakefile declares `roots` without a covering `globs`. Signal:
 `FM5 REFUSED: lean_lib <Name> restricts roots without globs`.
 
+## Waivers — per-dispatch, reasoned, never silent (adopted 2026-10-27, Bitter Lesson Phase 1)
+
+A finding can be waived for one dispatch with `--waive MODE=REASON`
+(repeatable), e.g. `--waive FM7="target pre-created by the runner setup
+step"`. The reason is required and must be non-empty; a malformed waiver
+is a usage error (exit 2). A waived finding prints as `MODE WAIVED:
+<finding> (waiver: <reason>)`, does not count toward refusal, and the
+OK line counts the waivers by mode. A waiver that matches no finding
+prints a NOTE. Waivers apply to the single invocation only; nothing is
+persisted, and the default with no `--waive` is unchanged (fail-closed).
+Waiver use is data: repeated waivers of the same mode are evidence that
+the mode is miscalibrated for that workflow class, and they are counted
+at the monthly hygiene review, where the mode is recalibrated or the
+waivers stop.
+
 ## FM6 — dispatch-time construct semantics unverified (D1/K13/K14 family)
 
 Three sibling lessons banked 2026-10-13 each killed or nearly killed a run
