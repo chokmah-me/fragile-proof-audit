@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   forge:
-    runs-on: [self-hosted, desktop]
+    runs-on: [self-hosted, laptop]
     timeout-minutes: 350
     env:
       ETH_DIR: ${{ github.workspace }}/eth-forge-evidence
