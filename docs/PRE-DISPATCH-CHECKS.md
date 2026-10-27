@@ -71,6 +71,18 @@ the mode is miscalibrated for that workflow class, and they are counted
 at the monthly hygiene review, where the mode is recalibrated or the
 waivers stop.
 
+Waivers can also be recorded ahead of time in a waivers file
+(`--waivers-file PATH`): JSON lines, one record per line,
+`{"fm": MODE, "reason": "...", "date": "YYYY-MM-DD", "workflow": NAME}`.
+A record waives its mode for a dispatch only when it names one of the
+workflows being checked (by the path as given, by basename, or `"*"`),
+so a waiver recorded for one workflow can never silently waive a
+finding in another. When `--waive` is used together with
+`--waivers-file`, each CLI waiver is appended to the file as a record,
+so all waiver use stays countable. An unparseable file, or a CLI
+waiver that cannot be recorded, is a usage error (exit 2): a waiver
+that leaves no record must not waive.
+
 ## FM6 — dispatch-time construct semantics unverified (D1/K13/K14 family)
 
 Three sibling lessons banked 2026-10-13 each killed or nearly killed a run
