@@ -9,8 +9,9 @@ bounds from a modified Cohn–Elkies linear program (Theorem 1
 of the paper), checked by four independent exact verifiers.
 Headline: for 11 ≤ n ≤ 16 the bounds beat the rigorous
 three-point bound of Cohn–de Laat–Salmon (n=16: 0.0187461206
-vs 0.024995, a 25.00% gain); for 67 further dimensions they
-lie below the published numerical Cohn–Elkies values.
+vs 0.024995, a 25.00% gain); in 61 further dimensions they
+lie below the published numerical Cohn–Elkies values
+(67 improved dimensions in total).
 **Harvest item:** fresh harvest 2026-10-27
 (`incoming/harvests/2026-10-27.md`, CLAIM
 improved-lattice-packing-bounds-small-dimensions, recon
@@ -56,7 +57,11 @@ DEEPEN challenge pass (below).
   recomputes kappa, rho_+, and both decimal claims for all
   83 certificates, and every claim holds; the gains,
   improvement set, and smallest margins in the data and
-  the paper recompute exactly.
+  the paper recompute exactly. Gains are certified
+  relative to the comparison values as printed in the
+  artifact (paper Table 1 and results.json); those
+  baseline transcriptions were not re-verified against
+  the Cohn–de Laat–Salmon or Afkhami-Jeddi et al. sources.
 - **Scope (not a GAP in the audited claim):** Theorem 1's
   proof is the paper's, read but not formalized; the
   verdict certifies the certificates given Theorem 1, as
@@ -106,7 +111,21 @@ sharing no code. The auditor's scalar gate is a fifth
 implementation of the budget and claim half. The search
 that produced the candidates (floating-point LP, run by
 GPT-6 Astra per the paper) is not part of any leg: invalid
-candidates would simply fail the sign tests.
+candidates would simply fail the sign tests. Source
+inspection (post-verdict, 2026-10-27, on the same
+hash-pinned bytes that ran): the driver `verify/run.py`
+was read in full — it spawns each verifier as a separate
+process per certificate and accepts only return code 0,
+output starting `PASS `, and exact equality with the
+reference log, so a verifier must actually compute its
+line; the verifiers' polynomial-construction and
+sign-test code was inspected in Taylor and Bernstein
+(Laguerre pair construction, interval subdivision with
+strict-positivity requirements, Bernstein bisection) and
+by function inventory in PARI and Descartes. The sign
+half of V-A rests on this inspection plus the four-way
+method diversity; only the budget half has an auditor
+implementation.
 
 ## M3 — credit honesty
 
@@ -139,6 +158,14 @@ audit only read and replayed it locally).
   bound, the PSD trace argument for B(s), the projection
   argument for A(a,s), summation by parts), and it was
   read at recon; it is not machine-checked anywhere.
+- The two truncations are definitional, with directions
+  proved in the paper's Section 3 (read at recon): the
+  512-term series is a partial sum of a positive-term
+  series, so R_b ≥ Γ_b·e^(−τ_b/2) in the conservative
+  direction for the budget, and the Machin pi bound ξ < π
+  is taken from the appropriate upper and lower
+  alternating Taylor sums. Neither is an unaudited
+  numerical approximation.
 - Environment deltas from the authors' tested setup:
   Python 3.12.3 here vs 3.14.6 tested; PARI/GP 2.15.4
   (apt) vs 2.19.0 tested; python-flint exactly 0.9.0 as
@@ -200,12 +227,33 @@ a verdict or added a finding.
   matching the README's exact fractions; all 69 rows of
   paper Table 1 match results.json (density exact,
   comparison to its printed rounding, gain to the table's
-  rounding).
+  rounding); Table 1's 69 rows are the 67 improvement
+  dimensions plus n=9 and n=10, printed as comparison-only
+  rows.
 - Manifest integrity in-run: the driver validated every
   certificate's sha256 against the manifest before
   checking it (83/83, no mismatch); spot-pinned here,
   n016 certificate sha256
   `1d6f40a3ca0812758a696750a378dbbafb4dea3f97bdf43f114502aefa43f5b1`.
+
+## Post-verdict stress test (2026-10-27)
+
+At the user's word, an independent model (Gemini 4 Argon
+via OpenRouter, contract-breaker brief, this note as its
+only fact pack) attacked the verdict on four axes; bottom
+line UPHOLD WITH REPAIRS. Adjudication by the auditor:
+one attack stands as an error and is fixed above — the
+header's "67 further dimensions" double-counted the six
+rigorous-range dimensions (67 improved in total, 61
+further; Table 1's 69 rows are the 67 plus n=9, 10). The
+truncation-direction attack fails on the paper's own
+Section 3 (M4, amended). Two disclosure repairs stand
+and are applied: verifier/driver source inspection is
+now recorded (M2), and the gains are fenced as relative
+to the artifact's printed baselines (V-B). The
+Theorem 1 scope attack was rated FAILS by the attacker
+itself. No attack moved the verdict. Run record:
+`~/workspace/argon-verdict-stress-2026-10-27/`.
 
 Closing verdict: PASS. The 32-gate verdict lock is
 untouched (17 BREAK / 15 PASS).
