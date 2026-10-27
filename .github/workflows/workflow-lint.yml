@@ -1,0 +1,66 @@
+name: workflow-lint
+
+# CI detection net for the pre-dispatch checker (adopted 2026-10-27,
+# option B of the dispatch-chain hardening; DeepSeek Pro double-check
+# adjudicated the same day). Runs pre_dispatch_checks.py over every
+# workflow file on push and on pull_request, so a workflow file the
+# dispatch gate would refuse turns CI red at landing time instead of
+# at dispatch time.
+#
+# - The job hard-pins ubuntu-latest. It must never reuse verify.yml's
+#   runner expression: for push events that expression routes to the
+#   self-hosted desktop, and this check must not depend on that box.
+# - The job always runs and always reports. Path awareness lives
+#   inside the job: when the change range is known and touches no
+#   workflow file, the lint step skips in seconds with success, so
+#   this check can later become a required status check without
+#   stalling unrelated pull requests. Any doubt about the range
+#   (first push, force push, missing base) runs the full lint.
+# - Plural --workflows mode, matching dispatch_gate.sh practice: the
+#   singular --workflow mode also runs FM3, which refuses on
+#   pre-existing findings in oai-family-forge.yml (2026-10-21).
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workflow-lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: workflow lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Pre-dispatch lint of all workflows
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          run_lint=1
+          if [ -n "${BASE_SHA:-}" ] \
+             && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ] \
+             && git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            changed="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" || true)"
+            if [ -n "$changed" ] \
+               && ! printf '%s\n' "$changed" | grep -q '^\.github/workflows/'; then
+              run_lint=0
+            fi
+          fi
+          if [ "$run_lint" = 0 ]; then
+            echo "no workflow files in ${BASE_SHA}..${HEAD_SHA}; lint skipped, check still reports success"
+            exit 0
+          fi
+          python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/*.yml

@@ -95,6 +95,50 @@ creates it` / `step '<name>' is a probe (informational) but can gate
 the job`. Scope note: tracking is in file order (steps run in written
 order); only `df` arguments are tracked, not every filesystem read.
 
+## Forge gate job — the dispatch-point catch (option A, adopted 2026-10-27)
+
+The chained `dispatch_gate.sh` call is a convention: a caller can forget
+it, and dispatches placed from the web UI never pass through it. Every
+forge workflow authored after 2026-10-27 therefore carries its own gate
+job, so the check runs at the exact SHA being dispatched, on every
+dispatch route:
+
+```yaml
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/<this-forge>.yml
+
+  forge:
+    needs: gate
+    runs-on: [self-hosted, desktop]
+    # ... the forge steps, unchanged ...
+```
+
+Rules: the gate job hard-pins `ubuntu-latest` (it must not depend on
+the runner the forge itself needs); **every** other job in the file
+declares `needs: gate`, not just the forge job; the hand-chained
+`dispatch_gate.sh` call stays as the pre-landing check. Known limit,
+accepted for a sole-owner repo whose threat model is accidents, not
+malice: the gate runs the checker from the same SHA it checks, so a
+commit that weakened the checker itself would pass vacuously — landing
+review is the catch for checker changes. The companion detection net is
+the `workflow-lint` workflow (option B): the same checker over all
+workflow files on every push and pull request, ubuntu-pinned,
+always-reporting, path-aware inside the job. Addition-gate lines:
+(1) replaces the hand-chained convention as the primary dispatch-point
+catch for new forges; the convention itself stays as pre-landing check;
+(2) scope = forge workflows authored after 2026-10-27 plus the one
+workflow-lint workflow; eth-forge (dispatched 2026-10-27, run #2) is
+not retrofitted mid-run; (3) review at the 2026-11-01 hygiene run.
+3 AM question: neither piece runs on a schedule; the gate job runs only
+inside a run someone dispatched, the lint job only on push/PR, and a
+red lint is an ordinary CI failure on the commit that caused it.
+
 ## Self-test
 
 Each check was proven against a fixture carrying its known-bad pattern
