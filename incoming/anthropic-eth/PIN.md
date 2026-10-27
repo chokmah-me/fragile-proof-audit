@@ -62,3 +62,11 @@ author contact.
   implemented_by, ofReduceBool, partial def, unsafe).
 - Working copies and recon: `~/workspace/anthropic-eth-recon/`
   (`RECON-BRIEF.md`, extracted source under `src/eth/`).
+- Forge evidence zip sha256
+  `3bfe1e87b39238a448c52e079b316c3dd973dc4b332a98f980fd3dcb9fcbf6a4`
+  (23,176 bytes, run-page digest, re-verified locally).
+- Forge run 40558969722 (desktop lane, DESKTOP-7HDI2D1),
+  verdict=PASS; audit CLOSED PASS 2026-10-27, note at
+  `docs/audits/anthropic-eth.md`; evidence in
+  `~/workspace/anthropic-eth-recon/evidence-run-40558969722/`,
+  DEEPEN pass in `~/workspace/anthropic-eth-recon/DEEPEN.md`.
