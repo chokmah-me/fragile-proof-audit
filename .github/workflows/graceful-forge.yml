@@ -144,7 +144,7 @@ jobs:
         run: |
           set -euo pipefail
           cd "$HOME/forge-graceful/work"
-          ns=$(grep -R --include='*.lean' -c 'sorry' PerM PerM.lean | awk -F: '{s+=$2} END{print s}')
+          ns=$( (grep -R --include='*.lean' 'sorry' PerM PerM.lean 2>/dev/null || true) | wc -l)
           echo "SORRY_COUNT=$ns"
           grep -Rn --include='*.lean' -E 'native_decide|Lean\.ofReduceBool|admit' PerM PerM.lean > "$HOME/forge-graceful/escapes.txt" || true
           echo "ESCAPES:"; cat "$HOME/forge-graceful/escapes.txt"
