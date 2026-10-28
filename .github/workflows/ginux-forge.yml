@@ -150,6 +150,20 @@ jobs:
           export PATH="$HOME/.cargo/bin:$PATH"
           echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
           rustup target add --toolchain 1.99.0 x86_64-unknown-none x86_64-unknown-uefi >> "$EV/install.log" 2>&1 || true
+          # Ginux tools/qemu/common.sh finds OVMF only at OVMF_CODE.fd /
+          # OVMF_VARS.fd (or the env vars); Ubuntu's ovmf package ships only
+          # the _4M names. Resolve whichever exists and export both in this
+          # shell (for doctor) and via GITHUB_ENV (for the gate steps).
+          for cand in /usr/share/OVMF/OVMF_CODE.fd /usr/share/edk2/x64/OVMF_CODE.fd /usr/share/OVMF/OVMF_CODE_4M.fd /usr/share/edk2/x64/OVMF_CODE_4M.fd; do
+            if test -f "$cand"; then export OVMF_CODE="$cand"; break; fi
+          done
+          for cand in /usr/share/OVMF/OVMF_VARS.fd /usr/share/edk2/x64/OVMF_VARS.fd /usr/share/OVMF/OVMF_VARS_4M.fd /usr/share/edk2/x64/OVMF_VARS_4M.fd; do
+            if test -f "$cand"; then export OVMF_VARS="$cand"; break; fi
+          done
+          echo "OVMF_CODE=${OVMF_CODE:-MISSING}" | tee "$EV/ovmf.txt"
+          echo "OVMF_VARS=${OVMF_VARS:-MISSING}" | tee -a "$EV/ovmf.txt"
+          if test -n "${OVMF_CODE:-}"; then echo "OVMF_CODE=$OVMF_CODE" >> "$GITHUB_ENV"; fi
+          if test -n "${OVMF_VARS:-}"; then echo "OVMF_VARS=$OVMF_VARS" >> "$GITHUB_ENV"; fi
           { cargo --version || echo "cargo: MISSING"
             rustc --version || echo "rustc: MISSING"
             clang --version || echo "clang: MISSING"
@@ -162,6 +176,8 @@ jobs:
           cat "$EV/doctor.log"
           if test "$doctor_rc" -ne 0; then
             echo "MAKE DOCTOR FAILED rc=$doctor_rc; failing closed (infrastructure, not a claim verdict)" >&2
+            echo "--- install.log (tail) ---" >&2
+            tail -n 100 "$EV/install.log" >&2 || true
             exit 1
           fi
 
