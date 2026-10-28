@@ -1,0 +1,95 @@
+name: probe-kvm
+
+# One-shot KVM capability check for the Ginux audit V-A leg.
+# The pin's boot gates need /dev/kvm: under TCG the emulated Intel
+# IOMMU advertises only a 39-bit address width and the kernel's
+# fail-closed IOMMU gate panics (run 40780499105). This probe asks
+# both self-hosted runner guests the same questions: is /dev/kvm
+# present and usable, are vmx/ept flags visible, is nested
+# virtualization already enabled in .wslconfig. Read-only.
+# Deleted after the receipt is recorded.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/probe-kvm.yml
+
+  probe-laptop:
+    needs: gate
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 10
+    steps:
+      - name: KVM capability check
+        shell: bash
+        continue-on-error: true
+        run: |
+          set +e
+          echo "host=$(hostname)"
+          echo "kernel=$(uname -r)"
+          if test -e /dev/kvm; then
+            ls -l /dev/kvm
+            test -r /dev/kvm && echo "kvm_readable=yes" || echo "kvm_readable=no"
+            test -w /dev/kvm && echo "kvm_writable=yes" || echo "kvm_writable=no"
+          else
+            echo "kvm_device=ABSENT"
+          fi
+          echo "cpu_flags=$(grep -m1 '^flags' /proc/cpuinfo | tr ' ' '\n' | grep -E '^(vmx|ept|svm|npt|hypervisor)$' | sort -u | paste -sd, -)"
+          echo "kvm_intel_nested=$(cat /sys/module/kvm_intel/parameters/nested 2>/dev/null || echo absent)"
+          echo "kvm_amd_nested=$(cat /sys/module/kvm_amd/parameters/nested 2>/dev/null || echo absent)"
+          id
+          found=0
+          for f in /mnt/c/Users/*/.wslconfig; do
+            if test -f "$f"; then
+              found=1
+              echo "wslconfig_found=yes"
+              grep -i "nestedVirtualization" "$f" || echo "nestedVirtualization=not-set"
+            fi
+          done
+          if test "$found" -eq 0; then echo "wslconfig_found=no"; fi
+          echo "proc_version=$(cat /proc/version)"
+          exit 0
+
+  probe-desktop:
+    needs: gate
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 10
+    steps:
+      - name: KVM capability check
+        shell: bash
+        continue-on-error: true
+        run: |
+          set +e
+          echo "host=$(hostname)"
+          echo "kernel=$(uname -r)"
+          if test -e /dev/kvm; then
+            ls -l /dev/kvm
+            test -r /dev/kvm && echo "kvm_readable=yes" || echo "kvm_readable=no"
+            test -w /dev/kvm && echo "kvm_writable=yes" || echo "kvm_writable=no"
+          else
+            echo "kvm_device=ABSENT"
+          fi
+          echo "cpu_flags=$(grep -m1 '^flags' /proc/cpuinfo | tr ' ' '\n' | grep -E '^(vmx|ept|svm|npt|hypervisor)$' | sort -u | paste -sd, -)"
+          echo "kvm_intel_nested=$(cat /sys/module/kvm_intel/parameters/nested 2>/dev/null || echo absent)"
+          echo "kvm_amd_nested=$(cat /sys/module/kvm_amd/parameters/nested 2>/dev/null || echo absent)"
+          id
+          found=0
+          for f in /mnt/c/Users/*/.wslconfig; do
+            if test -f "$f"; then
+              found=1
+              echo "wslconfig_found=yes"
+              grep -i "nestedVirtualization" "$f" || echo "nestedVirtualization=not-set"
+            fi
+          done
+          if test "$found" -eq 0; then echo "wslconfig_found=no"; fi
+          echo "proc_version=$(cat /proc/version)"
+          exit 0
