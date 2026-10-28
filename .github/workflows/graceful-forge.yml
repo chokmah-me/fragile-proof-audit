@@ -1,0 +1,195 @@
+name: graceful-forge
+
+# Graceful-labelings (PerM, arXiv:2610.34877) audit leg, dispatched
+# manually only. Fetches the pinned arXiv source tarball (sha256
+# asserted in-run), builds the ancillary Lean project on the desktop
+# runner, scans for sorry/escapes, classifies the 19 CheckAx axiom
+# reports against expectations, then runs the author's verify.sh
+# as-is against the built tree. Evidence lands as an Actions
+# artifact.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  GRACE_TARBALL_SHA: da5f84c4de1ef6beb19d67605314562f50c459a734b062ecb1dd2957661243d3
+
+jobs:
+  forge:
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 330
+    steps:
+      - name: Runner probe
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          mkdir -p "$HOME/forge-graceful"
+          echo "host=$(hostname) os=$(uname -s) home=$HOME"
+          echo "elan=$(command -v elan || echo missing)"
+          echo "disk:"; df -h "$HOME/forge-graceful" || true
+          exit 0
+
+      - name: Validate pinned tarball hash
+        shell: bash
+        run: |
+          set -euo pipefail
+          v="${GRACE_TARBALL_SHA}"
+          if [ "${#v}" -ne 64 ] || ! printf '%s' "$v" | grep -Eq '^[0-9a-f]{64}$'; then
+            echo "GRACE_TARBALL_SHA is not 64-hex: '$v'"; exit 2
+          fi
+          echo "pinned tarball sha256: $v"
+
+      - name: Fetch and verify the arXiv source tarball
+        shell: bash
+        run: |
+          set -euo pipefail
+          W="$HOME/forge-graceful"
+          mkdir -p "$W"
+          cd "$W"
+          curl -sL -o source.tar.gz https://arxiv.org/e-print/2610.34877
+          echo "${GRACE_TARBALL_SHA}  source.tar.gz" | sha256sum -c -
+          rm -rf proj work
+          mkdir -p proj
+          tar -xzf source.tar.gz -C proj
+          test -f proj/anc/lean/lakefile.toml
+          test -f proj/anc/lean/PerM/Axioms.lean
+          cp -r proj/anc/lean work
+          cd work
+          echo "files:"; find PerM -name '*.lean' | wc -l
+          cat lean-toolchain
+          sha256sum PerM/Axioms.lean PerM/TauDefs.lean PerM/CheckAx.lean verify.sh lake-manifest.json lean-toolchain > "$W/keyfile-hashes.txt"
+          cat "$W/keyfile-hashes.txt"
+          cat > "$W/verdict.py" <<'PYEOF'
+          import os, re, sys
+          W = os.path.expanduser("~/forge-graceful")
+          text = open(os.path.join(W, "checkax.txt")).read()
+          reports = {}
+          for m in re.finditer(r"'([^']+)' depends on axioms: \[([^\]]*)\]", text):
+              name = m.group(1)
+              axs = [a.strip() for a in m.group(2).split(",") if a.strip()]
+              reports[name] = set(axs)
+          C3 = {"propext", "Classical.choice", "Quot.sound"}
+          W_AXIOM = "PerM.wilson_integral"
+          P_AXIOM = "PerM.gamma_abs_sq_prod"
+          ALLOWED = C3 | {W_AXIOM, P_AXIOM, "PerM.stirling_re", "PerM.stirling_real"}
+          exact = {
+              "PerM.main_unconditional": C3 | {W_AXIOM, P_AXIOM},
+              "PerM.main_theorem": C3 | {W_AXIOM, P_AXIOM},
+              "PerM.compare": set(C3),
+          }
+          out = []
+          ok = True
+          out.append(f"axiom reports parsed: {len(reports)} (expect 19)")
+          if len(reports) != 19:
+              ok = False
+          for name in sorted(reports):
+              s = reports[name]
+              tag = ""
+              if not s <= ALLOWED:
+                  tag = "  <-- OUTSIDE ALLOWED SET: " + ",".join(sorted(s - ALLOWED))
+                  ok = False
+              if name in exact and s != exact[name]:
+                  tag += f"  <-- EXACT MISMATCH, expected {sorted(exact[name])}"
+                  ok = False
+              out.append(f"{name}: [{', '.join(sorted(s))}]{tag}")
+          for name in exact:
+              if name not in reports:
+                  out.append(f"MISSING REPORT: {name}")
+                  ok = False
+          out.append("VERDICT: " + ("PASS" if ok else "FAIL"))
+          print("\n".join(out))
+          sys.exit(0 if ok else 1)
+          PYEOF
+          echo "verdict.py written"
+
+      - name: Toolchain and Mathlib cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/forge-graceful/work"
+          elan toolchain install leanprover/lean4:v4.29.0-rc6
+          ec=0
+          lake exe cache get > "$HOME/forge-graceful/cache-get.log" 2>&1 || ec=$?
+          echo "CACHE_GET_EXIT:$ec" >> "$HOME/forge-graceful/cache-get.log"
+          tail -3 "$HOME/forge-graceful/cache-get.log"
+          n=$(find .lake/packages/mathlib/.lake/build/lib -name '*.olean' 2>/dev/null | wc -l)
+          echo "MATHLIB_OLEANS=$n"
+          echo "MATHLIB_OLEANS=$n" >> "$HOME/forge-graceful/cache-get.log"
+          if [ "$n" -lt 1000 ]; then
+            echo "Mathlib cache unavailable for this toolchain (oleans=$n); refusing a multi-hour source build"
+            exit 3
+          fi
+
+      - name: Build
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/forge-graceful/work"
+          start=$(date +%s)
+          ec=0
+          lake build > "$HOME/forge-graceful/build.log" 2>&1 || ec=$?
+          end=$(date +%s)
+          echo "lake build exit=$ec seconds=$((end-start))"
+          tail -3 "$HOME/forge-graceful/build.log"
+          exit $ec
+
+      - name: Sorry and escape scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$HOME/forge-graceful/work"
+          ns=$(grep -R --include='*.lean' -c 'sorry' PerM PerM.lean | awk -F: '{s+=$2} END{print s}')
+          echo "SORRY_COUNT=$ns"
+          grep -Rn --include='*.lean' -E 'native_decide|Lean\.ofReduceBool|admit' PerM PerM.lean > "$HOME/forge-graceful/escapes.txt" || true
+          echo "ESCAPES:"; cat "$HOME/forge-graceful/escapes.txt"
+          test "$ns" -eq 0
+          test ! -s "$HOME/forge-graceful/escapes.txt"
+
+      - name: Axiom reports (CheckAx)
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/forge-graceful/work"
+          timeout 1800 lake env lean PerM/CheckAx.lean > "$HOME/forge-graceful/checkax.txt" 2>&1
+          cat "$HOME/forge-graceful/checkax.txt"
+
+      - name: Verdict
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "$HOME/forge-graceful/verdict.py" | tee "$HOME/forge-graceful/verdict.txt"
+
+      - name: Author verify.sh as-is
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/forge-graceful/work"
+          ec=0
+          bash verify.sh > "$HOME/forge-graceful/verify-sh.log" 2>&1 || ec=$?
+          tail -5 "$HOME/forge-graceful/verify-sh.log"
+          echo "verify.sh exit=$ec"
+          grep -q "ALL GREEN" "$HOME/forge-graceful/verify-sh.log"
+          exit $ec
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: graceful-evidence
+          path: |
+            ~/forge-graceful/build.log
+            ~/forge-graceful/cache-get.log
+            ~/forge-graceful/checkax.txt
+            ~/forge-graceful/escapes.txt
+            ~/forge-graceful/keyfile-hashes.txt
+            ~/forge-graceful/verdict.txt
+            ~/forge-graceful/verify-sh.log
+          if-no-files-found: warn
