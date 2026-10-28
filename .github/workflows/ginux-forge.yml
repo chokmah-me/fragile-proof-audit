@@ -64,6 +64,18 @@ jobs:
           abs_skew=$(( skew < 0 ? -skew : skew ))
           clock_ok=FAIL
           if test "$srv_epoch" -gt 0 && test "$abs_skew" -le 600; then clock_ok=ok; fi
+          # Probe (run 40789619184): /dev/kvm EXISTS in this WSL guest with
+          # vmx/ept visible and kvm_intel nested=Y, but the node is
+          # root:kvm 0660 and the runner user is not in the kvm group, so
+          # the project's accelerator check fell back to tcg in runs 1-2.
+          # Opening the node for this session (passwordless sudo is
+          # verified on this runner) lets doctor and the gates use kvm.
+          # Session-scoped only: the node mode resets with the WSL guest.
+          kvm_chmod=not-needed
+          if test -e /dev/kvm && ! test -w /dev/kvm; then
+            kvm_chmod=failed
+            if sudo -n chmod 0666 /dev/kvm >> "$EV/install.log" 2>&1; then kvm_chmod=ok; fi
+          fi
           accel=tcg
           if test -r /dev/kvm && test -w /dev/kvm; then accel=kvm; fi
           sudo_ok=FAIL
@@ -73,6 +85,7 @@ jobs:
             echo "runner_epoch=$run_epoch"
             echo "server_epoch=$srv_epoch"
             echo "accelerator=$accel"
+            echo "kvm_chmod=$kvm_chmod"
             echo "sudo_passwordless=$sudo_ok"
           } | tee "$EV/runner.txt"
           { echo "date: $(date -u +%FT%TZ)"
