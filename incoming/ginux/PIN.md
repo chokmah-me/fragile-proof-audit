@@ -164,3 +164,58 @@ checkpoint drift, missing benchmark artifacts,
 uninstrumented provenance. Nothing in recon touches
 the core boot claim; that leg is simply untested
 until V-A runs.
+
+## Second-opinion addendum (2026-10-28)
+
+Haiku 5.5 double-check of this recon (OpenRouter
+`anthropic/claude-haiku-5.5`, one call, 2,257 in /
+5,139 out, $0.0028; pack and answer in
+`~/workspace/ginux-recon/haiku-doublecheck/`).
+Verdicts: findings 1 to 6 SOUND WITH CAVEATS,
+finding 5 SOUND, finding 7 (expectation) FLAWED.
+Adjudication against the receipts:
+
+- **Expectation reworded (his finding 7, adopted in
+  part).** PASS_WITH_GAPS is now conditional: it
+  holds only if the named boot gates pass in our
+  hands at the pin AND the disclosed supervisor
+  probe failure is the sole aggregate failure. If
+  the Rocky systemd gate fails in our hands, the
+  verdict drops. His stronger claim, that the pin's
+  docs contradict the systemd leg, does not stand:
+  the failing probe is in the verification boot,
+  and the same docs/PERFORMANCE.md records the
+  Rocky systemd benchmark reaching its verified
+  console login on every measured run. The systemd
+  claim is at risk, not contradicted.
+- **Paper vs repo disclosure (his finding 4 check,
+  adopted).** The paper itself never mentions the
+  `make test` failure. The disclosure is repo-only
+  (docs/PERFORMANCE.md). Finding 4 stands with that
+  sharpening.
+- **LOC wording (his findings 2 and 3, adopted).**
+  The exact matches at `9afa617` are the integer
+  counts and the Markdown row. The LOC rows check
+  only within 21 lines under the closest counting
+  set (.rs + .sh + .S); .rs-only and nonblank
+  variants tried at adjudication do not close the
+  21 lines. Finding 3's wording governs.
+- **Partial provenance in git metadata (his
+  finding 6, adopted and run).** All 1,037 commits
+  at `9afa617` are authored and committed by
+  Kurtzer (1,036 direct, 1 via GitHub web), with no
+  agent or co-author trailers. Timestamps cover all
+  24 hours, 258 commits between 00:00 and 06:59 PT,
+  consistent with a persistent agent loop running
+  overnight. This tests the chronology; it proves
+  neither the single task nor the model. Finding 6
+  stands.
+- **Hash objection (his finding 5 note, does not
+  stand against this PIN).** It hit a compressed
+  sentence in the fact pack, not the PIN: the PIN
+  records the md5 against the Zenodo md5 (match)
+  and the sha256 as the auditor's own pin. No
+  change.
+- Ledger classifications (his finding 1): counts
+  are what recon checked; the semantics of
+  "Complete" are a V-A matter, already in scope.
