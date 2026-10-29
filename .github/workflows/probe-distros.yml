@@ -1,0 +1,61 @@
+name: probe-distros
+
+# One-shot read-only probe for the Ginux audit host setup: from inside
+# the existing dell-laptop runner guest (Ubuntu 24.04 on DESKTOP-Q42R8VL),
+# list the Windows host's WSL distros via wsl.exe interop, to see whether
+# the Ubuntu 25.10 install landed. Boots nothing, changes nothing.
+# Deleted after the receipt is recorded.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/probe-distros.yml
+
+  probe:
+    needs: gate
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 10
+    steps:
+      - name: Runner probe (non-gating)
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          EV="$HOME/probe-evidence"
+          rm -rf "$EV"
+          mkdir -p "$EV"
+          WSL=/mnt/c/Windows/System32/wsl.exe
+          if test -x "$WSL"; then
+            "$WSL" --list --verbose > "$EV/wsl-raw.bin" 2>&1
+            if command -v iconv > /dev/null 2>&1; then
+              iconv -f UTF-16LE -t UTF-8//IGNORE "$EV/wsl-raw.bin" > "$EV/wsl-list.txt" 2>/dev/null
+            fi
+            if test ! -s "$EV/wsl-list.txt"; then
+              tr -d '\0' < "$EV/wsl-raw.bin" > "$EV/wsl-list.txt"
+            fi
+          else
+            echo "wsl.exe not found at $WSL (interop unavailable)" > "$EV/wsl-list.txt"
+          fi
+          ls /mnt/c/Users/ > "$EV/win-users.txt" 2>&1
+          ls /mnt/c/Users/*/AppData/Local/Packages/ 2>/dev/null | grep -i -E "ubuntu|canonical" > "$EV/win-packages.txt"
+          echo "--- wsl-list.txt ---"
+          cat "$EV/wsl-list.txt"
+          exit 0
+
+      - name: Upload probe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: probe-distros-evidence
+          path: ~/probe-evidence/
+          if-no-files-found: warn
