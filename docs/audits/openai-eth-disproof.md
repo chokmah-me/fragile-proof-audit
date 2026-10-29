@@ -182,3 +182,101 @@ public artifact exists) are not covered here.
   verdict step.
 
 Closing verdict: PASS.
+
+## Addendum (2026-10-29) — ZKSF re-run, finite-size scope
+
+Post-audit bearing assessment at the user's direction,
+2026-10-29, of ZKSF Org, "The Exponential Time Hypothesis
+Proof Checks, and Its Algorithm Is Brute Force on Every
+Formula That Could Exist", Zenodo record 23732240, v1.0.0,
+published 2026-10-28 (report, Dockerfiles, run logs with
+hashes, and `cutoff_check.lean` in the record). The
+assessment was double-checked with an adversarial
+second-model pass (Argon, `google/gemini-4-argon`,
+2026-10-29: UPHOLD WITH REPAIRS, adjudicated against the
+record, not relayed). **Verdicts unchanged: V-A PASS,
+V-B PASS. Original text above untouched; nothing in this
+addendum corrects it, because nothing in it was false.**
+
+Corroboration (bears on the M4 inventory, not the verdicts):
+
+- Comparator (M4, fourth bullet): this audit recorded the
+  repo's own comparator tool as not run and rested M1 on
+  corpus equality. ZKSF has now run the published comparator
+  configuration in an isolated (no-network) container at the
+  same pin `7ef5c0cc`: run 1 (published configuration) ends
+  "Lean default kernel accepts the solution" / "Your
+  solution is okay!", exit 0. Inputs verified byte-identical:
+  git blob hashes of the challenge file, configuration,
+  lakefile, manifest and toolchain file at the pin; all 8,926
+  compiled Mathlib and dependency files byte-identical to a
+  fresh official cache download (0 different, 0 missing);
+  no file outside the work volume changed. Caveat, theirs:
+  the comparator's file-level layer (landrun) needs Linux
+  7.2+ and ran best-effort on their 5.15 kernel, with the
+  integrity checks above substituted for it.
+- Second kernel: run 2 (nanoda, comparator's independently
+  written kernel, switched on with its stock 16 MiB thread
+  stack) aborted after 80s, exit 134, a stack overflow in a
+  checking thread, which the comparator reports as "nanoda
+  kernel rejected the solution". Run 3 changed exactly one
+  constant (`STACK_SIZE` 16,777,216 to 1,073,741,824 in
+  nanoda's source, per its build log): "nanoda kernel
+  accepts the solution", Lean accepts, exit 0. The run-2
+  output is a resource abort, not a rejection verdict.
+- Statement and machine model (M4, first bullet): ZKSF
+  audited the whole challenge file and find the formal
+  statement faithful. Against this note's open definitional
+  question, they read the machine affirmatively as a
+  standard deterministic multi-tape Turing machine, one tape
+  action per step, one fixed machine per k. Recorded as
+  their reading; this note's cautious framing stands.
+
+Finite-size scope (a consumption gap in M4, now filled).
+Three distinct facts; they are not interchangeable:
+
+- Bound crossover (statement level). The proved exponent is
+  rho(n) = n (log2 log2 n)^2 / sqrt(log2 n); rho(n) < n iff
+  (log2 x)^4 < x with x = log2 n, and that fails for every
+  integer x from 5 to 65,536. So even with every hidden
+  constant set to 1, the proved bound is no better than
+  brute force's 2^n for any n up to 2^65,536. This is a fact
+  about the proved upper bound, derivable from the
+  statement's own bound definitions, not a measured runtime.
+- Verified-program cutoff (proof body). The program's
+  cutoff is `max 20 (max Nleaf Ns)`, with `Ns` any number
+  past which `sparsifySchedule` stays at 2 or more
+  (`NativeLargeEntry.lean`); no value is written anywhere.
+  ZKSF's `cutoff_check.lean`, compiled against the proof's
+  own definitions with exactly the classical three axioms
+  (compile exit 0), proves `sparsifySchedule (2^521283) = 1`,
+  `sparsifySchedule (2^521284) = 2`,
+  `sparsifySchedule (2^639999) = 1`,
+  `sparsifySchedule (2^640000) = 2`, and that every
+  admissible `Ns` exceeds 2^639,999. The least admissible
+  `Ns` (2^639,999 + 1) is a floor, not the program's actual
+  cutoff; `Nleaf` may push it higher. Below the cutoff the
+  program answers from a finite table fixed before the input
+  (`FiniteFallback.lean`, noncomputable). It does not run
+  exhaustive search.
+- Manuscript algorithm (outside this audit's original
+  scope; recorded here because it is how the result will be
+  read). Proposition 6.4: "If s < 2, we use exhaustive
+  search", with s = floor(sqrt(lambda) / nu^2),
+  lambda = ceil(log2 n), nu = ceil(log2 lambda). By that
+  rule the manuscript's algorithm is exhaustive search for
+  every n <= 2^521,283 and again for
+  2^524,288 < n <= 2^639,999, with its construction active
+  in the window lambda in [521,284, 524,288] between.
+
+Assessment: ZKSF's own framing is that nothing here
+contradicts the result: ETH is a statement about growth
+rates and a 2^{o(n)} algorithm refutes it however late the
+speedup begins. This note's PASS certifies the asymptotic
+statement as written and claimed nothing about finite-size
+performance; what it did not do, until this addendum, is
+state the magnitudes above, which are what a reader needs
+to consume the headline correctly. The PASS is compatible
+with the algorithm giving no speedup on any formula that
+can be written down. The separate Anthropic ETH audit is a
+different artifact and is unaffected.
