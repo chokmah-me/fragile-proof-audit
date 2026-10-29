@@ -18,7 +18,13 @@ name: ginux-forge
 # The accelerator the project's own scripts select (kvm if /dev/kvm
 # is read-writable, else tcg) is recorded in the verdict; tcg is a
 # legitimate upstream configuration, not a failure.
-# Runner-first rule overflow lane: [self-hosted, laptop] only.
+# Runs 1-4 lane: [self-hosted, laptop] (Dell Ubuntu 24.04 guest,
+# QEMU 8.2, intel-iommu aw-bits fixed at 39, boot gates panic).
+# Run 5 lane: [self-hosted, qemu10] only, a dedicated Ubuntu 25.10
+# guest on the same Dell (QEMU 10.1, aw-bits defaults to 48 as on
+# QEMU >= 9.2). The harness runs exactly as shipped on run 5: the
+# run-4 QEMU wrapper block was removed (it was inert on QEMU 8.2,
+# which exposes no aw-bits property; run-4 evidence records NONE).
 
 on:
   workflow_dispatch:
@@ -41,7 +47,7 @@ jobs:
 
   forge:
     needs: gate
-    runs-on: [self-hosted, laptop]
+    runs-on: [self-hosted, qemu10]
     timeout-minutes: 360
     env:
       PIN_SHA: "d11c126a048a51fe7eb9c4105f31760add1027ea"
@@ -177,48 +183,6 @@ jobs:
           echo "OVMF_VARS=${OVMF_VARS:-MISSING}" | tee -a "$EV/ovmf.txt"
           if test -n "${OVMF_CODE:-}"; then echo "OVMF_CODE=$OVMF_CODE" >> "$GITHUB_ENV"; fi
           if test -n "${OVMF_VARS:-}"; then echo "OVMF_VARS=$OVMF_VARS" >> "$GITHUB_ENV"; fi
-          # DIAGNOSTIC (run 4, at the user's word): QEMU 8.2 on this runner
-          # defaults intel-iommu aw-bits to 39, so SAGAW lacks the 48-bit
-          # bit Ginux's fail-closed IOMMU gate requires (runs 2-3 panicked
-          # identically under tcg and kvm). QEMU >= 9.2 defaults aw-bits
-          # to 48. This wrapper, reached through Ginux's own find_qemu()
-          # hook ($QEMU_SYSTEM_X86_64 in tools/qemu/common.sh, used by
-          # run.sh and doctor.sh), adds the width property to the
-          # intel-iommu device argument. Upstream code is untouched; the
-          # deviation is harness-side, logged per invocation, and must be
-          # disclosed wherever run 4 evidence is used. NOT an as-shipped
-          # V-A pass.
-          mkdir -p "$HOME/ginux-qemu-wrap"
-          props="$(qemu-system-x86_64 -device intel-iommu,help 2>&1 || true)"
-          awprop=""
-          if echo "$props" | grep -q 'intel-iommu\.aw-bits'; then
-            awprop="aw-bits"
-          elif echo "$props" | grep -q 'intel-iommu\.x-aw-bits'; then
-            awprop="x-aw-bits"
-          fi
-          echo "aw_bits_property=${awprop:-NONE}" | tee "$EV/awbits.txt"
-          if test -n "$awprop"; then
-            cat > "$HOME/ginux-qemu-wrap/qemu-system-x86_64" <<WRAPEOF
-          #!/usr/bin/env bash
-          log="\$HOME/ginux-evidence/qemu-wrapper.log"
-          out=()
-          rewritten=0
-          for a in "\$@"; do
-            if test "\$a" = "intel-iommu,intremap=off"; then
-              out+=("intel-iommu,intremap=off,$awprop=48")
-              rewritten=1
-            else
-              out+=("\$a")
-            fi
-          done
-          printf 'invoke rewritten=%s\n' "\$rewritten" >> "\$log" 2>/dev/null || true
-          exec /usr/bin/qemu-system-x86_64 "\${out[@]}"
-          WRAPEOF
-            chmod +x "$HOME/ginux-qemu-wrap/qemu-system-x86_64"
-            export QEMU_SYSTEM_X86_64="$HOME/ginux-qemu-wrap/qemu-system-x86_64"
-            echo "QEMU_SYSTEM_X86_64=$QEMU_SYSTEM_X86_64" >> "$GITHUB_ENV"
-            sha256sum "$QEMU_SYSTEM_X86_64" | tee -a "$EV/awbits.txt"
-          fi
           { cargo --version || echo "cargo: MISSING"
             rustc --version || echo "rustc: MISSING"
             clang --version || echo "clang: MISSING"
