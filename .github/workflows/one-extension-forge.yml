@@ -1,0 +1,223 @@
+name: one-extension-forge
+
+# 1-extension (Heaton-Winter, arXiv:2610.31212) audit leg,
+# dispatched manually only. Fetches the pinned Zenodo archive
+# (sha256 asserted in-run), verifies the authors' SOURCE-SHA256
+# manifest against the extracted tree, builds the Lean project
+# on the desktop runner, scans for sorry/escapes, then classifies
+# the axiom reports of the authors' verification/CheckAxioms.lean
+# (5 theorems, as-is) plus an auditor superset (11 theorems)
+# against the expectation that every report is exactly the
+# classical three. Evidence lands as an Actions artifact.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  ONEXT_ZIP_SHA: cfd11ee0c41a13dbb87770e9e49d2622d6f87ca7115b6e3236c516082daf19fb
+
+jobs:
+  forge:
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 330
+    steps:
+      - name: Runner probe
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          mkdir -p "$HOME/forge-oneext"
+          echo "host=$(hostname) os=$(uname -s) home=$HOME"
+          echo "elan=$(command -v elan || echo missing)"
+          echo "disk:"; df -h "$HOME/forge-oneext" || true
+          exit 0
+
+      - name: Validate pinned zip hash
+        shell: bash
+        run: |
+          set -euo pipefail
+          v="${ONEXT_ZIP_SHA}"
+          if [ "${#v}" -ne 64 ] || ! printf '%s' "$v" | grep -Eq '^[0-9a-f]{64}$'; then
+            echo "ONEXT_ZIP_SHA is not 64-hex: '$v'"; exit 2
+          fi
+          echo "pinned zip sha256: $v"
+
+      - name: Fetch and verify the Zenodo archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          W="$HOME/forge-oneext"
+          mkdir -p "$W"
+          cd "$W"
+          curl -sL -o one-extension-lean-1.0.0.zip "https://zenodo.org/api/records/23503394/files/one-extension-lean-1.0.0.zip/content"
+          echo "${ONEXT_ZIP_SHA}  one-extension-lean-1.0.0.zip" | sha256sum -c -
+          rm -rf proj work
+          mkdir -p proj
+          python3 -m zipfile -e one-extension-lean-1.0.0.zip proj
+          P="proj/one-extension-lean-1.0.0"
+          test -f "$P/lakefile.toml"
+          test -f "$P/RequestProject/OneExtension/Main.lean"
+          test -f "$P/verification/CheckAxioms.lean"
+          cd "$P"
+          sha256sum -c SOURCE-SHA256.txt > "$W/source-sha-check.txt"
+          ok=$(grep -c ': OK' "$W/source-sha-check.txt" || true)
+          echo "SOURCE-SHA256 OK lines: $ok (expect 52)"
+          test "$ok" -eq 52
+          cd "$W"
+          cp -r "$P" work
+          cd work
+          echo "lean files:"; find RequestProject -name '*.lean' | wc -l
+          cat lean-toolchain
+          cat > "$W/AuditCheckAxioms.lean" <<'LEANEOF'
+          import RequestProject.Main
+
+          #print axioms RigidityTableaux.exists_genericPlacement
+          #print axioms RigidityTableaux.lemma_weak_stress
+          #print axioms RigidityTableaux.WeakDOrientation.exists_nonzero_selfStress_of_balancedAt
+          #print axioms RigidityTableaux.OneExtension.IsOneExt.theorem_one_extension
+          #print axioms RigidityTableaux.OneExtension.IsOneExtension.theorem_one_extension
+          #print axioms RigidityTableaux.OneExtension.theorem_one_extension_oneExtGraph
+          #print axioms RigidityTableaux.theorem_main_Maxwell_locally_flexible
+          #print axioms RigidityTableaux.corollary_characterization
+          #print axioms RigidityTableaux.theorem_balanced_equivalent_to_selfstress
+          #print axioms RigidityTableaux.corollary_affine_Maxwell_infinitesimally_flexible
+          #print axioms RigidityTableaux.lemma_red_blue_equiv_straighten_to_zero
+          LEANEOF
+          cat > "$W/verdict.py" <<'PYEOF'
+          import os, re, sys
+          W = os.path.expanduser("~/forge-oneext")
+          C3 = {"propext", "Classical.choice", "Quot.sound"}
+          def parse(fn):
+              text = open(os.path.join(W, fn)).read()
+              reports = {}
+              for m in re.finditer(r"'([^']+)' depends on axioms: \[([^\]]*)\]", text):
+                  name = m.group(1)
+                  axs = [a.strip() for a in m.group(2).split(",") if a.strip()]
+                  reports[name] = set(axs)
+              return reports, text
+          out = []
+          ok = True
+          for fn, expect in (("authors-axioms.txt", 5), ("audit-axioms.txt", 11)):
+              reports, text = parse(fn)
+              out.append(f"{fn}: {len(reports)} reports (expect {expect})")
+              if len(reports) != expect:
+                  ok = False
+              if "sorryAx" in text:
+                  out.append(f"{fn}: sorryAx PRESENT")
+                  ok = False
+              for name in sorted(reports):
+                  s = reports[name]
+                  tag = ""
+                  if s != C3:
+                      tag = f"  <-- MISMATCH, expected exactly {sorted(C3)}"
+                      ok = False
+                  out.append(f"{name}: [{', '.join(sorted(s))}]{tag}")
+          out.append("VERDICT: " + ("PASS" if ok else "FAIL"))
+          print("\n".join(out))
+          sys.exit(0 if ok else 1)
+          PYEOF
+          echo "audit axiom file + verdict.py written"
+
+      - name: Toolchain and Mathlib cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/forge-oneext/work"
+          elan toolchain install leanprover/lean4:v4.28.0
+          ec=0
+          lake exe cache get > "$HOME/forge-oneext/cache-get.log" 2>&1 || ec=$?
+          echo "CACHE_GET_EXIT:$ec" >> "$HOME/forge-oneext/cache-get.log"
+          tail -3 "$HOME/forge-oneext/cache-get.log"
+          n=$(find .lake/packages/mathlib/.lake/build/lib -name '*.olean' 2>/dev/null | wc -l)
+          echo "MATHLIB_OLEANS=$n"
+          echo "MATHLIB_OLEANS=$n" >> "$HOME/forge-oneext/cache-get.log"
+          if [ "$n" -lt 1000 ]; then
+            echo "Mathlib cache unavailable for this toolchain (oleans=$n); refusing a multi-hour source build"
+            exit 3
+          fi
+
+      - name: Build
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/forge-oneext/work"
+          start=$(date +%s)
+          ec=0
+          lake build > "$HOME/forge-oneext/build.log" 2>&1 || ec=$?
+          end=$(date +%s)
+          echo "lake build exit=$ec seconds=$((end-start))"
+          tail -3 "$HOME/forge-oneext/build.log"
+          exit $ec
+
+      - name: Sorry and escape scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$HOME/forge-oneext/work"
+          {
+            echo "== sorry token hits (expect exactly 1: Tableaux.lean:247, inside a block comment) =="
+            grep -Rn --include='*.lean' 'sorry' RequestProject verification || true
+            echo "== escape tokens (expect none) =="
+            grep -Rn --include='*.lean' -E 'native_decide|ofReduceBool|sorryAx' RequestProject verification || true
+            grep -Rn --include='*.lean' -E '^[[:space:]]*axiom[[:space:]]' RequestProject verification || true
+            echo "== build log sorry warnings (expect 0) =="
+            grep -c "declaration uses 'sorry'" "$HOME/forge-oneext/build.log" || true
+          } | tee "$HOME/forge-oneext/scan.txt"
+          ns=$( (grep -R --include='*.lean' 'sorry' RequestProject verification 2>/dev/null || true) | wc -l)
+          echo "SORRY_COUNT=$ns"
+          test "$ns" -eq 1
+          grep -R --include='*.lean' 'sorry' RequestProject | grep -q 'Tableaux.lean:247'
+          ne=$( (grep -R --include='*.lean' -E 'native_decide|ofReduceBool|sorryAx' RequestProject verification 2>/dev/null || true) | wc -l)
+          echo "ESCAPE_COUNT=$ne"
+          test "$ne" -eq 0
+          na=$( (grep -R --include='*.lean' -E '^[[:space:]]*axiom[[:space:]]' RequestProject verification 2>/dev/null || true) | wc -l)
+          echo "AXIOM_DECL_COUNT=$na"
+          test "$na" -eq 0
+          nb=$( (grep -c "declaration uses 'sorry'" "$HOME/forge-oneext/build.log" || true))
+          echo "BUILD_SORRY_WARNINGS=$nb"
+          test "$nb" -eq 0
+
+      - name: Axiom reports (authors, as-is)
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/forge-oneext/work"
+          timeout 1800 lake env lean verification/CheckAxioms.lean > "$HOME/forge-oneext/authors-axioms.txt" 2>&1
+          cat "$HOME/forge-oneext/authors-axioms.txt"
+
+      - name: Axiom reports (auditor superset)
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$HOME/forge-oneext/work"
+          cp "$HOME/forge-oneext/AuditCheckAxioms.lean" .
+          timeout 1800 lake env lean AuditCheckAxioms.lean > "$HOME/forge-oneext/audit-axioms.txt" 2>&1
+          cat "$HOME/forge-oneext/audit-axioms.txt"
+
+      - name: Verdict
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "$HOME/forge-oneext/verdict.py" | tee "$HOME/forge-oneext/verdict.txt"
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: one-extension-evidence
+          path: |
+            ~/forge-oneext/build.log
+            ~/forge-oneext/cache-get.log
+            ~/forge-oneext/source-sha-check.txt
+            ~/forge-oneext/scan.txt
+            ~/forge-oneext/authors-axioms.txt
+            ~/forge-oneext/audit-axioms.txt
+            ~/forge-oneext/verdict.txt
+          if-no-files-found: warn
