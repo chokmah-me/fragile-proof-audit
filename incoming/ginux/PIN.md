@@ -219,3 +219,27 @@ Adjudication against the receipts:
 - Ledger classifications (his finding 1): counts
   are what recon checked; the semantics of
   "Complete" are a V-A matter, already in scope.
+
+## Close-out (2026-10-30)
+
+CLOSED - verdict **PARTIAL**. Audit note:
+`docs/audits/ginux-kurtzer.md`.
+
+Runs 5 and 6 (QEMU 10.1.0, KVM, Dell laptop Ubuntu
+25.10 guest, harness as shipped): build, check,
+test-rocky-systemd, and test-storage pass twice
+(the headline Rocky systemd boot claim reproduces
+at the pin). test-alpine, test-rocky-shell, and
+test-multi-domain fail identically twice, cause
+unseparated (product gap vs upstream test-window
+timeout on this host class). The aggregate fails at
+a pre-exec probe (lib.rs:1967) that is not the
+disclosed supervisor-probe failure; the disclosed
+stage is never reached. Runs 2 to 4 on QEMU 8.2
+established the undocumented QEMU >= 9.2
+prerequisite (39-bit IOMMU default; kernel requires
+the 48-bit bit). The pre-registered PASS_WITH_GAPS
+condition does not trigger. Argon second opinion on
+the verdict: UPHOLD WITH REPAIRS (adjudication in
+~/workspace/ginux-recon/argon-check/). The forge
+workflow is deleted at this close-out.
