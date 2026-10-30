@@ -2,8 +2,9 @@ name: local-smoothing-forge
 
 # Independent audit of the OpenAI local-smoothing formalization
 # (openai/math ComparatorChallenges/LocalSmoothing at a pinned
-# commit): vendor the challenge file and the Fourier subtree from
-# the pinned commit into a scratch Lean v4.34.1 project, build the
+# commit): vendor the challenge file and the OAI/Analysis,
+# OAI/Geometry and OAI/MeasureTheory subtrees from the pinned
+# commit into a scratch Lean v4.34.1 project, build the
 # challenge module and the solution Comparator module, settle the
 # twin-definition seam with a challenge-env vs solution-env #print
 # corpus comparison, and run #print axioms on the six comparator
@@ -68,20 +69,22 @@ jobs:
           git sparse-checkout set --no-cone \
             "/lean/ComparatorChallenges/LocalSmoothing.lean" \
             "/lean/ComparatorChallenges/LocalSmoothing.json" \
-            "/lean/OAI/Analysis/Fourier/"
+            "/lean/OAI/Analysis/" \
+            "/lean/OAI/Geometry/" \
+            "/lean/OAI/MeasureTheory/"
           test -f lean/ComparatorChallenges/LocalSmoothing.lean
           test -f lean/OAI/Analysis/Fourier/LocalSmoothing/Comparator.lean
           got=$(sha256sum lean/ComparatorChallenges/LocalSmoothing.lean | awk '{print $1}')
           echo "challenge sha256: $got (expect $CHALLENGE_SHA256)"
           [ "$got" = "$CHALLENGE_SHA256" ] || { echo "FAIL: challenge file hash mismatch"; exit 1; }
-          find lean/OAI/Analysis/Fourier -name '*.lean' | wc -l | tee ../VENDORED_COUNT.txt
+          find lean/OAI/Analysis lean/OAI/Geometry lean/OAI/MeasureTheory -name '*.lean' | wc -l | tee ../VENDORED_COUNT.txt
 
       - name: Scratch project, vendoring, closure checks
         run: |
           set -euo pipefail
           mkdir -p ls-forge
           cd oai-math/lean
-          tar cf - ComparatorChallenges/LocalSmoothing.lean OAI/Analysis/Fourier | (cd ../../ls-forge && tar xf -)
+          tar cf - ComparatorChallenges/LocalSmoothing.lean OAI/Analysis OAI/Geometry OAI/MeasureTheory | (cd ../../ls-forge && tar xf -)
           cd ../..
           mv ls-forge/ComparatorChallenges ls-forge/ComparatorChallenges-tmp
           mkdir ls-forge/ComparatorChallenges
