@@ -1,0 +1,277 @@
+name: local-smoothing-forge
+
+# Independent audit of the OpenAI local-smoothing formalization
+# (openai/math ComparatorChallenges/LocalSmoothing at a pinned
+# commit): vendor the challenge file and the Fourier subtree from
+# the pinned commit into a scratch Lean v4.34.1 project, build the
+# challenge module and the solution Comparator module, settle the
+# twin-definition seam with a challenge-env vs solution-env #print
+# corpus comparison, and run #print axioms on the six comparator
+# theorems, failing closed unless every report is within
+# {propext, Quot.sound, Classical.choice} and the corpora match.
+# One-shot workflow: deleted after the audit closes.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: local-smoothing-forge
+  cancel-in-progress: false
+
+env:
+  OAI_COMMIT: 7ef5c0cc5ca4b0e072b7a050fca09ab24bc6fa3a
+  MATHLIB_REV: d13f23b723b8a846827a245b89c10fc7d3f11612
+  CHALLENGE_SHA256: 58dd1d878cd08f8d32850b1142e451a5efd4b0cdcf538ba80efbd01ea83cd9fd
+
+jobs:
+  forge:
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 330
+    steps:
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          set +e
+          echo "runner: $(hostname)"
+          df -h "$HOME" || true
+          free -h || true
+          exit 0
+
+      - name: Validate pinned commit
+        run: |
+          set -euo pipefail
+          case "$OAI_COMMIT" in
+            ????????????????????????????????????????) ;;
+            *) echo "FAIL: OAI_COMMIT is not 40-hex"; exit 1 ;;
+          esac
+          case "$OAI_COMMIT" in
+            *[!0-9a-f]*) echo "FAIL: OAI_COMMIT is not 40-hex"; exit 1 ;;
+          esac
+          echo "pin ok: $OAI_COMMIT"
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Clone openai/math at the pin and vendor subtrees
+        run: |
+          set -euo pipefail
+          rm -rf oai-math ls-forge
+          git clone --filter=blob:none https://github.com/openai/math.git oai-math
+          cd oai-math
+          git checkout "$OAI_COMMIT"
+          git rev-parse HEAD | tee ../OAI_COMMIT.txt
+          git sparse-checkout set --no-cone \
+            "/lean/ComparatorChallenges/LocalSmoothing.lean" \
+            "/lean/ComparatorChallenges/LocalSmoothing.json" \
+            "/lean/OAI/Analysis/Fourier/"
+          test -f lean/ComparatorChallenges/LocalSmoothing.lean
+          test -f lean/OAI/Analysis/Fourier/LocalSmoothing/Comparator.lean
+          got=$(sha256sum lean/ComparatorChallenges/LocalSmoothing.lean | awk '{print $1}')
+          echo "challenge sha256: $got (expect $CHALLENGE_SHA256)"
+          [ "$got" = "$CHALLENGE_SHA256" ] || { echo "FAIL: challenge file hash mismatch"; exit 1; }
+          find lean/OAI/Analysis/Fourier -name '*.lean' | wc -l | tee ../VENDORED_COUNT.txt
+
+      - name: Scratch project, vendoring, closure checks
+        run: |
+          set -euo pipefail
+          mkdir -p ls-forge
+          cd oai-math/lean
+          tar cf - ComparatorChallenges/LocalSmoothing.lean OAI/Analysis/Fourier | (cd ../../ls-forge && tar xf -)
+          cd ../..
+          mv ls-forge/ComparatorChallenges ls-forge/ComparatorChallenges-tmp
+          mkdir ls-forge/ComparatorChallenges
+          mv ls-forge/ComparatorChallenges-tmp/LocalSmoothing.lean ls-forge/ComparatorChallenges/LocalSmoothing.lean
+          rmdir ls-forge/ComparatorChallenges-tmp
+          cd ls-forge
+          # The solution tree must not import the challenge module:
+          # the corpus comparison is meaningless otherwise.
+          if grep -rEn "^[[:space:]]*(public[[:space:]]+)?import[[:space:]]+ComparatorChallenges" OAI; then
+            echo "FAIL: solution tree imports ComparatorChallenges"
+            exit 1
+          fi
+          echo "no-challenge-import check OK"
+          # Import-closure check: every OAI import in the vendored
+          # tree must resolve to a vendored file.
+          missing=$( { grep -rhE --include="*.lean" "^[[:space:]]*(public[[:space:]]+)?import[[:space:]]+OAI\." OAI || true; } | awk '{print $NF}' | sort -u | while read -r mod; do
+            f="$(echo "$mod" | tr '.' '/').lean"
+            [ -f "$f" ] || echo "$mod"
+          done)
+          if [ -n "$missing" ]; then
+            echo "FAIL: OAI imports with no vendored source file:"
+            echo "$missing"
+            exit 1
+          fi
+          echo "import-closure check OK"
+          echo "leanprover/lean4:v4.34.1" > lean-toolchain
+          {
+            echo 'import Lake'
+            echo 'open Lake DSL'
+            echo 'package ls_forge where'
+            echo ''
+            echo '-- Harness rule (oai-family-forge): require mathlib LAST'
+            echo '-- so its satellite revs win and cache hashes verify.'
+            echo 'require mathlib from git "https://github.com/leanprover-community/mathlib4.git" @ "d13f23b723b8a846827a245b89c10fc7d3f11612"'
+            echo ''
+            echo 'lean_lib OAI where'
+            echo 'lean_lib ComparatorChallenges where'
+          } > lakefile.lean
+          cat lakefile.lean
+
+      - name: Fetch dependencies and Mathlib cache
+        working-directory: ls-forge
+        run: |
+          set -euo pipefail
+          lake update 2>&1 | tee ../lake-update.log
+          if grep -q "pins different versions" ../lake-update.log; then
+            echo "FAIL: dependency satellite version conflict"
+            exit 1
+          fi
+          lake exe cache get 2>&1 | tee ../cache-get.log
+          oleans=$(find .lake/packages/mathlib/.lake/build/lib -name '*.olean' | wc -l)
+          echo "MATHLIB_OLEANS=$oleans" | tee ../oleans.txt
+          [ "$oleans" -ge 1000 ] || { echo "FAIL: Mathlib cache incomplete ($oleans oleans)"; exit 1; }
+
+      - name: Build challenge module (six statement sorries by design)
+        working-directory: ls-forge
+        run: |
+          set -o pipefail
+          lake build ComparatorChallenges.LocalSmoothing 2>&1 | tee ../build-challenge.log
+          exit ${PIPESTATUS[0]}
+
+      - name: Build solution module
+        working-directory: ls-forge
+        run: |
+          set -o pipefail
+          start=$(date +%s)
+          lake build OAI.Analysis.Fourier.LocalSmoothing.Comparator 2>&1 | tee ../build-solution.log
+          rc=${PIPESTATUS[0]}
+          echo "lake build exit=$rc seconds=$(( $(date +%s) - start ))" | tee ../build-exit.txt
+          exit $rc
+
+      - name: Sorry-warning scans on the build logs
+        run: |
+          set -euo pipefail
+          # The challenge file's six theorems end in `sorry` by design
+          # (it is the statement file): exactly 6 warnings expected,
+          # which also pins the built challenge module to the pinned
+          # statement file. The solution build must have none.
+          c=$(grep -c "declaration uses 'sorry'" build-challenge.log || true)
+          s=$(grep -c "declaration uses 'sorry'" build-solution.log || true)
+          echo "CHALLENGE_SORRY_WARNINGS=$c SOLUTION_SORRY_WARNINGS=$s" | tee scan.txt
+          [ "$c" -eq 6 ] || { echo "FAIL: challenge sorry warnings $c != 6"; exit 1; }
+          [ "$s" -eq 0 ] || { echo "FAIL: solution build contains sorry warnings"; exit 1; }
+
+      - name: Print corpora in the two environments
+        working-directory: ls-forge
+        run: |
+          set -euo pipefail
+          NAMES="Space angularFourier angularInverse halfWaveIntegral besselPotential observationMeasure Implications.sphereMeasure Implications.sphericalExtension Implications.conjugateExponent Implications.bochnerRieszSymbol Implications.bochnerRiesz Implications.unitSegment Implications.tube Implications.kakeyaMaximal Implications.IsKakeyaSet Stein.literalSteinSquareFunction"
+          TMS="euclidean_local_smoothing bochner_riesz spherical_restriction kakeya_maximal kakeya stein_square"
+          NS="OAI.Analysis.Fourier.LocalSmoothing.Comparator"
+          {
+            echo "import ComparatorChallenges.LocalSmoothing"
+            for nm in $NAMES; do echo "#print $NS.$nm"; done
+            for tm in $TMS; do echo "#check @$NS.$tm"; done
+          } > PrintChallenge.lean
+          {
+            echo "import OAI.Analysis.Fourier.LocalSmoothing.Comparator"
+            for nm in $NAMES; do echo "#print $NS.$nm"; done
+            for tm in $TMS; do echo "#check @$NS.$tm"; done
+          } > PrintSolution.lean
+          lake env lean PrintChallenge.lean > ../corpus-challenge.txt 2>&1 || true
+          lake env lean PrintSolution.lean > ../corpus-solution.txt 2>&1 || true
+          n1=$(grep -c . ../corpus-challenge.txt || true)
+          n2=$(grep -c . ../corpus-solution.txt || true)
+          echo "corpus nonempty lines: challenge=$n1 solution=$n2"
+
+      - name: Corpus comparison
+        run: |
+          set -euo pipefail
+          python3 - <<'EOF'
+          import re, sys
+          def norm(p):
+              t = open(p, encoding='utf-8', errors='replace').read()
+              return re.sub(r'\s+', ' ', t).strip()
+          a, b = norm('corpus-challenge.txt'), norm('corpus-solution.txt')
+          print('corpus chars: challenge=%d solution=%d' % (len(a), len(b)))
+          if a != b:
+              print('FAIL: corpora differ')
+              for i, (x, y) in enumerate(zip(a.split('. '), b.split('. '))):
+                  if x != y:
+                      print('first differing chunk', i)
+                      print('challenge:', x[:400])
+                      print('solution :', y[:400])
+                      break
+              sys.exit(1)
+          print('CORPUS: IDENTICAL')
+          EOF
+
+      - name: Axiom reports (six comparator theorems)
+        working-directory: ls-forge
+        run: |
+          set -euo pipefail
+          NS="OAI.Analysis.Fourier.LocalSmoothing.Comparator"
+          {
+            echo "import OAI.Analysis.Fourier.LocalSmoothing.Comparator"
+            for tm in euclidean_local_smoothing bochner_riesz spherical_restriction kakeya_maximal kakeya stein_square; do
+              echo "#print axioms $NS.$tm"
+            done
+          } > AxiomCheck.lean
+          lake env lean AxiomCheck.lean > ../axioms.txt 2>&1 || true
+          cat ../axioms.txt
+
+      - name: Verdict
+        run: |
+          set -euo pipefail
+          python3 - <<'EOF'
+          import re, sys
+          txt = open('axioms.txt').read()
+          allow = {'propext', 'Quot.sound', 'Classical.choice'}
+          blocks = re.findall(r"'?([\w.]+)'? depends on axioms: \[(.*?)\]", txt, re.DOTALL)
+          free = re.findall(r"'?([\w.]+)'? does not depend on any axioms", txt)
+          for name in free:
+              blocks.append((name, ''))
+          print('axiom reports:', len(blocks), '(expect 6)')
+          ok = len(blocks) == 6
+          for name, lst in blocks:
+              found = {a.strip().strip("'") for a in lst.split(',') if a.strip()}
+              print(name, ':', sorted(found))
+              if found - allow or 'sorryAx' in found:
+                  ok = False
+          if 'sorryAx' in txt:
+              ok = False
+          print('VERDICT:', 'PASS' if ok else 'FAIL')
+          open('verdict.txt', 'w').write('PASS\n' if ok else 'FAIL\n')
+          sys.exit(0 if ok else 1)
+          EOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-smoothing-evidence
+          path: |
+            OAI_COMMIT.txt
+            VENDORED_COUNT.txt
+            lake-update.log
+            cache-get.log
+            oleans.txt
+            build-challenge.log
+            build-solution.log
+            build-exit.txt
+            scan.txt
+            corpus-challenge.txt
+            corpus-solution.txt
+            axioms.txt
+            verdict.txt
+          if-no-files-found: warn
+
+      - name: Leave shared workspace clean (self-hosted meta-rule)
+        if: always()
+        run: |
+          rm -rf oai-math ls-forge
