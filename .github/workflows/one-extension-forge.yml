@@ -171,7 +171,8 @@ jobs:
           ns=$( (grep -R --include='*.lean' 'sorry' RequestProject verification 2>/dev/null || true) | wc -l)
           echo "SORRY_COUNT=$ns"
           test "$ns" -eq 1
-          grep -R --include='*.lean' 'sorry' RequestProject | grep -q 'Tableaux.lean:247'
+          grep -Rn --include='*.lean' 'sorry' RequestProject > "$HOME/forge-oneext/sorry-hits.txt" || true
+          grep -q 'Tableaux.lean:247' "$HOME/forge-oneext/sorry-hits.txt"
           ne=$( (grep -R --include='*.lean' -E 'native_decide|ofReduceBool|sorryAx' RequestProject verification 2>/dev/null || true) | wc -l)
           echo "ESCAPE_COUNT=$ne"
           test "$ne" -eq 0
