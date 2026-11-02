@@ -32,7 +32,7 @@ jobs:
         run: |
           set -euo pipefail
           bash scripts/harness/dispatch_gate.sh | tee gate-output.txt
-          grep -q "dispatch_gate: PASS" gate-output.txt
+          grep -q "DISPATCH-GATE: PASS" gate-output.txt
           python3 scripts/harness/pre_dispatch_checks.py | tee corpus-output.txt
 
   forge:
