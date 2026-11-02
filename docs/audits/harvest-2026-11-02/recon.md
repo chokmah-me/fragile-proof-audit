@@ -1,6 +1,6 @@
 # Harvest recon — 2026-11-02
 
-**Harvest window:** 2026-10-27..2026-11-02 · **Source:** weekly harvest scan 2026-11-02 -- three parallel sweeps: (a) arXiv math.CO/math.NT; (b) arXiv math.PR/math.NA/cs.DM/cs.SC; (c) math blogs, public GitHub repos, Zenodo records and lab announcements. All 10 arXiv IDs below verified on their abs pages (2610.36534, 2610.36648, 2610.39469, 2610.39021, 2610.40519 via search; 2610.42005, 2610.40694, 2610.40703, 2610.38386, 2610.39941 via live abstract-page checks); the morgan-mullen and r3333 repos verified live. Coverage caveats: math.NT was keyword-screened rather than fully title-enumerated in the middle slice (Oct 27 afternoon to Oct 30 midday); math.PR/math.NA/cs.DM/cs.SC coverage for Oct 27-29 was targeted search, not full listing enumeration, and Oct 31-Nov 2 listings had not appeared in crawled listings at sweep time; Hexagon Nov 2 deposits after the sweep fetch are unswept. Near-misses failing public inputs (no code/data location): 2610.38870 and 2610.41569 (AxiomProver formalizations with no public Lean location), 2610.38073 (58-field norm-Euclidean completeness, certificates claimed, no location), 2610.41555 (Haiman n<=10, 1.25B pairs, no data location), 2610.40691, 2610.41102, 2610.41223, 2610.39833, 2610.37848 (rational certificates claimed, no public location), plus the PR/NA slice's theory-only items (SQD linear systems 2610.41708 states a package but no repo URL was verified; Ramanujan 2-lift towers 2610.39485, Toeplitz-interior spectra 2610.42072, band random graphs 2610.42107, ERGM fluctuations 2610.41781, Potts Glauber 2610.42059 -- paper-contained only, no author code/data found). Hexagon in-window deposits (deterministic factoring 2610.00600, MacMahon cubes 2611.00016, trefoil distortion 2611.00012, Korenblum certificates 2611.00014 and 2610.00696, Vitorino-Vukusic 2611.00009) were NOT ranked: their Palomar artifact repo URLs could not be resolved from the deposit pages at sweep time, so they fail the public-inputs bar pending recon; the OpenAI local-smoothing claim (announced Oct 26, one day before the window) was not ranked because a local-smoothing audit thread is already open. Cut by the 10-cap, held for next run if still fresh: 2610.36964 (BP fixed-point degree formula, Lean), 2610.40342 (p-adic valuation calculus, 99 OEIS sequences, ancillary + Lean), 2610.40863 (Cranston-Li-Su-Wang-Xu conjecture, Lean from standard axioms alone), 2610.39637 (infinite sumset configurations, Lean claimed, no repo link on abs page). · **Harvest sha256:** `89e005c16bae0067879a5e3e939c0612ac672621fff7fa074ec24fefc5115ec1`
+**Harvest window:** 2026-10-27..2026-11-02 · **Source:** weekly harvest scan 2026-11-02 -- three parallel sweeps: (a) arXiv math.CO/math.NT; (b) arXiv math.PR/math.NA/cs.DM/cs.SC; (c) math blogs, public GitHub repos, Zenodo records and lab announcements. All 10 arXiv IDs below verified on their abs pages (2610.36534, 2610.36648, 2610.39469, 2610.39021, 2610.40519 via search; 2610.42005, 2610.40694, 2610.40703, 2610.38386, 2610.39941 via live abstract-page checks); the morgan-mullen and r3333 repos verified live. Coverage caveats: math.NT was keyword-screened rather than fully title-enumerated in the middle slice (Oct 27 afternoon to Oct 30 midday); math.PR/math.NA/cs.DM/cs.SC coverage for Oct 27-29 was targeted search, not full listing enumeration, and Oct 31-Nov 2 listings had not appeared in crawled listings at sweep time; Hexagon Nov 2 deposits after the sweep fetch are unswept. Near-misses failing public inputs (no code/data location): 2610.38870 and 2610.41569 (AxiomProver formalizations with no public Lean location), 2610.38073 (58-field norm-Euclidean completeness, certificates claimed, no location), 2610.41555 (Haiman n<=10, 1.25B pairs, no data location), 2610.40691, 2610.41102, 2610.41223, 2610.39833, 2610.37848 (rational certificates claimed, no public location), plus the PR/NA slice's theory-only items (SQD linear systems 2610.41708 states a package but no repo URL was verified; Ramanujan 2-lift towers 2610.39485, Toeplitz-interior spectra 2610.42072, band random graphs 2610.42107, ERGM fluctuations 2610.41781, Potts Glauber 2610.42059 -- paper-contained only, no author code/data found). Hexagon in-window deposits (deterministic factoring 2610.00600, MacMahon cubes 2611.00016, trefoil distortion 2611.00012, Korenblum certificates 2611.00014 and 2610.00696, Vitorino-Vukusic 2611.00009) were NOT ranked: their Palomar artifact repo URLs could not be resolved from the deposit pages at sweep time, so they fail the public-inputs bar pending recon; the OpenAI local-smoothing claim (announced Oct 26, one day before the window) was not ranked because a local-smoothing audit thread is already open. Cut by the 10-cap, held for next run if still fresh: 2610.36964 (BP fixed-point degree formula, Lean), 2610.40342 (p-adic valuation calculus, 99 OEIS sequences, ancillary + Lean), 2610.40863 (Cranston-Li-Su-Wang-Xu conjecture, Lean from standard axioms alone), 2610.39637 (infinite sumset configurations, Lean claimed, no repo link on abs page). · **Harvest sha256:** `d0babeac268b218da8762217d53abf0fc4034a5152573b60419860daae9b8f98`
 
 Generated by the harvest loop (`scripts/harvest-loop/recon.py`): identifier verification, inputs inventory, fragility scoring, attack-lane suggestion. No code cloned, nothing run. Deep gates wait for a target pick. The verdict lock is untouched.
 
@@ -8,8 +8,8 @@ Generated by the harvest loop (`scripts/harvest-loop/recon.py`): identifier veri
 
 | # | Claim | Paper | OpenAlex (axis 2) | Code |
 |---|---|---|---|---|
-| 1 | Cop-prisoner extremal function M(n,m) fully classified (single author, partial Lean) | VERIFIED (2610.39469) | AGREE | NON-GITHUB |
-| 2 | R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted) | VERIFIED (2610.36648) | AGREE | PUBLIC milostatarevic/r3333-upper-bound@faac6f3 (1390 lean files) |
+| 1 | R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted) | VERIFIED (2610.36648) | AGREE | PUBLIC milostatarevic/r3333-upper-bound@faac6f3 (1390 lean files) |
+| 2 | Cop-prisoner extremal function M(n,m) fully classified (single author, partial Lean) | VERIFIED (2610.39469) | AGREE | NON-GITHUB |
 | 3 | Hibi-Li (2016) conjecture fully resolved (Lean 4, single author) | VERIFIED (2610.40703) | ABSENT | NOT-FOUND |
 | 4 | Morgan-Mullen conjecture proved (Lean 4 formalization, single author) | VERIFIED (2610.36534) | AGREE | PUBLIC florian-hellwig/morgan-mullen@03fb9bd (43 lean files) |
 | 5 | Four-runner Lonely Runner case settled completely | VERIFIED (2610.40694) | ABSENT | NON-GITHUB |
@@ -21,8 +21,8 @@ Generated by the harvest loop (`scripts/harvest-loop/recon.py`): identifier veri
 
 ## Ranked queue
 
-1. **Cop-prisoner extremal function M(n,m) fully classified (single author, partial Lean)** — fragility 4
-2. **R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted)** — fragility 4
+1. **R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted)** — fragility 5
+2. **Cop-prisoner extremal function M(n,m) fully classified (single author, partial Lean)** — fragility 4
 3. **Hibi-Li (2016) conjecture fully resolved (Lean 4, single author)** — fragility 3
 4. **Morgan-Mullen conjecture proved (Lean 4 formalization, single author)** — fragility 2
 5. **Four-runner Lonely Runner case settled completely** — fragility 1
@@ -32,7 +32,37 @@ Generated by the harvest loop (`scripts/harvest-loop/recon.py`): identifier veri
 9. **Block-exchange descent for insertion, computer-assisted to length 30** — fragility 0
 10. **Sharp F2^9 tiling counterexample with no subspace complement** — fragility 0
 
-## Card 1: Cop-prisoner extremal function M(n,m) fully classified (single author, partial Lean)
+## Card 1: R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted)
+
+**Claim:** Every 4-coloring of the edges of K_61 contains a monochromatic triangle, improving the upper bound 62 to 61.
+**Harvest id:** `ramsey-r3333-61-lean-sat`
+
+**Paper.** status=VERIFIED
+- arXiv:2610.36648 — *An upper bound of 61 for the Ramsey number $R(3,3,3,3)$*
+- authors: Milos Tatarevic · published 2026-10-27
+- https://arxiv.org/abs/2610.36648
+- OpenAlex (axis 2): AGREE — *An upper bound of 61 for the Ramsey number $R(3,3,3,3)$* · 2026-10-27 · overlap: tatarevic
+
+**Code/data.** status=PUBLIC
+- repo: https://github.com/milostatarevic/r3333-upper-bound (branch `main`, pushed 2026-10-31)
+- HEAD: `faac6f3c5dfd071a0d946bc819f1c46caa7901f7` (2026-10-31)
+- Lean files: 1390 · lakefile: yes · toolchain: not pinned
+- code note: The Lean theorem's single premise is that 56,723 SAT formulas are unsatisfiable; the UNSAT results are external evidence, not replayed in the kernel, and the live repo HEAD has already moved on to a stronger R <= 60 claim (Oct 30, CaDiCaL verification still running), so the K61 paper version must be taken at its pinned commit, not HEAD. Heavy AI assistance disclosed (GPT-5.6, Fable 5, GPT-6 Astra/Pro).
+- inputs: Public repo verified live: formal/ Lean reduction, reproduce/ SAT formulas + native execution records + evidence verifier, CI builds the encoding target; the K61 version is pinned at its exact commit per the repo README. Lean toolchain pin not verified from the landing page; no comparator/Palomar registration mentioned. Recorded as declarations for the formalization coverage inventory + LeanExplore probe query.
+
+**Fragility.** score=5 · signals: `single_author`, `disclosed_llm_help`, `formal_subset_of_claim`, `public_ci_green`
+- +1: Lean files present, no lean-toolchain pin found
+- +1: arXiv title does not closely match harvest title (check citation)
+
+**Suggested lanes (heuristic, confirm on pick):** type G — logical-gap exposure (formalized subset vs headline); type A — scalar gate (quantitative bound)
+
+**Formalization coverage (Lean; API metadata only — nothing cloned or run).**
+- inventory: 1390 .lean files · lakefile: yes · toolchain: not pinned
+- declared by authors (unverified until target pick): Palomar registration (id not parsed) declared
+- declared by authors (unverified until target pick): multi-kernel / comparator replay declared
+- LeanExplore probe (post-pick; remote API is public and keyless — LeanExplore retired API keys, no account needed; or use the website): `leanexplore search "R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted). Every 4-coloring of the edges of K_61 contains a monochromatic triangle, improving the upper bound 62 to 61." --package Mathlib` — checks whether the formalized statement or its key lemmas already exist in Mathlib; feeds the statement-fidelity checklist (four modes, docs/harvest-loop.md).
+
+## Card 2: Cop-prisoner extremal function M(n,m) fully classified (single author, partial Lean)
 
 **Claim:** Exact M(n,m) for every admissible (n,m): piecewise formula for n >= 12 plus complete finite tables for orders 1-11, for guaranteed indirect delivery in directed networks.
 **Harvest id:** `cop-prisoner-extremal-m`
@@ -53,36 +83,6 @@ Generated by the harvest loop (`scripts/harvest-loop/recon.py`): identifier veri
 - +1: arXiv title does not closely match harvest title (check citation)
 
 **Suggested lanes (heuristic, confirm on pick):** type G — logical-gap exposure (formalized subset vs headline)
-
-## Card 2: R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted)
-
-**Claim:** Every 4-coloring of the edges of K_61 contains a monochromatic triangle, improving the upper bound 62 to 61.
-**Harvest id:** `ramsey-r3333-61-lean-sat`
-
-**Paper.** status=VERIFIED
-- arXiv:2610.36648 — *An upper bound of 61 for the Ramsey number $R(3,3,3,3)$*
-- authors: Milos Tatarevic · published 2026-10-27
-- https://arxiv.org/abs/2610.36648
-- OpenAlex (axis 2): AGREE — *An upper bound of 61 for the Ramsey number $R(3,3,3,3)$* · 2026-10-27 · overlap: tatarevic
-
-**Code/data.** status=PUBLIC
-- repo: https://github.com/milostatarevic/r3333-upper-bound (branch `main`, pushed 2026-10-31)
-- HEAD: `faac6f3c5dfd071a0d946bc819f1c46caa7901f7` (2026-10-31)
-- Lean files: 1390 · lakefile: yes · toolchain: not pinned
-- code note: The Lean theorem's single premise is that 56,723 SAT formulas are unsatisfiable; the UNSAT results are external evidence, not replayed in the kernel, and the live repo HEAD has already moved on to a stronger R <= 60 claim (Oct 30, CaDiCaL verification still running), so the K61 paper version must be taken at its pinned commit, not HEAD. Heavy AI assistance disclosed (GPT-5.6, Fable 5, GPT-6 Astra/Pro).
-- inputs: Public repo verified live: formal/ Lean reduction, reproduce/ SAT formulas + native execution records + evidence verifier, CI builds the encoding target; the K61 version is pinned at its exact commit per the repo README. Lean toolchain pin not verified from the landing page; no comparator/Palomar registration mentioned. Recorded as declarations for the formalization coverage inventory + LeanExplore probe query.
-
-**Fragility.** score=4 · signals: `single_author`, `disclosed_llm_help`, `formal_subset_of_claim`, `pinned_toolchain`, `public_ci_green`
-- +1: Lean files present, no lean-toolchain pin found
-- +1: arXiv title does not closely match harvest title (check citation)
-
-**Suggested lanes (heuristic, confirm on pick):** type G — logical-gap exposure (formalized subset vs headline); type A — scalar gate (quantitative bound)
-
-**Formalization coverage (Lean; API metadata only — nothing cloned or run).**
-- inventory: 1390 .lean files · lakefile: yes · toolchain: not pinned
-- declared by authors (unverified until target pick): Palomar registration (id not parsed) declared
-- declared by authors (unverified until target pick): multi-kernel / comparator replay declared
-- LeanExplore probe (post-pick; remote API is public and keyless — LeanExplore retired API keys, no account needed; or use the website): `leanexplore search "R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted). Every 4-coloring of the edges of K_61 contains a monochromatic triangle, improving the upper bound 62 to 61." --package Mathlib` — checks whether the formalized statement or its key lemmas already exist in Mathlib; feeds the statement-fidelity checklist (four modes, docs/harvest-loop.md).
 
 ## Card 3: Hibi-Li (2016) conjecture fully resolved (Lean 4, single author)
 

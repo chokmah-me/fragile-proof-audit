@@ -2,8 +2,8 @@ Weekly harvest recon is in — 10 claims analyzed, nothing run.
 
 | Rank | Claim | Fragility | Top signal |
 |---|---|---|---|
-| 1 | Cop-prisoner extremal function M(n,m) fully classified (single author, partial Lean) | 4 | `single_author` |
-| 2 | R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted) | 4 | `single_author` |
+| 1 | R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted) | 5 | `single_author` |
+| 2 | Cop-prisoner extremal function M(n,m) fully classified (single author, partial Lean) | 4 | `single_author` |
 | 3 | Hibi-Li (2016) conjecture fully resolved (Lean 4, single author) | 3 | `single_author` |
 | 4 | Morgan-Mullen conjecture proved (Lean 4 formalization, single author) | 2 | `single_author` |
 | 5 | Four-runner Lonely Runner case settled completely | 1 | `—` |

@@ -1,6 +1,6 @@
 {
   "date": "2026-11-02",
-  "harvest_sha": "89e005c16bae0067879a5e3e939c0612ac672621fff7fa074ec24fefc5115ec1",
+  "harvest_sha": "d0babeac268b218da8762217d53abf0fc4034a5152573b60419860daae9b8f98",
   "meta": {
     "window": "2026-10-27..2026-11-02",
     "source": "weekly harvest scan 2026-11-02 -- three parallel sweeps: (a) arXiv math.CO/math.NT; (b) arXiv math.PR/math.NA/cs.DM/cs.SC; (c) math blogs, public GitHub repos, Zenodo records and lab announcements. All 10 arXiv IDs below verified on their abs pages (2610.36534, 2610.36648, 2610.39469, 2610.39021, 2610.40519 via search; 2610.42005, 2610.40694, 2610.40703, 2610.38386, 2610.39941 via live abstract-page checks); the morgan-mullen and r3333 repos verified live. Coverage caveats: math.NT was keyword-screened rather than fully title-enumerated in the middle slice (Oct 27 afternoon to Oct 30 midday); math.PR/math.NA/cs.DM/cs.SC coverage for Oct 27-29 was targeted search, not full listing enumeration, and Oct 31-Nov 2 listings had not appeared in crawled listings at sweep time; Hexagon Nov 2 deposits after the sweep fetch are unswept. Near-misses failing public inputs (no code/data location): 2610.38870 and 2610.41569 (AxiomProver formalizations with no public Lean location), 2610.38073 (58-field norm-Euclidean completeness, certificates claimed, no location), 2610.41555 (Haiman n<=10, 1.25B pairs, no data location), 2610.40691, 2610.41102, 2610.41223, 2610.39833, 2610.37848 (rational certificates claimed, no public location), plus the PR/NA slice's theory-only items (SQD linear systems 2610.41708 states a package but no repo URL was verified; Ramanujan 2-lift towers 2610.39485, Toeplitz-interior spectra 2610.42072, band random graphs 2610.42107, ERGM fluctuations 2610.41781, Potts Glauber 2610.42059 -- paper-contained only, no author code/data found). Hexagon in-window deposits (deterministic factoring 2610.00600, MacMahon cubes 2611.00016, trefoil distortion 2611.00012, Korenblum certificates 2611.00014 and 2610.00696, Vitorino-Vukusic 2611.00009) were NOT ranked: their Palomar artifact repo URLs could not be resolved from the deposit pages at sweep time, so they fail the public-inputs bar pending recon; the OpenAI local-smoothing claim (announced Oct 26, one day before the window) was not ranked because a local-smoothing audit thread is already open. Cut by the 10-cap, held for next run if still fresh: 2610.36964 (BP fixed-point degree formula, Lean), 2610.40342 (p-adic valuation calculus, 99 OEIS sequences, ancillary + Lean), 2610.40863 (Cranston-Li-Su-Wang-Xu conjecture, Lean from standard axioms alone), 2610.39637 (infinite sumset configurations, Lean claimed, no repo link on abs page)."
@@ -84,7 +84,7 @@
     {
       "id": "ramsey-r3333-61-lean-sat",
       "title": "R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted)",
-      "score": 4,
+      "score": 5,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2610.36648",
@@ -127,7 +127,6 @@
         "single_author",
         "disclosed_llm_help",
         "formal_subset_of_claim",
-        "pinned_toolchain",
         "public_ci_green"
       ],
       "adjustments": [
