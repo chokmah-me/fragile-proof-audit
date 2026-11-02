@@ -122,6 +122,30 @@ creates it` / `step '<name>' is a probe (informational) but can gate
 the job`. Scope note: tracking is in file order (steps run in written
 order); only `df` arguments are tracked, not every filesystem read.
 
+## FM8 — the step block disagrees with what it calls
+
+Banked 2026-11-02: cop-prisoner runs #1 (41500245788) and #2 (41506252716)
+each died in minutes on their first dispatches, on two variants of one
+kind: a step block whose text disagrees with the behavior of what it
+invokes, in ways component-level checks cannot see. (a) Run #1's gate
+step ran dispatch_gate.sh, then `grep -q "dispatch_gate: PASS"` — the
+script prints `DISPATCH-GATE: PASS` (case, hyphen vs underscore), so
+grep exited 1 and the forge job was skipped. (b) Run #2's download step
+assigned `WORK=`/`CACHE=` without export (GITHUB_ENV exports them only
+to later steps), then its own python block read `os.environ["WORK"]` and
+died with KeyError after every hash check had passed. `--workflows`
+refuses when:
+(a) a run block invokes dispatch_gate.sh and greps for a pattern that
+does not appear verbatim in the literals dispatch_gate.sh prints
+(read from the script next to the checker);
+(b) a run block assigns `$VAR` without export and later reads
+`os.environ["VAR"]` (or `.get`) in the same block.
+Signals: `FM8 REFUSED: <file>:<line> gate step greps for ...` /
+`run block assigns $<VAR> without export, then reads os.environ[...]`.
+Proven 2026-11-02: the pre-FM8 checker passed both buggy revisions;
+with FM8 it refuses f5323d3 twice (both kinds) and d6b3c63 once (env
+kind), and passes the fixed 8f8ff1a plus the full 17-workflow corpus.
+
 ## Forge gate job — the dispatch-point catch (option A, adopted 2026-10-27)
 
 The chained `dispatch_gate.sh` call is a convention: a caller can forget

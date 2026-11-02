@@ -301,6 +301,7 @@ def check_workflow_lint(path):
             refuse("K13", f"{path}:{i} `..` in a path:/working-directory: "
                           "value is rejected by action path validation")
     check_fm7(path, lines)
+    check_fm8(path, lines)
 
 
 # --- FM7: probe gating + df use-before-create (eth-forge run #1, 2026-10-27) --
@@ -371,6 +372,85 @@ def check_fm7(path, lines):
                           f"probe (informational) but can gate the job: "
                           f"no continue-on-error: true and its run block "
                           f"does not end with `exit 0`")
+
+
+# --- FM8: gate-marker literal + same-step unexported env read ---------------
+# (cop-prisoner runs #1/#2, 2026-11-02: two step blocks that passed component
+# checks died in minutes on the runner. (a) Run #1's gate step ran
+# dispatch_gate.sh, then `grep -q "dispatch_gate: PASS"` — but the script
+# prints 'DISPATCH-GATE: PASS' (case, hyphen vs underscore), so grep exited 1
+# and the forge job was skipped. The marker a step greps for must exist,
+# verbatim, in the output the invoked script actually prints. (b) Run #2's
+# download step assigned WORK=/CACHE= as plain shell vars (GITHUB_ENV exports
+# them only to LATER steps), then its own python block read
+# os.environ["WORK"] and died with KeyError after every hash check had
+# passed. A var a block assigns but never exports before an in-block python
+# os.environ read of it is a step that only fails on the runner.)
+
+GREP_Q_RE = re.compile(r"""\bgrep\s+(?:-\w+\s+)*?["']([^"']+)["']""")
+DISPATCH_GATE_CALL_RE = re.compile(r"\bdispatch_gate\.sh\b")
+ASSIGN_RE = re.compile(r"^(\s*)(export\s+)?([A-Za-z_][A-Za-z0-9_]*)=",
+                       re.M)
+EXPORT_ONLY_RE = re.compile(r"^\s*export\s+([A-Za-z_][A-Za-z0-9_]*)\b",
+                            re.M)
+ENVIRON_READ_RE = re.compile(
+    r"""os\.environ\[["']([A-Za-z_][A-Za-z0-9_]*)["']\]"""
+    r"""|os\.environ\.get\(["']([A-Za-z_][A-Za-z0-9_]*)["']""")
+
+
+def _dispatch_gate_print_literals():
+    """Quoted literals dispatch_gate.sh prints, read from the script that
+    sits next to this checker. Returns None when the script is absent."""
+    gate = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "dispatch_gate.sh")
+    if not os.path.isfile(gate):
+        return None
+    text = open(gate, encoding="utf-8").read()
+    literals = re.findall(r"""printf\s+["']([^"']+)["']""", text)
+    literals += re.findall(r"""echo\s+["']([^"']+)["']""", text)
+    # strip printf format tails: 'DISPATCH-GATE: PASS %s\n' -> 'DISPATCH-GATE: PASS'
+    return [lit.split("%")[0].rstrip("\\n ").strip() for lit in literals]
+
+
+def check_fm8(path, lines):
+    literals = _dispatch_gate_print_literals()
+    for lineno, script in extract_run_blocks(lines):
+        # (a) grep marker vs the called script's printed output
+        if literals is not None and DISPATCH_GATE_CALL_RE.search(script):
+            for gm in GREP_Q_RE.finditer(script):
+                pattern = gm.group(1)
+                if not any(pattern in lit or lit.startswith(pattern)
+                           for lit in literals):
+                    refuse("FM8", f"{path}:{lineno} gate step greps for "
+                                  f"{pattern!r}, which dispatch_gate.sh "
+                                  f"never prints (it prints "
+                                  f"{literals!r}); grep exits 1 and the "
+                                  f"step fails on the runner")
+        # (b) unexported same-block assignment read back via os.environ
+        exported = set()
+        assigned = {}
+        events = []
+        for m in ASSIGN_RE.finditer(script):
+            var = m.group(3)
+            events.append((m.start(), "export" if m.group(2) else "assign",
+                           var))
+        for m in EXPORT_ONLY_RE.finditer(script):
+            events.append((m.start(), "export", m.group(1)))
+        for m in ENVIRON_READ_RE.finditer(script):
+            events.append((m.start(), "read", m.group(1) or m.group(2)))
+        for pos, kind, var in sorted(events):
+            if kind == "export":
+                exported.add(var)
+            elif kind == "assign":
+                assigned.setdefault(var, pos)
+            elif var in assigned and var not in exported:
+                refuse("FM8", f"{path}:{lineno} run block assigns ${var} "
+                              f"without export, then reads "
+                              f"os.environ[{var!r}] in the same block: "
+                              f"GITHUB_ENV exports it only to later steps, "
+                              f"so the python block dies with KeyError on "
+                              f"the runner")
+                assigned.pop(var, None)
 
 
 def main():
