@@ -61,6 +61,7 @@ jobs:
           mkdir -p "$WORK/dl" "$WORK/logs" "$CACHE/oleans"
           echo "WORK=$WORK" >> "$GITHUB_ENV"
           echo "CACHE=$CACHE" >> "$GITHUB_ENV"
+          export WORK CACHE
           cd "$WORK/dl"
           curl -sSL -o release.json "$CP_SITE/release.json"
           curl -sSL -o lean-verification.json "$CP_SITE/lean-verification.json"
