@@ -1,0 +1,281 @@
+name: cop-prisoner-forge
+
+# One-shot forge for the cop-prisoner audit (Raychev, extremal M(n,m)).
+# Snapshot-pinned companion-site Lean archive (no git repo, no Mathlib,
+# Std only), rebuilt on the Dell lane with an auditor-written compile
+# driver. The author's check.py is never executed. PIN:
+# incoming/cop-prisoner/PIN.md. Delete this workflow when the audit closes.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CP_SITE: https://angelraychev.com/cop-prisoner
+  CP_RELEASE_SHA256: aad1d1cc34de6b3d291e2acad7f10d3db1556ea441611b840fc6a2b5e10d1491
+  CP_ARCHIVE_SHA256: e826ac3e497ed94b965de7035286e26e917139568efb341bf4951b82c4de2d28
+  CP_VERIF_SHA256: de081cf0af03f87934e076c0edca30d668868a112b2b1861aac32a7d5bd804bf
+  CP_TOOLCHAIN: leanprover/lean4:v4.33.1
+  CP_EXPECT_MODULES: "6551"
+  CP_EXPECT_SOURCES: "6555"
+  CP_EXPECT_AUDIT_PRINTS: "115"
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch gate (dispatch_gate + corpus lint)
+        run: |
+          set -euo pipefail
+          bash scripts/harness/dispatch_gate.sh | tee gate-output.txt
+          grep -q "dispatch_gate: PASS" gate-output.txt
+          python3 scripts/harness/pre_dispatch_checks.py | tee corpus-output.txt
+
+  forge:
+    needs: gate
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 600
+    steps:
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          set +e
+          echo "runner: $(hostname)  os: $(uname -a)"
+          echo "cpus: $(nproc)  mem: $(free -g | awk 'NR==2{print $2" GiB total"}')"
+          command -v python3 && python3 --version
+          command -v curl && curl --version | head -1
+          mkdir -p "$HOME/cp-forge"
+          df -h "$HOME/cp-forge" || true
+          exit 0
+
+      - name: Download snapshot and verify pins
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          WORK="$HOME/cp-forge/run-${CP_ARCHIVE_SHA256:0:12}"
+          CACHE="$HOME/cp-forge/cache-${CP_ARCHIVE_SHA256:0:12}"
+          mkdir -p "$WORK/dl" "$WORK/logs" "$CACHE/oleans"
+          echo "WORK=$WORK" >> "$GITHUB_ENV"
+          echo "CACHE=$CACHE" >> "$GITHUB_ENV"
+          cd "$WORK/dl"
+          curl -sSL -o release.json "$CP_SITE/release.json"
+          curl -sSL -o lean-verification.json "$CP_SITE/lean-verification.json"
+          curl -sSL -o lean-proofs.zip "$CP_SITE/lean-proofs.zip"
+          sha256sum release.json lean-verification.json lean-proofs.zip | tee "$WORK/logs/download-hashes.txt"
+          [ "$(sha256sum release.json | awk '{print $1}')" = "$CP_RELEASE_SHA256" ]
+          [ "$(sha256sum lean-verification.json | awk '{print $1}')" = "$CP_VERIF_SHA256" ]
+          [ "$(sha256sum lean-proofs.zip | awk '{print $1}')" = "$CP_ARCHIVE_SHA256" ]
+          python3 - <<'PYEOF'
+          import json, hashlib, os
+          work = os.environ["WORK"]
+          rel = json.load(open(os.path.join(work, "dl", "release.json")))
+          snap = rel["artifact_snapshots"]["lean"]
+          assert snap["archive_sha256"] == os.environ["CP_ARCHIVE_SHA256"], "release.json snapshot archive hash != PIN"
+          assert snap["verification_sha256"] == os.environ["CP_VERIF_SHA256"], "release.json snapshot verification hash != PIN"
+          assert rel["files"]["lean-proofs.zip"]["sha256"] == os.environ["CP_ARCHIVE_SHA256"]
+          assert rel["files"]["lean-verification.json"]["sha256"] == os.environ["CP_VERIF_SHA256"]
+          print("release.json internal consistency: OK (snapshot + files[] agree with PIN)")
+          PYEOF
+          if ! command -v elan >/dev/null; then
+            curl -sSfL https://elan.lean-lang.org -o elan-init.sh
+            sh elan-init.sh -y --default-toolchain none
+          fi
+          elan toolchain install "$CP_TOOLCHAIN"
+          echo "pins: OK"
+
+      - name: Extract archive and verify all source hashes
+        run: |
+          set -euo pipefail
+          cd "$WORK"
+          python3 -m zipfile -e dl/lean-proofs.zip extracted
+          python3 - <<'PYEOF'
+          import json, hashlib, os, sys
+          work = os.environ["WORK"]
+          ver = json.load(open(os.path.join(work, "dl", "lean-verification.json")))
+          src = os.path.join(work, "extracted", "lean")
+          entries = ver["source_sha256"]
+          assert len(entries) == int(os.environ["CP_EXPECT_SOURCES"]), f"source entries {len(entries)}"
+          def sha(p):
+              h = hashlib.sha256()
+              with open(p, "rb") as f:
+                  for chunk in iter(lambda: f.read(1 << 20), b""):
+                      h.update(chunk)
+              return h.hexdigest()
+          bad = []
+          for name, want in entries.items():
+              p = os.path.join(src, name)
+              if not os.path.exists(p) or sha(p) != want:
+                  bad.append(name)
+          n_lean = len([f for f in os.listdir(src) if f.endswith(".lean")])
+          print(f"source hashes: {len(entries) - len(bad)}/{len(entries)} match; .lean modules: {n_lean}")
+          assert not bad, f"hash mismatches: {bad[:5]}"
+          assert n_lean == int(os.environ["CP_EXPECT_MODULES"]), f"module count {n_lean}"
+          with open(os.path.join(work, "logs", "source-hash-check.txt"), "w") as f:
+              f.write(f"all {len(entries)} source_sha256 entries match the extracted archive\n")
+              f.write(f"lean modules: {n_lean}\n")
+          PYEOF
+
+      - name: Source scans (sorry, native_decide, declared axioms, tactic admit)
+        run: |
+          set -euo pipefail
+          cd "$WORK/extracted/lean"
+          {
+            echo "== sorry (word, .lean files)"
+            if grep -rnw --include="*.lean" "sorry" .; then echo "SCAN FAIL: sorry"; exit 1; fi
+            echo "== native_decide (.lean files)"
+            if grep -rn --include="*.lean" "native_decide" .; then echo "SCAN FAIL: native_decide"; exit 1; fi
+            echo "== declared axioms (declaration pattern; doc prose excluded)"
+            if grep -rnE "^[[:space:]]*axiom [a-z_]" --include="*.lean" .; then echo "SCAN FAIL: declared axiom"; exit 1; fi
+            echo "== admit in tactic position (line start / after by, seq focus, semicolon)"
+            if grep -rnE "(^[[:space:]]*admit([[:space:]]|$)|by[[:space:]]+admit([[:space:]]|$)|<;>+[[:space:]]*admit([[:space:]]|$))" --include="*.lean" .; then echo "SCAN FAIL: tactic admit"; exit 1; fi
+            echo "scans: clean"
+          } | tee "$WORK/logs/scans.txt"
+
+      - name: Build all modules (auditor driver, topo order, parallel, resumable)
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.elan/bin:$PATH"
+          cd "$WORK"
+          cat > build_driver.py <<'PYEOF'
+          import os, re, subprocess, sys, time, json
+          from concurrent.futures import ThreadPoolExecutor
+          work = os.environ["WORK"]; cache = os.environ["CACHE"]
+          src = os.path.join(work, "extracted", "lean")
+          oleans = os.path.join(cache, "oleans"); logs = os.path.join(work, "logs", "modules")
+          os.makedirs(oleans, exist_ok=True); os.makedirs(logs, exist_ok=True)
+          modules = sorted(f[:-5] for f in os.listdir(src) if f.endswith(".lean"))
+          modset = set(modules)
+          imp_re = re.compile(r"^\s*import\s+([A-Za-z0-9_.]+)", re.M)
+          deps = {}
+          for m in modules:
+              text = open(os.path.join(src, m + ".lean"), encoding="utf-8", errors="replace").read()
+              deps[m] = {d for d in imp_re.findall(text) if d in modset and d != m}
+          # Kahn generations
+          done = set(); remaining = dict(deps); generations = []
+          while remaining:
+              ready = sorted(m for m, d in remaining.items() if d <= done)
+              if not ready:
+                  print("CYCLE or unresolved deps among:", sorted(remaining)[:10]); sys.exit(1)
+              generations.append(ready)
+              done |= set(ready)
+              for m in ready: del remaining[m]
+          print(f"modules: {len(modules)}  generations: {len(generations)}", flush=True)
+          env = dict(os.environ); env["LEAN_PATH"] = oleans
+          def compile_one(m):
+              out = os.path.join(oleans, m + ".olean")
+              if os.path.exists(out) and os.path.getsize(out) > 0:
+                  return (m, 0, True)
+              p = subprocess.run(["lean", "-o", out, m + ".lean"], cwd=src, env=env,
+                                 capture_output=True, text=True)
+              with open(os.path.join(logs, m + ".log"), "w") as f:
+                  f.write(p.stdout); f.write(p.stderr)
+              return (m, p.returncode, False)
+          total_done = 0; compiled = 0; cached = 0; failures = []
+          t0 = time.time()
+          workers = os.cpu_count() or 4
+          for gi, gen in enumerate(generations):
+              with ThreadPoolExecutor(max_workers=workers) as ex:
+                  for m, code, was_cached in ex.map(compile_one, gen):
+                      total_done += 1
+                      if was_cached: cached += 1
+                      else: compiled += 1
+                      if code != 0: failures.append(m)
+              print(f"gen {gi+1}/{len(generations)}: {total_done}/{len(modules)} done, "
+                    f"{len(failures)} failed, {time.time()-t0:.0f}s elapsed", flush=True)
+              if failures:
+                  break
+          summary = {"total": len(modules), "compiled": compiled, "cached": cached,
+                     "failed": failures, "seconds": round(time.time() - t0, 1)}
+          with open(os.path.join(work, "logs", "build-summary.json"), "w") as f:
+              json.dump(summary, f, indent=1)
+          print(json.dumps(summary))
+          if failures:
+              print("BUILD FAILURES:", failures[:20]); sys.exit(1)
+          if compiled + cached != len(modules):
+              print("BUILD INCOMPLETE"); sys.exit(1)
+          PYEOF
+          (cd extracted/lean && lean --version) | tee logs/lean-version.txt
+          grep -q "4.33.1" logs/lean-version.txt
+          python3 build_driver.py | tee logs/build-driver.txt
+
+      - name: Audit.lean axiom classification (115 prints, classical three only)
+        run: |
+          set -euo pipefail
+          cd "$WORK"
+          if [ ! -f logs/modules/Audit.log ]; then
+            echo "Audit.log missing (module was cached from a prior run); recompiling Audit.lean fresh"
+            export PATH="$HOME/.elan/bin:$PATH"
+            rm -f "$CACHE/oleans/Audit.olean"
+            (cd extracted/lean && LEAN_PATH="$CACHE/oleans" lean -o "$CACHE/oleans/Audit.olean" Audit.lean) > logs/modules/Audit.log 2>&1
+          fi
+          python3 - <<'PYEOF'
+          import os, re, sys
+          work = os.environ["WORK"]
+          src = open(os.path.join(work, "extracted", "lean", "Audit.lean"), encoding="utf-8").read()
+          expected = re.findall(r"#print axioms\s+([A-Za-z0-9_.]+)", src)
+          assert len(expected) == int(os.environ["CP_EXPECT_AUDIT_PRINTS"]), f"expected prints {len(expected)}"
+          log = open(os.path.join(work, "logs", "modules", "Audit.log"), encoding="utf-8", errors="replace").read()
+          if "sorryAx" in log:
+              print("CLASSIFIER FAIL: sorryAx in Audit output"); sys.exit(1)
+          found = {}
+          for name, axs in re.findall(r"'([^']+)' depends on axioms: \[([^\]]*)\]", log):
+              found[name] = {a.strip() for a in axs.split(",") if a.strip()}
+          for name in re.findall(r"'([^']+)' does not depend on any axioms", log):
+              found[name] = set()
+          allowed = {"propext", "Classical.choice", "Quot.sound"}
+          lines = [f"expected {len(expected)} prints, found {len(found)} in Audit output"]
+          ok = True
+          if set(found) != set(expected):
+              lines.append(f"NAME MISMATCH missing={sorted(set(expected)-set(found))[:5]} extra={sorted(set(found)-set(expected))[:5]}")
+              ok = False
+          for name, axs in sorted(found.items()):
+              extra = axs - allowed
+              if extra:
+                  lines.append(f"DISALLOWED {name}: {sorted(extra)}"); ok = False
+          from collections import Counter
+          dist = Counter(tuple(sorted(v)) for v in found.values())
+          for k, v in sorted(dist.items()):
+              lines.append(f"{v:4d} x {list(k)}")
+          report = "\n".join(lines) + "\n"
+          open(os.path.join(work, "logs", "audit-classifier.txt"), "w").write(report)
+          print(report)
+          if not ok:
+              print("CLASSIFIER FAIL"); sys.exit(1)
+          print("classifier: PASS (all 115 within the classical three)")
+          PYEOF
+
+      - name: Verdict
+        run: |
+          set -euo pipefail
+          {
+            echo "cop-prisoner-forge verdict: PASS"
+            echo "snapshot: release.json / lean-proofs.zip / lean-verification.json sha256 all match PIN"
+            echo "sources: all $CP_EXPECT_SOURCES source_sha256 entries match; $CP_EXPECT_MODULES modules"
+            echo "scans: no sorry, no native_decide, no declared axioms, no tactic admit"
+            cat "$WORK/logs/build-summary.json"
+            echo "axioms: all $CP_EXPECT_AUDIT_PRINTS Audit.lean prints within {propext, Classical.choice, Quot.sound}; no sorryAx"
+            echo "toolchain: $CP_TOOLCHAIN (Dell lane, self-hosted laptop)"
+          } | tee "$WORK/evidence-verdict.txt"
+          cp "$WORK/evidence-verdict.txt" "$WORK/logs/verdict.txt"
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cop-prisoner-forge-evidence
+          path: |
+            ${{ env.WORK }}/logs/verdict.txt
+            ${{ env.WORK }}/logs/download-hashes.txt
+            ${{ env.WORK }}/logs/source-hash-check.txt
+            ${{ env.WORK }}/logs/scans.txt
+            ${{ env.WORK }}/logs/lean-version.txt
+            ${{ env.WORK }}/logs/build-driver.txt
+            ${{ env.WORK }}/logs/build-summary.json
+            ${{ env.WORK }}/logs/audit-classifier.txt
+            ${{ env.WORK }}/logs/modules/Audit.log
+          if-no-files-found: warn
+          retention-days: 30
