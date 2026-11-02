@@ -128,6 +128,29 @@ lines, and the "declares exactly the axioms" line.
   part of this forge and not a runner job (author code
   never runs on the runner boxes).
 
+## Addendum 2026-11-02 (run #1 post-mortem, in brief)
+
+Forge run #1 (41492466013) died in 6 s at the source-scan
+step, on the harness, not the claim: the declared-axiom
+count used a naive `grep "^axiom "` that also matches two
+doc-prose lines inside /-! -/ blocks (Fin32Runs.lean:8 and
+Sec7W28Runs.lean:7, both of the form "axiom
+`Lean.ofReduceBool` (tactic ...)"), for a false count of
+4 against the expected 2. The two real declarations are
+unchanged and are exactly the pair above; the prose lines
+discuss the ofReduceBool axiom, they declare nothing.
+Fix: declaration pattern `^[[:space:]]*axiom [a-z_]`
+(backtick prose excluded), count == 2, both hits inside
+Axioms.lean, proven locally on the real tree (pass) and
+on an injected-declaration copy (fail), with the full
+scan step simulated against the pinned tree before
+re-dispatch. Kernel-level backstop was already in the
+design: AuditDeep.lean enumerates project axioms from
+the environment and throws on any extra. Parent kind:
+the gate-written-against-prep-assumptions family (the
+2026-10-23 verdict-classifier lesson); the prep recon
+grep output contained all 4 lines and was misread as 2.
+
 ## Forge design (morgan-mullen-forge.yml)
 
 - Lane: HP, runs-on [self-hosted, desktop]

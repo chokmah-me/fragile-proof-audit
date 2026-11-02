@@ -104,9 +104,20 @@ jobs:
             echo "FAIL: admit token in sources"; exit 1
           fi
           echo "no sorry/admit tokens"
-          grep -rn "^axiom " MorganMullen/ | tee ../evidence/declared-axioms.txt
-          n=$(grep -rn "^axiom " MorganMullen/ | wc -l)
+          # A declaration is `axiom <lowercase-ident>` in code position.
+          # The naive "^axiom " grep also matches two doc-prose lines
+          # (Fin32Runs.lean:8, Sec7W28Runs.lean:7, inside /-! -/ blocks:
+          # "axiom `Lean.ofReduceBool` (tactic ...)") and killed run #1
+          # with a false count of 4. The backtick after "axiom " in the
+          # prose is what the [a-z_] pattern excludes. The kernel-level
+          # backstop is AuditDeep.lean, which enumerates the project's
+          # axioms from the environment and throws on any extra.
+          grep -rnE "^[[:space:]]*axiom [a-z_]" MorganMullen/ | tee ../evidence/declared-axioms.txt
+          n=$(grep -rnE "^[[:space:]]*axiom [a-z_]" MorganMullen/ | wc -l)
           [ "$n" -eq 2 ] || { echo "FAIL: expected exactly 2 declared axioms, got $n"; exit 1; }
+          if grep -v "MorganMullen/Axioms.lean" ../evidence/declared-axioms.txt | grep -q .; then
+            echo "FAIL: an axiom declaration sits outside Axioms.lean"; exit 1
+          fi
           grep -q "garefalakis_kapetanakis" ../evidence/declared-axioms.txt || { echo "FAIL: garefalakis_kapetanakis declaration missing"; exit 1; }
           grep -q "rosser_schoenfeld_psi" ../evidence/declared-axioms.txt || { echo "FAIL: rosser_schoenfeld_psi declaration missing"; exit 1; }
           echo "declared axioms: exactly the two pinned literature axioms"
