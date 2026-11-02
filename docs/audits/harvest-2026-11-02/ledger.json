@@ -1,0 +1,510 @@
+{
+  "date": "2026-11-02",
+  "harvest_sha": "89e005c16bae0067879a5e3e939c0612ac672621fff7fa074ec24fefc5115ec1",
+  "meta": {
+    "window": "2026-10-27..2026-11-02",
+    "source": "weekly harvest scan 2026-11-02 -- three parallel sweeps: (a) arXiv math.CO/math.NT; (b) arXiv math.PR/math.NA/cs.DM/cs.SC; (c) math blogs, public GitHub repos, Zenodo records and lab announcements. All 10 arXiv IDs below verified on their abs pages (2610.36534, 2610.36648, 2610.39469, 2610.39021, 2610.40519 via search; 2610.42005, 2610.40694, 2610.40703, 2610.38386, 2610.39941 via live abstract-page checks); the morgan-mullen and r3333 repos verified live. Coverage caveats: math.NT was keyword-screened rather than fully title-enumerated in the middle slice (Oct 27 afternoon to Oct 30 midday); math.PR/math.NA/cs.DM/cs.SC coverage for Oct 27-29 was targeted search, not full listing enumeration, and Oct 31-Nov 2 listings had not appeared in crawled listings at sweep time; Hexagon Nov 2 deposits after the sweep fetch are unswept. Near-misses failing public inputs (no code/data location): 2610.38870 and 2610.41569 (AxiomProver formalizations with no public Lean location), 2610.38073 (58-field norm-Euclidean completeness, certificates claimed, no location), 2610.41555 (Haiman n<=10, 1.25B pairs, no data location), 2610.40691, 2610.41102, 2610.41223, 2610.39833, 2610.37848 (rational certificates claimed, no public location), plus the PR/NA slice's theory-only items (SQD linear systems 2610.41708 states a package but no repo URL was verified; Ramanujan 2-lift towers 2610.39485, Toeplitz-interior spectra 2610.42072, band random graphs 2610.42107, ERGM fluctuations 2610.41781, Potts Glauber 2610.42059 -- paper-contained only, no author code/data found). Hexagon in-window deposits (deterministic factoring 2610.00600, MacMahon cubes 2611.00016, trefoil distortion 2611.00012, Korenblum certificates 2611.00014 and 2610.00696, Vitorino-Vukusic 2611.00009) were NOT ranked: their Palomar artifact repo URLs could not be resolved from the deposit pages at sweep time, so they fail the public-inputs bar pending recon; the OpenAI local-smoothing claim (announced Oct 26, one day before the window) was not ranked because a local-smoothing audit thread is already open. Cut by the 10-cap, held for next run if still fresh: 2610.36964 (BP fixed-point degree formula, Lean), 2610.40342 (p-adic valuation calculus, 99 OEIS sequences, ancillary + Lean), 2610.40863 (Cranston-Li-Su-Wang-Xu conjecture, Lean from standard axioms alone), 2610.39637 (infinite sumset configurations, Lean claimed, no repo link on abs page)."
+  },
+  "claims": [
+    {
+      "id": "morgan-mullen-conjecture-lean",
+      "title": "Morgan-Mullen conjecture proved (Lean 4 formalization, single author)",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.36534",
+        "title": "Resolvent Components of Completely Normal Elements and the Morgan-Mullen Conjecture",
+        "authors": [
+          "Florian Hellwig"
+        ],
+        "published": "2026-10-27",
+        "url": "https://arxiv.org/abs/2610.36534"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.36534",
+        "title": "Resolvent Components of Completely Normal Elements and the Morgan-Mullen Conjecture",
+        "authors": [
+          "Florian Hellwig"
+        ],
+        "publication_date": "2026-10-27",
+        "title_ok": true,
+        "author_overlap": [
+          "hellwig"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224103723"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "florian-hellwig/morgan-mullen",
+        "branch": "main",
+        "size_kb": 380,
+        "pushed_at": "2026-10-28",
+        "url": "https://github.com/florian-hellwig/morgan-mullen",
+        "head_sha": "03fb9bd6c2605f7d4df111c154db14ed2f570b7b",
+        "head_date": "2026-10-28",
+        "lean_files": 43,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.34.1"
+      },
+      "signals": [
+        "single_author",
+        "formal_subset_of_claim",
+        "pinned_toolchain",
+        "public_ci_green"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.34.1",
+        "+1: arXiv title does not closely match harvest title (check citation)"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 43,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.34.1",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared",
+          "zero-sorry declared"
+        ],
+        "probe_query": "Morgan-Mullen conjecture proved (Lean 4 formalization, single author). Every finite field extension F_q^n over F_q contains an element that is both primitive and completely normal "
+      }
+    },
+    {
+      "id": "ramsey-r3333-61-lean-sat",
+      "title": "R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted)",
+      "score": 4,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.36648",
+        "title": "An upper bound of 61 for the Ramsey number $R(3,3,3,3)$",
+        "authors": [
+          "Milos Tatarevic"
+        ],
+        "published": "2026-10-27",
+        "url": "https://arxiv.org/abs/2610.36648"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.36648",
+        "title": "An upper bound of 61 for the Ramsey number $R(3,3,3,3)$",
+        "authors": [
+          "Milos Tatarevic"
+        ],
+        "publication_date": "2026-10-27",
+        "title_ok": true,
+        "author_overlap": [
+          "tatarevic"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224136849"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "milostatarevic/r3333-upper-bound",
+        "branch": "main",
+        "size_kb": 16257,
+        "pushed_at": "2026-10-31",
+        "url": "https://github.com/milostatarevic/r3333-upper-bound",
+        "head_sha": "faac6f3c5dfd071a0d946bc819f1c46caa7901f7",
+        "head_date": "2026-10-31",
+        "lean_files": 1390,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "single_author",
+        "disclosed_llm_help",
+        "formal_subset_of_claim",
+        "pinned_toolchain",
+        "public_ci_green"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found",
+        "+1: arXiv title does not closely match harvest title (check citation)"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 1390,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "R(3,3,3,3) <= 61 via Lean + SAT (single author, AI-assisted). Every 4-coloring of the edges of K_61 contains a monochromatic triangle, improving the upper bound 62 to 61."
+      }
+    },
+    {
+      "id": "f2-9-tiling-no-subspace-complement",
+      "title": "Sharp F2^9 tiling counterexample with no subspace complement",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.42005",
+        "title": "Tiling without a subspace complement: a sharp counterexample in dimension nine over the field with two elements",
+        "authors": [
+          "Samuel J. Ferguson",
+          "Joshua Iosevich"
+        ],
+        "published": "2026-10-30",
+        "url": "https://arxiv.org/abs/2610.42005"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2610.42005",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2610.42005"
+      },
+      "signals": [],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "four-runner-lonely-classification",
+      "title": "Four-runner Lonely Runner case settled completely",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.40694",
+        "title": "Four runners that are barely lonely",
+        "authors": [
+          "Hyunjun Yi",
+          "Karam Gill",
+          "Bryan Bu"
+        ],
+        "published": "2026-10-28",
+        "url": "https://arxiv.org/abs/2610.40694"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2610.40694",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2610.40694"
+      },
+      "signals": [],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "+1: arXiv title does not closely match harvest title (check citation)",
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "hibi-li-conjecture-lean",
+      "title": "Hibi-Li (2016) conjecture fully resolved (Lean 4, single author)",
+      "score": 3,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.40703",
+        "title": "The Hibi--Li (2016) conjecture is fully resolved",
+        "authors": [
+          "Dave Goel"
+        ],
+        "published": "2026-10-28",
+        "url": "https://arxiv.org/abs/2610.40703"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2610.40703",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "NOT-FOUND",
+        "slug": "davegoel/LeanProofs"
+      },
+      "signals": [
+        "single_author",
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "code repo check: NOT-FOUND",
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "cop-prisoner-extremal-m",
+      "title": "Cop-prisoner extremal function M(n,m) fully classified (single author, partial Lean)",
+      "score": 4,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.39469",
+        "title": "Guaranteed indirect delivery in directed networks: The joint extremal function and explicit attaining constructions",
+        "authors": [
+          "Angel Ivanov Raychev"
+        ],
+        "published": "2026-10-29",
+        "url": "https://arxiv.org/abs/2610.39469"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.39469",
+        "title": "Guaranteed indirect delivery in directed networks: The joint extremal function and explicit attaining constructions",
+        "authors": [
+          "Angel Ivanov Raychev"
+        ],
+        "publication_date": "2026-10-29",
+        "title_ok": true,
+        "author_overlap": [
+          "raychev"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224950584"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://angelraychev.com/cop-prisoner/"
+      },
+      "signals": [
+        "single_author",
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "+1: arXiv title does not closely match harvest title (check citation)"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "petersson-rigid-lattices-21",
+      "title": "Exactly twelve Petersson-rigid lattices of signature (2,1) (single author)",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.40519",
+        "title": "Petersson-rigid lattices of signature (2,1) and their harmonic weak Maass forms",
+        "authors": [
+          "Eungang Cho"
+        ],
+        "published": "2026-10-29",
+        "url": "https://arxiv.org/abs/2610.40519"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.40519",
+        "title": "Petersson-rigid lattices of signature (2,1) and their harmonic weak Maass forms",
+        "authors": [
+          "Eungang Cho"
+        ],
+        "publication_date": "2026-10-29",
+        "title_ok": true,
+        "author_overlap": [
+          "cho"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224904126"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://doi.org/10.5281/zenodo.23770095"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "D",
+          "finite q-expansion"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "hook-immanants-kl-positive",
+      "title": "Hook monomial immanants are Kazhdan-Lusztig positive (single author)",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.39021",
+        "title": "Hook monomial immanants are Kazhdan-Lusztig positive",
+        "authors": [
+          "Keith McNulty"
+        ],
+        "published": "2026-10-28",
+        "url": "https://arxiv.org/abs/2610.39021"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.39021",
+        "title": "Hook monomial immanants are Kazhdan-Lusztig positive",
+        "authors": [
+          "Keith McNulty"
+        ],
+        "publication_date": "2026-10-28",
+        "title_ok": true,
+        "author_overlap": [
+          "mcnulty"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224767375"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://doi.org/10.5281/zenodo.23730750"
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [],
+      "formalization_coverage": null
+    },
+    {
+      "id": "block-exchange-descent-insertion",
+      "title": "Block-exchange descent for insertion, computer-assisted to length 30",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.39941",
+        "title": "Block-exchange descent for insertion: commuting projections and minimum masks",
+        "authors": [
+          "Haobo Ma",
+          "Wenlin Zhang",
+          "Charles E. Hughes"
+        ],
+        "published": "2026-10-29",
+        "url": "https://arxiv.org/abs/2610.39941"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.39941",
+        "title": "Block-exchange descent for insertion: commuting projections and minimum masks",
+        "authors": [
+          "Haobo Ma",
+          "Wenlin Zhang",
+          "Charles E. Hughes"
+        ],
+        "publication_date": "2026-10-29",
+        "title_ok": true,
+        "author_overlap": [
+          "hughes",
+          "ma",
+          "zhang"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224818195"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "the-omega-institute/insertion-degree-descent",
+        "branch": "main",
+        "size_kb": 362,
+        "pushed_at": "2026-10-09",
+        "url": "https://github.com/the-omega-institute/insertion-degree-descent",
+        "head_sha": "e11e63d1ec53c40b4a67b56d6668ac86dd14f9b7",
+        "head_date": "2026-10-09",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": [],
+      "formalization_coverage": null
+    },
+    {
+      "id": "magic-square-permutation-threshold",
+      "title": "Magic-square permutation threshold k*(n) for 18 <= n <= 40",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.38386",
+        "title": "Moments of Magic Squares: Line-Sum Conditions, a Permutation Threshold, and Random Energies",
+        "authors": [
+          "Kyle Elliott Mathewson"
+        ],
+        "published": "2026-10-28",
+        "url": "https://arxiv.org/abs/2610.38386"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.38386",
+        "title": "Moments of Magic Squares: Line-Sum Conditions, a Permutation Threshold, and Random Energies",
+        "authors": [
+          "Kyle Elliott Mathewson"
+        ],
+        "publication_date": "2026-10-28",
+        "title_ok": true,
+        "author_overlap": [
+          "mathewson"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224806548"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2610.38386"
+      },
+      "signals": [],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "+1: arXiv title does not closely match harvest title (check citation)"
+      ],
+      "lanes": [],
+      "formalization_coverage": null
+    }
+  ]
+}
