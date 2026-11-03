@@ -93,3 +93,20 @@ vendored .lean count == manifest count, and keeps the
 tree-wide closure check unchanged as a guard. All other legs
 (cache gate, builds, sorry scans, corpus comparison, axiom
 verdict) are unchanged from runs #1/#2.
+
+Run #3 (41593282506, main@59e99b9) died at the clone/vendor
+step in 1m48s: the manifest was fed to git sparse-checkout
+through xargs, whose default 128 KB argument cap split the
+2,263 patterns (about 135 KB) into two invocations; the second
+set call replaced the first batch's patterns and removed the
+challenge file, and the following silent test -f killed the
+step (log shows exit 1 immediately after rev-parse, no FAIL
+line; the split reproduces locally on the same manifest). The
+step also uploaded the previous run's stale evidence files
+(VENDORED_COUNT.txt still read 46810 from run #2), because the
+self-hosted workspace persists between runs. Run #4 fixes:
+sparse-checkout reads the manifest via --stdin (single call,
+no argument cap; git 2.43 verified), the presence checks fail
+loudly by name, and the clone step first deletes every stale
+evidence output so a dead step cannot upload a prior run's
+files.

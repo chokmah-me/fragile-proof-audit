@@ -70,13 +70,14 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf oai-math ls-forge
+          rm -f OAI_COMMIT.txt VENDORED_COUNT.txt vendor-files.txt FALLBACK_NOTE.txt lake-manifest.json toolchain.txt cache-get.log challenge-build.log solution-build.log challenge-sorries.txt solution-sorries.txt corpus-challenge.txt corpus-solution.txt corpus-diff.txt axioms.txt report-*.txt
           git clone --filter=blob:none https://github.com/openai/math.git oai-math
           cd oai-math
           git checkout "$OAI_COMMIT"
           git rev-parse HEAD | tee ../OAI_COMMIT.txt
-          xargs -d '\n' -a ../audit/incoming/local-smoothing/closure-manifest.txt git sparse-checkout set --no-cone
-          test -f lean/ComparatorChallenges/LocalSmoothing.lean
-          test -f lean/OAI/Analysis/Fourier/LocalSmoothing/Comparator.lean
+          git sparse-checkout set --no-cone --stdin < ../audit/incoming/local-smoothing/closure-manifest.txt
+          test -f lean/ComparatorChallenges/LocalSmoothing.lean || { echo "FAIL: challenge file missing after sparse checkout"; exit 1; }
+          test -f lean/OAI/Analysis/Fourier/LocalSmoothing/Comparator.lean || { echo "FAIL: solution Comparator file missing after sparse checkout"; exit 1; }
           got=$(sha256sum lean/ComparatorChallenges/LocalSmoothing.lean | awk '{print $1}')
           echo "challenge sha256: $got (expect $CHALLENGE_SHA256)"
           [ "$got" = "$CHALLENGE_SHA256" ] || { echo "FAIL: challenge file hash mismatch"; exit 1; }
