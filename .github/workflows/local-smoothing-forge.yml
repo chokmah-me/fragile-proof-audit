@@ -2,15 +2,18 @@ name: local-smoothing-forge
 
 # Independent audit of the OpenAI local-smoothing formalization
 # (openai/math ComparatorChallenges/LocalSmoothing at a pinned
-# commit): vendor the challenge file and the OAI/Analysis,
-# OAI/Geometry and OAI/MeasureTheory subtrees from the pinned
-# commit into a scratch Lean v4.34.1 project, build the
-# challenge module and the solution Comparator module, settle the
-# twin-definition seam with a challenge-env vs solution-env #print
-# corpus comparison, and run #print axioms on the six comparator
-# theorems, failing closed unless every report is within
-# {propext, Quot.sound, Classical.choice} and the corpora match.
-# One-shot workflow: deleted after the audit closes.
+# commit): vendor the challenge file and the exact transitive
+# import closure of the two target modules (2,262 .lean files,
+# pinned as incoming/local-smoothing/closure-manifest.txt; run #3
+# design, see the PIN addendum 2026-11-03: area vendoring died at
+# the closure check twice, runs #1/#2) from the pinned commit
+# into a scratch Lean v4.34.1 project, build the challenge
+# module and the solution Comparator module, settle the
+# twin-definition seam with a challenge-env vs solution-env
+# #print corpus comparison, and run #print axioms on the six
+# comparator theorems, failing closed unless every report is
+# within {propext, Quot.sound, Classical.choice} and the corpora
+# match. One-shot workflow: deleted after the audit closes.
 
 on:
   workflow_dispatch:
@@ -53,12 +56,17 @@ jobs:
           esac
           echo "pin ok: $OAI_COMMIT"
 
+      - name: Checkout audit repo (closure manifest)
+        uses: actions/checkout@v4
+        with:
+          path: audit
+
       - name: Install elan
         run: |
           curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
-      - name: Clone openai/math at the pin and vendor subtrees
+      - name: Clone openai/math at the pin and vendor the closure manifest
         run: |
           set -euo pipefail
           rm -rf oai-math ls-forge
@@ -66,25 +74,24 @@ jobs:
           cd oai-math
           git checkout "$OAI_COMMIT"
           git rev-parse HEAD | tee ../OAI_COMMIT.txt
-          git sparse-checkout set --no-cone \
-            "/lean/ComparatorChallenges/LocalSmoothing.lean" \
-            "/lean/ComparatorChallenges/LocalSmoothing.json" \
-            "/lean/OAI/Analysis/" \
-            "/lean/OAI/Geometry/" \
-            "/lean/OAI/MeasureTheory/"
+          xargs -d '\n' -a ../audit/incoming/local-smoothing/closure-manifest.txt git sparse-checkout set --no-cone
           test -f lean/ComparatorChallenges/LocalSmoothing.lean
           test -f lean/OAI/Analysis/Fourier/LocalSmoothing/Comparator.lean
           got=$(sha256sum lean/ComparatorChallenges/LocalSmoothing.lean | awk '{print $1}')
           echo "challenge sha256: $got (expect $CHALLENGE_SHA256)"
           [ "$got" = "$CHALLENGE_SHA256" ] || { echo "FAIL: challenge file hash mismatch"; exit 1; }
-          find lean/OAI/Analysis lean/OAI/Geometry lean/OAI/MeasureTheory -name '*.lean' | wc -l | tee ../VENDORED_COUNT.txt
+          want=$(grep -c '\.lean$' ../audit/incoming/local-smoothing/closure-manifest.txt)
+          got_count=$(find lean -name '*.lean' | wc -l)
+          echo "vendored .lean files: $got_count (closure manifest: $want)" | tee ../VENDORED_COUNT.txt
+          [ "$got_count" -eq "$want" ] || { echo "FAIL: vendored file count differs from closure manifest"; exit 1; }
 
       - name: Scratch project, vendoring, closure checks
         run: |
           set -euo pipefail
           mkdir -p ls-forge
           cd oai-math/lean
-          tar cf - ComparatorChallenges/LocalSmoothing.lean OAI/Analysis OAI/Geometry OAI/MeasureTheory | (cd ../../ls-forge && tar xf -)
+          sed 's|^/lean/||' ../../audit/incoming/local-smoothing/closure-manifest.txt | grep '\.lean$' > ../../vendor-files.txt
+          tar cf - -T ../../vendor-files.txt | (cd ../../ls-forge && tar xf -)
           cd ../..
           mv ls-forge/ComparatorChallenges ls-forge/ComparatorChallenges-tmp
           mkdir ls-forge/ComparatorChallenges
@@ -261,6 +268,8 @@ jobs:
           path: |
             OAI_COMMIT.txt
             VENDORED_COUNT.txt
+            vendor-files.txt
+            audit/incoming/local-smoothing/closure-manifest.txt
             lake-update.log
             cache-get.log
             oleans.txt
@@ -277,4 +286,4 @@ jobs:
       - name: Leave shared workspace clean (self-hosted meta-rule)
         if: always()
         run: |
-          rm -rf oai-math ls-forge
+          rm -rf oai-math ls-forge audit vendor-files.txt

@@ -56,3 +56,40 @@ explicitly do not certify.
 - Toolchain `leanprover/lean4:v4.34.1`; Mathlib rev
   `d13f23b723b8a846827a245b89c10fc7d3f11612` (same as
   the ETH audit).
+
+## Addendum 2026-11-03 (run #3 design: closure-manifest vendoring)
+
+Runs #1 (41021417933) and #2 (41021802409) both died at the
+vendoring step's import-closure check, before any build: the
+check scans every vendored file's OAI imports, and Fourier
+files import modules outside any vendored area set. Run #1
+vendored the Fourier subtree (76 external imports); run #2
+vendored OAI/Analysis + OAI/Geometry + OAI/MeasureTheory
+(about 46,800 files) and still failed. The pinned tree holds
+162,416 OAI .lean files in 27 areas, so area widening has no
+stopping point. Diagnosis and design were double-checked with
+Argon under the Stunspot System Design Request prompt
+(adjudication: ~/workspace/local-smoothing-recon/argon-sdr/).
+
+Run #3 design (Design A): vendor the exact transitive import
+closure of the two roots (solution Comparator module +
+challenge file), computed at prep time against the pinned
+commit. The closure is 2,262 .lean files (Analysis 2,209,
+LinearAlgebra 27, MeasureTheory 25, lean/OAI.lean 1; notably
+zero Geometry), pinned as
+incoming/local-smoothing/closure-manifest.txt (2,263 lines
+including the challenge .json; sha256
+da921cacb6d9c3bef4446e84019a1c401e4298907b0985c5796856febc5a2c1b).
+Run #2's failure is explained by the closure: it never
+vendored the 27 LinearAlgebra files or lean/OAI.lean, and it
+paid for 14,443 Geometry files the closure never touches.
+Prep proof: the workflow's verbatim closure-check blocks pass
+on the materialized closure (challenge sha256 matches this
+PIN), and removing one imported file makes the same check
+fail naming exactly that module (simulation record:
+~/workspace/local-smoothing-recon/sim.log). The workflow
+sparse-checks-out exactly the manifest at the pin, asserts
+vendored .lean count == manifest count, and keeps the
+tree-wide closure check unchanged as a guard. All other legs
+(cache gate, builds, sorry scans, corpus comparison, axiom
+verdict) are unchanged from runs #1/#2.
