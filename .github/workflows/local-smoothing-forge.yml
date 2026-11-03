@@ -171,8 +171,8 @@ jobs:
           # (it is the statement file): exactly 6 warnings expected,
           # which also pins the built challenge module to the pinned
           # statement file. The solution build must have none.
-          c=$(grep -c "declaration uses 'sorry'" build-challenge.log || true)
-          s=$(grep -c "declaration uses 'sorry'" build-solution.log || true)
+          c=$(grep -cE "declaration uses ['\`]sorry['\`]" build-challenge.log || true)
+          s=$(grep -cE "declaration uses ['\`]sorry['\`]" build-solution.log || true)
           echo "CHALLENGE_SORRY_WARNINGS=$c SOLUTION_SORRY_WARNINGS=$s" | tee scan.txt
           [ "$c" -eq 6 ] || { echo "FAIL: challenge sorry warnings $c != 6"; exit 1; }
           [ "$s" -eq 0 ] || { echo "FAIL: solution build contains sorry warnings"; exit 1; }

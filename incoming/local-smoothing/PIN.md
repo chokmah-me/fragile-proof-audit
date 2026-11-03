@@ -110,3 +110,19 @@ no argument cap; git 2.43 verified), the presence checks fail
 loudly by name, and the clone step first deletes every stale
 evidence output so a dead step cannot upload a prior run's
 files.
+
+Run #4 (41594242540, main@294cb1a) ran 2h24m09s and died
+at step 11, the sorry-warning scan, after both builds
+succeeded (challenge 8,924 jobs in 11s; solution 9,833 jobs
+in 8,361s; cache 8,548 Mathlib oleans; vendored count 2262
+= manifest). Cause: the scan greps for
+declaration uses 'sorry' with straight quotes, but Lean
+v4.34.1 prints the warning with backticks
+(declaration uses `sorry`); the challenge log holds exactly
+six such lines (lines 84, 99, 109, 120, 129, 134) and the
+solution log holds none, so the scan read 0/0 and failed the
+challenge leg. The formalization substance is intact: 6
+challenge sorries by design, 0 solution sorries. Run #5 fix:
+the scan pattern matches either quote form
+(grep -cE "declaration uses ['\`]sorry['\`]"), verified
+against the run #4 logs as 6/0 before landing.
