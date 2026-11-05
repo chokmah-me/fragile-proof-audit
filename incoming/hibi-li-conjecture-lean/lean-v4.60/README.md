@@ -1,0 +1,26 @@
+# The Hibi–Li (2016) conjecture is fully resolved — Lean 4 proof
+
+The paper: https://doi.org/10.5281/zenodo.23704735
+
+This folder is a Lean 4 proof of the paper's results.
+
+## Directions to Reproduce
+
+Install Git, Lean (https://lean-lang.org/install/), Python 3 and ripgrep, then run:
+
+```bash
+git clone https://github.com/david44hello/papers_supporting_materials.git
+cd papers_supporting_materials/hibi-li-2016-conjecture/lean
+./check.sh
+```
+
+Its last lines look like:
+
+```
+AUDIT: 177 claims. PROVED: 158, PROVED-FROM-CITED: 19. Table: .../AUDIT.md
+PASS: project builds; source policy passes; no forbidden assumptions in the paper audit.
+```
+
+19 claims use results that the paper cites; [AUDIT.md](AUDIT.md) names them, claim by claim.
+
+Copyright (C) Dave Goel 2026--now. All rights reserved.
