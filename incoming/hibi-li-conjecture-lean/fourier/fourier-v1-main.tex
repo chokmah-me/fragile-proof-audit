@@ -1,0 +1,698 @@
+\documentclass[a4paper,12pt]{amsart}
+\usepackage[utf8]{inputenc}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=30mm]{geometry}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue,urlcolor=blue]{hyperref}
+
+\usepackage[backend=biber,style=alphabetic,maxbibnames=99,maxcitenames=3]{biblatex}
+\addbibresource{bib.bib}
+\AtBeginBibliography{\small\sloppy\setlength{\bibitemsep}{0pt}}
+\AtEveryBibitem{\clearfield{doi}\clearfield{eprint}\clearfield{archivePrefix}\clearfield{primaryClass}\clearfield{url}\clearfield{urldate}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\OO}{\mathcal O}
+\newcommand{\CC}{\mathcal C}
+\newcommand{\relint}{\operatorname{relint}}
+\newcommand{\dir}{\operatorname{dir}}
+
+\title{The Hibi--Li Face-Number Conjecture}
+
+\author{Ghislain Fourier}
+\address{Chair of Algebra and Representation Theory, RWTH Aachen University, Pontdriesch 10--16, 52062 Aachen, Germany}
+\email{fourier@art.rwth-aachen.de}
+
+\subjclass[2020]{Primary 52B05; Secondary 06A07, 52B20}
+
+\keywords{order polytope, chain polytope, chain--order polytope,
+face numbers, polytopal subdivision, poset}
+
+\begin{document}
+
+
+\begin{abstract}
+We prove the face-number conjecture of Hibi and Li: for every finite poset, the order polytope has no more faces of any given dimension than the chain polytope. 
+More generally, the face numbers increase weakly along the admissible family of chain--order polytopes when one order coordinate is replaced by a chain coordinate.
+
+\end{abstract}
+\maketitle
+\section{Introduction}
+
+The order polytope $\mathcal O(P)$ and the chain polytope $\mathcal C(P)$ of a finite poset $P$ were studied by Stanley \cite{Sta86}, following Geissinger's work on the faces of the order polytope \cite{Gei81}. 
+Stanley's transfer map shows that the two polytopes have the same Ehrhart polynomial; their numbers of vertices also agree. 
+Hibi and Li \cite{HL16} proved that the order polytope has at most as many facets as the chain polytope, with equality precisely when the two polytopes are unimodularly equivalent. 
+They conjectured the corresponding inequality for faces of every dimension. 
+
+Hibi, Li, Sahara and Shikama \cite{Hib+17} proved that the numbers of edges always agree. 
+Descriptions of edges and low-dimensional faces were obtained in \cite{HL19,Mor19}, and simplex faces were studied further in \cite{Mor25a,Mor25b,FL26}. 
+Recently Ahmad, the author and Joswig
+\cite{AFJ26} proved the conjecture for maximal ranked posets while Freij-Hollanti and Lundstr\"om \cite{FL24} proved it for the larger class generated from $X$-free posets by disjoint unions and ordinal sums. 
+More recently, Freij-Hollanti, Lundstr\"om and Mori \cite{FLM26} proved the two-dimensional inequality for arbitrary finite posets, including its equality characterization. 
+The difference between the numbers of facets was studied in
+\cite{Bha+25,Fou26}.
+
+Marked order and chain polytopes were introduced by Ardila, Bliem and Salazar \cite{ABS11}; they provided a generalization of Stanley's transfer map.
+The author \cite{Fou16} extended the facet comparison to marked posets and formulated the marked face-number conjecture. 
+Fang and the author \cite{FF16} introduced marked chain--order polytopes and conjectured that face numbers increase when order coordinates are replaced by chain coordinates along admissible decompositions. 
+Later, the two together with Litza and Pegel \cite{Fan+20} placed these polytopes in a continuous family. 
+The face structure of marked order polyhedra and Minkowski decompositions of marked chain--order polytopes were studied in \cite{Peg18,FFP20}, respectively.
+
+In this paper we prove the face-number inequalities conjectured by Hibi and Li. 
+For a polytope $Q$, let $f_k(Q)$ denote the number of its $k$-dimensional faces.
+\begin{theorem}\label{thm:face-inequality}
+Let $P$ be a finite poset with $n$ elements. Then
+\[
+ f_k(\mathcal O(P))\leq f_k(\mathcal C(P))  \qquad (0\leq k\leq n-1).
+\]
+\end{theorem}
+We prove, more generally, monotonicity along the admissible chain--order polytopes. 
+For an order ideal $I\subseteq P$, let $\OO_{I,P\setminus I}(P)$ be the polytope with chain coordinates indexed by $I$ and order coordinates indexed by $P\setminus I$, as recalled in Section~2. 
+Thus $\OO_{\varnothing,P}(P)=\mathcal O(P)$ and $\OO_{P,\varnothing}(P)=\mathcal C(P)$. 
+We show that
+\[
+ f_k(\OO_{I,P\setminus I}(P))\leq f_k(\OO_{I',P\setminus I'}(P))  \qquad  (I\subseteq I',\quad 0\leq k\leq n-1)
+\]
+for all order ideals $I,I'$ of $P$. 
+This proves the admissible, unmarked case of \cite[Conjecture~5.3]{FF16}.
+
+For the proof, we pass through the admissible chain--order polytopes by replacing one order coordinate by a chain coordinate at a time. 
+The comparison of two consecutive polytopes is reduced, after projecting away the changing coordinate, to a local problem over a common base polytope. 
+The resulting polyhedral subdivisions allow us to compare the face numbers at each step.
+
+The paper is organized as follows. 
+Section~2 recalls the partial transfer maps. 
+Section~3 gives the fibre description for a one-element change. 
+Section~4 proves the face-polynomial identity and the subdivision inequality, and Section~5 establishes relative transversality. 
+The face-number inequality is proved in Section~6.
+
+\medskip
+\noindent\textbf{Acknowledgements.}
+The author gratefully acknowledges support by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) -- Project-ID 286237555 -- TRR 195. 
+AI tools were used for language editing, bibliographic searches, and auxiliary checks of the final manuscript.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Intermediate chain--order polytopes}\label{sec:intermediate}
+
+Throughout the paper, $P$ is a finite poset. 
+We allow the empty chain and take its sum to be zero. 
+We set
+\[
+ \OO(P)=\{v\in[0,1]^P:v_p\leq v_q\text{ whenever }p\leq q\}
+\]
+and
+\[
+ \CC(P)=\left\{x\in\mathbb R_{\geq0}^P: \sum_{p\in K}x_p\leq1\text{ for every chain }K\subseteq P\right\}.
+\]
+
+Let $I\subseteq P$ be an order ideal and put $J=P\setminus I$.  
+Define $\OO_{I,J}(P)$ by the inequalities
+\begin{align*}
+ x_i&\geq0 &&(i\in I),\\
+ 0\leq x_j&\leq1 &&(j\in J),\\
+ x_j&\leq x_{j'} &&(j\leq j'\text{ in }J),\\
+ \sum_{i\in K}x_i&\leq x_j    &&\left(\substack{j\in J,\ K\subseteq I\text{ a chain},\\
+ i<j\text{ for every }i\in K}\right),\\
+ \sum_{i\in K}x_i&\leq1 &&(K\subseteq I\text{ a chain}).
+\end{align*}
+In particular, $\OO_{\varnothing,P}(P)=\OO(P)$ and $\OO_{P,\varnothing}(P)=\CC(P)$.  
+These are marked chain--order polytopes of \cite{FF16,Fan+20} obtained by adjoining a minimum marked $0$ and a maximum marked $1$.
+
+\begin{lemma}\label{lem:transfer}
+The map $T_I:\OO(P)\to\OO_{I,J}(P)$ given by
+\[
+ (T_Iv)_i=v_i-\max\bigl(\{v_p:p<i\}\cup\{0\}\bigr)\quad(i\in I),  \qquad  (T_Iv)_j=v_j\quad(j\in J)
+\]
+is a piecewise-linear bijection.  Its inverse is
+\[
+ v_i=\max\left\{\sum_{p\in K}x_p: K\subseteq I\text{ is a chain ending at }i\right\}, \qquad v_j=x_j\quad(j\in J).
+\]
+The same assertion holds with upper bound $1$ replaced by any $h\geq0$; the image is then $h\OO_{I,J}(P)$.
+\end{lemma}
+
+This is a special case of \cite[Theorem~2.1]{Fan+20}.
+We recall the proof to fix the inverse map.
+
+\begin{proof}
+Since $I$ is an order ideal, all predecessors of an element of $I$ belong to $I$.  
+For $x\in\OO_{I,J}(P)$ define $v$ successively along a linear extension by
+\[
+ v_i=x_i+\max\bigl(\{v_p:p<i\}\cup\{0\}\bigr)\quad(i\in I),  \qquad v_j=x_j\quad(j\in J).
+\]
+A chain ending at $i$ is either $\{i\}$ or a chain ending at a predecessor followed by $i$.  
+Hence the recurrence gives the stated maximum over chain sums, and $(T_Iv)_i=x_i$.
+
+Nonnegativity of $x_i$ implies $v_p\leq v_i$ for $p<i$ in $I$.
+The chain bounds give $v_i\leq1$.  
+If $i\in I$, $j\in J$, and $i<j$, every chain used to compute $v_i$ lies below $j$, so $v_i\leq x_j=v_j$.
+The order inequalities inside $J$ hold by definition.  
+Since $I$ is an ideal, no element of $J$ lies below an element of $I$.  
+Thus $v\in\OO(P)$.
+
+Conversely, let $v\in\OO(P)$ and set $x=T_Iv$.  
+Then $x_i\geq0$ for $i\in I$, and for any chain $i_1<\cdots<i_r$ in $I$ we have
+\[
+ \sum_{s=1}^r x_{i_s}  \leq v_{i_1}+\sum_{s=2}^r(v_{i_s}-v_{i_{s-1}})  =v_{i_r}.
+\]
+If the chain lies below $j\in J$, this is at most $v_j=x_j$.
+In all cases it is at most $1$.  
+Hence $x\in\OO_{I,J}(P)$, and the recurrence recovers $v$.  
+The case $h>0$ follows by scaling; for $h=0$ both sets consist of the zero vector.
+\end{proof}
+
+The inequalities defining $\OO_{I,J}(P)$ are finite in number, and the singleton-chain inequalities bound each chain coordinate.
+Thus $\OO_{I,J}(P)$ is a polytope.  
+It has dimension $|P|$: choose a strictly order-preserving $v$ with pairwise distinct coordinates in $(0,1)$.
+The estimate above shows that $T_Iv$ satisfies all nontrivial defining inequalities strictly.  
+For $P=\varnothing$, the polytope is a point.
+
+\section{A one-element change}\label{sec:fiber}
+
+Let $q$ be minimal in $J=P\setminus I$, put $P'=P\setminus\{q\}$, and set
+\[
+ B=\OO_{I,J\setminus\{q\}}(P').
+\]
+We give $P'$ the induced order. 
+Deleting the $q$-coordinate of a point of $\OO_{I,J}(P)$ leaves all inequalities defining $B$ satisfied. 
+Thus projection along this coordinate has image contained in $B$. 
+Conversely, for $u\in B$, let $v=T_I^{-1}u\in\OO(P')$. 
+We add a $q$-coordinate to the vector $(v_p)_{p\in P'}$, choosing
+\[
+ v_q\in\left[   \max\bigl(\{v_p:p<q\}\cup\{0\}\bigr),   \min\bigl(\{v_r:r>q\}\cup\{1\}\bigr)\right].
+\]
+Every predecessor of $q$ is below every successor in the induced order on $P'$, so the interval is nonempty. 
+The resulting vector $(v_p)_{p\in P}$ belongs to $\OO(P)$. 
+Moreover, no element of $I$ lies above $q$, so applying $T_I$ to this vector leaves all coordinates indexed by $P'$ equal to those of $u$. 
+Thus $u$ is the projection of a point of $\OO_{I,J}(P)$, proving surjectivity. 
+All predecessors of $q$ lie in $I$, since
+$q$ is minimal in $J$, and all successors lie in $J$, since $I$ is an ideal.
+In particular, $I\cup\{q\}$ is again an order ideal.
+
+For $u\in B$ define
+\begin{align*}
+ L(u)&=\max\left( \left\{\sum_{p\in K}u_p: K\subseteq I\text{ is a chain and }p<q\text{ for every }p\in K\right\} \cup\{0\}\right),\\
+ U(u)&=\min\bigl(\{u_r:r>q\}\cup\{1\}\bigr).
+\end{align*}
+The function $L$ is convex piecewise affine and depends only on coordinates below $q$. 
+The function $U$ is concave piecewise affine and depends only on the order coordinates above $q$. 
+If $K$ occurs in the definition of $L$ and $r>q$, then the defining inequalities of $B$ give $\sum_{p\in K}u_p\leq u_r$ and $\sum_{p\in K}u_p\leq1$.
+It follows that
+\[
+ 0\leq L(u)\leq U(u)\leq1 \qquad (u\in B).
+\]
+
+\begin{proposition}\label{prop:fibers}
+With coordinates $(u,z)$ and $(u,w)$ over $B$, respectively,
+\begin{align}
+ \OO_{I,J}(P)&=\{(u,z):u\in B,\ L(u)\leq z\leq U(u)\},\label{eq:oldfiber}\\
+ \OO_{I\cup\{q\},J\setminus\{q\}}(P)&= \{(u,w):u\in B,\ 0\leq w\leq U(u)-L(u)\}.\label{eq:newfiber}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+For the order coordinate $z=x_q$, nonnegativity and the chain inequalities below $q$ give $z\geq L(u)$.  
+The inequalities $z\leq1$ and $z\leq u_r$ for $r>q$ give $z\leq U(u)$. 
+The inequalities not involving $z$ are precisely those of $B$, since $P'$ has the induced order. 
+This proves \eqref{eq:oldfiber}.
+
+No element of $I$ lies above $q$, so $q$ is maximal in $I\cup\{q\}$. 
+Each chain containing $q$ therefore consists of a chain $K\subseteq I$ below $q$, followed by $q$.
+For the chain coordinate $w=x_q$, the corresponding inequalities are
+\[
+ w+\sum_{p\in K}u_p\leq u_r\quad(r>q)
+ \qquad\text{and}\qquad
+ w+\sum_{p\in K}u_p\leq1,
+\]
+together with $w\geq0$.  
+Maximizing over $K$ and minimizing the upper bounds gives \eqref{eq:newfiber}. 
+Here the chain inequalities not involving $q$, together with the order inequalities on $J\setminus\{q\}$, are precisely the inequalities defining $B$.
+\end{proof}
+
+The change from \eqref{eq:oldfiber} to \eqref{eq:newfiber} is the
+piecewise-affine bijection
+\[
+ \tau_q(u,z)=(u,z-L(u)),\qquad
+ \tau_q^{-1}(u,w)=(u,w+L(u)).
+\]
+It equals $T_{I\cup\{q\}}\circ T_I^{-1}$, where both partial transfer maps are taken on $P$. 
+Thus only the coordinate indexed by $q$ changes. 
+The lower graph is sent to $B\times\{0\}$ and the upper graph to the graph of $U-L$. 
+The map need not be globally affine.
+
+\section{Subdivisions and face counting}\label{sec:counting}
+
+For a finite polytopal complex $\mathcal K$, including all nonempty faces, set
+\[
+ F_{\mathcal K}(t)=  \sum_{A\in\mathcal K,\ A\neq\varnothing}t^{\dim A}.
+\]
+For a polytope, we use its full face complex, including the polytope itself.
+
+Let $\mathcal S$ and $\mathcal T$ be the subdivisions of $B$ into maximal domains on which $L$ and $U$ are affine, together with their faces, and let $\mathcal S\vee\mathcal T$ be their common refinement. 
+If
+\[
+ L=\max_i\ell_i,
+\]
+then a maximal cell of $\mathcal S$ is of the form
+\[
+ A_i=\{u\in B:L(u)=\ell_i(u)\}
+\]
+with nonempty interior relative to $\operatorname{aff}(B)$. 
+For every face $E$ of $B$, the nonempty intersections $A_i\cap E$, together with their faces, form a subdivision of $E$. 
+We denote this restricted subdivision by $\mathcal S|_E$. 
+We use the analogous notation for $\mathcal T$ and $\mathcal S\vee\mathcal T$.
+
+The \emph{carrier} of a cell is the smallest face of $B$ containing it. 
+If its carrier is $E$, then its relative interior is contained in $\relint(E)$: a supporting hyperplane of $B$ containing a relative interior point of the cell contains the whole cell.
+
+Here the cells $A\in\mathcal S$, $C\in\mathcal T$, and their carriers all lie in the base $B$. 
+Their corresponding graph pieces in the old fibre polytope are
+\[
+ \{(u,L(u)):u\in A\},\qquad  \{(u,U(u)):u\in C\}.
+\]
+Projection $(u,z)\mapsto u$ is an affine isomorphism on each such piece. 
+Lemma~\ref{lem:faceidentity} identifies these pieces with the lower and upper graph faces, respectively.
+
+
+\begin{lemma}\label{lem:faceidentity}
+One has
+\begin{equation}\label{eq:faceidentity}
+ F_{\OO_{I\cup\{q\},J\setminus\{q\}}(P)}-F_{\OO_{I,J}(P)}  =F_B+F_{\mathcal S\vee\mathcal T}-F_{\mathcal S}-F_{\mathcal T}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put
+\[
+ H=U-L
+\]
+and
+\[
+ D=\{u\in B:H(u)=0\}.
+\]
+By Section~\ref{sec:fiber}, $H\geq0$ on $B$, and $H$ is concave.
+
+\smallskip
+\noindent\emph{Step 1: degenerate fibres.}
+We first show that $D$ is a union of faces of $B$. 
+Suppose that $x\in\relint(E)$ for a face $E$ of $B$ and $H(x)=0$. 
+For $y\in E$, choose $\varepsilon>0$ such that
+\[
+ y'=x+\varepsilon(x-y)\in E.
+\]
+Writing
+\[
+ x=\frac{\varepsilon}{1+\varepsilon}y+\frac{1}{1+\varepsilon}y',
+\]
+concavity and nonnegativity of $H$ give
+\[
+ 0=H(x)\geq \frac{\varepsilon}{1+\varepsilon}H(y)+\frac{1}{1+\varepsilon}H(y')\geq0.
+\]
+Thus $H(y)=0$, and hence $E\subseteq D$.
+
+If $E\subseteq D$, then $L|_E=U|_E$. Since $L|_E$ is convex and $U|_E$ is concave, their common restriction is affine. 
+Thus the restrictions of $\mathcal S$ and $\mathcal T$ to $E$ are trivial. 
+Consequently, the cells of either subdivision contained in $D$ are precisely the faces of $B$ contained in $D$. 
+Let $F_D$ denote the face polynomial of this subcomplex.
+
+\smallskip
+\noindent\emph{Step 2: classification of faces.}
+Consider first
+\[
+ \OO_{I,J}(P)=\{(u,z):u\in B,\ L(u)\leq z\leq U(u)\}.
+\]
+For a maximal affinity domain
+$A_i=\{u\in B:L(u)=\ell_i(u)\}$ of $L$, the set
+\[
+ G_i^-=\{(u,z)\in\OO_{I,J}(P):z=\ell_i(u)\}
+\]
+is a face, since $z\geq L(u)\geq\ell_i(u)$ throughout the polytope.
+Projection to $B$ restricts to an affine isomorphism $G_i^-\to A_i$.
+
+Conversely, let $F$ be a nonempty face contained in the lower graph and choose $\xi\in\relint(F)$. 
+Some $G_i^-$ contains $\xi$.
+A face containing a relative interior point of $F$ contains all of $F$, so $F$ is a face of $G_i^-$. 
+It follows that the lower graph faces are indexed, with dimensions preserved, by the cells of $\mathcal S$. 
+The same argument applies to the upper graph and $\mathcal T$. 
+The two collections overlap precisely in the lifted faces of $B$ contained in $D$, and therefore contribute
+\[
+ F_{\mathcal S}+F_{\mathcal T}-F_D.
+\]
+The remaining faces are the full inverse images of faces of $B$. 
+To see this, expose a face by a linear form
+\[
+ c(u)+\alpha z.
+\]
+If $\alpha<0$, maximization over each fibre forces $z=L(u)$; if $\alpha>0$, it forces $z=U(u)$. 
+Thus these faces have already been counted on the two graphs. If $\alpha=0$, the exposed face is
+\[
+ \{(u,z):u\in E,\ L(u)\leq z\leq U(u)\}
+\]
+for a face $E$ of $B$. 
+For $E\subseteq D$ this has already been counted. 
+Otherwise $H>0$ on $\relint(E)$, and its dimension is $\dim E+1$. 
+Hence
+\begin{equation}\label{eq:old-face-count}
+ F_{\OO_{I,J}(P)}  =F_{\mathcal S}+F_{\mathcal T}-F_D+t(F_B-F_D).
+\end{equation}
+
+For
+\[
+ \OO_{I\cup\{q\},J\setminus\{q\}}(P)  =\{(u,w):u\in B,\ 0\leq w\leq H(u)\},
+\]
+the same classification applies. The lower graph is $B\times\{0\}$, while the upper graph is determined by the affinity subdivision $\mathcal R$ of $H$. Thus
+\begin{equation}\label{eq:new-face-count}
+ F_{\OO_{I\cup\{q\},J\setminus\{q\}}(P)}  =F_B+F_{\mathcal R}-F_D+t(F_B-F_D).
+\end{equation}
+
+\smallskip
+\noindent\emph{Step 3: the upper subdivision.}
+We claim that
+\[
+ \mathcal R=\mathcal S\vee\mathcal T.
+\]
+Let $u,v\in B$, $0<\lambda<1$, and $x=\lambda u+(1-\lambda)v$. 
+By concavity of $U$ and convexity of $L$,
+\[
+ U(x)-\lambda U(u)-(1-\lambda)U(v)\geq0
+\]
+and
+\[
+ \lambda L(u)+(1-\lambda)L(v)-L(x)\geq0.
+\]
+Their sum is
+\[
+ H(x)-\lambda H(u)-(1-\lambda)H(v).
+\]
+If $H$ is affine on a convex set, this sum vanishes for all $u,v$ in that set, and hence both nonnegative terms vanish. 
+Thus both $L$ and $U$ are affine there. 
+The converse is immediate from $H=U-L$. 
+Therefore the affinity subdivision of $H$ is the common refinement $\mathcal S\vee\mathcal T$.
+
+Substituting
+\[
+ F_{\mathcal R}=F_{\mathcal S\vee\mathcal T}
+\]
+in \eqref{eq:new-face-count} and subtracting \eqref{eq:old-face-count} gives \eqref{eq:faceidentity}.
+\end{proof}
+
+
+\begin{definition}\label{def:relative-transverse}
+Two subdivisions $\mathcal S$ and $\mathcal T$ of $B$ are \emph{transverse relative to the faces of $B$} if the following holds. 
+For every face $E$ of $B$ and every $x\in\relint(E)$, let $A$ and $C$ be the unique cells of $\mathcal S|_E$ and $\mathcal T|_E$ whose relative interiors contain $x$. 
+Then
+\begin{equation}\label{eq:transverse}
+ \dim(A\cap C)=\dim A+\dim C-\dim E.
+\end{equation}
+\end{definition}
+
+
+\begin{lemma}\label{lem:subdivision}
+If $\mathcal S$ and $\mathcal T$ are transverse relative to the faces of $B$, then
+\begin{equation}\label{eq:subdivision-inequality}
+ F_{\mathcal S}+F_{\mathcal T}\leq F_{\mathcal S\vee\mathcal T}+F_B
+\end{equation}
+coefficientwise.
+\end{lemma}
+
+\begin{proof}
+Fix $k$. 
+We prove the inequality separately for the $k$-cells with a fixed carrier $E$. 
+Summing these inequalities over all faces $E$ of $B$ proves the inequality. 
+Put $e=\dim E$.
+
+\noindent\emph{Step 1: carriers of dimension $e\neq k$.}
+If $e<k$, there are no $k$-cells with carrier $E$. 
+Assume $e>k$.
+For each $k$-cell $A\in\mathcal S$ with carrier $E$, set
+\[
+ \mathcal R(A)=  \{R\in\mathcal S\vee\mathcal T:R\subseteq A,\ \dim R=k\}.
+\]
+This set is nonempty because the common refinement induces a subdivision of $A$. 
+Moreover, for every $R\in\mathcal R(A)$,
+\[
+ \relint(R)\subseteq\relint(A)\subseteq\relint(E),
+\]
+since $R\subseteq A$ and both have dimension $k$. 
+Thus $R$ also has carrier $E$. Define $\mathcal R(C)$ analogously for the $k$-cells $C\in\mathcal T$ with carrier $E$.
+
+Within either subdivision, these sets are pairwise disjoint, because the relative interiors of distinct cells are disjoint.
+They are also disjoint across the two subdivisions. 
+Indeed, if $R\in\mathcal R(A)\cap\mathcal R(C)$, then any $x\in\relint(R)$ lies in
+$\relint(A)\cap\relint(C)\cap\relint(E)$. 
+Transversality gives
+\[
+ \dim(A\cap C)=2k-e<k,
+\]
+contrary to $R\subseteq A\cap C$ and $\dim R=k$.
+Hence we have pairwise disjoint, nonempty sets of refinement $k$-cells, one for each $k$-cell of either subdivision with carrier $E$. 
+This proves the required inequality for $e>k$. 
+
+\noindent\emph{Step 2: carriers of dimension $e=k$.}
+Now the $k$-cells with carrier $E$ are precisely the full-dimensional cells of the restricted subdivisions $\mathcal S|_E$ and $\mathcal T|_E$. 
+Form a bipartite graph $G_E$ whose vertex classes are these cells, with an edge  between $A$ and $C$ for every $e$-cell 
+\[
+ R=A\cap C
+\]
+of $(\mathcal S\vee\mathcal T)|_E$. 
+Thus the edges of $G_E$ are in bijection with the $e$-cells of the common refinement.
+
+We claim that $G_E$ is connected. For $e=0$ this is immediate. 
+Suppose $e>0$ and put
+\[
+ \mathcal R=(\mathcal S\vee\mathcal T)|_E.
+\]
+The dual graph of a polytopal subdivision of a polytope is connected; see \cite[Lemma~2]{CJK25}. 
+Let
+\[
+ R=A\cap C,\qquad R'=A'\cap C'
+\]
+be adjacent $e$-cells of $\mathcal R$, and let $F=R\cap R'$ be their common $(e-1)$-face. 
+We show that either $A=A'$ or $C=C'$.
+
+Suppose that $A\neq A'$ and $C\neq C'$. 
+Then $A\cap A'$ is an $(e-1)$-cell of $\mathcal S|_E$ and $C\cap C'$ is an $(e-1)$-cell of $\mathcal T|_E$, both containing $F$. 
+Since $F$ is a common face of two distinct $e$-cells of $\mathcal R$, its relative interior lies in $\relint(E)$. 
+Moreover, $F$ has the same dimension as $A\cap A'$ and $C\cap C'$, so
+\[
+ \relint(F)\subseteq\relint(A\cap A')\cap\relint(C\cap C').
+\]
+Hence, for $x\in\relint(F)$, transversality gives
+\[
+ \dim\bigl((A\cap A')\cap(C\cap C')\bigr)  =(e-1)+(e-1)-e=e-2.
+\]
+This is impossible since the intersection contains the $(e-1)$-dimensional face $F$. 
+Thus $A=A'$ or $C=C'$.
+
+Consequently, adjacent cells in the dual graph of $\mathcal R$ correspond to edges of $G_E$ with a common endpoint. 
+Since the dual graph of $\mathcal R$ is connected, all edges of $G_E$ lie in one connected component. 
+Every vertex of $G_E$ is incident with an edge, since a full-dimensional cell of one subdivision cannot be covered by lower-dimensional cells of the other. 
+Hence $G_E$ is connected.
+
+Therefore
+\[
+ \#E(G_E)\geq \#V(G_E)-1.
+\]
+Thus the number of $k$-cells of $\mathcal S\vee\mathcal T$ with carrier $E$ is at least the sum of the corresponding numbers for $\mathcal S$ and $\mathcal T$, minus one. 
+The missing $1$ is supplied by the face $E$ itself in $F_B$.
+\end{proof}
+
+\section{Clipping and relative transversality}\label{sec:transversality}
+
+For $v\in\OO(P')$ and $0<h<1$, define
+\[
+ v^-_p=\min(v_p,h),  \qquad  v^+_p=\max(v_p-h,0),
+\]
+and put
+\[
+ u=T_Iv,  \qquad  u^\pm=T_I(v^\pm).
+\]
+This clipping decomposition is also used in the proof of \cite[Proposition~15]{FFP20}.
+
+\begin{lemma}\label{lem:clipping}
+One has
+\begin{equation}\label{eq:clipping}
+ u=u^-+u^+,  \qquad  u^-\in hB,  \qquad  u^+\in(1-h)B.
+\end{equation}
+If $u$ lies in a face $E$ of $B$, then
+\begin{equation}\label{eq:same-face}
+ u^-/h\in E,  \qquad  u^+/(1-h)\in E.
+ \end{equation}
+\end{lemma}
+
+\begin{proof}
+For $i\in I$, put
+\[
+ m_i=\max\bigl(\{v_p:p<i\}\cup\{0\}\bigr).
+\]
+Maximum commutes with both clipping functions, so
+\begin{align*}
+ (T_Iv^-)_i  &=  \min(v_i,h)-\min(m_i,h),\\
+ (T_Iv^+)_i  &=  (v_i-h)_+-(m_i-h)_+.
+\end{align*}
+These expressions sum to $v_i-m_i=(T_Iv)_i$. The untouched coordinates are additive as well. Hence
+\[
+ u=u^-+u^+.
+\]
+Since $v^-$ and $v^+$ have upper bounds $h$ and $1-h$, respectively, the scaled form of Lemma~\ref{lem:transfer} gives
+\[
+ u^-\in hB,  \qquad  u^+\in(1-h)B.
+\]
+
+Thus
+\[
+ u  = h\,\frac{u^-}{h} +(1-h)\,\frac{u^+}{1-h}
+ \]
+is a proper convex combination of two points of $B$. If $u\in E$, where $E$ is a face of $B$, both points lie in $E$. This proves
+\eqref{eq:same-face}.
+\end{proof}
+
+
+\begin{proposition}[Relative transversality]\label{prop:transversality}
+The subdivisions $\mathcal S$ and $\mathcal T$ determined by $L$ and $U$ are transverse relative to every face of $B$.
+\end{proposition}
+
+\begin{proof}
+Fix a face $E$ of $B$ and $x\in\relint(E)$, and let $A$ and $C$ be the cells of $\mathcal S|_E$ and $\mathcal T|_E$ containing $x$ in their relative interiors. 
+If $L(x)=U(x)$, then $L$ and $U$ are affine on $E$ by the proof of Lemma~\ref{lem:faceidentity}. 
+Hence $A=C=E$, and there is nothing to prove.
+
+Assume $L(x)<U(x)$. 
+We first use the clipping decomposition to separate the directions coming from coordinates below and above $q$. 
+We then apply this separation to the conormal spaces of $A$ and $C$.
+
+\smallskip
+\noindent\emph{Step 1: separation of the two sets of coordinates.}
+Choose
+\[
+ L(x)<h<U(x).
+\]
+After restricting to a neighbourhood of $x$ in $E$, we may assume $L(y)<h<U(y)$. 
+Let $v=T_I^{-1}y$. 
+For $p<q$, 
+\[
+ v_p\leq L(y)<h,
+\]
+whereas for $r>q$,
+\[
+ v_r=y_r\geq U(y)>h.
+\]
+Thus, with
+\[
+ a=y^- -x^-,
+\]
+Lemma~\ref{lem:clipping} gives
+\[
+ a\in\dir(E),\qquad  a_p=y_p-x_p\quad(p<q),\qquad  a_r=0\quad(r>q).
+\]
+
+Put $V=\dir(E)$. 
+We claim that the restrictions to $V$ of linear forms supported below $q$ and those supported above $q$ have zero intersection. 
+Indeed, suppose that $\ell$ is supported below $q$, $m$ is supported above $q$, and
+\[
+ \ell|_V=m|_V.
+\]
+For $\delta\in V$, take $y=x+\varepsilon\delta$ with $\varepsilon>0$ sufficiently small. 
+The vector $a$ above then satisfies
+\[
+ \ell(a)=\varepsilon\ell(\delta),  \qquad
+ m(a)=0.
+\]
+Since $a\in V$, we have $\ell(a)=m(a)$, and hence $\ell(\delta)=0$. 
+Thus the common restriction is zero.
+
+\smallskip
+\noindent\emph{Step 2: the cells meet transversely.}
+Write $L=\max_i\ell_i$ as in Section~\ref{sec:counting}, and $U=\min_j g_j$, where the branches $g_j$ are the coordinate functions $u\mapsto u_r$ with $r>q$ together with the constant function $1$. 
+Let 
+\[
+ S_L=\{i:\ell_i(x)=L(x)\},  \qquad  S_U=\{j:g_j(x)=U(x)\}
+\]
+be the sets of branches active at $x$. 
+Since $\ell_i(x)<L(x)$ for $i\notin S_L$ and $g_j(x)>U(x)$ for $j\notin S_U$, the remaining branches stay inactive in a neighbourhood of $x$. 
+Hence, near $x$,
+\[
+ A=E\cap\bigcap_{i,i'\in S_L}\{\ell_i=\ell_{i'}\},  \qquad  C=E\cap\bigcap_{j,j'\in S_U}\{g_j=g_{j'}\},
+\]
+and therefore, with $V=\dir(E)$ as above,
+\[
+ \dir(A)=V\cap\bigcap_{i,i'\in S_L}\ker(\ell_i-\ell_{i'}),  \qquad  \dir(C)=V\cap\bigcap_{j,j'\in S_U}\ker(g_j-g_{j'})_{\mathrm{lin}},
+\]
+where $(\,\cdot\,)_{\mathrm{lin}}$ denotes the linear part. 
+Consequently the conormal spaces $N_L=\dir(A)^\perp$ and $N_U=\dir(C)^\perp$ in $V^*$ are spanned by the restrictions to $V$ of the forms $\ell_i-\ell_{i'}$ and $(g_j-g_{j'})_{\mathrm{lin}}$, respectively. 
+The former are supported below $q$. 
+The differences $g_j-g_{j'}$ are of the form $u_r-u_{r'}$ or $u_r-1$ with $r,r'>q$, so their linear parts $u_r-u_{r'}$ and $u_r$ are supported above $q$; the constant branch contributes no linear part. 
+Step~1 therefore gives
+\[
+ N_L\cap N_U=0.
+\]
+By definition, $\dir(A)=N_L^\perp$ and $\dir(C)=N_U^\perp$. 
+Since $x\in\relint(A)\cap\relint(C)$, the set $\relint(A)\cap\relint(C)$ is a relatively open neighbourhood of $x$ in $\operatorname{aff}(A)\cap\operatorname{aff}(C)$, so 
+\[
+ \dir(A\cap C)=\dir(A)\cap\dir(C)=(N_L+N_U)^\perp.
+\]
+Writing $e=\dim E$, we obtain
+\begin{align*}
+ \dim(A\cap C)  &=e-\dim(N_L+N_U)\\
+ &=e-\dim N_L-\dim N_U\\
+ &=\dim A+\dim C-e.
+\end{align*}
+This is \eqref{eq:transverse}.
+\end{proof}
+
+The dimension formula in Definition~\ref{def:relative-transverse} is the polyhedral transversality condition. 
+A related formulation for normal fans of Minkowski sums appears in \cite[Sections~2--3]{FW10}. 
+Here it is proved directly for the subdivisions determined by $L$ and $U$,  after restriction to every face of the base.
+
+\section{Proof of the face-number inequality}\label{sec:dominance}
+
+\begin{proposition}\label{prop:step}
+If $I$ is an order ideal of $P$ and $q$ is minimal in $P\setminus I$,
+then
+\[
+ F_{\OO_{I,P\setminus I}(P)}(t)  \leq  F_{\OO_{I\cup\{q\},P\setminus(I\cup\{q\})}(P)}(t)
+\]
+coefficientwise.
+\end{proposition}
+
+\begin{proof}
+By Proposition~\ref{prop:transversality}, the subdivisions $\mathcal S$ and $\mathcal T$ are transverse relative to the faces of $B$.
+Lemma~\ref{lem:subdivision} and Lemma~\ref{lem:faceidentity} give
+\[
+ F_{\OO_{I\cup\{q\},P\setminus(I\cup\{q\})}(P)}-F_{\OO_{I,P\setminus I}(P)}
+ =  F_B+F_{\mathcal S\vee\mathcal T}  -F_{\mathcal S}-F_{\mathcal T}  \geq0
+\]
+coefficientwise.
+\end{proof}
+
+Choose a linear extension $q_1,\ldots,q_n$ of $P$ and set
+\[
+ I_s=\{q_1,\ldots,q_s\}.
+\]
+Each $I_s$ is an order ideal, and $q_{s+1}$ is minimal in its complement. Proposition~\ref{prop:step} gives
+\[
+ F_{\OO(P)}  =  F_{\OO_{\varnothing,P}(P)}  \leq  F_{\OO_{I_1,P\setminus I_1}(P)}  
+ \leq\cdots\leq  F_{\OO_{P,\varnothing}(P)}  = F_{\CC(P)}.
+\]
+This proves Theorem~\ref{thm:face-inequality}. 
+The top-dimensional coefficients are both $1$.
+
+More generally, if $I\subseteq I'$ are order ideals, list the elements of $I'\setminus I$ in the order induced by a linear extension of $P$.
+Adding them successively and applying Proposition~\ref{prop:step} at each step gives
+\[
+ F_{\OO_{I,P\setminus I}(P)}\leq F_{\OO_{I',P\setminus I'}(P)}
+\]
+coefficientwise.
+\printbibliography
+\end{document}

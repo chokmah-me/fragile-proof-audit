@@ -185,12 +185,9 @@ source and in the reproduced axiom sets:
    taken as an AXIOM ... every claim whose AUDIT.md row lists it
    is conditional on it (in particular Theorem 4.1, Corollary 5.3
    and the headline)." This is the single load-bearing external
-   input to the equality case. Open question, not a defect in the
-   Lean: Fourier's preprint now has a v2 (2026-10-29), which the
-   Goel abstract says "gives an independent proof of this
-   statement" (the equality statement); the axiom pins Prop 5.2 as
-   stated in v1, and whether v2 restates it identically was not
-   checked here.
+   input to the equality case. The Fourier v1-vs-v2 question
+   was resolved the same day (follow-up section at the end of
+   this note): the statement is unchanged in v2.
 2. **`hibiLi_thm_2_1`** — Hibi–Li 2016, Theorem 2.1 (published,
    Math. Scand. 118 (2016)). Used for the unimodular-equivalence
    criterion (Theorem 2.2) and the k = 1 edge.
@@ -246,3 +243,42 @@ preprint, not for this formalization.
   axioms` listings from run #2.
 - `results/hibi_li_audit_regenerated.md` — the regenerated
   `AUDIT.md`, byte-identical to the pinned one.
+
+## Follow-up (2026-11-05, same day): Fourier Prop 5.2, v1 vs v2
+
+The open question in M4 item 1 is resolved. Both versions of
+Fourier's preprint were pinned (`incoming/hibi-li-conjecture-lean/fourier/`:
+v1 e-print tarball sha256
+`239087f165ced37738ae8a7c8ee2b56aa4944717e45252855a598b235ae9d62a`,
+v2 `51ffa26e62dc841d7579f55cb388cab0936dc090006deceeea2c3b951610d74e`)
+and compared at the source level:
+
+- **Numbering.** Theorem-like environments share one per-section
+  counter in both versions. Section 5 runs Lemma 5.1 (clipping)
+  then the relative-transversality proposition, so it is
+  **Proposition 5.2 in v1 and in v2 alike**; section 5's structure
+  is unchanged.
+- **Statement.** Byte-identical in v1 and v2, and equal to the
+  verbatim quote in `Cited/Fourier.lean`: "The subdivisions S and
+  T determined by L and U are transverse relative to every face of
+  B." The definition of relative transversality is likewise
+  identical up to trailing whitespace.
+- **Proof.** Same two-step proof in both; v2 tightens a few
+  sentences editorially (normalized length 3,822 vs 3,734
+  characters; the step-2 conormal-space passage is reworded, no
+  step added or removed).
+- **What v2 adds** is elsewhere: two new sections (~370 lines),
+  a local comparison on the five-element star (§7) and marked
+  monotonicity with strict inequalities (§8), including a theorem
+  in §8.2 ("The equality case of the Hibi–Li conjecture") proving
+  the equality statement for marked polytopes by a route that does
+  not go through Proposition 5.2. That is the independent proof
+  Goel's abstract refers to.
+
+Effect on the verdict: none. Goel's Lean still takes Prop 5.2 as
+an axiom and the axiom's statement is stable across the only two
+versions of the preprint; the condition is now on the *current*
+text of the preprint, not a superseded one. The proposition
+remains unrefereed prose mathematics either way, and Fourier v2's
+independent equality-case proof does not discharge Goel's axiom,
+since Goel's formalization does not use it.
