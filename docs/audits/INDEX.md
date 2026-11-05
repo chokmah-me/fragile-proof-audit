@@ -20,6 +20,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [Erdős–Straus covering (Phase 2(e))](es-covering.md) |  |
 | [ES-5 Ghermoul equation (35) — BREAK](es5-eq35.md) |  |
 | [F2^9 tiling with no subspace complement (Ferguson–Iosevich, arXiv:2610.42005) — PASS, 512 complements / 64 spectra reproduced by two routes; d <= 8 leg cited, not verified](f2-9-tiling-no-subspace-complement.md) | 2026-11-05 |
+| [Hibi–Li (2016) conjecture fully resolved, Lean formalization (Goel, arXiv:2610.40703v2) — PASS (conditional): 177-claim table reproduced (158 PROVED / 19 PROVED-FROM-CITED); headline conditional on the single unrefereed axiom fourier_prop_5_2 (Fourier Prop 5.2, arXiv:2609.23629v1)](hibi-li-conjecture-lean.md) | 2026-11-05 |
 | [FR-05 phase-retrieval injectivity, Lean formalization](fr-05-phase-retrieval-injectivity.md) | 2026-09-29 |
 | [five new strongly regular graphs (Kovaľ, Zenodo 23296158) — PASS; prior-"?" confirmed via SageMath DB](koval-strongly-regular-graphs.md) | 2026-10-12 |
 | [FRK-UC Demontis union-closed — proof GAP (type G)](frankl-uc-gap.md) |  |
@@ -65,4 +66,4 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [TPC-GN evaluation display — BREAK](tpc-gn.md) |  |
 | [simple symmetric Venn diagrams, 17 and 19 curves](venn-simple-symmetric.md) | 2026-09-28 |
 
-_52 notes. Dispositions (BREAK / PASS / GAP / SKIP) live in the notes themselves; gates refute routes, not theorems._
+_53 notes. Dispositions (BREAK / PASS / GAP / SKIP) live in the notes themselves; gates refute routes, not theorems._

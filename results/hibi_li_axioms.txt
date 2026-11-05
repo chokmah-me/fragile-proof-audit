@@ -1,0 +1,32 @@
+'HibiLi.Paper.prop_3_4' depends on axioms: [propext, Classical.choice, Quot.sound, HibiLi.Cited.fourier_prop_5_2]
+'HibiLi.Paper.prop_3_7' depends on axioms: [propext, Classical.choice, Quot.sound, HibiLi.Cited.fourier_prop_5_2]
+'HibiLi.Paper.fourier_thm_1_1' depends on axioms: [propext, Classical.choice, Quot.sound, HibiLi.Cited.fourier_prop_5_2]
+'HibiLi.Paper.thm_4_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ HibiLi.Cited.fourier_prop_5_2,
+ HibiLi.Cited.ziegler_face_figure]
+'HibiLi.Paper.thm_4_1_binom' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ HibiLi.Cited.fourier_prop_5_2,
+ HibiLi.Cited.ziegler_face_figure]
+'HibiLi.Paper.cor_5_3' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ HibiLi.Cited.fourier_prop_5_2,
+ HibiLi.Cited.hibiLi_thm_2_1,
+ HibiLi.Cited.ziegler_face_figure]
+'HibiLi.Paper.thm_1_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ HibiLi.Cited.fourier_prop_5_2,
+ HibiLi.Cited.hibiLi_thm_2_1,
+ HibiLi.Cited.hlss_thm_2_1,
+ HibiLi.Cited.ziegler_face_figure]
+'HibiLi.Paper.conj_1_1_resolved' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ HibiLi.Cited.fourier_prop_5_2,
+ HibiLi.Cited.hibiLi_thm_2_1,
+ HibiLi.Cited.ziegler_face_figure]
