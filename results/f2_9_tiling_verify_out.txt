@@ -1,0 +1,25 @@
+[     0.00s] STEP 1: principal difference set and allowed set
+[     0.00s] |D|=484, |allowed|=28
+[     0.00s] STEP 2: claimed complement T0 partition check
+[     0.00s] T0 tiles E: True
+[     0.00s] STEP 3: exhaustive normalized complement census (principal)
+[     0.00s] principal: exhaustive census over C(28,7)=1184040 combinations
+[     0.85s] principal: normalized complements found = 8
+[     0.85s] building translates of 8 normalized complements
+[     0.86s] distinct complements = 512; running partition check on each
+[     0.88s] partition passes=512, linear=0, affine=0
+[     0.88s] STEP 4: reduced spectra census
+[     0.88s] spectral census: C(28,7)=1184040 combinations
+[     1.66s] spectral normalized Q count = 8
+[     1.70s] passing spectra = 64
+[     1.70s] Wiener norms over passing spectra (512-point naive Walsh)
+[     1.82s] STEP 5: exhaustive RREF subspace census (3-dim subspaces of F2^9)
+[     5.70s] subspaces: total=788035 tiling=0 gaussian=788035
+[     5.70s] STEP 6: Goyal cross-check census
+[     5.70s] goyal: exhaustive census over C(28,7)=1184040 combinations
+[     6.55s] goyal: normalized complements found = 8
+[     6.58s] goyal: normalized=8 total=512 partition_pass=512 equal=True
+[     6.58s] STEP 7: discrimination control (a set that DOES have a subspace complement)
+[     6.58s] control: subspace K tiles the 6-dim subspace domain: True, |D_ctrl|=64
+SUMMARY {"D_size": 484, "Lambda_claim_gram_ok": true, "Lambda_claim_size": 64, "T0_partition_ok": true, "allowed_size": 28, "complements_equal": true, "control_D_size": 64, "control_subspace_tiles": true, "gaussian_binomial": 788035, "goyal_D_size": 484, "goyal_allowed_size": 28, "goyal_normalized_count": 8, "goyal_partition_pass_count": 512, "goyal_total_complements": 512, "passing_spectra_count": 64, "principal_affine_subspace_count": 0, "principal_distinct_complements": 512, "principal_linear_subspace_count": 0, "principal_normalized_count": 8, "principal_partition_pass_count": 512, "spectral_S_size": 29, "spectral_cand_size": 28, "spectral_normalized_count": 8, "spectral_translate_distinct": 64, "subspace_tiling": 0, "subspace_total": 788035, "wiener_norms": ["15/8"]}
+[     6.58s] done

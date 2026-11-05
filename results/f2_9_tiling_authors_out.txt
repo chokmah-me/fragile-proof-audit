@@ -1,0 +1,58 @@
+=== verify_example.py (authors, masked runner, exit 0) ===
+{
+  "status": "PASS",
+  "source_sha256": "6c98b0834efb902768b5d093770558ebbbb8246017779c6032815d7b2f50e60f",
+  "proof_dependency": "The paper proves every spectrum is Q x F_2^3 and Q+Q is contained in S. The program verifies the structural hypotheses and exhausts that reduced problem.",
+  "difference_size": 484,
+  "normalized_complement_count": 8,
+  "complement_recursion_nodes": 125,
+  "spectrum_count": 64,
+  "normalized_spectrum_count": 8,
+  "quotient_recursion_nodes": 125,
+  "exact_integer_gram_checks": 65,
+  "spectrum_wiener_norms": [
+    "15/8"
+  ],
+  "three_subspaces_enumerated": 788035,
+  "subspace_complement_count": 0,
+  "elapsed_seconds": 1.004208798000036
+}
+
+=== verify_comparison.py (authors, masked runner, exit 0) ===
+{
+  "status": "PASS",
+  "domains": 2,
+  "complements_checked_per_domain": 512,
+  "spectra_checked_per_domain": 64,
+  "integer_gram_checks_per_domain": 65,
+  "direction_multiplicities": [
+    [
+      2,
+      2,
+      1,
+      1,
+      1,
+      1
+    ],
+    [
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  ],
+  "periods_of_each_domain": [
+    0
+  ],
+  "periodic_complement_count": 0,
+  "spectrum_wiener_norms": [
+    "15/8"
+  ],
+  "same_complement_families": true,
+  "same_spectrum_families": true,
+  "cross_fiber_certificate_checked": true,
+  "proof_dependency": "Completeness of the spectrum lists uses the common-layer theorem: every spectrum is Q x F_2^3 with Q+Q contained in C+C. Affine inequivalence uses the intrinsic-space and fiber-direction invariant proved in the appendix."
+}

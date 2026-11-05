@@ -1,0 +1,33 @@
+{
+   "sources" : [
+      {
+         "usage" : "toplevel",
+         "filename" : "Binary_Tiles_Threshold.tex"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "anc/README.txt"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "anc/comparison_data.json"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "anc/example.json"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "anc/verify_comparison.py"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "anc/verify_example.py"
+      }
+   ],
+   "spec_version" : 1,
+   "texlive_version" : "2025",
+   "process" : {
+      "compiler" : "pdflatex"
+   }
+}
