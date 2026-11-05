@@ -1,0 +1,230 @@
+name: hibi-li-forge
+
+# Independent build + axiom audit of Dave Goel, "The Hibi-Li (2016)
+# conjecture is fully resolved", arXiv:2610.40703v2 (2026-11-02).
+#
+# Canonical artifact (recon 2026-11-05, incoming/hibi-li-conjecture-lean/PIN.md):
+# the arXiv v2 comments field names tag hibi-li-2016-conjecture-v4.60 in
+# david44hello/papers_supporting_materials @
+# a936b943f1ad442f46ac4e38c3e3dd11d0f33c55, folder
+# hibi-li-2016-conjecture/lean/ -- a complete lake project (162 .lean
+# files, toolchain leanprover/lean4:v4.35.0, Mathlib v4.35.0).
+# Zenodo 23601975 carries no Lean; the sweep's davegoel/LeanProofs blob
+# is a 404 phantom.
+#
+# The author's AUDIT.md claims 177 statements in HibiLi/Paper/Statements.lean:
+# 158 PROVED, 19 PROVED-FROM-CITED, the cited set being exactly four axioms
+# declared in HibiLi/Cited/ -- fourier_prop_5_2 (Fourier Prop 5.2,
+# arXiv:2609.23629v1, an unrefereed preprint), hibiLi_thm_2_1 (2016),
+# hlss_thm_2_1 (2017), ziegler_face_figure (textbook). This workflow
+# verifies that disclosure by building the pinned tree and re-deriving
+# the axiom sets independently. Fail-closed on: wrong HEAD, wrong key
+# file hashes, build failure, sorryAx anywhere, any axiom outside
+# {standard three} + {the four Cited}, any headline cited-set differing
+# from the AUDIT.md row for it, or a regenerated AUDIT.md that differs
+# from the pinned one.
+#
+# Manual dispatch only. Heavy leg on the self-hosted desktop runner.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hibi-li-forge
+  cancel-in-progress: false
+
+env:
+  TARGET_REPO: https://github.com/david44hello/papers_supporting_materials.git
+  TARGET_SHA: a936b943f1ad442f46ac4e38c3e3dd11d0f33c55
+  TARGET_DIR: hibi-li-2016-conjecture/lean
+  EXPECTED_LEAN_FILES: "162"
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/hibi-li-forge.yml
+
+  forge:
+    needs: gate
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 360
+    steps:
+      - name: Check out this repo
+        # Full checkout, no sparse config: the shared self-hosted checkout
+        # must be left residue-free (META-RULE 2026-10-09). All scratch
+        # work happens in subdirs of this checkout (hibi-src/, hibi-forge/,
+        # hibi-evidence/) and is removed by the final step.
+        uses: actions/checkout@v4
+
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          set +e
+          mkdir -p hibi-evidence
+          df -h . || true
+          echo "rg: $(command -v rg || echo absent)"
+          echo "cpus: $(nproc || echo unknown)"
+          free -h || true
+          exit 0
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Pin target commit (fail-closed)
+        run: |
+          set -euo pipefail
+          echo "$TARGET_SHA" | grep -Eq '^[0-9a-f]{40}$' || { echo "FAIL: TARGET_SHA is not 40 lowercase hex: $TARGET_SHA"; exit 1; }
+          rm -rf hibi-src
+          git clone --filter=blob:none --no-checkout "$TARGET_REPO" hibi-src
+          cd hibi-src
+          git fetch --depth 1 origin "$TARGET_SHA"
+          git checkout "$TARGET_SHA"
+          head="$(git rev-parse HEAD)"
+          [ "$head" = "$TARGET_SHA" ] || { echo "FAIL: target HEAD $head != pinned $TARGET_SHA"; exit 1; }
+          echo "$head" | tee ../hibi-evidence/TARGET_HEAD
+
+      - name: Extract pinned project and verify key hashes
+        run: |
+          set -euo pipefail
+          cd hibi-src
+          git sparse-checkout set "$TARGET_DIR"
+          cd ..
+          rm -rf hibi-forge
+          cp -r "hibi-src/$TARGET_DIR" hibi-forge
+          count=$(find hibi-forge -name '*.lean' | wc -l)
+          echo "lean files: $count (expected $EXPECTED_LEAN_FILES)"
+          [ "$count" -eq "$EXPECTED_LEAN_FILES" ] || { echo "FAIL: lean file count $count != $EXPECTED_LEAN_FILES"; exit 1; }
+          cd hibi-forge
+          echo "bdb173d37c005426bf63ed3f6dbbdd2db476f4622d380723506546c798cdb3c7  HibiLi/Cited/Fourier.lean" | sha256sum -c -
+          echo "8bded29dd875a31801675ce0dcf47578c8038020b06bb586b40d69f05bb88b89  HibiLi/Paper/Statements.lean" | sha256sum -c -
+          echo "4c2f90ad7b02efd7652868ee385cfe9ced05b5e35db13a5b530ae1e1c58c7ef1  AUDIT.md" | sha256sum -c -
+          cp AUDIT.md ../hibi-evidence/AUDIT-pinned.md
+          lean --version | tee ../hibi-evidence/lean-version.txt
+          grep -q "4.35.0" ../hibi-evidence/lean-version.txt || { echo "FAIL: toolchain is not v4.35.0"; exit 1; }
+
+      - name: Source policy scan (grep mirror of the author's check.sh)
+        working-directory: hibi-forge
+        run: |
+          set -euo pipefail
+          # The author's scan fails on the words even in comments; the pinned
+          # tree was pre-scanned clean on the VM, so any hit here is real.
+          if grep -rnw --include='*.lean' -e sorry -e sorryAx -e admit -e native_decide -e implemented_by -e unsafe . | grep -v '^\./\.lake/'; then
+            echo "FAIL: forbidden proof construct in sources"
+            exit 1
+          fi
+          outside=$(grep -rln --include='*.lean' -w axiom . | grep -v '^\./\.lake/' | grep -v '^\./HibiLi/Cited/' || true)
+          [ -z "$outside" ] || { echo "FAIL: axiom declared outside HibiLi/Cited/: $outside"; exit 1; }
+          echo "scan clean: no sorry/admit/native_decide/implemented_by/unsafe; axioms only under HibiLi/Cited/"
+
+      - name: Fetch Mathlib prebuilt oleans
+        working-directory: hibi-forge
+        run: |
+          set -o pipefail
+          lake exe cache get 2>&1 | tee ../hibi-evidence/cache-get.log
+
+      - name: Build the project
+        working-directory: hibi-forge
+        run: |
+          set -o pipefail
+          lake build 2>&1 | tee ../hibi-evidence/build.log
+
+      - name: Regenerate the author's AUDIT.md from #print axioms
+        working-directory: hibi-forge
+        run: |
+          set -o pipefail
+          python3 scripts/audit.py 2>&1 | tee ../hibi-evidence/audit-py.log
+          cp AUDIT.md ../hibi-evidence/AUDIT-regenerated.md
+
+      - name: Independent axiom check on the headline declarations
+        working-directory: hibi-forge
+        run: |
+          cat > AxiomCheck.lean <<'EOF'
+          import HibiLi
+          #print axioms HibiLi.Paper.prop_3_4
+          #print axioms HibiLi.Paper.prop_3_7
+          #print axioms HibiLi.Paper.fourier_thm_1_1
+          #print axioms HibiLi.Paper.thm_4_1
+          #print axioms HibiLi.Paper.thm_4_1_binom
+          #print axioms HibiLi.Paper.cor_5_3
+          #print axioms HibiLi.Paper.thm_1_2
+          #print axioms HibiLi.Paper.conj_1_1_resolved
+          EOF
+          lake env lean AxiomCheck.lean > ../hibi-evidence/axioms.txt 2>&1 || true
+          cat ../hibi-evidence/axioms.txt
+
+      - name: Verdict (fail-closed)
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          ev = 'hibi-evidence/'
+          ok = True
+          def fail(msg):
+              global ok
+              ok = False
+              print('FAIL:', msg)
+          txt = open(ev + 'axioms.txt').read()
+          if 'sorryAx' in txt:
+              fail('sorryAx present in an axiom listing')
+          std = {'propext', 'Classical.choice', 'Quot.sound'}
+          cited = lambda *ns: {'HibiLi.Cited.' + n for n in ns}
+          expected = {
+              'HibiLi.Paper.prop_3_4': cited('fourier_prop_5_2'),
+              'HibiLi.Paper.prop_3_7': cited('fourier_prop_5_2'),
+              'HibiLi.Paper.fourier_thm_1_1': cited('fourier_prop_5_2'),
+              'HibiLi.Paper.thm_4_1': cited('fourier_prop_5_2', 'ziegler_face_figure'),
+              'HibiLi.Paper.thm_4_1_binom': cited('fourier_prop_5_2', 'ziegler_face_figure'),
+              'HibiLi.Paper.cor_5_3': cited('fourier_prop_5_2', 'hibiLi_thm_2_1', 'ziegler_face_figure'),
+              'HibiLi.Paper.thm_1_2': cited('fourier_prop_5_2', 'hibiLi_thm_2_1', 'hlss_thm_2_1', 'ziegler_face_figure'),
+              'HibiLi.Paper.conj_1_1_resolved': cited('fourier_prop_5_2', 'hibiLi_thm_2_1', 'ziegler_face_figure'),
+          }
+          # DOTALL: #print axioms wraps long lists across physical lines.
+          listings = re.findall(r"'([\w.]+)' depends on axioms: \[(.*?)\]", txt, re.DOTALL)
+          found = {}
+          for name, ax in listings:
+              found[name] = {a.strip() for a in ax.replace('\n', ' ').split(',') if a.strip()}
+          for name, want in expected.items():
+              if name not in found:
+                  fail(f'no axiom listing for {name}')
+                  continue
+              got = found[name]
+              extra = got - std - want
+              if extra:
+                  fail(f'{name}: axioms outside standard+cited-declared: {sorted(extra)}')
+              got_cited = {a for a in got if a.startswith('HibiLi.Cited.')}
+              if got_cited != want:
+                  fail(f'{name}: cited set {sorted(got_cited)} != AUDIT.md row {sorted(want)}')
+              else:
+                  print(f'{name}: cited={sorted(got_cited)} standard-subset-ok')
+          pinned = open(ev + 'AUDIT-pinned.md').read()
+          regen = open(ev + 'AUDIT-regenerated.md').read()
+          if pinned != regen:
+              fail('regenerated AUDIT.md differs from the pinned AUDIT.md')
+          else:
+              print('AUDIT.md regeneration: identical to pinned (177-claim table reproduced)')
+          print('VERDICT: PASS' if ok else 'VERDICT: FAIL')
+          with open(ev + 'verdict.txt', 'w') as f:
+              f.write('PASS\n' if ok else 'FAIL\n')
+          sys.exit(0 if ok else 1)
+          EOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hibi-li-forge-evidence
+          path: hibi-evidence
+
+      - name: Leave shared checkout clean (meta-rule)
+        if: always()
+        run: |
+          rm -rf hibi-src hibi-forge
+          git checkout --force HEAD 2>/dev/null || true
