@@ -147,8 +147,17 @@ jobs:
       - name: Independent axiom check on the headline declarations
         working-directory: hibi-forge
         run: |
+          set -euo pipefail
+          # Fail-fast guard (run #1 lesson): the names live in
+          # HibiLi.Paper.Statements, NOT under the root HibiLi module --
+          # `import HibiLi` left every name unknown and the check failed
+          # with eight unknown-constant errors while the build itself was
+          # green. Assert each name is declared in Statements.lean first.
+          for name in prop_3_4 prop_3_7 fourier_thm_1_1 thm_4_1 thm_4_1_binom cor_5_3 thm_1_2 conj_1_1_resolved; do
+            grep -qE "theorem $name[ :]" HibiLi/Paper/Statements.lean || { echo "FAIL: $name not declared in HibiLi/Paper/Statements.lean"; exit 1; }
+          done
           cat > AxiomCheck.lean <<'EOF'
-          import HibiLi
+          import HibiLi.Paper.Statements
           #print axioms HibiLi.Paper.prop_3_4
           #print axioms HibiLi.Paper.prop_3_7
           #print axioms HibiLi.Paper.fourier_thm_1_1
