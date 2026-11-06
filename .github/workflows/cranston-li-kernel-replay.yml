@@ -125,13 +125,25 @@ jobs:
         working-directory: cl-forge
         run: |
           set -euo pipefail
-          missing=""
-          command -v rg >/dev/null 2>&1 || missing="$missing ripgrep"
-          [ -x /usr/bin/time ] || missing="$missing time"
-          if [ -n "$missing" ]; then
-            echo "installing:$missing"
-            sudo -n apt-get update -qq
-            sudo -n apt-get install -y -qq $missing
+          # The desktop runner has no passwordless sudo (run 42193106961
+          # died on "sudo: a password is required" installing ripgrep),
+          # so ripgrep comes from its pinned release tarball instead of
+          # apt: no root needed, sha256 checked against the published
+          # sum. GNU time is a package on the runner already; if it
+          # were missing there is no no-root fallback, so that stays a
+          # hard SETUP-FAIL for the user to install by hand.
+          if ! command -v rg >/dev/null 2>&1; then
+            echo "installing: ripgrep 15.1.0 (release tarball, no root)"
+            mkdir -p "$HOME/.local/bin"
+            cd /tmp
+            curl -fsSL -o rg.tar.gz "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/ripgrep-15.1.0-x86_64-unknown-linux-musl.tar.gz"
+            echo "1c9297be4a084eea7ecaedf93eb03d058d6faae29bbc57ecdaf5063921491599  rg.tar.gz" | sha256sum -c -
+            mkdir -p rg-extract && tar -xzf rg.tar.gz -C rg-extract
+            cp rg-extract/ripgrep-15.1.0-x86_64-unknown-linux-musl/rg "$HOME/.local/bin/rg"
+            rm -rf rg.tar.gz rg-extract
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+            export PATH="$HOME/.local/bin:$PATH"
+            cd -
           fi
           command -v rg >/dev/null || { echo "SETUP-FAIL: ripgrep unavailable"; exit 1; }
           [ -x /usr/bin/time ] || { echo "SETUP-FAIL: /usr/bin/time unavailable"; exit 1; }
