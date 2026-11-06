@@ -1,0 +1,265 @@
+name: cranston-li-kernel-replay
+
+# Add-on to the CLOSED Cranston-Li audit (docs/audits/cranston-li-su-
+# wang-xu.md, PASS, main@5351223; forge run 42148721865): run the
+# author's own scripts/kernel_replay.sh, the one verification route
+# the audit note recorded as shipped-but-not-run. Requested by the
+# user 2026-11-06 as the optional add-on, ahead of the RiemannJensen
+# forge.
+#
+# What the script does (read line by line at pin time, sha256
+# 26596005e43a1dc18add6b8eba290f6d9a6d5907ab04bd9f3185b0d95c1f5c4a):
+# (a) leanchecker olean replay, one process per EulerFlow module,
+#     replaying each module's own declarations with Lean's C++
+#     kernel on top of the imported environment;
+# (b) leanexport of every safe EulerFlow constant with transitive
+#     dependencies (core and Mathlib included), then six independent
+#     checkers from an empty environment: leanchecker --from-export,
+#     leanchecker-paranoid --from-export, lean4lean --import,
+#     nanoda, con-leche --verified, con-ron --verified. Declaration
+#     counts are cross-checked against the export analysis, so an
+#     empty or truncated export cannot pass silently. The script
+#     refuses (exit 3) on missing or stale oleans, snapshots its
+#     inputs (sources + oleans + toolchain files) and exits 3 if
+#     they change during the run.
+#
+# Our verdict is stricter than the script's exit code: the script
+# exits 0 even when a checker is SKIPPED (per-checker 2400 s limit,
+# or a con-* decline). This workflow's verdict FAILs on any FAIL,
+# any SKIPPED, any INCONSISTENT or NOT FRESH line, a non-zero
+# script exit, a missing PASS line for any of the eight checks, or
+# any axiom declared in the export outside the standard three.
+#
+# Fail-closed also on: wrong target HEAD, wrong key file hashes
+# (including kernel_replay.sh itself), build failure.
+#
+# Manual dispatch only. Heavy leg on the self-hosted desktop runner.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cranston-li-kernel-replay
+  cancel-in-progress: false
+
+env:
+  TARGET_REPO: https://github.com/david44hello/papers_supporting_materials.git
+  TARGET_SHA: 7c03e0ba9a2c34e578472f477237a64d5c181e02
+  TARGET_DIR: cranston-li-su-wang-xu-2026-conjecture/lean
+  EXPECTED_LEAN_FILES: "55"
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/cranston-li-kernel-replay.yml
+
+  replay:
+    needs: gate
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 360
+    steps:
+      - name: Check out this repo
+        # Full checkout, no sparse config: the shared self-hosted checkout
+        # must be left residue-free (META-RULE 2026-10-09). All scratch
+        # work happens in subdirs of this checkout (cl-src/, cl-forge/,
+        # cl-evidence/) and is removed by the final step.
+        uses: actions/checkout@v4
+
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          set +e
+          mkdir -p cl-evidence
+          df -h . || true
+          echo "rg: $(command -v rg || echo absent)"
+          echo "gnu-time: $(test -x /usr/bin/time && echo present || echo absent)"
+          echo "cpus: $(nproc || echo unknown)"
+          free -h || true
+          exit 0
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Pin target commit (fail-closed)
+        run: |
+          set -euo pipefail
+          echo "$TARGET_SHA" | grep -Eq '^[0-9a-f]{40}$' || { echo "FAIL: TARGET_SHA is not 40 lowercase hex: $TARGET_SHA"; exit 1; }
+          rm -rf cl-src
+          git clone --filter=blob:none --no-checkout "$TARGET_REPO" cl-src
+          cd cl-src
+          git fetch --depth 1 origin "$TARGET_SHA"
+          git checkout "$TARGET_SHA"
+          head="$(git rev-parse HEAD)"
+          [ "$head" = "$TARGET_SHA" ] || { echo "FAIL: target HEAD $head != pinned $TARGET_SHA"; exit 1; }
+          echo "$head" | tee ../cl-evidence/TARGET_HEAD
+
+      - name: Extract pinned project and verify key hashes
+        run: |
+          set -euo pipefail
+          cd cl-src
+          git sparse-checkout set "$TARGET_DIR"
+          cd ..
+          rm -rf cl-forge
+          cp -r "cl-src/$TARGET_DIR" cl-forge
+          count=$(find cl-forge -name '*.lean' | wc -l)
+          echo "lean files: $count (expected $EXPECTED_LEAN_FILES)"
+          [ "$count" -eq "$EXPECTED_LEAN_FILES" ] || { echo "FAIL: lean file count $count != $EXPECTED_LEAN_FILES"; exit 1; }
+          cd cl-forge
+          echo "ff84d6fc5b5f1b93aa2c784fa9600d050a406bf679cac865dbe04e4bf8970376  AUDIT.md" | sha256sum -c -
+          echo "22e7f55612875772d175ec88010718c36086cbc9b3fe16344c44ac3790773cfe  EulerFlow/Paper/Statements.lean" | sha256sum -c -
+          echo "f115711d8005ec51b6d445b65ed71636013193294389f17086a8c5971feac580  EulerFlow.lean" | sha256sum -c -
+          echo "26596005e43a1dc18add6b8eba290f6d9a6d5907ab04bd9f3185b0d95c1f5c4a  scripts/kernel_replay.sh" | sha256sum -c -
+          lean --version | tee ../cl-evidence/lean-version.txt
+          grep -q "4.35.0" ../cl-evidence/lean-version.txt || { echo "FAIL: toolchain is not v4.35.0"; exit 1; }
+
+      - name: Replay prerequisites (ripgrep, GNU time, checker binaries)
+        working-directory: cl-forge
+        run: |
+          set -euo pipefail
+          missing=""
+          command -v rg >/dev/null 2>&1 || missing="$missing ripgrep"
+          [ -x /usr/bin/time ] || missing="$missing time"
+          if [ -n "$missing" ]; then
+            echo "installing:$missing"
+            sudo -n apt-get update -qq
+            sudo -n apt-get install -y -qq $missing
+          fi
+          command -v rg >/dev/null || { echo "SETUP-FAIL: ripgrep unavailable"; exit 1; }
+          [ -x /usr/bin/time ] || { echo "SETUP-FAIL: /usr/bin/time unavailable"; exit 1; }
+          prefix="$(lean --print-prefix)"
+          echo "toolchain prefix: $prefix" | tee ../cl-evidence/checker-binaries.txt
+          for tool in lean leanchecker leanchecker-paranoid leanexport lean4lean nanoda_bin con-leche con-ron; do
+            if [ -x "$prefix/bin/$tool" ]; then
+              echo "present: $tool" | tee -a ../cl-evidence/checker-binaries.txt
+            else
+              echo "SETUP-FAIL: missing toolchain binary $tool" | tee -a ../cl-evidence/checker-binaries.txt
+              exit 1
+            fi
+          done
+
+      - name: Fetch Mathlib prebuilt oleans
+        working-directory: cl-forge
+        run: |
+          set -o pipefail
+          lake exe cache get 2>&1 | tee ../cl-evidence/cache-get.log
+
+      - name: Build the project (fresh oleans for the replay)
+        working-directory: cl-forge
+        run: |
+          set -o pipefail
+          lake build 2>&1 | tee ../cl-evidence/build.log
+
+      - name: Run the author's kernel_replay.sh (full mode)
+        working-directory: cl-forge
+        run: |
+          set +e
+          timeout 18000 bash scripts/kernel_replay.sh > ../cl-evidence/kernel-replay.log 2>&1
+          code=$?
+          echo "$code" > ../cl-evidence/kernel-replay-exit.txt
+          echo "kernel_replay.sh exit: $code"
+          tail -n 30 ../cl-evidence/kernel-replay.log
+          exit 0
+
+      - name: Collect replay logs
+        if: always()
+        run: |
+          set +e
+          latest="$(ls -dt cl-forge/.lake/kernel_replay/run.* 2>/dev/null | head -n 1)"
+          if [ -n "$latest" ]; then
+            mkdir -p cl-evidence/kernel_replay_run
+            cp -r "$latest"/logs_* cl-evidence/kernel_replay_run/ 2>/dev/null || true
+            cp "$latest"/*.analysis "$latest"/*.missing "$latest"/*.skipped cl-evidence/kernel_replay_run/ 2>/dev/null || true
+            # The export itself is regenerable bulk: record size + hash, do not upload it.
+            for f in "$latest"/*.ndjson; do
+              [ -f "$f" ] && { ls -la "$f"; sha256sum "$f"; } >> cl-evidence/export-file.txt 2>/dev/null
+            done
+            du -sh cl-evidence/kernel_replay_run || true
+          else
+            echo "no kernel_replay run dir found" | tee cl-evidence/kernel_replay_run-MISSING.txt
+          fi
+          exit 0
+
+      - name: Verdict (fail-closed, stricter than the script's exit code)
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          ev = 'cl-evidence/'
+          ok = True
+          def fail(msg):
+              global ok
+              ok = False
+              print('FAIL:', msg)
+          try:
+              code = int(open(ev + 'kernel-replay-exit.txt').read().strip())
+          except Exception as e:
+              code = None
+              fail(f'cannot read kernel-replay exit code: {e}')
+          if code != 0:
+              fail(f'kernel_replay.sh exit code is {code}, not 0')
+          log = open(ev + 'kernel-replay.log').read()
+          m = re.search(r'==== kernel_replay summary .*?====\n(.*?)\Z', log, re.DOTALL)
+          if not m:
+              fail('no kernel_replay summary block in the log')
+              summary = ''
+          else:
+              summary = m.group(1)
+          for bad in ('FAIL(', 'SKIPPED(', 'INCONSISTENT', 'NOT FRESH', 'UNCERTIFIED'):
+              if bad in summary:
+                  fail(f'summary contains {bad}')
+          expected_pass = [
+              'leanchecker (olean replay)',
+              'leanexport',
+              'leanchecker --from-export',
+              'leanchecker-paranoid --from-export',
+              'lean4lean --import',
+              'nanoda',
+              'con-leche --verified',
+              'con-ron --verified',
+          ]
+          for label in expected_pass:
+              line = next((ln for ln in summary.splitlines() if ln.startswith(label)), None)
+              if line is None:
+                  fail(f'no summary line for {label}')
+              elif ' PASS(' not in line:
+                  fail(f'{label} did not PASS: {line.strip()}')
+              else:
+                  print(f'{label}: PASS confirmed')
+          ax = next((ln for ln in summary.splitlines() if ln.startswith('axioms declared in the export')), None)
+          if ax is None:
+              fail('no axioms-declared summary line')
+          else:
+              # The record() padding puts the value after the 36-char label field.
+              declared = {a.strip() for a in ax[36:].split(',') if a.strip()}
+              std = {'propext', 'Classical.choice', 'Quot.sound'}
+              extra = declared - std
+              if extra:
+                  fail(f'export declares axioms outside the standard three: {sorted(extra)}')
+              else:
+                  print(f'axioms declared in the export: {sorted(declared)} (standard three only)')
+          print('VERDICT: PASS' if ok else 'VERDICT: FAIL')
+          with open(ev + 'verdict.txt', 'w') as f:
+              f.write('PASS\n' if ok else 'FAIL\n')
+          sys.exit(0 if ok else 1)
+          EOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cranston-li-kernel-replay-evidence
+          path: cl-evidence
+
+      - name: Leave shared checkout clean (meta-rule)
+        if: always()
+        run: |
+          rm -rf cl-src cl-forge
+          git checkout --force HEAD 2>/dev/null || true
