@@ -218,10 +218,31 @@ Minor artifact gaps (recorded, not verdict-changing):
   similar). Cosmetic; the statements are unaffected.
 - The author's `scripts/kernel_replay.sh` (independent-kernel
   replay, author-stated about 20 minutes) ships in the pinned
-  artifact but was **not** run by this audit; the verdict
-  rests on the lake build, the author's `audit.py`, and the
-  independent `#print axioms` pass. A kernel-replay run is
-  available as a follow-up if ever wanted.
+  artifact. **Follow-up run 2026-11-06: kernel replay PASS.**
+  Forge-style run 42193889816 (head 02a0bb5, replay job
+  09:33:30-09:51:13 UTC, 17m43s on DESKTOP-7HDI2D1), first
+  dispatch 42193106961 having died at the setup step (ripgrep
+  missing on the runner, no passwordless sudo; repaired by
+  installing ripgrep 15.1.0 from the pinned release tarball,
+  no root). `kernel_replay.sh` exit 0; all eight checks PASS:
+  leanchecker olean replay (54 modules, 486 s), leanexport
+  (1,433 requested constants + dependencies = 32,196 records),
+  leanchecker --from-export (32,196 records), leanchecker-paranoid
+  --from-export (32,196 records), lean4lean --import (32,193
+  declarations), nanoda (33,957 declarations), con-leche
+  --verified (32,196), con-ron --verified (32,196); axioms
+  declared in the export are the standard three alone
+  (propext, Quot.sound, Classical.choice); 0 helpers not
+  exported. Evidence artifact `cranston-li-kernel-replay-evidence`
+  id 13493420656, 39,857 bytes, sha256
+  eaf558986040040ac61ef413554aebf6e86b16ff5a90a07ee6d42b1028a51282,
+  expires 2027-02-04; export file sha256
+  a67e602beda9adb718335b9c80f0d4b782683ac27ce3f82fd0ec232b1644ec17.
+  The audit verdict (PASS) is unchanged; the residual is
+  closed. Note: per-checker declaration counts differ slightly
+  by convention (lean4lean 32,193, nanoda 33,957 against the
+  32,196-record export), the same spread seen in the forge
+  smoke tests; no checker reported a mismatch.
 - `AUDIT_NOTES.md` and the long-paper line citations in
   `Defs/` docstrings refer to the expanded version (Zenodo),
   which was not pinned by this audit; only the short paper

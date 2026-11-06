@@ -1,0 +1,10 @@
+leanchecker (olean replay)           PASS(54 modules, 486 s, peak RSS 6.9 GB)
+leanexport                           PASS(1433 requested constants + dependencies = 32196 declaration records, 199M, 15 s, peak RSS 7.3 GB)
+leanchecker --from-export            PASS(no count printed; export has 32196 records, 40 s, peak RSS 0.5 GB)
+leanchecker-paranoid --from-export   PASS(no count printed; export has 32196 records, 50 s, peak RSS 0.4 GB)
+lean4lean --import                   PASS(32193 declarations, 49 s, peak RSS 0.4 GB)
+nanoda                               PASS(33957 declarations, 24 s, peak RSS 0.3 GB)
+con-leche --verified                 PASS(32196 declarations, 37 s, peak RSS 0.3 GB)
+con-ron --verified                   PASS(32196 declarations, 20 s, peak RSS 0.4 GB)
+axioms declared in the export        propext, Quot.sound, Classical.choice
+not exported (unsafe/partial)        0 compiler helpers; replayed in (a) only
