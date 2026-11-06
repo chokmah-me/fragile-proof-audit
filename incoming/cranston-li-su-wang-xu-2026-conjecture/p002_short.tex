@@ -1,0 +1,703 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,array,booktabs,microtype,enumitem}
+\usepackage{cite}\renewcommand{\citemid}{,~}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={The Cranston\textendash Li\textendash Su\textendash Wang\textendash Xu (2026) conjecture is true},pdfauthor={Dave Goel},
+  pdfkeywords={nowhere-zero flow, group flow, reconfiguration, flow-connected graph, Eulerian graph}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\one}{\mathbf{1}}
+\raggedbottom
+\makeatletter\@secpenalty=0\makeatother
+\widowpenalty=10000 \clubpenalty=10000
+\emergencystretch=1.5em
+
+\title{The Cranston--Li--Su--Wang--Xu (2026) conjecture is true}
+\author{Dave Goel\thanks{\raggedright The Lean proof is at
+\url{https://github.com/david44hello/papers_supporting_materials/tree/cranston-li-su-wang-xu-2026-conjecture-v1.59/cranston-li-su-wang-xu-2026-conjecture}.}}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $A$ be a finite abelian group. A nowhere-zero $A$-flow of a graph gives every edge a direction and a non-zero
+value in $A$, so that at every vertex the sum of the values on the entering edges equals the sum on the leaving edges.
+Such a flow can be changed along a cycle: going around the cycle, add a fixed non-zero element of $A$ to the value of
+every edge that points forward and subtract it from the value of every edge that points backward. The Cranston--Li--Su--Wang--Xu (2026) conjecture states that if $A$ has at least four elements, then in every
+graph in which all degrees are even, any two nowhere-zero
+$A$-flows are joined by a chain of such changes through nowhere-zero $A$-flows. It also states that, for every integer $k\ge 4$, the same holds for integer flows whose
+values are between $1$ and $k-1$ in absolute value, where each change adds a non-zero integer. We prove this conjecture. The core of the proof is an induction on the number of edges: if a flow
+enters a vertex $v$ along an edge $uv$ and leaves $v$ along an edge $vw$ with the same value, the two edges can be
+replaced by one edge $uw$, and the induction hypothesis applies to the smaller graph. So the main task is to change
+every flow into a flow with such a pair of edges.
+For nowhere-zero $A$-flows with $|A|\ge 4$, replacing vertices of degree more than $4$ by triangles reduces the problem to graphs with all degrees
+at most $4$. For integer flows, a counting argument joins any two nowhere-zero flows with values in the cyclic group $\Z_k$,
+$k\ge 4$, by changes that add $1$, $-1$, $2$ or $-2$; every such chain gives a chain of integer flows with values between
+$1$ and $k-1$ in absolute value, and every integer flow of this chain reduces modulo $k$ to a flow of the given chain. All results of this paper are also proved in the Lean~4 proof
+assistant, from Lean's standard axioms alone.
+\end{abstract}
+
+\noindent\textit{2020 Mathematics Subject Classification:} 05C21 (primary), 05C45 (secondary).\\
+\textit{Keywords:} nowhere-zero flow, group flow, reconfiguration, flow-connected graph, Eulerian graph.
+
+\section{Introduction}\label{sec:intro}
+
+This paper proves the Cranston--Li--Su--Wang--Xu (2026) conjecture \cite[Conjecture~4.1]{CLSWX} on the
+reconfiguration of nowhere-zero flows in graphs in which every vertex has even degree, that is, on whether every
+nowhere-zero flow can be changed into every other one by changes along cycles that keep the flow nowhere-zero.
+
+Let $G$ be a finite graph; loops and parallel edges are allowed. For a finite abelian group $A$ (for example the cyclic group $\Z_m$ of the integers modulo $m$), a nowhere-zero
+$A$-flow of $G$ assigns to every edge, in a fixed reference direction, a non-zero element of $A$, so that at every
+vertex the sum of the values on the entering edges equals the sum on the leaving edges. Two such flows differ by a
+\emph{step} with \emph{value} $t\ne 0$ if there is a cycle, traversed in one of its two directions, such that their
+difference is $t$ on every edge of the cycle whose reference direction agrees with the traversal, $-t$ on every other
+edge of the cycle, and $0$ on every edge not on the cycle. The graph $\cF(G,A)$ has the nowhere-zero $A$-flows of $G$ as its vertices, two of them being
+adjacent if they differ by a step, and $G$ is \emph{$A$-flow-connected} if $\cF(G,A)$ is connected. For an integer
+$k\ge 2$, the graph $\cF(G,k)$ is defined in the same way with integers. Its vertices are the integer flows $F$ of $G$
+(flows with integer values) with $1\le|F(e)|\le k-1$ on every edge $e$, and two of them are adjacent if they differ by a
+step whose value is a non-zero integer. The graph $G$ is \emph{$k$-flow-connected} if $\cF(G,k)$ is connected. Sections~\ref{sec:words} and~\ref{sec:int}
+restate these definitions in the notation of the proofs.
+
+Esperet, Hendrey, Lagoutte, Marseloo, Norin and Steiner \cite{EHLMNS} introduced the graphs $\cF(G,A)$ and $\cF(G,k)$
+and asked for which graphs $G$, groups $A$ and integers $k$ they are connected. Cranston, Li, Su, Wang and Xu
+\cite[Conjecture~4.1]{CLSWX} conjectured that every graph in which all degrees are even is $A$-flow-connected for every finite abelian group $A$
+with $|A|\ge 4$ and $k$-flow-connected for every integer $k\ge 4$. In \cite{CLSWX}, a graph in which all
+degrees are even is called Eulerian. Since ``Eulerian'' often also requires the graph to be connected, we call a graph \emph{even} if every vertex
+has even degree; an even graph need not be connected.
+
+\begin{theorem}\label{thm:main}
+Let $G$ be a graph in which every vertex has even degree.
+\begin{itemize}
+\item[(a)] $G$ is $A$-flow-connected for every finite abelian group $A$ with $|A|\ge 4$.
+\item[(b)] $G$ is $k$-flow-connected for every integer $k\ge 4$.
+\end{itemize}
+\end{theorem}
+
+Thus the Cranston--Li--Su--Wang--Xu (2026) conjecture is true. Part~(a) is Theorem~\ref{thm:all}, proved in
+Section~\ref{sec:proofs}, and part~(b) is Theorem~\ref{thm:int}, proved in Section~\ref{sec:int}. The following table
+compares Theorem~\ref{thm:main} with earlier results.
+
+\begin{center}
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.45\textwidth}@{\hspace{0.04\textwidth}}>{\raggedright\arraybackslash}p{0.51\textwidth}@{}}
+\toprule
+New result & Best result before this paper\\
+\midrule
+Every even graph is $A$-flow-connected for every finite abelian group $A$ with $|A|\ge 4$
+(Theorem~\ref{thm:main}~(a)).
+& Groups of even order \cite[Theorem~4.3]{CLSWX}; groups with $|A|\ge 5{,}251{,}339$
+\cite[Corollary~4.5]{CLSWX}; planar graphs, $|A|\ge 7$ \cite[Corollary~5.9]{EHLMNS}.\\
+\addlinespace
+Every even graph is $k$-flow-connected for every integer $k\ge 4$ (Theorem~\ref{thm:main}~(b)).
+& Even $k$ \cite[Theorem~4.2]{CLSWX}; planar graphs, $k\ge 7$ \cite[Corollary~5.9]{EHLMNS}; open for odd $k\ge 5$ in general.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The number $4$ in Theorem~\ref{thm:main} cannot be replaced by $3$. By \cite[Theorem~2.1]{CLSWX}, for a graph with a
+nowhere-zero $3$-flow (an integer flow with values in $\{1,-1,2,-2\}$), the following are equivalent: it is
+$\Z_3$-flow-connected; it is $3$-flow-connected; all its degrees are even and no two of its vertices are joined by more
+than four edge-disjoint paths. The even graph with two vertices and six parallel edges has a nowhere-zero $3$-flow
+(direct every edge from one vertex to the other, and give three edges the value $1$ and three the value $-1$), and its
+two vertices are joined by six edge-disjoint paths. So it is neither $\Z_3$-flow-connected nor $3$-flow-connected.
+
+\paragraph{Further results.} Every even graph in which all degrees are at most $4$ is $A$-flow-connected for every
+finite abelian group $A$, of any order (Theorem~\ref{thm:deg4}); for $A=\Z_3$ this also follows from
+\cite[Theorem~2.1]{CLSWX}, since an even graph has a nowhere-zero $3$-flow (the value $1$ on every edge, with the edges directed so
+that at every vertex as many edges enter as leave, which is possible because all degrees are even) and, when all degrees are at most $4$, no two
+vertices are joined by more than four edge-disjoint paths. For the cyclic groups $\Z_m$ with $m\ge 4$, any two nowhere-zero $\Z_m$-flows of an even graph are joined by a
+chain of steps whose values are in $\{1,-1,2,-2\}$ (Theorem~\ref{thm:cyclic}); for even $m$, $\Z_m$-flow-connectedness, with steps of any value,
+was known \cite[Theorem~4.3]{CLSWX}. The restriction of the step values to $\pm1$ and $\pm2$ is what the proof of
+part~(b) of Theorem~\ref{thm:main} needs (see the outline below).
+
+An expanded version of this paper, with many other results, is posted on Zenodo \cite{G}.
+The two main questions of combinatorial reconfiguration, as listed in \cite[Section~1]{EHLMNS}, are whether the
+reconfiguration graph (here $\cF(G,A)$) is connected and, if so, what its diameter is. For even graphs and $|A|\ge 4$,
+Theorem~\ref{thm:main} answers the first. For the second, \cite[Theorem~2.5]{G} gives a polynomial upper bound: if $|A|\ge 4$, any two
+nowhere-zero $A$-flows of an even graph with $M$ edges are joined by a chain of at most $16M^3+12M^2+M$ steps. For
+integers $q\ge 1$ and $p>2q$, a modular $(p,q)$-flow \cite[Section~2]{CLSWX} is a $\Z_p$-flow whose values are residues
+of $q,q+1,\dots,p-q$, and a graph is $(p,q)$-flow-connected if any two of its modular $(p,q)$-flows are joined by a
+chain of steps through modular $(p,q)$-flows. All even graphs are $(p,q)$-flow-connected if and only if $p\ge 4q$
+\cite[Theorems~9.1~and~9.2]{G}. None of these results is used here.
+
+\paragraph{Outline of the proof.}
+Section~\ref{sec:red} reduces the flow-connectedness of all even graphs to the statement that, in every loopless even graph
+with at least one edge, every flow can be changed, by a chain of steps, into a flow with a balanced pair (defined next) at some vertex. If a flow enters a vertex $v$ along an edge
+$e=uv$ and leaves along another edge $e'=vw$ with the same value (a balanced pair, Definition~\ref{def:balanced}), the two
+edges can be replaced by a single edge $uw$, and the flows with this balanced pair correspond to the flows of the smaller
+graph (Lemma~\ref{lem:split}). Assuming the statement above, we use induction on the number of edges: the smaller graph is flow-connected by the
+induction hypothesis, so any two flows with a balanced pair on the same two edges are joined by a chain of steps. An Eulerian orientation directs every edge so that at every
+vertex as many edges enter as leave; it exists because every degree is even. A constant flow with value $a\ne 0$ has
+the value $a$ on every edge in the direction of an Eulerian orientation. For any two edges at a vertex of a loopless even graph and any $a\ne 0$,
+the two edges form a balanced pair at that vertex in some constant flow with value $a$, and for a suitable $a$, all constant flows with
+value $a$ are joined to each other (Lemma~\ref{lem:const}). So all flows with a balanced pair are joined to each other, and it
+suffices to join every flow to one of them; this is statement \textup{(LOCAL)} of Proposition~\ref{prop:red}.
+
+Statement \textup{(LOCAL)} is needed only for loopless graphs in which every degree is $0$ or at least $4$: loops can be
+deleted (Lemma~\ref{lem:loop}), and at a vertex of degree $2$ the two edges form a balanced pair in every flow, by the flow condition.
+Section~\ref{sec:local} proves it when every degree is $0$ or $4$; this gives Theorem~\ref{thm:deg4}
+(all degrees at most~$4$). In Section~\ref{sec:proofs} a vertex of larger degree is replaced by a triangle: if
+$|A|\ge 4$ and the graph with the triangle is $A$-flow-connected, then so is the original graph
+(Lemma~\ref{lem:triangle}). This implication is a special case of \cite[Theorem~5.9(1)]{CLSWX}; we include its short
+proof. That theorem applies because a triangle is $A$-connected when $|A|\ge 4$, in the sense of \cite{JLPT}. This
+notion is different from $A$-flow-connectedness: a graph $H$ is \emph{$A$-connected} if, for a fixed reference
+direction of every edge and every map $\beta\colon V(H)\to A$ with $\sum_v\beta(v)=0$, there is a map
+$f\colon E(H)\to A\setminus\{0\}$ such that at every vertex $v$ the sum of $f$ on the leaving edges minus the sum on the
+entering edges is $\beta(v)$.
+
+Part~(b) of
+Theorem~\ref{thm:main} needs a further argument: the steps of Section~\ref{sec:local} can have any value, but
+Lemmas~\ref{lem:step1} and~\ref{lem:step2}, which turn a step between two $\Z_k$-flows into a step between two integer flows
+whose residues modulo $k$ are these two $\Z_k$-flows, apply only to steps with values $\pm1$
+and $\pm2$. So, for the cyclic groups $\Z_m$ with $m\ge 4$,
+Section~\ref{sec:cyclic} proves \textup{(LOCAL)} using only steps with values $\pm1$ and $\pm2$, by a counting argument
+that needs no bound on the degrees; this gives Theorem~\ref{thm:cyclic}, which also proves part~(a) for cyclic groups
+(Remark~\ref{rem:noncyclic} explains why the counting argument does not extend to all groups). Section~\ref{sec:int} lifts these chains to
+integer flows, using Tutte's lifting theorem \cite{Tutte} in the form of \cite[Theorem~2.3]{EHLMNS}: every nowhere-zero
+$\Z_k$-flow is the residue modulo $k$ of an integer flow with values between $1$ and $k-1$ in absolute value.
+
+\section{Definitions and results}\label{sec:words}
+
+\paragraph{Graphs.} All graphs are finite; loops and parallel edges are allowed. A graph is \emph{even} if every
+vertex has even degree, where a loop counts twice. A \emph{cycle} is a connected subgraph in which every vertex has
+degree~$2$; a loop is a cycle with one edge, and two parallel edges form a cycle with two edges. A \emph{directed
+cycle} is a cycle together with one of its two directions of traversal.
+
+\paragraph{Flows.} Let $A$ be a finite abelian group, and let $G$ be a graph. Fix a
+reference direction of every edge. An \emph{$A$-flow} of $G$ is a map $f\colon E(G)\to A$ such that at every vertex
+the sum of $f$ over the edges that leave the vertex equals the sum over the edges that enter it. The value of $f$ on an
+edge $e$ is $f(e)$ in the reference direction of $e$ and $-f(e)$ in the other direction. From now on, a \emph{flow}
+is a nowhere-zero $A$-flow, that is, $f(e)\ne 0$ for every edge $e$.
+
+For a directed cycle $Q$, let $\chi_Q(e)$ be $1$ if $Q$ traverses $e$ in its reference direction, $-1$ if
+$Q$ traverses $e$ against it, and $0$ if $e$ is not on $Q$. A \emph{step} is a pair of flows $f$ and
+$f'=f+t\chi_Q$, where $Q$ is a directed cycle and $t\ne 0$ is an element of $A$, the \emph{value} of the step. The value is determined only up to sign, as reversing $Q$ or exchanging $f$ and $f'$ replaces $t$ by $-t$. The
+graph $\cF(G,A)$ has the flows of $G$ as its vertices, and two flows are adjacent if they form a step. In \cite{CLSWX,EHLMNS} two different flows are adjacent if they agree outside a cycle $Q$; this gives the same graph, because the
+difference of two such flows is an $A$-flow that is zero outside $Q$, and such an $A$-flow is $t\chi_Q$ for some $t\in A$ and a direction of $Q$. The graph $G$ is \emph{$A$-flow-connected} if $\cF(G,A)$ is connected; here $\cF(G,A)$ counts as connected when it has at most one
+vertex, in particular when $G$ has no~flow.
+
+Let $T$ be a set of non-zero elements of $A$ with $T=-T$. A \emph{$T$-step} is a step whose value is in $T$, and two flows
+are \emph{$T$-joined} if a chain of $T$-steps (possibly empty) leads from one to the other.
+
+A \emph{multi-step} with value $t\ne 0$ is a pair of flows $f$ and $f'=f+t(\chi_{Q_1}+\dots+\chi_{Q_r})$, where
+$r\ge 1$ and $Q_1,\dots,Q_r$ are directed cycles, no two of which have a common edge. Every partial sum
+$f+t(\chi_{Q_1}+\dots+\chi_{Q_j})$ is then a flow, as it agrees with $f$ or $f'$ on every edge; so a
+multi-step is a chain of $r$ steps with value $t$.
+
+\paragraph{Ends of edges.} Every edge has two ends, one at each endpoint; a loop at $v$ has both ends at $v$. The degree of $v$ is the
+number of ends at $v$. If $v$ is a vertex of a cycle $Q$, the \emph{ends of $Q$ at $v$} are the two ends at $v$ of the
+edges of $Q$. For an $A$-flow $f$ and an end $i$ at $v$ of the edge $e$, the \emph{outward value}
+$y_i(f)\in A$ is the value of $f$ on $e$ in the direction that leaves $v$ through $i$; it is non-zero if $f$ is a flow. The flow
+condition at $v$ says
+\begin{equation}\label{eq:kirchhoff}
+\sum_{i\text{ an end at }v} y_i(f)=0 .
+\end{equation}
+If a directed cycle $Q$ enters $v$ through the end $i$ and leaves $v$ through the end $j$, then
+\begin{equation}\label{eq:ends}
+y_i(f+t\chi_Q)=y_i(f)-t,\qquad y_j(f+t\chi_Q)=y_j(f)+t ,
+\end{equation}
+and the other ends at $v$ keep their outward values.
+
+\begin{definition}\label{def:balanced}
+Let $G$ have no loop. A \emph{balanced pair} of a flow $f$ at a vertex $v$ is a pair of different ends $i,j$ at
+$v$ with $y_i(f)+y_j(f)=0$; that is, $f$ enters $v$ through one of them and leaves $v$ through the other with the same
+value. (Loops are excluded because the two ends of a loop would always form a balanced pair.)
+\end{definition}
+
+We prove the following three theorems on group flows, that is, on $A$-flows for a finite abelian group $A$.
+\begin{theorem}\label{thm:deg4}
+Let $A$ be a finite abelian group. Every even graph in which all degrees are at most $4$ is $A$-flow-connected.
+\end{theorem}
+
+\begin{theorem}\label{thm:all}
+Let $A$ be a finite abelian group with $|A|\ge 4$. Every even graph is $A$-flow-connected.
+\end{theorem}
+
+\begin{theorem}\label{thm:cyclic}
+Let $m\ge 4$. In every even graph, any two nowhere-zero $\Z_m$-flows are joined by a chain of steps whose values are
+in $\{1,-1,2,-2\}$.
+\end{theorem}
+
+Sections~\ref{sec:proofs} and~\ref{sec:cyclic} prove these theorems, and Section~\ref{sec:int} deduces Theorem~\ref{thm:main}~(b) from Theorem~\ref{thm:cyclic}.
+
+\section{Reduction to flows with a balanced pair}\label{sec:red}
+
+This section proves the following (Proposition~\ref{prop:red}). Let a class of even graphs be closed under deleting a
+loop and under splitting off, that is, replacing two edges $uv$ and $vw$ at a vertex $v$ by one edge $uw$
+(Lemma~\ref{lem:split}). If, in every loopless graph of the class with at least one edge, every flow is joined by steps
+to a flow with a balanced pair, then in every graph of the class any two flows are joined by steps. In this section $A$ is a finite abelian group with at least two elements, and $T$ is a set of non-zero elements of $A$
+with $T=-T$. Here $T$ is the set of allowed step values ($A\setminus\{0\}$ for Theorems~\ref{thm:deg4} and~\ref{thm:all}, and
+$\{1,-1,2,-2\}$ for Theorem~\ref{thm:cyclic}). We use two conditions on $T$:
+\begin{itemize}
+\item[(T1)] any two non-zero elements of $A$ are joined by a sequence of non-zero elements of $A$ in which
+consecutive elements differ by an element of $T$;
+\item[(T2)] there is a non-zero $a\in A$ with $2a=0$ or $2a\in T$.
+\end{itemize}
+Both conditions hold for $T=A\setminus\{0\}$, and also for $A=\Z_m$ with $m\ge 3$ and $T=\{1,-1,2,-2\}$: the sequence
+$1,2,\dots,m-1$ gives (T1), and $a=1$ gives (T2). Condition (T1) is used for loops in Lemma~\ref{lem:loop}, and (T2) is
+used in Proposition~\ref{prop:red} to join the constant flows of Lemma~\ref{lem:const}.
+
+\begin{lemma}[deleting a loop]\label{lem:loop}
+Let $T$ satisfy \textup{(T1)}, and let $\ell$ be a loop of $G$. If any two flows of $G-\ell$ are $T$-joined, then any two
+flows of $G$ are $T$-joined.
+\end{lemma}
+\begin{proof}
+A loop adds the same term to both sides of the flow condition at its vertex. So a flow of $G$ is a flow of $G-\ell$
+together with any non-zero value on $\ell$. A step of $G-\ell$, with the value on $\ell$ kept, is a step of $G$, and a
+change of the value on $\ell$ by an element of $T$ is a $T$-step along the cycle $\ell$. Given two flows of $G$, join their
+restrictions by $T$-steps of $G-\ell$, then change the value on $\ell$ along a sequence as in \textup{(T1)}.
+\end{proof}
+
+\begin{lemma}[splitting off]\label{lem:split}
+Let $G$ have no loop, let $v$ be a vertex, and let $e=vu$ and $e'=vw$ be two different edges at $v$ ($u=w$ is
+allowed). Let $G'$ be the graph $G-e-e'+g$ with a new edge $g=uw$ (a loop if $u=w$): the first end of $g$ is at $u$ and
+replaces the end of $e$ at $u$, and its second end is at $w$ and replaces the end of $e'$ at $w$. The direction of
+$g$ \emph{from $u$ to $w$} is the direction from its first end to its second end; if $u=w$, this fixes one of the two
+directions of the loop $g$. For a map $f'\colon E(G')\to A$, let $x$ be the value of $f'$ on $g$
+from $u$ to $w$, and let $Lf'\colon E(G)\to A$ be the map that agrees with $f'$ on the edges other than $e,e',g$ (the common edges of $G$ and $G'$) and has the value $x$ on
+$e$ in the direction from $u$ to $v$ and on $e'$ in the direction from $v$ to $w$. Let $B(v;e,e')$ be the set of flows
+$f$ of $G$ in which the ends of $e$ and $e'$ at $v$ are a balanced pair.
+\begin{itemize}
+\item[(a)] $L$ is a bijection from the flows of $G'$ onto $B(v;e,e')$.
+\item[(b)] If $f'_2$ comes from $f'_1$ by a multi-step of $G'$ with value $t$, then $Lf'_2$ comes from $Lf'_1$ by
+a multi-step of $G$ with value $t$. In particular, if two flows of $G'$ are $T$-joined, their images under $L$ are
+$T$-joined.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+(a) In $Lf'$ the ends of $e$ and $e'$ at $v$ have the outward values $-x$ and $x$, so the flow condition holds at $v$;
+at $u$ the edge $e$ leaves with value $x$ as $g$ did, and at $w$ the edge $e'$ enters with value $x$ as $g$
+did. So $Lf'$ is a flow in $B(v;e,e')$. Conversely, for $f\in B(v;e,e')$ the value of $f$ on $e$ from $u$ to $v$
+equals its value on $e'$ from $v$ to $w$; giving $g$ this value from $u$ to $w$ and keeping the other values defines
+the only map $f'$ with $Lf'=f$; it is a flow, as the ends of $g$ have the outward values of the ends of $e,e'$ that they
+replace, and the ends of $e,e'$ at $v$ have outward values with sum~$0$.
+
+(b) Let $Q'$ be a directed cycle of $G'$. If $g$ is not on $Q'$, let $W=Q'$, a directed cycle of $G$. If $g$ is on
+$Q'$, replace $g$ by the two edges $e,e'$, traversed through $v$ in the direction of $Q'$ (first $e$ from $u$ to $v$
+and then $e'$ from $v$ to $w$ if $Q'$ traverses $g$ from $u$ to $w$, and the reverse otherwise); this gives a closed
+walk $W$ of $G$ that uses every edge at most once. If $u=w$, then $Q'=g$ and $W$ is the cycle formed by $e$ and $e'$.
+If $u\ne w$ and $Q'$ does not pass through $v$, then $W$ is a directed cycle. If $u\ne w$ and $Q'$ passes through $v$,
+then $W$ visits $v$ twice and no other vertex twice, and splitting $W$ at $v$ gives two directed cycles with no
+common edge. In every case let $\chi_W$ be the sum of the maps $\chi$ of these one or two directed cycles; then
+$L(f'+t\chi_{Q'})=Lf'+t\chi_W$. If $Q'_1,\dots,Q'_r$ are directed cycles of $G'$, no two of which have a common edge,
+then the directed cycles of $G$ obtained from them have pairwise no common edge: they use the edges of the $Q'_j$,
+with $e,e'$ instead of $g$. So $L$ maps a multi-step of $G'$ to a multi-step of $G$ with the same value.
+\end{proof}
+
+\begin{lemma}[constant flows]\label{lem:const}
+Let $G$ be even and let $a\ne 0$ be an element of $A$. An Eulerian orientation $D$ of $G$ directs every edge so that at every vertex the
+in-degree equals the out-degree (one exists because $G$ is even); the directed edges are the \emph{arcs} of $D$. Let
+$a\one_D$ be the constant flow with value $a$ along every arc of $D$.
+\begin{itemize}
+\item[(a)] For two Eulerian orientations $D,D_2$ of $G$, either $a\one_{D_2}=a\one_D$, or $a\one_{D_2}$ comes from
+$a\one_D$ by a multi-step with value $-2a$.
+\item[(b)] In the situation of Lemma~\ref{lem:split}, $B(v;e,e')$ contains $a\one_D$ for some Eulerian orientation $D$ of $G$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+(a) The arcs of $D$ that are reversed in $D_2$ form a directed graph with in-degree equal to out-degree at every
+vertex, so they are the union of directed cycles $Q_1,\dots,Q_r$ of $D$, no two of which have a common arc. The
+reversal of an arc changes its value along $D$ from $a$ to $-a$. So
+$a\one_{D_2}=a\one_D-2a(\chi_{Q_1}+\dots+\chi_{Q_r})$. If $2a=0$ or $r=0$, the two flows are equal; otherwise this is a
+multi-step with value $-2a$.
+
+(b) The graph $G'$ is even. Take an Eulerian orientation $D'$ of $G'$, and let $D$ agree with $D'$ on the common edges and
+direct $e$ and $e'$ through $v$ in the direction of $g$ in $D'$ (from $u$ to $v$ to $w$ if $D'$ directs $g$ from $u$
+to $w$, and the reverse otherwise). Then $D$ is an Eulerian orientation of $G$ and $a\one_D=L(a\one_{D'})$.
+\end{proof}
+
+\begin{proposition}[reduction to a balanced pair]\label{prop:red}
+Let $\cG$ be a class of even graphs such that $G-\ell\in\cG$ for every $G\in\cG$ and every loop $\ell$ of $G$, and
+$G'\in\cG$ for every $G\in\cG$ with no loop and every graph $G'$ obtained from $G$ as in Lemma~\ref{lem:split}. Let
+$T$ satisfy \textup{(T1)} and \textup{(T2)}. Suppose that the following statement holds.
+\begin{itemize}[leftmargin=4.6em,labelsep=0.5em]
+\item[\textup{(LOCAL)}] For every loopless $G\in\cG$ in which every vertex has degree $0$
+or at least $4$, and which has at least one edge, every flow of $G$ is $T$-joined to a flow that has a balanced pair at some vertex.
+\end{itemize}
+Then in every $G\in\cG$ any two flows are $T$-joined.
+\end{proposition}
+\begin{proof}
+We use induction on the number of edges of $G$. A graph with no edge has exactly one flow. If $G$ has a loop $\ell$, use
+Lemma~\ref{lem:loop} and the induction hypothesis for $G-\ell$. From now on $G$ has no loop.
+
+If some vertex $v$ has degree $2$, its two ends belong to two different edges $e,e'$, and by \eqref{eq:kirchhoff}
+they are a balanced pair in every flow. So every flow of $G$ is in $B(v;e,e')$, and by Lemma~\ref{lem:split} and the
+induction hypothesis for $G'$, any two flows of $G$ are $T$-joined.
+
+Otherwise $G$ has an edge and every vertex has degree $0$ or at least $4$. Fix $a$ as in \textup{(T2)}. For every
+vertex $v$ and any two different edges $e,e'$ at $v$, any two flows in $B(v;e,e')$ are $T$-joined, by the induction
+hypothesis for $G'$ and Lemma~\ref{lem:split}, and $B(v;e,e')$ contains a flow $a\one_D$, by
+Lemma~\ref{lem:const}~(b). By Lemma~\ref{lem:const}~(a) and \textup{(T2)}, all flows $a\one_D$ are $T$-joined to one another (if $2a\ne 0$, the value
+$-2a$ is in $T$, because $2a\in T$ and $T=-T$). A flow with a balanced pair is in some $B(v;e,e')$, because $G$ has
+no loop. So all flows with a balanced pair are $T$-joined to one another, and \textup{(LOCAL)} joins every flow to
+one of them.
+\end{proof}
+
+\section{Reaching a balanced pair when all degrees are 0 or 4}\label{sec:local}
+
+This section proves statement \textup{(LOCAL)} of Proposition~\ref{prop:red} for graphs in which every
+degree is $0$ or $4$ (Proposition~\ref{prop:local4}). We fix generators of the cyclic summands of $A$ and call an edge
+small if its value is one of these generators or its negative (precise definitions follow). First, steps along cycles
+change a flow into one in which the edges that are not small form a forest (Corollary~\ref{cor:forest}); then, as the graph has an edge and every vertex with an edge has degree $4$, the small
+edges contain a cycle, and one more step along that cycle gives a balanced pair (Lemma~\ref{lem:Bstar}). Let $A$ be a finite abelian
+group with at least two elements.
+Write $A$ as a direct sum of cyclic groups,
+\[
+A=\langle s_1\rangle\oplus\dots\oplus\langle s_r\rangle,\qquad s_h\ne 0 ,
+\]
+so that every element $a$ of $A$ can be written in exactly one way as $a=a_1+\dots+a_r$ with $a_h\in\langle
+s_h\rangle$; the $a_h$ are the \emph{parts} of $a$. Let $S=\{s_1,-s_1,\dots,s_r,-s_r\}$. The elements of $S$ are
+called \emph{small}, and the \emph{color} of $s\in S$ is the index $h$ with $s\in\langle s_h\rangle$. We have $S=-S$ and $0\notin S$, and $S$ generates $A$. For a
+flow $f$, an edge is \emph{small} if its value is small (this does not depend on the direction); the \emph{color} of
+a small edge is the color of its value, which is the same in both directions. Let $\rho(f)$ be the number of edges
+that are not small.
+
+\begin{lemma}[a cycle with no small edge]\label{lem:Astar}
+Let $f$ be a flow of a graph $G$ and $Q$ a directed cycle of $G$ none of whose edges is small. Then there is
+a step $f'=f+t\chi_Q$ with $\rho(f')\le\rho(f)-1$.
+\end{lemma}
+\begin{proof}
+Let $X$ be the set of values of the edges of $Q$ in the direction of $Q$. Then $0\notin X$
+and $X\cap S=\emptyset$. We claim that there are $x\in X$ and $s\in S$ with $x-s\notin X$. If not, then $X-S\subseteq
+X$, that is, $X+S\subseteq X$ as $S=-S$; adding elements of $S$ repeatedly gives $X+\langle S\rangle\subseteq X$, and as $S$ generates $A$ and $X$ is not empty,
+$X=A$, contradicting $0\notin X$. Let $t=s-x$. Then $t\ne 0$ because $x\notin S$. A new value $x'+t$ with $x'\in X$ is $0$
+only if $x'=x-s$, which is not in $X$. So $f'=f+t\chi_Q$ is a flow. An edge of $Q$ with value $x$ has the new
+value $s$ and is small in $f'$; the edges outside $Q$ did not change; and no edge of $Q$ was small in $f$. So $\rho(f')\le\rho(f)-1$.
+\end{proof}
+
+\begin{corollary}\label{cor:forest}
+Every flow $f$ of a graph $G$ is joined by a chain of at most $\rho(f)$ steps to a flow in which the edges that are
+not small form a forest.
+\end{corollary}
+\begin{proof}
+Apply Lemma~\ref{lem:Astar} as long as the edges that are not small contain a cycle. Each application is a single step and lowers $\rho$ by at least $1$, and $\rho\ge 0$.
+\end{proof}
+
+\begin{lemma}[a cycle of small edges]\label{lem:Bstar}
+Let $G$ be a loopless graph in which every vertex has degree $0$ or $4$. Let $f$ be a flow of $G$ with no balanced
+pair, and $Q$ a cycle of $G$ all of whose edges are small. Then there are a direction of $Q$ and an element $t\ne 0$ of $A$ such that $f+t\chi_Q$ is a flow with a balanced pair.
+\end{lemma}
+\begin{proof}
+Let $v$ be a vertex of $Q$, to be chosen below. As $v$ lies on $Q$, its degree is $4$; number the four ends at $v$ as $1,2,3,4$, where $1$ and $2$ are the ends at $v$ of the two edges of $Q$ at $v$, and write
+$y_i=y_i(f)$. Direct $Q$ so that it enters $v$ through the end $1$ and leaves through the end $2$. For $j\in\{3,4\}$
+let $t_j=y_1+y_j$, and let $j'$ be the other element of $\{3,4\}$; $t_j$ is not $0$ because $f$ has no balanced pair. By \eqref{eq:ends} and
+\eqref{eq:kirchhoff}, in $f+t_j\chi_Q$ the end $1$ has the outward value $y_1-t_j=-y_j$ and the end $2$ has the
+outward value $y_2+t_j=-y_{j'}$. Neither is $0$, and the ends $1$ and $j$ are a balanced pair. An edge of $Q$ that is not at $v$ gets
+the value $0$ exactly if its value in the direction of $Q$ was $-t_j$. Hence the following holds.
+\begin{itemize}
+\item[$(\ast)$] If no edge of $Q$ that is not at $v$ has the value $-t_j$ in the direction of $Q$, then
+$f+t_j\chi_Q$ is a flow with a balanced pair.
+\end{itemize}
+In particular, $(\ast)$ applies if $t_j$ is not small, because then $-t_j$ is not small either ($S=-S$), while all
+values on $Q$ are small; and $(\ast)$ applies if $Q$ has only two edges, because then both edges of $Q$ are at $v$. Below
+we use the identity $t_3+t_4=2y_1+y_3+y_4=y_1-y_2$, which holds by \eqref{eq:kirchhoff}.
+
+\emph{Case 1: two consecutive edges of $Q$ have different colors.} Choose $v$ to be a common vertex of these two edges. Then $y_1=a$ is
+small, of color $h$, and $y_2=b$ is small, of color $h'\ne h$. Suppose that $t_3$ and $t_4$ are both small. Their sum
+$a-b$ has exactly two non-zero parts, $a$ in $\langle s_h\rangle$ and $-b$ in $\langle s_{h'}\rangle$. Two small elements
+of the same color have a sum with at most one non-zero part; so $t_3$ and $t_4$ have different colors; by the uniqueness of the parts, $t_3$ and $t_4$ are the two non-zero parts of $t_3+t_4=a-b$, that is, $\{t_3,t_4\}=\{a,-b\}$. But $t_3=a$ means $y_3=0$, and $t_4=a$ means $y_4=0$. This is
+impossible. So $t_3$ or $t_4$ is not small, and $(\ast)$ gives the step.
+
+\emph{Case 2: all edges of $Q$ have the same color $h$.} Here $v$ may be any vertex of $Q$. Then $y_1,y_2\in\{s_h,-s_h\}$
+and $y_1+y_2\ne 0$, so $y_1=y_2=a$ and $2a\ne 0$. (If $2s_h=0$ this case does not occur: the ends $1,2$ would be a
+balanced pair.) The values of the edges of $Q$ in the direction of $Q$ are $a$ or $-a$. Now $-t_3=a$ means
+$y_3=-2a$ and then $y_4=-2a-y_3=0$; and $-t_3=-a$ means $y_3=0$. Both are impossible, so $(\ast)$ applies with $j=3$ and gives a step with value $t_3$.
+\end{proof}
+
+\begin{proposition}[reaching a balanced pair when all degrees are $0$ or $4$]\label{prop:local4}
+Let $G$ be a loopless graph in which every vertex has degree $0$ or $4$, and which has at least one edge. Every flow $f$ of $G$ is joined by a chain of at most $\rho(f)+1$ steps to a flow with a balanced pair.
+\end{proposition}
+\begin{proof}
+By Corollary~\ref{cor:forest}, $f$ is joined by a chain of at most $\rho(f)$ steps to a flow $f^*$ in which the
+edges that are not small form a forest. Let $n\ge 1$ be the number of vertices of degree $4$. Then $G$ has $2n$ edges, all on these
+$n$ vertices; at most $n-1$ of them are not small in $f^*$ (a forest on $n$ vertices has at most $n-1$ edges), so at
+least $n+1$ are small, and the small edges contain a cycle $Q$. If $f^*$ has no balanced pair,
+Lemma~\ref{lem:Bstar} gives a further step to a flow with a balanced pair.
+\end{proof}
+
+\section{Finite abelian groups: proofs of Theorems \ref{thm:deg4} and \ref{thm:all}}\label{sec:proofs}
+
+Theorem~\ref{thm:deg4} follows from Sections~\ref{sec:red} and~\ref{sec:local}. For Theorem~\ref{thm:all}, after the loops are
+deleted (Lemma~\ref{lem:loop}), a vertex of degree at least $6$ is replaced by a triangle; Lemma~\ref{lem:triangle} shows that if the new graph is
+$A$-flow-connected, then so is the original graph, and induction on $\sum_v\max(\deg v-4,0)$, the total amount by which the degrees exceed $4$, completes the proof.
+
+\begin{proof}[Proof of Theorem~\ref{thm:deg4}]
+If $|A|=1$, then $G$ has at most one flow (none if it has an edge), so $G$ is $A$-flow-connected. Let $|A|\ge 2$, let $\cG$ be the class of even graphs with all degrees at most $4$, and let $T=A\setminus\{0\}$; it satisfies \textup{(T1)} and \textup{(T2)}. Deleting a loop lowers the degree of its vertex by $2$. Splitting off as in Lemma~\ref{lem:split} lowers the degree of $v$ by $2$ and keeps the other degrees
+(a new loop at $u=w$ counts twice). So $\cG$ is closed under both operations. A graph in $\cG$ with no loop and no
+vertex of degree $2$ has only vertices of degree $0$ or $4$, so \textup{(LOCAL)} is Proposition~\ref{prop:local4}.
+Proposition~\ref{prop:red} gives the theorem.
+\end{proof}
+
+\begin{lemma}[contracting a triangle]\label{lem:triangle}
+Let $|A|\ge 4$. Let $G^+$ be a graph and $\Delta$ a triangle of $G^+$ with vertices $x_1,x_2,x_3$, such that the
+three edges of $\Delta$ are the only edges of $G^+$ whose two ends are both at vertices of $\Delta$. Let $G=G^+/\Delta$ be the
+graph obtained by deleting the three edges of $\Delta$ and identifying $x_1,x_2,x_3$ to one vertex $x$. For a flow
+$f$ of $G^+$, let $pf$ be its restriction to $E(G)=E(G^+)\setminus E(\Delta)$.
+\begin{itemize}
+\item[(a)] $pf$ is a flow of $G$, and every flow of $G$ is $pf$ for some flow $f$ of $G^+$.
+\item[(b)] If $f_2$ comes from $f_1$ by a multi-step with value $t$, then $pf_2=pf_1$ or $pf_2$ comes from $pf_1$
+by a multi-step with value $t$.
+\end{itemize}
+So if $G^+$ is $A$-flow-connected, then $G$ is $A$-flow-connected.
+\end{lemma}
+\begin{proof}
+(a) The flow condition of $pf$ at $x$ is the sum of the flow conditions of $f$ at $x_1,x_2,x_3$, in which the edges
+of $\Delta$ cancel. Let $\varphi$ be a flow of $G$. For $i=1,2,3$, let $\beta_i$ be the sum of the outward values of $\varphi$
+over the ends at $x$ that are ends at $x_i$ in $G^+$; then $\beta_1+\beta_2+\beta_3=0$. Give the edges $x_1x_2$,
+$x_2x_3$, $x_3x_1$ of $\Delta$, in these directions, the values $z$, $z-\beta_2$, $z+\beta_1$. The flow conditions at
+$x_1,x_2,x_3$ are $\beta_1+z-(z+\beta_1)=0$, $\beta_2+(z-\beta_2)-z=0$ and $\beta_3+(z+\beta_1)-(z-\beta_2)=0$; they
+hold for every $z$. The three values are not $0$ if $z\notin\{0,\beta_2,-\beta_1\}$, and $|A|\ge 4$ leaves such a
+$z$.
+
+(b) Let $f_2=f_1+t(\chi_{Q_1}+\dots+\chi_{Q_r})$ with directed cycles of $G^+$, no two of which have a common edge.
+Let $H$ be the directed graph on $V(G)$ whose arcs are the edges of $Q_1,\dots,Q_r$ outside $\Delta$, each with the
+direction of its cycle. At every vertex other than $x$, the in-degree of $H$ equals its out-degree, because this holds for the union of the
+cycles. It also holds at $x$: in the union of the cycles, the total in-degree of $x_1,x_2,x_3$ equals their total
+out-degree, and every arc of the cycles inside $\Delta$ adds one to the total in-degree and one to the total out-degree. So $H$ is the union of
+directed cycles of $G$, no two of which have a common arc, and $pf_2-pf_1$ is $t$ times the sum of their maps $\chi$.
+If $H$ has no arc, $pf_2=pf_1$; otherwise this is a multi-step of $G$ with value $t$.
+
+The last statement follows, because a multi-step is a chain of steps and $p$ is onto by (a).
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:all}]
+By Lemma~\ref{lem:loop} (with $T=A\setminus\{0\}$), deleting the loops one by one, we may assume that $G$ has no loop. Let
+$\Phi(G)=\sum_v\max(\deg v-4,0)$. We use induction on $\Phi(G)$. If $\Phi(G)=0$, this is Theorem~\ref{thm:deg4}.
+Otherwise let $v$ be a vertex of degree $d\ge 6$. Let $G^+$ be the graph obtained from $G$ by replacing $v$ with a
+triangle $\Delta$ with vertices $x_1,x_2,x_3$: two of the ends at $v$ become ends at $x_1$, two become ends at $x_2$,
+and the other $d-4$ become ends at $x_3$. The new degrees are $4$, $4$ and $d-2$, so $G^+$ is even and
+$\Phi(G^+)=\Phi(G)-2$. The graph $G^+$ has no loop, and the edges of $\Delta$ are the only edges whose two ends
+are both at vertices of $\Delta$, because $G$ has no loop at $v$. Also $G=G^+/\Delta$. By the induction hypothesis $G^+$ is
+$A$-flow-connected, and Lemma~\ref{lem:triangle} gives the same for $G$.
+\end{proof}
+
+\section{Cyclic groups: steps with values \texorpdfstring{$\pm1$}{+-1} and \texorpdfstring{$\pm2$}{+-2}}\label{sec:cyclic}
+
+This section proves Theorem~\ref{thm:cyclic}. Let $A=\Z_m$ with $m\ge 4$ and $T=\{1,-1,2,-2\}$. An edge is small for a flow $f$ if its value is $1$
+or $-1$ (as in Section~\ref{sec:local} with $S=\{1,-1\}$), and $\rho(f)$ is the number of edges that are not small. The value of an edge that is not
+small is, in each direction, the residue of an integer in $\{2,\dots,m-2\}$.
+
+\begin{lemma}[a cycle with no small edge, in $\Z_m$]\label{lem:Acyc}
+Let $f$ be a flow of a graph $G$ and $Q$ a cycle none of whose edges is small. Then $f$ is $T$-joined, by steps along
+$Q$ with value $-1$, to a flow $f'$ with $\rho(f')\le\rho(f)-1$.
+\end{lemma}
+\begin{proof}
+Fix a direction of $Q$. For an edge $e$ of $Q$, let $x_e\in\{2,\dots,m-2\}$ be the integer whose residue is the value
+of $e$ in this direction, and let $x$ be the least of the $x_e$. For $j=1,\dots,x-1$ the map $f-j\chi_Q$ has on $e$
+the residue of $x_e-j$, where $1\le x_e-j\le m-3$; so it is a flow. In $f'=f-(x-1)\chi_Q$, an edge with $x_e=x$
+has the value $1$; the edges outside $Q$ did not change, and no edge of $Q$ was small in $f$. So $\rho(f')\le\rho(f)-1$.
+\end{proof}
+
+\begin{lemma}[a cycle of small edges, in $\Z_m$]\label{lem:Bcyc}
+Let $G$ have no loop, let $f$ be a flow with no balanced pair, $Q$ a cycle all of whose edges are small, and $v$ a
+vertex of $Q$.
+\begin{itemize}
+\item[(a)] The two ends of $Q$ at $v$ have the same outward value $a\in\{1,-1\}$.
+\item[(b)] If an end at $v$ that is not an end of $Q$ has an outward value $c\ne -2a$, then $f$ is $T$-joined, by steps along $Q$, to a
+flow with a balanced pair at $v$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+(a) Both values are in $\{1,-1\}$ and their sum is not $0$.
+
+(b) Call the two ends of $Q$ at $v$ the end $1$ and the end $2$, direct $Q$ so that it enters $v$ through the end
+$1$ and leaves through the end $2$, and let $t=a+c$. Then $t\ne
+0$ ($f$ has no balanced pair), $t\ne a$ ($c\ne 0$), and $t\ne -a$ ($c\ne -2a$). So $t$ is the residue of an integer
+$\tau$ with $2\le\tau\le m-2$. The values of the edges of $Q$ in the direction of $Q$ are $1$ or $-1$. For
+$j=2,3,\dots,\tau$ the map $f+j\chi_Q$ has on the edges of $Q$ the residues of $1+j$ or $-1+j$, integers between $1$ and
+$m-1$; so it is a flow. The chain $f$, $f+2\chi_Q$, $f+3\chi_Q$, \dots, $f+\tau\chi_Q$ consists of one step with
+value $2$ and $\tau-2$ steps with value $1$. In $f+\tau\chi_Q=f+t\chi_Q$ the end $1$ has the outward value $a-t=-c$ by
+\eqref{eq:ends}, and the end with the outward value $c$ did not change; so these two ends are a balanced pair at $v$.
+\end{proof}
+
+\begin{proposition}[reaching a balanced pair in $\Z_m$]\label{prop:localcyc}
+Let $m\ge 4$, and let $G$ be a loopless even graph in which every vertex has degree $0$ or at least $4$, and which has at least one edge. Every flow of $G$ is $T$-joined to a flow with a balanced pair.
+\end{proposition}
+\begin{proof}
+Let $n\ge 1$ be the number of vertices of degree at least $4$; all edges are on these vertices, and $|E(G)|\ge 2n$.
+By Lemma~\ref{lem:Acyc}, used as long as the edges that are not small contain a cycle, a given flow is $T$-joined to a flow
+$f^*$ in which they form a forest; so at most $n-1$ edges are not small, as they lie on the $n$ vertices. Suppose that
+$f^*$ has no balanced pair (otherwise there is nothing to prove), and that the hypothesis of Lemma~\ref{lem:Bcyc}~(b) fails for every cycle $Q$ of small
+edges and every vertex $v$ of $Q$. Then at every vertex $v$ of such a cycle, all ends at $v$ that are not ends of the cycle have the outward
+value $-2a$, where $a\in\{1,-1\}$ is the common outward value at $v$ of the two ends of the cycle
+(Lemma~\ref{lem:Bcyc}~(a)). As $m\ge 4$, $-2a$ is neither $1$ nor $-1$: $-2a=a$ would mean $3\equiv 0$, and $-2a=-a$ would
+mean $1\equiv 0$, modulo $m$. So the edges of these ends are not small, and every vertex of a cycle of small edges lies
+on exactly two small edges, the two edges of the cycle. Hence every cycle of small edges is a whole component of the graph formed by the small edges on the $n$
+vertices. So every component of this graph is a tree or a cycle (a component that contains a cycle is that cycle), and
+there are at most $n$ small edges. Then
+$|E(G)|\le n+(n-1)<2n$, a contradiction. So, for some cycle $Q$ of small edges and some vertex $v$ of $Q$,
+Lemma~\ref{lem:Bcyc}~(b) joins $f^*$ to a flow with a balanced pair.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:cyclic}]
+Apply Proposition~\ref{prop:red} to the class $\cG$ of all even graphs and $T=\{1,-1,2,-2\}$: \textup{(T1)} and
+\textup{(T2)} hold, as noted at the start of Section~\ref{sec:red}, and \textup{(LOCAL)} is
+Proposition~\ref{prop:localcyc}.
+\end{proof}
+
+\begin{remark}\label{rem:noncyclic}
+Theorem~\ref{thm:cyclic} proves Theorem~\ref{thm:all} again for cyclic groups, without Lemma~\ref{lem:triangle}. The
+counting argument of Proposition~\ref{prop:localcyc} does not extend to all groups:
+it requires the value $-2a$ in Lemma~\ref{lem:Bcyc}~(b) not to be small. This holds in $\Z_m$ with $m\ge 4$, but fails,
+for example, in $\Z_3\times\Z_3$ with $S$ as in Section~\ref{sec:local}, where $-2a=a$; there a vertex of degree $6$ can have six ends
+with the same small outward value $a$ and no balanced pair. For this reason, the proof of Theorem~\ref{thm:all} first treats graphs with all degrees at most $4$
+(Section~\ref{sec:local} and Theorem~\ref{thm:deg4}) and then reduces larger degrees by triangles
+(Section~\ref{sec:proofs}).
+\end{remark}
+
+\section{Integer flows: proof of Theorem~\ref{thm:main}~(b)}\label{sec:int}
+
+This section turns a chain of $\Z_k$-flows from Theorem~\ref{thm:cyclic}
+into a walk in $\cF(G,k)$: every $\Z_k$-flow of the chain is replaced by a path of $k$-flows (integer flows with values between $1$ and $k-1$ in absolute value, defined below) whose residues modulo $k$
+form that $\Z_k$-flow.
+
+\paragraph{Definitions.} An \emph{integer flow} of a graph $G$ is a map $F\colon E(G)\to\Z$ that satisfies the flow condition at every vertex. For a map $x$ from $E(G)$ to $\Z$ or to the real numbers, the \emph{boundary}
+$(\partial x)(v)$ at a vertex $v$ is the sum of $x$ over the edges that enter $v$ minus the sum over the edges that
+leave $v$ (a loop at $v$ is in both sums). So an integer map $x$ is an integer flow if and only if $\partial x=0$; also $\partial\chi_Q=0$ for every directed cycle~$Q$.
+
+Let $k\ge 2$. A \emph{$k$-flow} of $G$ is an integer flow $F$ with $1\le|F(e)|\le k-1$ for every edge $e$; for $k=3$, these are the nowhere-zero $3$-flows of Section~\ref{sec:intro}. The graph
+$\cF(G,k)$ has the $k$-flows of $G$ as its vertices, and two $k$-flows are adjacent if they differ by $\lambda\chi_Q$,
+where $Q$ is a directed cycle and $\lambda\ne 0$ is an integer. The graph $G$ is \emph{$k$-flow-connected} if $\cF(G,k)$ is
+connected; as for $\cF(G,A)$, it counts as connected when it has at most one vertex. As with $\cF(G,A)$ in Section~\ref{sec:words}, this graph is the same as the graph $\cF(G,k)$ of
+\cite{CLSWX,EHLMNS}. In this section a $\Z_k$-flow means a nowhere-zero $\Z_k$-flow. An \emph{integer lift} of a $\Z_k$-flow $f$ is a $k$-flow $F$ with $F(e)\equiv f(e)$
+modulo $k$ for every edge $e$. The residues modulo $k$ of a $k$-flow form a $\Z_k$-flow, because no value of a
+$k$-flow is a multiple of $k$.
+
+\begin{theorem}\label{thm:int}
+Let $k\ge 4$. Every even graph is $k$-flow-connected.
+\end{theorem}
+
+This is part~(b) of Theorem~\ref{thm:main}. The proof lifts a chain from Theorem~\ref{thm:cyclic} step by step.
+Lemma~\ref{lem:lift} is Tutte's lifting theorem in the form of \cite[Theorem~2.3]{EHLMNS}, and Lemma~\ref{lem:fibre}
+is contained in \cite[Lemma~5.5]{EHLMNS}. We include their short proofs to keep the paper self-contained; the rounding lemma
+(Lemma~\ref{lem:round}) gives Lemma~\ref{lem:lift} and is used again in the proof of Lemma~\ref{lem:step2}.
+
+\begin{lemma}[rounding]\label{lem:round}
+Let $G$ be a graph and $x$ a map from $E(G)$ to the real interval $[0,1]$ such that $(\partial x)(v)$ is an integer
+for every vertex $v$. Then there is a map $z\colon E(G)\to\{0,1\}$ with $\partial z=\partial x$ and with $z(e)=x(e)$
+for every edge $e$ with $x(e)\in\{0,1\}$.
+\end{lemma}
+\begin{proof}
+Call an edge $e$ \emph{fractional} if $0<x(e)<1$. If no edge is fractional, take $z=x$. Otherwise the fractional
+edges contain a cycle $Q$. If some loop is fractional, it is such a cycle. If no loop is fractional, then no vertex $v$
+meets exactly one fractional edge, because the other edges at $v$ have integer values and $(\partial x)(v)$ is an
+integer; and a graph with no loop, at least one edge and no vertex of degree $1$ contains a cycle. Give $Q$ a direction, and
+let $\delta>0$ be the least number such that $x+\delta\chi_Q$ has the value $0$ or $1$ on some edge of $Q$. The map
+$x+\delta\chi_Q$ takes values in $[0,1]$, has the same boundary as $x$, agrees with $x$ on the edges that are not
+fractional, and has fewer fractional edges than $x$. After at most $|E(G)|$ such changes no edge is fractional; take
+$z$ to be the final map.
+\end{proof}
+
+For a $\Z_k$-flow $f$ and an edge $e$, let $r_f(e)\in\{1,\dots,k-1\}$ be the integer whose residue is the value of
+$f$ on $e$ in the reference direction. Then $\partial r_f\equiv 0$ modulo $k$ at every vertex, and an integer lift of
+$f$ has on every edge $e$ the value $r_f(e)$ or $r_f(e)-k$.
+
+\begin{lemma}[integer lifts]\label{lem:lift}
+Let $k\ge 2$. Every $\Z_k$-flow $f$ of a graph $G$ has an integer lift.
+\end{lemma}
+\begin{proof}
+The map $x=r_f/k$ takes values in $(0,1)$ and has integer boundary. Let $z$ be as in Lemma~\ref{lem:round}, and
+$F=r_f-kz$. Then $\partial F=\partial r_f-k\,\partial z=\partial r_f-k\,\partial x=0$, $F\equiv f$ modulo $k$, and
+$F(e)$ is $r_f(e)\in[1,k-1]$ or $r_f(e)-k\in[-(k-1),-1]$.
+\end{proof}
+
+\begin{lemma}[integer lifts of a given flow]\label{lem:fibre}
+Let $k\ge 2$ and let $f$ be a $\Z_k$-flow of a graph $G$. Any two integer lifts of $f$ are joined by a path in
+$\cF(G,k)$ all of whose vertices are integer lifts of $f$.
+\end{lemma}
+\begin{proof}
+Let $F,F'$ be integer lifts of $f$. On every edge both have the value $r_f(e)$ or $r_f(e)-k$, so $h=(F'-F)/k$ is an
+integer flow with values in $\{-1,0,1\}$. Direct every edge $e$ with $h(e)\ne 0$ so that $h$ is $1$ in this
+direction. By the flow condition these arcs form a directed graph with in-degree equal to out-degree at every vertex,
+so they are the union of directed cycles $Q_1,\dots,Q_j$, no two of which have a common arc, and
+$h=\chi_{Q_1}+\dots+\chi_{Q_j}$. Let $F_i=F+k(\chi_{Q_1}+\dots+\chi_{Q_i})$. On every edge $F_i$ has the value of $F$
+or the value of $F'$, so $F_i$ is an integer lift of $f$; and $F_i-F_{i-1}=k\chi_{Q_i}$. So $F=F_0,F_1,\dots,F_j=F'$
+is a path in $\cF(G,k)$ of integer lifts of $f$.
+\end{proof}
+
+\begin{lemma}[a step with value $1$]\label{lem:step1}
+Let $k\ge 2$, let $Q$ be a directed cycle of a graph $G$, and let $f$ and $f+\chi_Q$ be $\Z_k$-flows of $G$. Then for
+every integer lift $F$ of $f$, the map $F+\chi_Q$ is an integer lift of $f+\chi_Q$.
+\end{lemma}
+\begin{proof}
+Choose the reference directions so that $Q$ traverses all its edges in the reference direction. (The statement does
+not depend on this choice: a change of the reference direction of an edge changes the signs of $F(e)$, of $f(e)$ and
+of $\chi_Q(e)$.) The map $F+\chi_Q$ is an integer flow with the residues of $f+\chi_Q$. Let $e$ be an edge of $Q$. Then
+$r_f(e)\ne k-1$, because $f+\chi_Q$ is not $0$ on $e$. The value $F(e)$ is $r_f(e)$ or $r_f(e)-k$, so $F(e)+1$ is in
+$[2,k-1]$ or in $[2-k,-1]$.
+\end{proof}
+
+\begin{lemma}[a step with value $2$]\label{lem:step2}
+Let $k\ge 3$, let $Q$ be a directed cycle of a graph $G$, and let $f$ and $f+2\chi_Q$ be $\Z_k$-flows of $G$. Then
+there is an integer lift $F$ of $f$ such that $F+2\chi_Q$ is an integer lift of $f+2\chi_Q$.
+\end{lemma}
+\begin{proof}
+Lemma~\ref{lem:step1} cannot simply be used twice, because $f+\chi_Q$ can have zeros. As in the proof of Lemma~\ref{lem:step1}, choose the reference directions so that $Q$ traverses all its edges in the reference
+direction, and write $r=r_f$. No edge of $Q$ has $r(e)=k-2$, because $f+2\chi_Q$ is not $0$ there. Let $E_1$ be the set of edges $e$ of $Q$ with $r(e)=k-1$, and let
+\[
+x=(r+\chi_Q)/k .
+\]
+All values of $x$ are in $(0,1]$, and $x(e)=1$ exactly for $e\in E_1$. The boundary $\partial x=(\partial r)/k$ is
+an integer at every vertex. By Lemma~\ref{lem:round} there is $z\colon E(G)\to\{0,1\}$ with $\partial z=\partial x$
+and with $z(e)=1$ for every $e\in E_1$. Let $F=r-kz$. As in the proof of Lemma~\ref{lem:lift}, $F$ is an integer
+lift of $f$.
+
+Now $F+2\chi_Q$ is an integer flow with the residues of $f+2\chi_Q$, and outside $Q$ it equals $F$. If $e\in E_1$, then $z(e)=1$, so
+$F(e)=-1$ and the new value is $1$. If $e$ is an edge of $Q$ not in $E_1$, then $r(e)\le k-3$; hence
+$3\le F(e)+2\le k-1$ if $F(e)=r(e)$, and $3-k\le F(e)+2\le -1$ if $F(e)=r(e)-k$. So $F+2\chi_Q$ is a $k$-flow.
+\end{proof}
+
+\begin{proposition}[from $\Z_k$-flows to $k$-flows]\label{prop:transfer}
+Let $k\ge 3$ and let $G$ be a graph. If any two $\Z_k$-flows of $G$ are joined by a chain of steps whose values are in
+$\{1,-1,2,-2\}$, then $G$ is $k$-flow-connected.
+\end{proposition}
+\begin{proof}
+Let $F$ and $F'$ be $k$-flows of $G$, and let $f$ and $f'$ be the $\Z_k$-flows formed by their residues modulo $k$. If $f=f'$, then $F$
+and $F'$ are two integer lifts of $f$, and they are joined in $\cF(G,k)$ by Lemma~\ref{lem:fibre}. Otherwise let $f=f_0,f_1,\dots,f_s=f'$
+with $s\ge 1$ be a chain of $\Z_k$-flows with $f_i=f_{i-1}+t_i\chi_{Q_i}$ and $t_i\in\{1,-1,2,-2\}$. If $t_i$ is
+neither $1$ nor $2$, replace $Q_i$ by the same cycle with the other direction and $t_i$ by $-t_i$; so we may assume
+that $t_i\in\{1,2\}$. For every $i$ from $1$ to $s$, Lemmas~\ref{lem:lift} and~\ref{lem:step1} (if $t_i=1$) or Lemma~\ref{lem:step2} (if
+$t_i=2$) give an integer lift $F_{i-1}^{+}$ of $f_{i-1}$ such that $F_i^{-}=F_{i-1}^{+}+t_i\chi_{Q_i}$ is an integer
+lift of $f_i$; these two $k$-flows are adjacent in $\cF(G,k)$. (The superscripts $-$ and $+$ only label two, possibly equal, integer lifts of $f_i$: $F_i^{-}$ is the lift reached by the step from $f_{i-1}$, and $F_i^{+}$ is the lift from which the step to $f_{i+1}$ starts.) By Lemma~\ref{lem:fibre}, $F$ is
+joined to $F_0^{+}$, $F_i^{-}$ is joined to $F_i^{+}$ for $0<i<s$, and $F_s^{-}$ is joined to $F'$. So $F$ and $F'$
+are joined in $\cF(G,k)$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:int}]
+By Theorem~\ref{thm:cyclic} with $m=k$, any two $\Z_k$-flows of an even graph are joined by a chain of steps
+with values in $\{1,-1,2,-2\}$; so Proposition~\ref{prop:transfer} shows that the graph is $k$-flow-connected.
+\end{proof}
+
+
+\section*{Acknowledgments}
+This work was done overwhelmingly by AI models and supervised by the author. The models were Anthropic's Claude and
+OpenAI's ChatGPT. The author takes full responsibility for the paper.
+
+\begin{thebibliography}{9}\small
+\bibitem{CLSWX} D.~W. Cranston, J.~Li, B.~Su, Z.~Wang, N.~Xu, \emph{Reconfiguration of nowhere-zero flows},
+arXiv:2606.24685v1 (June 23, 2026). Statement numbers refer to this version.
+\bibitem{EHLMNS} L.~Esperet, K.~Hendrey, A.~Lagoutte, M.~Marseloo, S.~Norin, R.~Steiner, \emph{Nowhere-zero flow
+reconfiguration}, arXiv:2512.17342v4 (July 3, 2026). Statement numbers refer to this version.
+\bibitem{G} D.~Goel, \emph{The Cranston--Li--Su--Wang--Xu (2026) conjecture is true, with extensions to graphs with
+few vertices of odd degree}, Zenodo (2026),
+\href{https://doi.org/10.5281/zenodo.23605838}{doi:10.5281/zenodo.23605838}. Statement numbers refer to version 2.30,
+\href{https://doi.org/10.5281/zenodo.23605839}{doi:10.5281/zenodo.23605839}.
+\bibitem{JLPT} F.~Jaeger, N.~Linial, C.~Payan, M.~Tarsi, \emph{Group connectivity of graphs---a nonhomogeneous
+analogue of nowhere-zero flow properties}, J. Combin. Theory Ser.~B \textbf{56} (1992), no.~2, 165--182.
+\bibitem{Tutte} W.~T.~Tutte, \emph{A contribution to the theory of chromatic polynomials}, Canad. J. Math.
+\textbf{6} (1954), 80--91.
+\end{thebibliography}
+\end{document}
