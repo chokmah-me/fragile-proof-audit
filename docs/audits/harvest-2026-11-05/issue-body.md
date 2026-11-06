@@ -1,4 +1,4 @@
-Weekly harvest recon is in — 12 claims analyzed, nothing run.
+Weekly harvest recon is in — 14 claims analyzed, nothing run.
 
 | Rank | Claim | Fragility | Top signal |
 |---|---|---|---|
@@ -14,6 +14,8 @@ Weekly harvest recon is in — 12 claims analyzed, nothing run.
 | 10 | Goel -- the Cranston-Li-Su-Wang-Xu (2026) conjecture is true, in Lean (arXiv:2610.40863) | 1 | `single_author` |
 | 11 | Li-Su -- solutions to several problems on infinite sumset configurations, in Lean (arXiv:2610.39637) | 1 | `formal_subset_of_claim` |
 | 12 | Mghirbi-Douglas -- Kaplansky's conjectures fail for torsion-free hyperbolic groups in positive characteristic (arXiv:2611.04599) | 1 | `—` |
+| 13 | Klimm-Lippke-Warode -- the complexity of continuous contract design over polymatroids, in Lean (arXiv:2611.04934) | -1 | `pinned_toolchain` |
+| 14 | Pariente-Martin-Tradacete -- order continuity of induced homomorphisms between free Banach lattices (arXiv:2611.00451) | -1 | `pinned_toolchain` |
 
 Full recon cards: [`docs/audits/harvest-2026-11-05/recon.md`](https://github.com/chokmah-me/fragile-proof-audit/blob/main/docs/audits/harvest-2026-11-05/recon.md)
 

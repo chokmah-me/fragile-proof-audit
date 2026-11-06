@@ -1,6 +1,6 @@
 # Harvest recon — 2026-11-05
 
-**Harvest window:** 2026-10-06..2026-11-05 · **Source:** ReplayGate feedstock harvest at the user's tap 2026-11-05 -- three parallel sweeps: (a) Axiom Math lab announcements and repos; (b) the four Lean candidates cut by the 10-cap in the 2026-11-02 harvest plus its two AxiomProver near-misses, re-checked; (c) arXiv "Lean" listing sweep 2026-10-20..2026-11-05 (172 API entries screened). All arXiv IDs verified on their abs pages or via the arXiv API; all repos verified live via the GitHub API (metadata and trees only, no clones, no builds, per the loop's boundaries). Recon method: Grandmaster's Methods at recon (what the artifact's architecture actually does, weighted to process evidence over announcement prose), M1-M4 seams recorded per claim in code_note, Stellar BB6 non-vacuity vectors noted where the scope applies (agent-rewritten Challenge/Solution statements: factoring, RiemannJensen, CFSG corollary, Dedekind), DEEPEN run as the pre-registration challenge pass on the draft shortlist (its findings are folded into the notes: comparator config is not a comparator run; repo file counts are inflated by vendored trees where flagged; squashed single-commit histories are provenance, not defects). Purpose: candidates whose audit artifacts a ReplayGate-checked audit note can actually be written against. No verdicts in this run. Dedup: Axiom CFSG itself was already registered in harvest 2026-10-27 (unpicked, still in queue) and is NOT re-registered here; OpenAI ETH and Anthropic ETH are audited closed; the toric-code paper arXiv:2611.03329 stays WATCH-only (registered with the Monday scan 2026-11-05, no Lean files public yet). WATCH registrations (formalization claimed, no public artifact location verified as of 2026-11-05; availability trigger only): arXiv:2611.06562 (Mortality undecidable for 2x2 integer matrices, Lean companion claimed, no link on the abs page) and arXiv:2610.37899 (hierarchical laminates counterexample, "formally verified in Lean 4" in the comments, no location). Out of window, not registered: arXiv:2609.33842 (Hamilton-Perelman Poincare formalization, submitted 2026-09-27, artifact pinned at release v0.1.3 commit 7a48598d in github.com/qinz1yang/differential-geometry) -- flag for a future window decision, do not silently absorb. Cut by the cap, held for the next run if still fresh: 2611.06325 (third Brauer-Thrall, Enomoto, 1,201-file tree), 2610.30655 (Euler non-uniqueness Part I, Coiculescu), 2611.05146 (path decompositions, Gaspers, Zenodo), 2611.04934 (contract design polymatroids, 74 files), 2611.04862 (Douglas conjecture Kronecker quivers, 738-file tree), 2611.04806 (minimax lower bounds, ancillary Lean), 2611.01064 (two-deletion channel entropy, single-file Lean checker), 2610.40592 (toric CSS decoupling, 780-file tree; distinct from the 2611.03329 watch item), 2610.40585 (quantum channel additivity, no toolchain pin found), 2610.39883 (pure semisimplicity counterexample, 161 files), 2610.38913 (Maxwell universality, v2 adds Lean records), 2610.42124 (first-passage percolation, 990-file tree), 2611.00153 (small universal reversible TMs, 336 files), 2611.00451 (free Banach lattices, 12 files), 2610.34580 (Bloch-Landau constant, Zenodo), 2610.27451 (rank-23 3x3 scheme, Zenodo), 2611.06616 (LeanVOA library release, library not a single claim). · **Harvest sha256:** `4c7115ba7b087e793a3e3f6c8f8be27bc2bdb18e6b50338e85dd1506939ca518`
+**Harvest window:** 2026-10-06..2026-11-05 · **Source:** ReplayGate feedstock harvest at the user's tap 2026-11-05 -- three parallel sweeps: (a) Axiom Math lab announcements and repos; (b) the four Lean candidates cut by the 10-cap in the 2026-11-02 harvest plus its two AxiomProver near-misses, re-checked; (c) arXiv "Lean" listing sweep 2026-10-20..2026-11-05 (172 API entries screened). All arXiv IDs verified on their abs pages or via the arXiv API; all repos verified live via the GitHub API (metadata and trees only, no clones, no builds, per the loop's boundaries). Recon method: Grandmaster's Methods at recon (what the artifact's architecture actually does, weighted to process evidence over announcement prose), M1-M4 seams recorded per claim in code_note, Stellar BB6 non-vacuity vectors noted where the scope applies (agent-rewritten Challenge/Solution statements: factoring, RiemannJensen, CFSG corollary, Dedekind), DEEPEN run as the pre-registration challenge pass on the draft shortlist (its findings are folded into the notes: comparator config is not a comparator run; repo file counts are inflated by vendored trees where flagged; squashed single-commit histories are provenance, not defects). Purpose: candidates whose audit artifacts a ReplayGate-checked audit note can actually be written against. No verdicts in this run. Dedup: Axiom CFSG itself was already registered in harvest 2026-10-27 (unpicked, still in queue) and is NOT re-registered here; OpenAI ETH and Anthropic ETH are audited closed; the toric-code paper arXiv:2611.03329 stays WATCH-only (registered with the Monday scan 2026-11-05, no Lean files public yet). WATCH registrations (formalization claimed, no public artifact location verified as of 2026-11-05; availability trigger only): arXiv:2611.06562 (Mortality undecidable for 2x2 integer matrices, Lean companion claimed, no link on the abs page) and arXiv:2610.37899 (hierarchical laminates counterexample, "formally verified in Lean 4" in the comments, no location). Out of window, not registered: arXiv:2609.33842 (Hamilton-Perelman Poincare formalization, submitted 2026-09-27, artifact pinned at release v0.1.3 commit 7a48598d in github.com/qinz1yang/differential-geometry) -- flag for a future window decision, do not silently absorb. Cut by the cap, held for the next run if still fresh: 2611.06325 (third Brauer-Thrall, Enomoto, 1,201-file tree), 2610.30655 (Euler non-uniqueness Part I, Coiculescu), 2611.05146 (path decompositions, Gaspers, Zenodo), 2611.04862 (Douglas conjecture Kronecker quivers, 738-file tree), 2611.04806 (minimax lower bounds, ancillary Lean), 2611.01064 (two-deletion channel entropy, single-file Lean checker), 2610.40592 (toric CSS decoupling, 780-file tree; distinct from the 2611.03329 watch item), 2610.40585 (quantum channel additivity, no toolchain pin found), 2610.39883 (pure semisimplicity counterexample, 161 files), 2610.38913 (Maxwell universality, v2 adds Lean records), 2610.42124 (first-passage percolation, 990-file tree), 2611.00153 (small universal reversible TMs, 336 files), 2610.34580 (Bloch-Landau constant, Zenodo), 2610.27451 (rank-23 3x3 scheme, Zenodo), 2611.06616 (LeanVOA library release, library not a single claim). · **Harvest sha256:** `c8539178f8fb23336b3bd428ec343a3a1d06c08b0726a05476c1b697802f0661`
 
 Generated by the harvest loop (`scripts/harvest-loop/recon.py`): identifier verification, inputs inventory, fragility scoring, attack-lane suggestion. No code cloned, nothing run. Deep gates wait for a target pick. The verdict lock is untouched.
 
@@ -20,6 +20,8 @@ Generated by the harvest loop (`scripts/harvest-loop/recon.py`): identifier veri
 | 10 | Goel -- the Cranston-Li-Su-Wang-Xu (2026) conjecture is true, in Lean (arXiv:2610.40863) | VERIFIED (2610.40863) | AGREE | PUBLIC david44hello/papers_supporting_materials@f26bde8 (586 lean files) |
 | 11 | Li-Su -- solutions to several problems on infinite sumset configurations, in Lean (arXiv:2610.39637) | VERIFIED (2610.39637) | AGREE | NON-GITHUB |
 | 12 | Mghirbi-Douglas -- Kaplansky's conjectures fail for torsion-free hyperbolic groups in positive characteristic (arXiv:2611.04599) | VERIFIED (2611.04599) | AGREE | PUBLIC Apsiape/kaplansky-conjectures-hyperbolic-groups@00ed620 (199 lean files) |
+| 13 | Klimm-Lippke-Warode -- the complexity of continuous contract design over polymatroids, in Lean (arXiv:2611.04934) | VERIFIED (2611.04934) | AGREE | PUBLIC philippwarode/contract-design-polymatroids-lean@f942e00 (74 lean files) |
+| 14 | Pariente-Martin-Tradacete -- order continuity of induced homomorphisms between free Banach lattices (arXiv:2611.00451) | VERIFIED (2611.00451) | AGREE | PUBLIC pedrotradacete/FBLOrderContinuousLH@ee3cde5 (12 lean files) |
 
 ## Ranked queue
 
@@ -35,6 +37,8 @@ Generated by the harvest loop (`scripts/harvest-loop/recon.py`): identifier veri
 10. **Goel -- the Cranston-Li-Su-Wang-Xu (2026) conjecture is true, in Lean (arXiv:2610.40863)** — fragility 1
 11. **Li-Su -- solutions to several problems on infinite sumset configurations, in Lean (arXiv:2610.39637)** — fragility 1
 12. **Mghirbi-Douglas -- Kaplansky's conjectures fail for torsion-free hyperbolic groups in positive characteristic (arXiv:2611.04599)** — fragility 1
+13. **Klimm-Lippke-Warode -- the complexity of continuous contract design over polymatroids, in Lean (arXiv:2611.04934)** — fragility -1
+14. **Pariente-Martin-Tradacete -- order continuity of induced homomorphisms between free Banach lattices (arXiv:2611.00451)** — fragility -1
 
 ## Card 1: Ono -- an asymptotic Jensen-Polya criterion for GRH, formalized by AxiomProver (arXiv:2610.38870)
 
@@ -349,6 +353,60 @@ Generated by the harvest loop (`scripts/harvest-loop/recon.py`): identifier veri
 **Formalization coverage (Lean; API metadata only — nothing cloned or run).**
 - inventory: 199 .lean files · lakefile: yes · toolchain: not pinned
 - LeanExplore probe (post-pick; remote API is public and keyless — LeanExplore retired API keys, no account needed; or use the website): `leanexplore search "Mghirbi-Douglas -- Kaplansky's conjectures fail for torsion-free hyperbolic groups in positive characteristic (arXiv:2611.04599). All four Kaplansky group-ring conjectures (zero-di" --package Mathlib` — checks whether the formalized statement or its key lemmas already exist in Mathlib; feeds the statement-fidelity checklist (four modes, docs/harvest-loop.md).
+
+## Card 13: Klimm-Lippke-Warode -- the complexity of continuous contract design over polymatroids, in Lean (arXiv:2611.04934)
+
+**Claim:** A complexity classification of continuous contract design over polymatroids (full classification as in the paper), with a Lean 4 formalization.
+**Harvest id:** `contract-design-polymatroids-lean`
+
+**Paper.** status=VERIFIED
+- arXiv:2611.04934 — *The Complexity of Continuous Contract Design over Polymatroids*
+- authors: Max Klimm, Paul Lippke, Philipp Warode · published 2026-11-03
+- https://arxiv.org/abs/2611.04934
+- OpenAlex (axis 2): AGREE — *The Complexity of Continuous Contract Design over Polymatroids* · 2026-11-03 · overlap: klimm, lippke, warode
+
+**Code/data.** status=PUBLIC
+- repo: https://github.com/philippwarode/contract-design-polymatroids-lean (branch `main`, pushed 2026-11-03)
+- HEAD: `f942e0029c2d8233dad4d8927bec41f2d13b35cb` (2026-11-03)
+- Lean files: 74 · lakefile: yes · toolchain: leanprover/lean4:v4.34.1
+- code note: Promoted from the held list on 2026-11-05 at the Argon double-check of this harvest (same adjudication as the free-Banach-lattices promotion): 74 .lean files, single repo, toolchain present -- compact and runner-scale, displaced at the cap by larger items with worse fit. M1 seam at pick: complexity classifications formalize one direction at a time; which directions (hardness vs algorithm) the Lean covers is the first read.
+- inputs: Public repo verified live at sweep time: 1,559 KB, 74 .lean files, lean-toolchain present. Authors Max Klimm, Paul Lippke, Philipp Warode; submitted 2026-11-03. Recorded as declarations for the formalization coverage inventory + LeanExplore probe query.
+
+**Fragility.** score=-1 · signals: `pinned_toolchain`
+- toolchain pinned: leanprover/lean4:v4.34.1
+
+**Suggested lanes (heuristic, confirm on pick):** type G — logical-gap exposure (formalized subset vs headline)
+
+**Formalization coverage (Lean; API metadata only — nothing cloned or run).**
+- inventory: 74 .lean files · lakefile: yes · toolchain: `leanprover/lean4:v4.34.1`
+- LeanExplore probe (post-pick; remote API is public and keyless — LeanExplore retired API keys, no account needed; or use the website): `leanexplore search "Klimm-Lippke-Warode -- the complexity of continuous contract design over polymatroids, in Lean (arXiv:2611.04934). A complexity classification of continuous contract design over po" --package Mathlib` — checks whether the formalized statement or its key lemmas already exist in Mathlib; feeds the statement-fidelity checklist (four modes, docs/harvest-loop.md).
+
+## Card 14: Pariente-Martin-Tradacete -- order continuity of induced homomorphisms between free Banach lattices (arXiv:2611.00451)
+
+**Claim:** Induced homomorphisms between free Banach lattices are order continuous (full statement as in the paper), formalized in Lean 4.
+**Harvest id:** `free-banach-lattice-order-continuity`
+
+**Paper.** status=VERIFIED
+- arXiv:2611.00451 — *Order continuity of induced homomorphisms between free Banach lattices*
+- authors: Raúl E. Pariente-Martín, Pedro Tradacete · published 2026-10-30
+- https://arxiv.org/abs/2611.00451
+- OpenAlex (axis 2): AGREE — *Order continuity of induced homomorphisms between free Banach lattices* · 2026-10-30 · overlap: pariente-martín, tradacete
+
+**Code/data.** status=PUBLIC
+- repo: https://github.com/pedrotradacete/FBLOrderContinuousLH (branch `main`, pushed 2026-10-31)
+- HEAD: `ee3cde5070125ff2356b7144ff7a940a8dff2a54` (2026-10-31)
+- Lean files: 12 · lakefile: yes · toolchain: leanprover/lean4:v4.35.0
+- code note: Promoted from the held list on 2026-11-05 at the Argon double-check of this harvest (adjudication: ~/workspace/replaygate-harvest-argon-2026-11-05/ADJUDICATION.md, C10 repair accepted in part): at 12 .lean files in a single public repo with a toolchain pin, it is the smallest buildable artifact in the whole sweep, and its absence from the registered 12 while larger ancillary bundles were registered was a fit inconsistency. M1 read at pick: which of the paper's theorems the 12 files cover, and whether the formalization is the authors' own or assisted (no AI disclosure located at sweep time).
+- inputs: Public repo verified live at sweep time: 183 KB, 12 .lean files, lean-toolchain present. Authors Raul E. Pariente-Martin, Pedro Tradacete; submitted 2026-10-30. Recorded as declarations for the formalization coverage inventory + LeanExplore probe query.
+
+**Fragility.** score=-1 · signals: `pinned_toolchain`
+- toolchain pinned: leanprover/lean4:v4.35.0
+
+**Suggested lanes (heuristic, confirm on pick):** type G — logical-gap exposure (formalized subset vs headline)
+
+**Formalization coverage (Lean; API metadata only — nothing cloned or run).**
+- inventory: 12 .lean files · lakefile: yes · toolchain: `leanprover/lean4:v4.35.0`
+- LeanExplore probe (post-pick; remote API is public and keyless — LeanExplore retired API keys, no account needed; or use the website): `leanexplore search "Pariente-Martin-Tradacete -- order continuity of induced homomorphisms between free Banach lattices (arXiv:2611.00451). Induced homomorphisms between free Banach lattices are order" --package Mathlib` — checks whether the formalized statement or its key lemmas already exist in Mathlib; feeds the statement-fidelity checklist (four modes, docs/harvest-loop.md).
 
 ## Next step
 

@@ -1,9 +1,9 @@
 {
   "date": "2026-11-05",
-  "harvest_sha": "4c7115ba7b087e793a3e3f6c8f8be27bc2bdb18e6b50338e85dd1506939ca518",
+  "harvest_sha": "c8539178f8fb23336b3bd428ec343a3a1d06c08b0726a05476c1b697802f0661",
   "meta": {
     "window": "2026-10-06..2026-11-05",
-    "source": "ReplayGate feedstock harvest at the user's tap 2026-11-05 -- three parallel sweeps: (a) Axiom Math lab announcements and repos; (b) the four Lean candidates cut by the 10-cap in the 2026-11-02 harvest plus its two AxiomProver near-misses, re-checked; (c) arXiv \"Lean\" listing sweep 2026-10-20..2026-11-05 (172 API entries screened). All arXiv IDs verified on their abs pages or via the arXiv API; all repos verified live via the GitHub API (metadata and trees only, no clones, no builds, per the loop's boundaries). Recon method: Grandmaster's Methods at recon (what the artifact's architecture actually does, weighted to process evidence over announcement prose), M1-M4 seams recorded per claim in code_note, Stellar BB6 non-vacuity vectors noted where the scope applies (agent-rewritten Challenge/Solution statements: factoring, RiemannJensen, CFSG corollary, Dedekind), DEEPEN run as the pre-registration challenge pass on the draft shortlist (its findings are folded into the notes: comparator config is not a comparator run; repo file counts are inflated by vendored trees where flagged; squashed single-commit histories are provenance, not defects). Purpose: candidates whose audit artifacts a ReplayGate-checked audit note can actually be written against. No verdicts in this run. Dedup: Axiom CFSG itself was already registered in harvest 2026-10-27 (unpicked, still in queue) and is NOT re-registered here; OpenAI ETH and Anthropic ETH are audited closed; the toric-code paper arXiv:2611.03329 stays WATCH-only (registered with the Monday scan 2026-11-05, no Lean files public yet). WATCH registrations (formalization claimed, no public artifact location verified as of 2026-11-05; availability trigger only): arXiv:2611.06562 (Mortality undecidable for 2x2 integer matrices, Lean companion claimed, no link on the abs page) and arXiv:2610.37899 (hierarchical laminates counterexample, \"formally verified in Lean 4\" in the comments, no location). Out of window, not registered: arXiv:2609.33842 (Hamilton-Perelman Poincare formalization, submitted 2026-09-27, artifact pinned at release v0.1.3 commit 7a48598d in github.com/qinz1yang/differential-geometry) -- flag for a future window decision, do not silently absorb. Cut by the cap, held for the next run if still fresh: 2611.06325 (third Brauer-Thrall, Enomoto, 1,201-file tree), 2610.30655 (Euler non-uniqueness Part I, Coiculescu), 2611.05146 (path decompositions, Gaspers, Zenodo), 2611.04934 (contract design polymatroids, 74 files), 2611.04862 (Douglas conjecture Kronecker quivers, 738-file tree), 2611.04806 (minimax lower bounds, ancillary Lean), 2611.01064 (two-deletion channel entropy, single-file Lean checker), 2610.40592 (toric CSS decoupling, 780-file tree; distinct from the 2611.03329 watch item), 2610.40585 (quantum channel additivity, no toolchain pin found), 2610.39883 (pure semisimplicity counterexample, 161 files), 2610.38913 (Maxwell universality, v2 adds Lean records), 2610.42124 (first-passage percolation, 990-file tree), 2611.00153 (small universal reversible TMs, 336 files), 2611.00451 (free Banach lattices, 12 files), 2610.34580 (Bloch-Landau constant, Zenodo), 2610.27451 (rank-23 3x3 scheme, Zenodo), 2611.06616 (LeanVOA library release, library not a single claim)."
+    "source": "ReplayGate feedstock harvest at the user's tap 2026-11-05 -- three parallel sweeps: (a) Axiom Math lab announcements and repos; (b) the four Lean candidates cut by the 10-cap in the 2026-11-02 harvest plus its two AxiomProver near-misses, re-checked; (c) arXiv \"Lean\" listing sweep 2026-10-20..2026-11-05 (172 API entries screened). All arXiv IDs verified on their abs pages or via the arXiv API; all repos verified live via the GitHub API (metadata and trees only, no clones, no builds, per the loop's boundaries). Recon method: Grandmaster's Methods at recon (what the artifact's architecture actually does, weighted to process evidence over announcement prose), M1-M4 seams recorded per claim in code_note, Stellar BB6 non-vacuity vectors noted where the scope applies (agent-rewritten Challenge/Solution statements: factoring, RiemannJensen, CFSG corollary, Dedekind), DEEPEN run as the pre-registration challenge pass on the draft shortlist (its findings are folded into the notes: comparator config is not a comparator run; repo file counts are inflated by vendored trees where flagged; squashed single-commit histories are provenance, not defects). Purpose: candidates whose audit artifacts a ReplayGate-checked audit note can actually be written against. No verdicts in this run. Dedup: Axiom CFSG itself was already registered in harvest 2026-10-27 (unpicked, still in queue) and is NOT re-registered here; OpenAI ETH and Anthropic ETH are audited closed; the toric-code paper arXiv:2611.03329 stays WATCH-only (registered with the Monday scan 2026-11-05, no Lean files public yet). WATCH registrations (formalization claimed, no public artifact location verified as of 2026-11-05; availability trigger only): arXiv:2611.06562 (Mortality undecidable for 2x2 integer matrices, Lean companion claimed, no link on the abs page) and arXiv:2610.37899 (hierarchical laminates counterexample, \"formally verified in Lean 4\" in the comments, no location). Out of window, not registered: arXiv:2609.33842 (Hamilton-Perelman Poincare formalization, submitted 2026-09-27, artifact pinned at release v0.1.3 commit 7a48598d in github.com/qinz1yang/differential-geometry) -- flag for a future window decision, do not silently absorb. Cut by the cap, held for the next run if still fresh: 2611.06325 (third Brauer-Thrall, Enomoto, 1,201-file tree), 2610.30655 (Euler non-uniqueness Part I, Coiculescu), 2611.05146 (path decompositions, Gaspers, Zenodo), 2611.04862 (Douglas conjecture Kronecker quivers, 738-file tree), 2611.04806 (minimax lower bounds, ancillary Lean), 2611.01064 (two-deletion channel entropy, single-file Lean checker), 2610.40592 (toric CSS decoupling, 780-file tree; distinct from the 2611.03329 watch item), 2610.40585 (quantum channel additivity, no toolchain pin found), 2610.39883 (pure semisimplicity counterexample, 161 files), 2610.38913 (Maxwell universality, v2 adds Lean records), 2610.42124 (first-passage percolation, 990-file tree), 2611.00153 (small universal reversible TMs, 336 files), 2610.34580 (Bloch-Landau constant, Zenodo), 2610.27451 (rank-23 3x3 scheme, Zenodo), 2611.06616 (LeanVOA library release, library not a single claim)."
   },
   "claims": [
     {
@@ -745,6 +745,141 @@
         "toolchain": null,
         "declared_verification": [],
         "probe_query": "Zhang-Zhang -- the sharpness conjectures for all saturated fusion systems, in Lean and Rocq (arXiv:2611.02043). The Diaz-Park sharpness conjecture is proved for all saturated fusio"
+      }
+    },
+    {
+      "id": "free-banach-lattice-order-continuity",
+      "title": "Pariente-Martin-Tradacete -- order continuity of induced homomorphisms between free Banach lattices (arXiv:2611.00451)",
+      "score": -1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.00451",
+        "title": "Order continuity of induced homomorphisms between free Banach lattices",
+        "authors": [
+          "Ra\u00fal E. Pariente-Mart\u00edn",
+          "Pedro Tradacete"
+        ],
+        "published": "2026-10-30",
+        "url": "https://arxiv.org/abs/2611.00451"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.00451",
+        "title": "Order continuity of induced homomorphisms between free Banach lattices",
+        "authors": [
+          "Ra\u00fal E. Pariente-Mart\u00edn",
+          "Pedro Tradacete"
+        ],
+        "publication_date": "2026-10-30",
+        "title_ok": true,
+        "author_overlap": [
+          "pariente-mart\u00edn",
+          "tradacete"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7225148800"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "pedrotradacete/FBLOrderContinuousLH",
+        "branch": "main",
+        "size_kb": 183,
+        "pushed_at": "2026-10-31",
+        "url": "https://github.com/pedrotradacete/FBLOrderContinuousLH",
+        "head_sha": "ee3cde5070125ff2356b7144ff7a940a8dff2a54",
+        "head_date": "2026-10-31",
+        "lean_files": 12,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0"
+      },
+      "signals": [
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 12,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0",
+        "declared_verification": [],
+        "probe_query": "Pariente-Martin-Tradacete -- order continuity of induced homomorphisms between free Banach lattices (arXiv:2611.00451). Induced homomorphisms between free Banach lattices are order"
+      }
+    },
+    {
+      "id": "contract-design-polymatroids-lean",
+      "title": "Klimm-Lippke-Warode -- the complexity of continuous contract design over polymatroids, in Lean (arXiv:2611.04934)",
+      "score": -1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.04934",
+        "title": "The Complexity of Continuous Contract Design over Polymatroids",
+        "authors": [
+          "Max Klimm",
+          "Paul Lippke",
+          "Philipp Warode"
+        ],
+        "published": "2026-11-03",
+        "url": "https://arxiv.org/abs/2611.04934"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.04934",
+        "title": "The Complexity of Continuous Contract Design over Polymatroids",
+        "authors": [
+          "Max Klimm",
+          "Paul Lippke",
+          "Philipp Warode"
+        ],
+        "publication_date": "2026-11-03",
+        "title_ok": true,
+        "author_overlap": [
+          "klimm",
+          "lippke",
+          "warode"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7225245724"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "philippwarode/contract-design-polymatroids-lean",
+        "branch": "main",
+        "size_kb": 1559,
+        "pushed_at": "2026-11-03",
+        "url": "https://github.com/philippwarode/contract-design-polymatroids-lean",
+        "head_sha": "f942e0029c2d8233dad4d8927bec41f2d13b35cb",
+        "head_date": "2026-11-03",
+        "lean_files": 74,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.34.1"
+      },
+      "signals": [
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.34.1"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 74,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.34.1",
+        "declared_verification": [],
+        "probe_query": "Klimm-Lippke-Warode -- the complexity of continuous contract design over polymatroids, in Lean (arXiv:2611.04934). A complexity classification of continuous contract design over po"
       }
     }
   ]
