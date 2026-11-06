@@ -1,0 +1,235 @@
+name: cranston-li-forge
+
+# Independent build + axiom audit of Dave Goel, "The Cranston-Li-Su-
+# Wang-Xu (2026) conjecture is true", arXiv:2610.40863 (2026-10-29).
+#
+# Canonical artifact (pin 2026-11-05,
+# incoming/cranston-li-su-wang-xu-2026-conjecture/PIN.md): the arXiv
+# comments field names tag cranston-li-su-wang-xu-2026-conjecture-v1.59
+# in david44hello/papers_supporting_materials @
+# 7c03e0ba9a2c34e578472f477237a64d5c181e02, folder
+# cranston-li-su-wang-xu-2026-conjecture/lean/ -- a complete lake
+# project (55 .lean files, toolchain leanprover/lean4:v4.35.0,
+# Mathlib v4.35.0 at 56a005855ea17e0b0958f73ec801ae140b0a1679).
+#
+# The paper's abstract claims all results are proved in Lean 4 "from
+# Lean's standard axioms alone". The author's AUDIT.md claims 106
+# statements, all PROVED, cited-axioms column empty on every row, and
+# states there is NO EulerFlow/Cited/ folder and no project axiom.
+# (Contrast the same author's Hibi-Li artifact, audited 2026-11-05:
+# 158 PROVED / 19 PROVED-FROM-CITED on four declared axioms.) This
+# workflow verifies the stronger disclosure by building the pinned
+# tree and re-deriving the axiom sets independently. Fail-closed on:
+# wrong HEAD, wrong key file hashes, build failure, forbidden proof
+# constructs in sources, any axiom declaration anywhere in the tree,
+# sorryAx in any listing, any headline axiom set outside the standard
+# three, or a regenerated AUDIT.md that differs from the pinned one.
+#
+# Picked 2026-11-05 at the user's tap after an Argon double-check of
+# the harvest shortlist (adjudication: the pick's deciding question
+# is whether any unproved input moved from an axiom declaration into
+# a statement hypothesis; the pinned headline statements were read
+# at pin time and carry exactly the paper's hypotheses).
+#
+# Manual dispatch only. Heavy leg on the self-hosted desktop runner.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cranston-li-forge
+  cancel-in-progress: false
+
+env:
+  TARGET_REPO: https://github.com/david44hello/papers_supporting_materials.git
+  TARGET_SHA: 7c03e0ba9a2c34e578472f477237a64d5c181e02
+  TARGET_DIR: cranston-li-su-wang-xu-2026-conjecture/lean
+  EXPECTED_LEAN_FILES: "55"
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/cranston-li-forge.yml
+
+  forge:
+    needs: gate
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 360
+    steps:
+      - name: Check out this repo
+        # Full checkout, no sparse config: the shared self-hosted checkout
+        # must be left residue-free (META-RULE 2026-10-09). All scratch
+        # work happens in subdirs of this checkout (cl-src/, cl-forge/,
+        # cl-evidence/) and is removed by the final step.
+        uses: actions/checkout@v4
+
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          set +e
+          mkdir -p cl-evidence
+          df -h . || true
+          echo "rg: $(command -v rg || echo absent)"
+          echo "cpus: $(nproc || echo unknown)"
+          free -h || true
+          exit 0
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Pin target commit (fail-closed)
+        run: |
+          set -euo pipefail
+          echo "$TARGET_SHA" | grep -Eq '^[0-9a-f]{40}$' || { echo "FAIL: TARGET_SHA is not 40 lowercase hex: $TARGET_SHA"; exit 1; }
+          rm -rf cl-src
+          git clone --filter=blob:none --no-checkout "$TARGET_REPO" cl-src
+          cd cl-src
+          git fetch --depth 1 origin "$TARGET_SHA"
+          git checkout "$TARGET_SHA"
+          head="$(git rev-parse HEAD)"
+          [ "$head" = "$TARGET_SHA" ] || { echo "FAIL: target HEAD $head != pinned $TARGET_SHA"; exit 1; }
+          echo "$head" | tee ../cl-evidence/TARGET_HEAD
+
+      - name: Extract pinned project and verify key hashes
+        run: |
+          set -euo pipefail
+          cd cl-src
+          git sparse-checkout set "$TARGET_DIR"
+          cd ..
+          rm -rf cl-forge
+          cp -r "cl-src/$TARGET_DIR" cl-forge
+          count=$(find cl-forge -name '*.lean' | wc -l)
+          echo "lean files: $count (expected $EXPECTED_LEAN_FILES)"
+          [ "$count" -eq "$EXPECTED_LEAN_FILES" ] || { echo "FAIL: lean file count $count != $EXPECTED_LEAN_FILES"; exit 1; }
+          cd cl-forge
+          echo "ff84d6fc5b5f1b93aa2c784fa9600d050a406bf679cac865dbe04e4bf8970376  AUDIT.md" | sha256sum -c -
+          echo "22e7f55612875772d175ec88010718c36086cbc9b3fe16344c44ac3790773cfe  EulerFlow/Paper/Statements.lean" | sha256sum -c -
+          echo "f115711d8005ec51b6d445b65ed71636013193294389f17086a8c5971feac580  EulerFlow.lean" | sha256sum -c -
+          cp AUDIT.md ../cl-evidence/AUDIT-pinned.md
+          lean --version | tee ../cl-evidence/lean-version.txt
+          grep -q "4.35.0" ../cl-evidence/lean-version.txt || { echo "FAIL: toolchain is not v4.35.0"; exit 1; }
+
+      - name: Source policy scan (grep mirror of the author's check.sh)
+        working-directory: cl-forge
+        run: |
+          set -euo pipefail
+          # The author's scan fails on the words even in comments; the pinned
+          # tree was pre-scanned clean on the VM, so any hit here is real.
+          if grep -rnw --include='*.lean' -e sorry -e sorryAx -e admit -e native_decide -e implemented_by -e unsafe . | grep -v '^\./\.lake/'; then
+            echo "FAIL: forbidden proof construct in sources"
+            exit 1
+          fi
+          # This artifact declares NO Cited/ folder: any axiom declaration
+          # anywhere in the tree breaks the abstract's claim directly.
+          if grep -rnw --include='*.lean' -e axiom . | grep -v '^\./\.lake/'; then
+            echo "FAIL: axiom declared in sources (artifact claims standard axioms alone)"
+            exit 1
+          fi
+          echo "scan clean: no sorry/admit/native_decide/implemented_by/unsafe; no axiom declarations"
+
+      - name: Fetch Mathlib prebuilt oleans
+        working-directory: cl-forge
+        run: |
+          set -o pipefail
+          lake exe cache get 2>&1 | tee ../cl-evidence/cache-get.log
+
+      - name: Build the project
+        working-directory: cl-forge
+        run: |
+          set -o pipefail
+          lake build 2>&1 | tee ../cl-evidence/build.log
+
+      - name: Regenerate the author's AUDIT.md from #print axioms
+        working-directory: cl-forge
+        run: |
+          set -o pipefail
+          python3 scripts/audit.py 2>&1 | tee ../cl-evidence/audit-py.log
+          cp AUDIT.md ../cl-evidence/AUDIT-regenerated.md
+
+      - name: Independent axiom check on the headline declarations
+        working-directory: cl-forge
+        run: |
+          cat > AxiomCheck.lean <<'EOF'
+          import EulerFlow.Paper.Statements
+          #print axioms EulerFlow.thm_2_3
+          #print axioms EulerFlow.thm_2_4
+          #print axioms EulerFlow.thm_8_1
+          #print axioms EulerFlow.thm_2_2
+          #print axioms EulerFlow.prop_3_4
+          EOF
+          lake env lean AxiomCheck.lean > ../cl-evidence/axioms.txt 2>&1 || true
+          cat ../cl-evidence/axioms.txt
+
+      - name: Verdict (fail-closed)
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          ev = 'cl-evidence/'
+          ok = True
+          def fail(msg):
+              global ok
+              ok = False
+              print('FAIL:', msg)
+          txt = open(ev + 'axioms.txt').read()
+          if 'sorryAx' in txt:
+              fail('sorryAx present in an axiom listing')
+          if 'unknown constant' in txt or 'unknown identifier' in txt:
+              fail('AxiomCheck hit an unknown declaration name (listing incomplete)')
+          std = {'propext', 'Classical.choice', 'Quot.sound'}
+          expected = [
+              'EulerFlow.thm_2_3',
+              'EulerFlow.thm_2_4',
+              'EulerFlow.thm_8_1',
+              'EulerFlow.thm_2_2',
+              'EulerFlow.prop_3_4',
+          ]
+          # DOTALL: #print axioms wraps long lists across physical lines.
+          listings = re.findall(r"'([\w.]+)' depends on axioms: \[(.*?)\]", txt, re.DOTALL)
+          found = {}
+          for name, ax in listings:
+              found[name] = {a.strip() for a in ax.replace('\n', ' ').split(',') if a.strip()}
+          # A theorem with no axioms prints "does not depend on any axioms".
+          for m in re.findall(r"'([\w.]+)' does not depend on any axioms", txt):
+              found[m] = set()
+          for name in expected:
+              if name not in found:
+                  fail(f'no axiom listing for {name}')
+                  continue
+              extra = found[name] - std
+              if extra:
+                  fail(f'{name}: axioms outside the standard three: {sorted(extra)}')
+              else:
+                  print(f'{name}: standard-three-subset-ok ({sorted(found[name])})')
+          pinned = open(ev + 'AUDIT-pinned.md').read()
+          regen = open(ev + 'AUDIT-regenerated.md').read()
+          if pinned != regen:
+              fail('regenerated AUDIT.md differs from the pinned AUDIT.md')
+          else:
+              print('AUDIT.md regeneration: identical to pinned (106-claim table reproduced)')
+          print('VERDICT: PASS' if ok else 'VERDICT: FAIL')
+          with open(ev + 'verdict.txt', 'w') as f:
+              f.write('PASS\n' if ok else 'FAIL\n')
+          sys.exit(0 if ok else 1)
+          EOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cranston-li-forge-evidence
+          path: cl-evidence
+
+      - name: Leave shared checkout clean (meta-rule)
+        if: always()
+        run: |
+          rm -rf cl-src cl-forge
+          git checkout --force HEAD 2>/dev/null || true
