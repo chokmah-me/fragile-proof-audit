@@ -1,0 +1,5 @@
+'EulerFlow.thm_2_3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EulerFlow.thm_2_4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EulerFlow.thm_8_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EulerFlow.thm_2_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EulerFlow.prop_3_4' depends on axioms: [propext, Classical.choice, Quot.sound]

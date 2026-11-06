@@ -247,3 +247,18 @@ alone.
   id 13487380223, 36,601 bytes, sha256
   `918b78dd87c22b23b3010621d2cecea2fb053b55d66de803a862617ec3e725c9`,
   expires 2027-02-04).
+- `results/cranston_li_forge_run1_evidence.zip` — the run #1
+  evidence artifact, downloaded and verified locally after the
+  note landed (36,601 bytes, sha256
+  `918b78dd87c22b23b3010621d2cecea2fb053b55d66de803a862617ec3e725c9`,
+  matching the Actions API listing): `verdict.txt` reads
+  `PASS`; `TARGET_HEAD` is `7c03e0ba`; `audit-py.log` reads
+  "AUDIT: 106 claims. PROVED: 106."; the build log's last line
+  reads "Build completed successfully (9102 jobs)".
+- `results/cranston_li_verdict.txt` — `PASS` (from run #1).
+- `results/cranston_li_axioms.txt` — the five headline
+  `#print axioms` listings from run #1.
+- `results/cranston_li_audit_regenerated.md` — the regenerated
+  `AUDIT.md`, byte-identical to the pinned one (verified again
+  locally with `cmp` against
+  `incoming/cranston-li-su-wang-xu-2026-conjecture/repo-v1.59/lean/AUDIT.md`).
