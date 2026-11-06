@@ -1,0 +1,751 @@
+{
+  "date": "2026-11-05",
+  "harvest_sha": "4c7115ba7b087e793a3e3f6c8f8be27bc2bdb18e6b50338e85dd1506939ca518",
+  "meta": {
+    "window": "2026-10-06..2026-11-05",
+    "source": "ReplayGate feedstock harvest at the user's tap 2026-11-05 -- three parallel sweeps: (a) Axiom Math lab announcements and repos; (b) the four Lean candidates cut by the 10-cap in the 2026-11-02 harvest plus its two AxiomProver near-misses, re-checked; (c) arXiv \"Lean\" listing sweep 2026-10-20..2026-11-05 (172 API entries screened). All arXiv IDs verified on their abs pages or via the arXiv API; all repos verified live via the GitHub API (metadata and trees only, no clones, no builds, per the loop's boundaries). Recon method: Grandmaster's Methods at recon (what the artifact's architecture actually does, weighted to process evidence over announcement prose), M1-M4 seams recorded per claim in code_note, Stellar BB6 non-vacuity vectors noted where the scope applies (agent-rewritten Challenge/Solution statements: factoring, RiemannJensen, CFSG corollary, Dedekind), DEEPEN run as the pre-registration challenge pass on the draft shortlist (its findings are folded into the notes: comparator config is not a comparator run; repo file counts are inflated by vendored trees where flagged; squashed single-commit histories are provenance, not defects). Purpose: candidates whose audit artifacts a ReplayGate-checked audit note can actually be written against. No verdicts in this run. Dedup: Axiom CFSG itself was already registered in harvest 2026-10-27 (unpicked, still in queue) and is NOT re-registered here; OpenAI ETH and Anthropic ETH are audited closed; the toric-code paper arXiv:2611.03329 stays WATCH-only (registered with the Monday scan 2026-11-05, no Lean files public yet). WATCH registrations (formalization claimed, no public artifact location verified as of 2026-11-05; availability trigger only): arXiv:2611.06562 (Mortality undecidable for 2x2 integer matrices, Lean companion claimed, no link on the abs page) and arXiv:2610.37899 (hierarchical laminates counterexample, \"formally verified in Lean 4\" in the comments, no location). Out of window, not registered: arXiv:2609.33842 (Hamilton-Perelman Poincare formalization, submitted 2026-09-27, artifact pinned at release v0.1.3 commit 7a48598d in github.com/qinz1yang/differential-geometry) -- flag for a future window decision, do not silently absorb. Cut by the cap, held for the next run if still fresh: 2611.06325 (third Brauer-Thrall, Enomoto, 1,201-file tree), 2610.30655 (Euler non-uniqueness Part I, Coiculescu), 2611.05146 (path decompositions, Gaspers, Zenodo), 2611.04934 (contract design polymatroids, 74 files), 2611.04862 (Douglas conjecture Kronecker quivers, 738-file tree), 2611.04806 (minimax lower bounds, ancillary Lean), 2611.01064 (two-deletion channel entropy, single-file Lean checker), 2610.40592 (toric CSS decoupling, 780-file tree; distinct from the 2611.03329 watch item), 2610.40585 (quantum channel additivity, no toolchain pin found), 2610.39883 (pure semisimplicity counterexample, 161 files), 2610.38913 (Maxwell universality, v2 adds Lean records), 2610.42124 (first-passage percolation, 990-file tree), 2611.00153 (small universal reversible TMs, 336 files), 2611.00451 (free Banach lattices, 12 files), 2610.34580 (Bloch-Landau constant, Zenodo), 2610.27451 (rank-23 3x3 scheme, Zenodo), 2611.06616 (LeanVOA library release, library not a single claim)."
+  },
+  "claims": [
+    {
+      "id": "axiom-stacks-project-lean",
+      "title": "Axiom Math -- the entire Stacks Project formalized in Lean (seed item)",
+      "score": 2,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://axiommath.ai/research/the-stacks-project-formalized",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "AxiomMath/Stacks",
+        "branch": "main",
+        "size_kb": 245862,
+        "pushed_at": "2026-11-05",
+        "url": "https://github.com/AxiomMath/Stacks",
+        "head_sha": "012108f61d7f92a6ffc35ec3f263b6da5d438125",
+        "head_date": "2026-11-05",
+        "lean_files": 49745,
+        "tree_truncated": true,
+        "has_lakefile": false,
+        "lean_toolchain": "leanprover/lean4:v4.34.0-rc2"
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.34.0-rc2"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 49745,
+        "has_lakefile": false,
+        "toolchain": "leanprover/lean4:v4.34.0-rc2",
+        "declared_verification": [
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Axiom Math -- the entire Stacks Project formalized in Lean (seed item). The Stacks Project (about 7,500 pages, 17,269 tags) is formalized in Lean: 15,751,904 lines in 62,975 files,"
+      }
+    },
+    {
+      "id": "axiom-cfsg-two-generators-corollary",
+      "title": "Axiom Math -- every finite simple group is generated by two elements (Lean, on top of CFSG)",
+      "score": 2,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/AxiomMath/CFSGCorollary",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "AxiomMath/CFSGCorollary",
+        "branch": "main",
+        "size_kb": 244,
+        "pushed_at": "2026-11-02",
+        "url": "https://github.com/AxiomMath/CFSGCorollary",
+        "head_sha": "161b0c2db2288330b16f347a844cc75a53f11b55",
+        "head_date": "2026-11-02",
+        "lean_files": 91,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc3"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 91,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0-rc3",
+        "declared_verification": [
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Axiom Math -- every finite simple group is generated by two elements (Lean, on top of CFSG). Every finite simple group is generated by two elements, proved in Lean on top of the Ax"
+      }
+    },
+    {
+      "id": "cureton-thorner-dedekind-zeta-zero-free",
+      "title": "Cureton-Thorner with AxiomProver -- no zeros of any Dedekind zeta function past Re s = 31/32",
+      "score": 2,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://hexagonmath.org/2610.00200",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "AxiomMath/DedekindZetaZeroFree",
+        "branch": "main",
+        "size_kb": 13600,
+        "pushed_at": "2026-10-13",
+        "url": "https://github.com/AxiomMath/DedekindZetaZeroFree",
+        "head_sha": "09afbb4ce6570c1615d58509dc197fc9f0956b7d",
+        "head_date": "2026-10-13",
+        "lean_files": 5528,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "ai_only_review",
+        "pinned_toolchain",
+        "public_ci_green"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc3",
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 5528,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0-rc3",
+        "declared_verification": [
+          "multi-kernel / comparator replay declared",
+          "AI-generated formalization \u2014 2610.08144 exposure (compilation does not certify the NL argument; M1\u2013M4 statement-fidelity checklist post-pick)"
+        ],
+        "probe_query": "Cureton-Thorner with AxiomProver -- no zeros of any Dedekind zeta function past Re s = 31/32. For every number field K, the Dedekind zeta function of K has no zeros with real part "
+      }
+    },
+    {
+      "id": "subexponential-deterministic-factoring",
+      "title": "Rudich-Rousseau -- deterministic subexponential factoring, Lean proof generated by Claude",
+      "score": 4,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/IsaacRudich/SubexponentialDeterministicFactoring",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "IsaacRudich/SubexponentialDeterministicFactoring",
+        "branch": "main",
+        "size_kb": 905,
+        "pushed_at": "2026-10-28",
+        "url": "https://github.com/IsaacRudich/SubexponentialDeterministicFactoring",
+        "head_sha": "c91cc3f4947caca8977e81a5d14244f73b5ae2b1",
+        "head_date": "2026-10-28",
+        "lean_files": 146,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0"
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (exact rational object)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 146,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0",
+        "declared_verification": [
+          "multi-kernel / comparator replay declared",
+          "zero-sorry declared",
+          "AI-generated formalization \u2014 2610.08144 exposure (compilation does not certify the NL argument; M1\u2013M4 statement-fidelity checklist post-pick)"
+        ],
+        "probe_query": "Rudich-Rousseau -- deterministic subexponential factoring, Lean proof generated by Claude. One deterministic Turing machine (FinTM2) computes the smallest prime factor Nat.minFac N"
+      }
+    },
+    {
+      "id": "ono-jensen-polya-grh-lean",
+      "title": "Ono -- an asymptotic Jensen-Polya criterion for GRH, formalized by AxiomProver (arXiv:2610.38870)",
+      "score": 4,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.38870",
+        "title": "An asymptotic Jensen-Polya criterion for GRH",
+        "authors": [
+          "Ken Ono"
+        ],
+        "published": "2026-10-28",
+        "url": "https://arxiv.org/abs/2610.38870"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.38870",
+        "title": "An asymptotic Jensen-Polya criterion for GRH",
+        "authors": [
+          "Ken Ono"
+        ],
+        "publication_date": "2026-10-28",
+        "title_ok": true,
+        "author_overlap": [
+          "ono"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224887107"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "AxiomMath/RiemannJensen",
+        "branch": "main",
+        "size_kb": 536,
+        "pushed_at": "2026-10-23",
+        "url": "https://github.com/AxiomMath/RiemannJensen",
+        "head_sha": "c1e023fa3ae7161219dde3dcb73f0c28ff972be2",
+        "head_date": "2026-10-23",
+        "lean_files": 152,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0"
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 152,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0",
+        "declared_verification": [
+          "multi-kernel / comparator replay declared",
+          "AI-generated formalization \u2014 2610.08144 exposure (compilation does not certify the NL argument; M1\u2013M4 statement-fidelity checklist post-pick)"
+        ],
+        "probe_query": "Ono -- an asymptotic Jensen-Polya criterion for GRH, formalized by AxiomProver (arXiv:2610.38870). Unconditionally, for every number field K the unshifted Jensen polynomial J_{K,d}"
+      }
+    },
+    {
+      "id": "theta-quotient-sign-patterns-lean",
+      "title": "Banerjee-Bringmann-Heim-Kane -- sign patterns of Fourier coefficients of theta quotients, formalized by AxiomProver (arXiv:2610.41569)",
+      "score": 3,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.41569",
+        "title": "On sign patterns of Fourier coefficients of theta quotients",
+        "authors": [
+          "Koustav Banerjee",
+          "Kathrin Bringmann",
+          "Bernhard Heim",
+          "Ben Kane"
+        ],
+        "published": "2026-10-30",
+        "url": "https://arxiv.org/abs/2610.41569"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.41569",
+        "title": "On sign patterns of Fourier coefficients of theta quotients",
+        "authors": [
+          "Koustav Banerjee",
+          "Kathrin Bringmann",
+          "Bernhard E. Heim",
+          "Ben Kane"
+        ],
+        "publication_date": "2026-10-30",
+        "title_ok": true,
+        "author_overlap": [
+          "banerjee",
+          "bringmann",
+          "heim",
+          "kane"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7225104081"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "bkanemath/Sign-Patterns-of-Fourier-Coefficients-of-Theta-Quotients",
+        "branch": "main",
+        "size_kb": 495,
+        "pushed_at": "2026-10-22",
+        "url": "https://github.com/bkanemath/Sign-Patterns-of-Fourier-Coefficients-of-Theta-Quotients",
+        "head_sha": "7fe1c982c0e6f99a927246c1e3dba6bd762e7f79",
+        "head_date": "2026-10-22",
+        "lean_files": 17,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "D",
+          "finite q-expansion"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 17,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [],
+        "probe_query": "Banerjee-Bringmann-Heim-Kane -- sign patterns of Fourier coefficients of theta quotients, formalized by AxiomProver (arXiv:2610.41569). For two families of theta quotients and thei"
+      }
+    },
+    {
+      "id": "cranston-li-su-wang-xu-lean",
+      "title": "Goel -- the Cranston-Li-Su-Wang-Xu (2026) conjecture is true, in Lean (arXiv:2610.40863)",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.40863",
+        "title": "The Cranston--Li--Su--Wang--Xu (2026) conjecture is true",
+        "authors": [
+          "Dave Goel"
+        ],
+        "published": "2026-10-29",
+        "url": "https://arxiv.org/abs/2610.40863"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.40863",
+        "title": "The Cranston--Li--Su--Wang--Xu (2026) conjecture is true",
+        "authors": [
+          "Dave Goel"
+        ],
+        "publication_date": "2026-10-29",
+        "title_ok": true,
+        "author_overlap": [
+          "goel"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7225115473"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "david44hello/papers_supporting_materials",
+        "branch": "main",
+        "size_kb": 4055,
+        "pushed_at": "2026-11-05",
+        "url": "https://github.com/david44hello/papers_supporting_materials",
+        "head_sha": "f26bde876235bb3850ef5979a3bf9dcf02055a50",
+        "head_date": "2026-11-05",
+        "lean_files": 586,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "single_author",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 586,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [],
+        "probe_query": "Goel -- the Cranston-Li-Su-Wang-Xu (2026) conjecture is true, in Lean (arXiv:2610.40863). For every finite abelian group A with |A| >= 4, any two nowhere-zero A-flows on an all-eve"
+      }
+    },
+    {
+      "id": "bp-fixed-point-degree-lean",
+      "title": "Watanabe -- counting fixed points of binary belief propagation, in Lean (arXiv:2610.36964)",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.36964",
+        "title": "Counting the Fixed Points of Binary Belief Propagation: Generic Degree, Syzygies, and Real Solutions",
+        "authors": [
+          "Yusuke Watanabe"
+        ],
+        "published": "2026-10-27",
+        "url": "https://arxiv.org/abs/2610.36964"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.36964",
+        "title": "Counting the Fixed Points of Binary Belief Propagation: Generic Degree, Syzygies, and Real Solutions",
+        "authors": [
+          "Yusuke Watanabe"
+        ],
+        "publication_date": "2026-10-27",
+        "title_ok": true,
+        "author_overlap": [
+          "watanabe"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224101611"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "ywatanabex/bp-degree-syzygies-lean",
+        "branch": "main",
+        "size_kb": 2235,
+        "pushed_at": "2026-10-28",
+        "url": "https://github.com/ywatanabex/bp-degree-syzygies-lean",
+        "head_sha": "2c097b160b5fc7c69e0d9867b6502d85af52e531",
+        "head_date": "2026-10-28",
+        "lean_files": 932,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0"
+      },
+      "signals": [
+        "single_author",
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 932,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0",
+        "declared_verification": [],
+        "probe_query": "Watanabe -- counting fixed points of binary belief propagation, in Lean (arXiv:2610.36964). The generic degree of the belief-propagation fixed-point equations for a binary pairwise"
+      }
+    },
+    {
+      "id": "infinite-sumset-configurations-lean",
+      "title": "Li-Su -- solutions to several problems on infinite sumset configurations, in Lean (arXiv:2610.39637)",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.39637",
+        "title": "Solutions to several problems on infinite sumset configurations",
+        "authors": [
+          "Shisheng Li",
+          "Yong Su"
+        ],
+        "published": "2026-10-29",
+        "url": "https://arxiv.org/abs/2610.39637"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.39637",
+        "title": "Solutions to several problems on infinite sumset configurations",
+        "authors": [
+          "Shisheng Li",
+          "Yong Su"
+        ],
+        "publication_date": "2026-10-29",
+        "title_ok": true,
+        "author_overlap": [
+          "li",
+          "su"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224777102"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2610.39637"
+      },
+      "signals": [
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "p-adic-valuation-calculus-lean",
+      "title": "Kallat -- a p-adic valuation calculus for permutations with restricted cycle lengths, in Lean (arXiv:2610.40342)",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2610.40342",
+        "title": "A p-adic Valuation Calculus for Permutations with Restricted Cycle Lengths",
+        "authors": [
+          "Ahaan Kallat"
+        ],
+        "published": "2026-10-29",
+        "url": "https://arxiv.org/abs/2610.40342"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2610.40342",
+        "title": "A p-adic Valuation Calculus for Permutations with Restricted Cycle Lengths",
+        "authors": [
+          "Ahaan Kallat"
+        ],
+        "publication_date": "2026-10-29",
+        "title_ok": true,
+        "author_overlap": [
+          "kallat"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7224916767"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2610.40342"
+      },
+      "signals": [
+        "single_author",
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "kaplansky-conjectures-hyperbolic-groups",
+      "title": "Mghirbi-Douglas -- Kaplansky's conjectures fail for torsion-free hyperbolic groups in positive characteristic (arXiv:2611.04599)",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.04599",
+        "title": "Kaplansky's conjectures fail for torsion-free hyperbolic groups in positive characteristic",
+        "authors": [
+          "Nidhal Mghirbi",
+          "Seth Douglas"
+        ],
+        "published": "2026-11-03",
+        "url": "https://arxiv.org/abs/2611.04599"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.04599",
+        "title": "Kaplansky's conjectures fail for torsion-free hyperbolic groups in positive characteristic",
+        "authors": [
+          "Nidhal Mghirbi",
+          "Seth Douglas"
+        ],
+        "publication_date": "2026-10-14",
+        "title_ok": true,
+        "author_overlap": [
+          "douglas",
+          "mghirbi"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7223765911"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "Apsiape/kaplansky-conjectures-hyperbolic-groups",
+        "branch": "main",
+        "size_kb": 2120,
+        "pushed_at": "2026-11-02",
+        "url": "https://github.com/Apsiape/kaplansky-conjectures-hyperbolic-groups",
+        "head_sha": "00ed62004dcf08ad5b6fab059c1399b206a1c586",
+        "head_date": "2026-11-02",
+        "lean_files": 199,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 199,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [],
+        "probe_query": "Mghirbi-Douglas -- Kaplansky's conjectures fail for torsion-free hyperbolic groups in positive characteristic (arXiv:2611.04599). All four Kaplansky group-ring conjectures (zero-di"
+      }
+    },
+    {
+      "id": "sharpness-fusion-systems-lean-rocq",
+      "title": "Zhang-Zhang -- the sharpness conjectures for all saturated fusion systems, in Lean and Rocq (arXiv:2611.02043)",
+      "score": 4,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.02043",
+        "title": "A proof of the sharpness conjectures for all saturated fusion systems",
+        "authors": [
+          "Baoyu Zhang",
+          "Shengmin Zhang"
+        ],
+        "published": "2026-11-01",
+        "url": "https://arxiv.org/abs/2611.02043"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.02043",
+        "title": "A PROOF OF THE SHARPNESS CONJECTURES FOR ALL SATURATED FUSION SYSTEMS",
+        "authors": [
+          "Baoyu Zhang",
+          "Shengmin Zhang"
+        ],
+        "publication_date": "2026-11-01",
+        "title_ok": true,
+        "author_overlap": [
+          "zhang"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7225039976"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "BaoyuZhang747/sharpness-Lean-Rocq",
+        "branch": "main",
+        "size_kb": 3180,
+        "pushed_at": "2026-11-03",
+        "url": "https://github.com/BaoyuZhang747/sharpness-Lean-Rocq",
+        "head_sha": "b0af032a5ba8f29364a298969989956de2206683",
+        "head_date": "2026-11-03",
+        "lean_files": 958,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 958,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [],
+        "probe_query": "Zhang-Zhang -- the sharpness conjectures for all saturated fusion systems, in Lean and Rocq (arXiv:2611.02043). The Diaz-Park sharpness conjecture is proved for all saturated fusio"
+      }
+    }
+  ]
+}
