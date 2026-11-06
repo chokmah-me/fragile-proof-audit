@@ -1,0 +1,15 @@
+# ReplayGate repo config (freeze section 5). Setting audit_globs
+# replaces the deployed default list wholesale, so the two default
+# patterns are restated verbatim first; the two negations appended
+# after them are the scope ruling of 2026-11-06 (owner's tap, Argon
+# double-check adjudicated): the default glob swept in two classes
+# of non-note markdown under docs/audits/ -- INDEX.md (a link table,
+# findings on the 2026-10-25 checks) and the generated harvest
+# recon outputs docs/audits/harvest-<date>/*.md (16 findings each on
+# main@8282a42 and main@23b27e9). Neither is an audit note; both are
+# now out of scope. Everything else about the defaults is unchanged.
+audit_globs:
+  - "docs/audits/**/*.md"
+  - "!incoming/**/PIN.md"
+  - "!docs/audits/INDEX.md"
+  - "!docs/audits/harvest-*/**/*.md"
