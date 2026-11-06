@@ -166,6 +166,20 @@ jobs:
               exit 1
             fi
           done
+          # Run 1 root cause, confirmed in the v4.35.0 source
+          # (src/lake/Lake/CLI/Check.lean, resolveExternalKernels):
+          # the comparator resolves external kernels by bare name via
+          # PATH in its own process BEFORE any sandboxing, and exits
+          # 2 ("judgment could not run") when the lookup fails. The
+          # toolchain bin dir is on no PATH, so run 1 died at startup
+          # with "nanoda kernel nanoda_bin was not found" even though
+          # the binary sits in the prefix. Put the prefix bin on PATH
+          # for every later step; at kernel run time the comparator
+          # resolves the absolute path and binds it back into the
+          # sandbox, so a home-installed kernel then works.
+          echo "$prefix/bin" >> "$GITHUB_PATH"
+          export PATH="$prefix/bin:$PATH"
+          command -v nanoda_bin | tee -a ../rj-evidence/checker-binaries.txt || { echo "SETUP-FAIL: nanoda_bin not resolvable via PATH even with toolchain bin added"; exit 1; }
           lake comparator --help 2>&1 | head -30 | tee ../rj-evidence/lake-comparator-help.txt || true
           # bubblewrap: the core comparator sandboxes the code it
           # judges with bwrap. No passwordless sudo on this runner,
@@ -211,8 +225,19 @@ jobs:
         working-directory: rj-forge
         run: |
           set +e
-          timeout 14400 lake comparator --config Comparator/comparator.json > ../rj-evidence/comparator.log 2>&1
-          code=$?
+          # Run 1 fix (see Forge prerequisites): the comparator
+          # resolves nanoda_bin via PATH in its own process before
+          # sandboxing. GITHUB_PATH from prerequisites should already
+          # carry the toolchain bin; export it again here so this
+          # step does not depend on that propagation alone.
+          export PATH="$(lean --print-prefix)/bin:$PATH"
+          if command -v nanoda_bin >/dev/null 2>&1; then
+            timeout 14400 lake comparator --config Comparator/comparator.json > ../rj-evidence/comparator.log 2>&1
+            code=$?
+          else
+            echo "SETUP-FAIL: nanoda_bin not resolvable via PATH" > ../rj-evidence/comparator.log
+            code=2
+          fi
           echo "$code" > ../rj-evidence/comparator-exit.txt
           cat ../rj-evidence/comparator.log
           echo "comparator exit: $code"
