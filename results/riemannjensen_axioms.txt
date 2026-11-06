@@ -1,0 +1,4 @@
+'RiemannJensen.Challenge.exists_isDedekindZetaContinuation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RiemannJensen.Challenge.isDedekindZetaContinuation_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RiemannJensen.Challenge.dedekind_thm_main' depends on axioms: [propext, Classical.choice, Quot.sound]
+'RiemannJensen.Challenge.riemannJensen_main' depends on axioms: [propext, Classical.choice, Quot.sound]
