@@ -1,0 +1,16 @@
+::notice::nothing published for CFSGCorollary at its revision; lake build will compile it
+mathlib: 8570 artifacts (leanprover-community/mathlib4 at b63f6e8a68d2)
+TauCeti: 1456 artifacts (TauCetiProject/TauCeti at 6e0c6acab5f4)
+cfsg: 229805 artifacts (AxiomMath/CFSG at 69cb972f587a)
+plausible: 13 artifacts (leanprover-community/plausible at fb13df72ecef)
+LeanSearchClient: 4 artifacts (leanprover-community/LeanSearchClient at 29ff470276c7)
+importGraph: 21 artifacts (leanprover-community/import-graph at 10a2cfff285e)
+proofwidgets: 13 artifacts (leanprover-community/ProofWidgets4 at c643bbb3c24f)
+aesop: 132 artifacts (leanprover-community/aesop at a90fbf7b02ff)
+Qq: 14 artifacts (leanprover-community/quote4 at 37b0ba0b2610)
+batteries: 193 artifacts (leanprover-community/batteries at 33131f4fb100)
+::notice::nothing published for Cli at its revision; lake build will compile it
+downloading 240221 artifacts ...
+723 artifacts missing, 106 failed their hash check
+::warning::the fetch did not complete cleanly; discarding it and leaving Lake's cache (/home/dyb/.cache/lake) as it was
+now run: lake build
