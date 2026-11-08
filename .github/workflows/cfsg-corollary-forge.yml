@@ -51,6 +51,10 @@ name: cfsg-corollary-forge
 # Linux x86_64 only. If free disk is under the threshold, or the
 # script fails, the route is a source build of the needed closures.
 # The route taken is recorded in the evidence either way.
+# Run 3 (2026-11-07) showed the script exits 0 even when its fetch
+# fails and discards (723 artifacts missing, 106 hash failures of
+# 240221), so the route is decided by the fetch log ("did not
+# complete cleanly" / "discarding"), never by the exit code alone.
 #
 # Trust order: the corollary library and the author's Checks target
 # build first (the conditional leg's receipts: the library's
@@ -254,8 +258,18 @@ jobs:
               timeout 3300 bash ../cfsg-evidence/lake-cache-get-fast.sh . > ../cfsg-evidence/cache-get.log 2>&1
               code=$?
               echo "$code" > ../cfsg-evidence/cache-exit.txt
-              if [ "$code" -eq 0 ]; then
+              # The script exits 0 even when its fetch fails and is
+              # discarded whole (run 3, 2026-11-07: 723 artifacts
+              # missing, 106 hash failures of 240221, fetch discarded,
+              # exit still 0). The fetch log is therefore the only
+              # authority on whether anything was restored: a clean
+              # fetch leaves no discard warning in the log.
+              grep -E "artifacts missing|hash check" ../cfsg-evidence/cache-get.log | tail -1 > ../cfsg-evidence/cache-fetch.txt || true
+              if grep -q "did not complete cleanly" ../cfsg-evidence/cache-get.log || grep -qi "discarding" ../cfsg-evidence/cache-get.log; then
+                echo "fetch FAILED and was discarded (see cache-fetch.txt); nothing was restored, route is source despite script exit $code" | tee -a ../cfsg-evidence/cache-get.log
+              elif [ "$code" -eq 0 ]; then
                 echo "cache" > ../cfsg-evidence/route.txt
+                echo "fetch clean (no discard warning in cache-get.log)" > ../cfsg-evidence/cache-fetch.txt
               else
                 echo "cache script exited $code; its design discards a failed fetch whole, so the route falls back to source" | tee -a ../cfsg-evidence/cache-get.log
               fi
