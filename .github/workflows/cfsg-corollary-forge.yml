@@ -76,7 +76,17 @@ name: cfsg-corollary-forge
 # exit codes into the evidence and let the Verdict step judge, so a
 # degraded tier still produces a full evidence artifact.
 #
-# Manual dispatch only. Heavy leg on the self-hosted desktop runner.
+# Manual dispatch only. Heavy leg on a self-hosted runner.
+# Run 5 (2026-11-08, at the user's word): the heavy leg moves to
+# the laptop runner and the time limits rise. Run 4 on the desktop
+# died at the 360-minute job cap mid-comparator (forge cancelled
+# 12:27:58Z, 46 min into the comparator step), after the library
+# build and the import inventory had succeeded. Job cap
+# 360 -> 720; comparator time-box 5400 -> 14400; library build
+# 6600 -> 9900; open Comparator build 3300 -> 5400. The step
+# time-boxes now sum to 1500 + 3300 + 9900 + 14400 + 5400 =
+# 34500 s (575 min), under the 720-minute cap with room for
+# setup, checkout, and the import inventory.
 
 on:
   workflow_dispatch:
@@ -106,8 +116,8 @@ jobs:
 
   forge:
     needs: gate
-    runs-on: [self-hosted, desktop]
-    timeout-minutes: 360
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 720
     steps:
       - name: Check out this repo
         uses: actions/checkout@v4
@@ -289,7 +299,7 @@ jobs:
           set +e
           export LAKE_ARTIFACT_CACHE=true RUST_MIN_STACK=1073741824
           ulimit -s 1048576 2>/dev/null || true
-          timeout 6600 lake build CFSGCorollary Checks > ../cfsg-evidence/build-lib.log 2>&1
+          timeout 9900 lake build CFSGCorollary Checks > ../cfsg-evidence/build-lib.log 2>&1
           code=$?
           echo "$code" > ../cfsg-evidence/build-lib-exit.txt
           tail -3 ../cfsg-evidence/build-lib.log
@@ -344,7 +354,7 @@ jobs:
           # so this step does not depend on that propagation alone.
           export PATH="$(lean --print-prefix)/bin:$PATH"
           if command -v nanoda_bin >/dev/null 2>&1; then
-            timeout 5400 lake comparator --config comparator.json > ../cfsg-evidence/comparator.log 2>&1
+            timeout 14400 lake comparator --config comparator.json > ../cfsg-evidence/comparator.log 2>&1
             code=$?
           else
             echo "SETUP-FAIL: nanoda_bin not resolvable via PATH" > ../cfsg-evidence/comparator.log
@@ -360,7 +370,7 @@ jobs:
           set +e
           export LAKE_ARTIFACT_CACHE=true RUST_MIN_STACK=1073741824
           ulimit -s 1048576 2>/dev/null || true
-          timeout 3300 lake build Comparator > ../cfsg-evidence/build-comparator.log 2>&1
+          timeout 5400 lake build Comparator > ../cfsg-evidence/build-comparator.log 2>&1
           code=$?
           echo "$code" > ../cfsg-evidence/build-comparator-exit.txt
           grep -A1 "depends on axioms" ../cfsg-evidence/build-comparator.log | head -10
