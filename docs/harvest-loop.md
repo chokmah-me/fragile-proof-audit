@@ -104,6 +104,10 @@ different method, or prove less than the NL text claims. Compilation is
 therefore never the acceptance criterion for "the source proof is
 correct"; no fixed finite procedure can certify faithful translation (their
 SCI = ∞ result), so the checks below stay human-judgment, fail-closed.
+The statement tests adopted 2026-11-08 supply machine evidence
+to M1 without changing that: they test a statement's own
+logic, never its faithfulness to the source, and the M1
+judgment stays the auditor's.
 
 Every audit note that evaluates a Lean formalization — ours or a third
 party's — answers these four modes explicitly. Pure computational-replay
@@ -195,6 +199,199 @@ are unchanged, nothing is retired. (2) Scope as stated above.
 first full application (expected: the Cryptids audit),
 whichever is later. No automation rides with this adoption;
 it is a document checklist.
+
+### Statement tests (M1 add-on, adopted 2026-11-08)
+
+M1 is a read. A read can be careful and still miss the two
+failures that live inside a statement's own logic: hypotheses
+only degenerate instances satisfy, and total functions whose
+off-domain values silently shrink what the statement covers.
+AutoIP (Clason et al., arXiv:2611.06962, Sec. 5) hit both in
+settled literature: a textbook convergence theorem whose
+hypothesis (order optimality for one nu and ALL rho > 0) admits
+essentially only the zero operator, and a dimension lemma
+weakened by Module.finrank being 0 on infinite-dimensional
+spaces. The tests below turn the mechanical half of that check
+into forge evidence. They supplement the M1 read; they do not
+replace it, and they never grade the proof side.
+
+Scope: the headline theorems of a Lean formalization audit (the
+theorems the build and comparator target), plus any
+artifact-defined predicate appearing in a headline signature
+(one level in; that is where vacuity hid in the RiemannJensen
+audit, in IsDedekindZetaContinuation). Every probe is recorded
+per theorem as PASS / FAIL / N-A with the object named; N-A
+means structural inapplicability only, and a probe that times
+out is recorded PROBE-TIMEOUT, never N-A. Mandatory probes:
+ST-1 for every headline theorem (the pure-existence N-A below
+excepted), ST-2 whenever ST-1(a) is attempted, ST-5 for every
+conditional headline theorem, and ST-3 / ST-4 whenever their
+scope is nonempty. If the library build or the comparator
+fails, probes do not run: their rows record NOT-RUN and the
+verdict follows the machine tiers as usual. Probe files are
+Lean files run in the forge (the AxiomAudit pattern), strictly
+AFTER the library build and the comparator have succeeded, on
+warm oleans, importing the built library; a probe never
+recompiles the library. Probe obligations are discharged by
+applying the pinned theorem (or a projection of its type),
+never by re-typing its hypotheses into the probe file, so the
+kernel itself checks that the obligation is about the pinned
+statement. Probe lemmas join the run's axiom audit: a probe
+proved with sorryAx or an added axiom is a failed probe, not a
+passed one.
+
+- **ST-1 Two-sided satisfiability.** (a) SATISFYING: exhibit a
+  concrete instance of the theorem's binders and prove the
+  hypotheses for it, by applying the pinned theorem or its
+  hypothesis projection. (b) ESCAPING: exhibit an instance of
+  the binders where at least one hypothesis fails. A signature
+  predicate is probed the same way, as a hypothesis over its
+  own arguments: exhibit an object satisfying it, or prove
+  none exists, under the same labels. ST-1(a) has three
+  outcomes, which are also its record values (WITNESSED
+  records as PASS; VACUOUS-PROVED records as FAIL; UNWITNESSED
+  records as itself, a finding):
+  WITNESSED (a non-degenerate instance is exhibited, ST-2);
+  UNWITNESSED (a bounded, recorded search found no witness;
+  before recording it, check whether an existence proof for
+  the hypotheses already exists in the artifact or Mathlib: a
+  finding, not a cap, because failing to find a witness does
+  not prove unsatisfiability); VACUOUS-PROVED (the audit
+  proves the hypotheses imply False, or proves they admit
+  only the degenerate cases under ST-2: the theorem as
+  claimed is empty, and that theorem's verdict caps at
+  PARTIAL with the proof as the receipt). AutoIP's catch was
+  the VACUOUS-PROVED shape: not "no witness found" but an
+  argument that only the zero operator survives. If no
+  escaping instance is found either (NO-ESCAPE), the
+  hypotheses may be content-free, recorded as a finding.
+  Pure existence theorems, where exhibiting the witness is
+  the theorem itself, are N-A with that reason recorded.
+  Where a headline theorem carries both instance-level
+  hypotheses and a proposition-level antecedent, ST-1 applies
+  to the instance-level hypotheses; the antecedent is ST-5's
+  object alone.
+
+- **ST-2 Non-trivial witness.** The ST-1(a) witness must be
+  non-degenerate relative to the claim. Non-degeneracy is
+  pinned at pin time as an excluded list or an explicit
+  predicate, not judged by eye afterward; the standing
+  exclusions are the zero object, the trivial group or zero
+  space, the empty structure, and a subsingleton or empty
+  carrier where the claim's class is nontrivial. If the
+  hypotheses provably imply degeneracy on the intended class
+  (a formal proof, or a mathematical argument recorded in the
+  note, as AutoIP's forcing argument that the hypothesis
+  drives R to 0 and so T to 0), the finding is
+  OVER-RESTRICTIVE HYPOTHESIS: the note states which
+  instances the hypothesis actually admits, and any source
+  assertion that the hypothesis is mild or general is
+  recorded REFUTED, with the proof as the receipt. If only a
+  documented search stands behind the suspicion, the finding
+  caps at UNVERIFIED-NONDEGENERACY and the source assertion
+  at UNSUPPORTED, never REFUTED.
+
+- **ST-3 Hypothesis reference check.** First pass, no build
+  cost: check whether each hypothesis of a headline theorem
+  is referenced by its proof, using the unusedVariables
+  linter or, equivalently, a dependency scan of the compiled
+  proof term (two instruments for the same question; record
+  which one ran). A hypothesis the proof never references is
+  recorded as a finding: a reader of the claim is entitled to
+  think it is needed. Where a hypothesis IS referenced but
+  only through bulk tactics (simp, aesop, omega and their
+  kin), a second pass may restate the theorem with that
+  hypothesis dropped (or, where the formal version is
+  stronger than the source's wording, weakened to the
+  source's version), holding the dropped binder's position
+  with a (h : True) dummy, and replay the original proof
+  script. Second-pass outcomes: REPLAY-CLOSES (the script
+  closes without the hypothesis: a finding) or REPLAY-BREAKS
+  (the failing step is recorded verbatim: a finding). Either
+  way the outcome is named referenced / not-referenced at the
+  first pass: reference is syntactic, a referenced hypothesis
+  can still be semantically redundant, and the probe claims
+  nothing stronger. Cost overruns are PROBE-TIMEOUT, not N-A.
+
+- **ST-4 Junk-value inventory and boundary probe.** For every
+  total function with a documented off-domain value by
+  convention (Module.finrank = 0 on infinite rank, Nat
+  truncated subtraction, division by zero, partial operations
+  totalized) appearing in a headline statement or in the
+  artifact definitions that statement unfolds to (one to two
+  levels in), record: the junk value, whether the statement's
+  hypotheses rule the junk region out, and whether the source
+  claim covers that region. Boundary probe: where a
+  junk-region instance exists, exhibit it, restate the
+  theorem on it, and record what the statement says there
+  (nothing, a tautology, or real content). If the claim
+  covers a region the formal statement silently excludes or
+  trivializes through a junk value, the finding is WEAKENED
+  STATEMENT, an M1 finding with the region named. The same
+  treatment applies to artifact definitions built by
+  totalization (Classical.epsilon / choose with an else
+  default, if-exists-else): the definition's existence
+  predicate is itself an ST-1 obligation. The offenders
+  named in this section are the seed list; the list grows by
+  findings, each addition named in the note that found it and
+  appended to this section at the next hygiene review. The
+  depth here (one to two levels into definitions) is deeper
+  than ST-1's one level for predicates, because a predicate
+  is probed as a hypothesis in its own right while a junk
+  function hides inside the definitions a statement uses.
+  (AutoIP Sec. 5.2: their satisfiability tests would not
+  have caught the finrank case; this probe exists because
+  that failure class is disjoint from ST-1.)
+
+- **ST-5 Conditional antecedent status.** For a headline
+  theorem of the form H -> C where H is itself a substantial
+  proposition, record H's status at the pinned artifact. H
+  grades PROVED only if (a) it sits inside the comparator's
+  coverage at the pinned commit and passed there, or (b) it
+  comes from the trusted base (the pinned Mathlib commit)
+  with a clean #print axioms in the forge, or (c) the
+  sibling claim that owns H has passed its own kernel tier at
+  that exact commit. Anything else, including a theorem
+  imported from a named pinned dependency whose oleans
+  arrived by cache and were never kernel-rechecked in this
+  audit, grades UNVERIFIED-IMPORTED-ANTECEDENT. (The D1 rule
+  behind that grade, in one line: a leg fed by cached oleans
+  is receipted only by the comparator, because a build does
+  not kernel-recheck imported oleans.) (This formalizes the 2026-11-06
+  CFSG handling: the corollary's antecedent is TauCeti's
+  ClassificationStatement, proved in the cfsg package as
+  CFSG.Certified.classification_finite_simple_groups, a
+  separate registered claim.)
+
+Grading summary: ST-1 VACUOUS-PROVED caps the affected
+theorem at PARTIAL. A conditional headline theorem grades
+above PARTIAL only if its antecedent is witnessed
+non-degenerately under ST-1 + ST-2 (instance-level
+hypotheses) or graded PROVED under ST-5 (proposition-level
+hypotheses); otherwise it caps at PARTIAL. ST-1 UNWITNESSED,
+ST-2, ST-3, ST-4 findings are recorded in the note's M1
+section and move the verdict only when the affected
+hypothesis or region is the claim's headline condition or
+conclusion, per the loop's existing rules. A WEAKENED STATEMENT finding grades the affected
+theorem PARTIAL, unless the excluded region is the claim's
+central case, in which case the finding is recorded as a
+statement-level BREAK for that theorem. A headline theorem
+with a PROBE-TIMEOUT on a mandatory probe cannot grade clean
+PASS. No probe result upgrades a verdict.
+
+Addition-gate lines: (1) replaces the per-audit improvised
+vacuity work outside the BB6 scope and generalizes BB6 Vector
+A beyond closed invariant systems; the BB6 vectors stay in
+force for their stated scope, M1–M4 are unchanged, nothing
+else is retired. (2) Scope = headline theorems and their
+signature predicates in Lean formalization audits, prospective
+only, no backfill. (3) Review at the 2026-12-01 monthly
+hygiene run, or after its first full application, whichever
+is later; findings per probe are counted at the review, and a
+probe with zero findings in its first three applications is a
+retirement candidate there. The only automation is the forge
+probe files the workflow already knows how to run; no new
+standing machinery.
 
 ### Receipt requirement (adopted 2026-10-09)
 
