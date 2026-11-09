@@ -1,0 +1,278 @@
+name: block-anderson-forge
+
+# Independent build + axiom audit of JYin80/Lean-LSBA1d @
+# 6faccdc2d8dd1fae2c622ec697c1c2e747e389ac: Jun Yin, "Block
+# Anderson model localization scale in 1D" (arXiv:2611.09776,
+# Theorem 1.4: ell_{W,g,L} = min{WL, max{W, W^2 g^2}} up to
+# W^(+-tau), uniformly for g >= 0 and L >= 3). Pin:
+# incoming/block-anderson-localization-2611-09776/PIN.md.
+#
+# The author states (README, docs/PAPER-VS-LEAN.md) that the
+# Lean statements differ from the printed ones in documented
+# places and that every declaration depends only on propext,
+# Classical.choice, Quot.sound, with no sorry and no declared
+# axiom. The 2026-11-09 probe graded all 32 documented
+# divergences against the LaTeX: zero load-bearing at headline
+# level (see the PIN's M1 summary). This forge supplies the two
+# receipts the probe could not: a from-source build of all 478
+# files (285,871 lines) and an independent #print axioms pass
+# over the twelve headline declarations.
+#
+# No comparator config exists in this artifact (no
+# comparator.json, no challenge module), so there is no
+# comparator tier. The build compiles the author's sources
+# against the Mathlib dependency cache only; no author-built
+# oleans are consumed, so build + axioms is the top tier here
+# (D1: the weaker tier arises from author artifact caches,
+# which this run never touches). The Mathlib route taken
+# (cache vs source) is recorded in the evidence.
+#
+# Fail-closed on: wrong target SHA, wrong lean-file count,
+# wrong key file hashes, toolchain not v4.36.0-rc1,
+# lake-manifest drift during materialization, any
+# sorry/admit/native_decide anywhere, any axiom word anywhere
+# in the Lean sources (probe-verified zero). Build and axiom
+# steps capture their exit codes into the evidence and let the
+# Verdict step judge.
+#
+# Verdict: PASS = build exit 0 and all twelve headline axiom
+# listings present and within the standard three. PARTIAL =
+# build exit 0 but at least one listing missing or unclean.
+# FAIL = anything else (124 in the build exit is a time-box,
+# recorded as such).
+#
+# Manual dispatch only. Heavy leg on the desktop runner
+# (dispatched 2026-11-09 at the user's word: register both
+# probed claims, run both on the desktop runner). Time-boxes:
+# cache 1800 + build 21600 + axioms 1800 = 25200 s (420 min),
+# under the 720-minute job cap with room for setup, clone, and
+# scans.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: block-anderson-forge
+  cancel-in-progress: false
+
+env:
+  TARGET_SHA: 6faccdc2d8dd1fae2c622ec697c1c2e747e389ac
+  TARGET_REPO: https://github.com/JYin80/Lean-LSBA1d
+  EXPECTED_LEAN_FILES: "478"
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/block-anderson-forge.yml
+
+  forge:
+    needs: gate
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 720
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v4
+
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          set +e
+          mkdir -p ba-evidence
+          df -h . || true
+          echo "cpus: $(nproc || echo unknown)"
+          free -h || true
+          uname -a || true
+          exit 0
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Pin target commit (fail-closed)
+        run: |
+          set -euo pipefail
+          echo "$TARGET_SHA" | grep -Eq '^[0-9a-f]{40}$' || { echo "FAIL: TARGET_SHA is not 40 lowercase hex: $TARGET_SHA"; exit 1; }
+          rm -rf ba-forge
+          git clone "$TARGET_REPO" ba-forge
+          cd ba-forge
+          git checkout "$TARGET_SHA"
+          head_sha=$(git rev-parse HEAD)
+          echo "$head_sha" | tee ../ba-evidence/TARGET_HEAD
+          [ "$head_sha" = "$TARGET_SHA" ] || { echo "FAIL: cloned HEAD $head_sha != TARGET_SHA $TARGET_SHA"; exit 1; }
+          count=$(find . -path ./.git -prune -o -name '*.lean' -print | wc -l)
+          echo "lean files: $count (expected $EXPECTED_LEAN_FILES)"
+          [ "$count" -eq "$EXPECTED_LEAN_FILES" ] || { echo "FAIL: lean file count $count != $EXPECTED_LEAN_FILES"; exit 1; }
+
+      - name: Verify key hashes (fail-closed)
+        working-directory: ba-forge
+        run: |
+          set -euo pipefail
+          echo "a064da5a2ffaeba5ae8484469b0a8fdcc25f9248086c92d03aca607836bebddf  LSBA/Main/Endpoints.lean" | sha256sum -c -
+          echo "bfe44725a45604ae9f1c677e49072a54d11f155cd70cda8df69d4046433db627  LSBA/Main/UpperEndpoints.lean" | sha256sum -c -
+          echo "635a9cf54394a3e7f41815a3c898286c20332119575670f102e9104f097bf338  LSBA/Dyson/DistributionLemma.lean" | sha256sum -c -
+          echo "669367a9f1b713cf5631848da0e7ad62b5df47758c3b8b26acf840d4944f8d1b  LSBA/Upper/Interface.lean" | sha256sum -c -
+          echo "d581a24b57a4ae9e0b2132ca8ac7cc3ac336a9fc2751fe6b29414e2d434d54c4  lean-toolchain" | sha256sum -c -
+          echo "86ea313d5cbbb3d235812890e2b25c29493b1e6b5574946c9ed86bb579eb0f72  lakefile.toml" | sha256sum -c -
+          echo "8560758c1c956a66752d29bc01835acc8f084d4a551b98cc64e32e5c4e4f33ab  lake-manifest.json" | sha256sum -c -
+          echo "6cc4782a712d3becf2533bacc73243e5ae7210ce891d54e064ca35c4f8400ca0  README.md" | sha256sum -c -
+          echo "3924d31a4b407fc69d6da882a65976b79a3646f51a1e9d58b50e705b1a91470a  docs/PAPER-VS-LEAN.md" | sha256sum -c -
+
+      - name: Source policy scan (no sorry, no admit, no native_decide, no axiom)
+        working-directory: ba-forge
+        run: |
+          set -euo pipefail
+          if grep -rnw --include='*.lean' -e sorry -e admit -e native_decide . | grep -v '^\./\.lake/'; then
+            echo "FAIL: sorry/admit/native_decide in sources"
+            exit 1
+          fi
+          if grep -rnw --include='*.lean' -e axiom . | grep -v '^\./\.lake/'; then
+            echo "FAIL: axiom word in sources (probe-verified zero in the pinned tree)"
+            exit 1
+          fi
+          echo "scan clean: no sorry/admit/native_decide, no axiom word"
+
+      - name: Forge prerequisites (toolchain v4.36.0-rc1)
+        working-directory: ba-forge
+        run: |
+          set -euo pipefail
+          elan toolchain install leanprover/lean4:v4.36.0-rc1
+          lean --version | tee ../ba-evidence/lean-version.txt
+          grep -q "4.36.0-rc1" ../ba-evidence/lean-version.txt || { echo "SETUP-FAIL: toolchain is not v4.36.0-rc1"; exit 1; }
+
+      - name: Materialize dependencies and fetch the Mathlib cache
+        working-directory: ba-forge
+        run: |
+          set +e
+          timeout 1800 lake exe cache get > ../ba-evidence/cache-get.log 2>&1
+          code=$?
+          echo "$code" > ../ba-evidence/cache-exit.txt
+          if [ "$code" -eq 0 ]; then
+            echo "cache" > ../ba-evidence/route.txt
+          else
+            echo "source" > ../ba-evidence/route.txt
+          fi
+          tail -3 ../ba-evidence/cache-get.log
+          echo "cache exit: $code; route: $(cat ../ba-evidence/route.txt) (recorded; the build proceeds either way and the Verdict step judges)"
+          if echo "8560758c1c956a66752d29bc01835acc8f084d4a551b98cc64e32e5c4e4f33ab  lake-manifest.json" | sha256sum -c - >> ../ba-evidence/cache-get.log 2>&1; then
+            echo "manifest unchanged by materialization"
+          else
+            echo "FAIL: lake-manifest.json drifted during materialization (Lake resolved revisions other than the pinned ones)"
+            exit 1
+          fi
+
+      - name: Build the full library from source
+        working-directory: ba-forge
+        run: |
+          set +e
+          export RUST_MIN_STACK=1073741824
+          ulimit -s 1048576 2>/dev/null || true
+          timeout 21600 lake build > ../ba-evidence/build.log 2>&1
+          code=$?
+          echo "$code" > ../ba-evidence/build-exit.txt
+          grep -c "^Build completed\|Built" ../ba-evidence/build.log > ../ba-evidence/build-progress.txt || true
+          tail -3 ../ba-evidence/build.log
+          echo "build exit: $code (124 = time-boxed; recorded, the Verdict step judges)"
+
+      - name: Independent axiom check on the twelve headline declarations
+        working-directory: ba-forge
+        run: |
+          set +e
+          cat > AxiomAudit.lean <<'EOF'
+          import LSBA
+          #print axioms LSBA.main_ratio_endpoint
+          #print axioms LSBA.lower_ratio_endpoint
+          #print axioms LSBA.simultaneous_endpoint
+          #print axioms LSBA.lower_simultaneous_endpoint
+          #print axioms LSBA.lower_count_endpoint
+          #print axioms LSBA.upper_count_endpoint
+          #print axioms LSBA.rough_density_endpoint
+          #print axioms LSBA.distribution_lemma
+          #print axioms LSBA.strong_upper
+          #print axioms LSBA.sharp_small_upper
+          #print axioms LSBA.compact_upper
+          #print axioms LSBA.large_upper
+          EOF
+          timeout 1800 lake env lean AxiomAudit.lean > ../ba-evidence/axioms.txt 2>&1
+          code=$?
+          echo "$code" > ../ba-evidence/axioms-exit.txt
+          cat ../ba-evidence/axioms.txt
+          echo "axiom audit exit: $code (recorded, the Verdict step judges)"
+
+      - name: Verdict (fail-closed)
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          ev = 'ba-evidence/'
+          def read(name, default=''):
+              try:
+                  return open(ev + name).read()
+              except Exception:
+                  return default
+          def exitcode(name):
+              t = read(name).strip()
+              return int(t) if t.lstrip('-').isdigit() else None
+          route = read('route.txt', 'unknown').strip() or 'unknown'
+          build_exit = exitcode('build-exit.txt')
+          print(f'Mathlib route: {route}')
+          print(f'library build exit: {build_exit}')
+          if build_exit == 124:
+              print('build was TIME-BOXED (21600 s): the library did not finish')
+          txt = read('axioms.txt')
+          axioms_ok = True
+          if 'sorryAx' in txt:
+              axioms_ok = False
+              print('FAIL: sorryAx present in an axiom listing')
+          std = {'propext', 'Classical.choice', 'Quot.sound'}
+          listings = {}
+          for name, ax in re.findall(r"'([\w.]+)' depends on axioms: \[(.*?)\]", txt, re.DOTALL):
+              listings[name] = {a.strip() for a in ax.replace('\n', ' ').split(',') if a.strip()}
+          for name in re.findall(r"'([\w.]+)' does not depend on any axioms", txt):
+              listings[name] = set()
+          headlines = ['LSBA.main_ratio_endpoint', 'LSBA.lower_ratio_endpoint',
+              'LSBA.simultaneous_endpoint', 'LSBA.lower_simultaneous_endpoint',
+              'LSBA.lower_count_endpoint', 'LSBA.upper_count_endpoint',
+              'LSBA.rough_density_endpoint', 'LSBA.distribution_lemma',
+              'LSBA.strong_upper', 'LSBA.sharp_small_upper',
+              'LSBA.compact_upper', 'LSBA.large_upper']
+          for thm in headlines:
+              s = listings.get(thm)
+              if s is None:
+                  axioms_ok = False
+                  print(f'FAIL: no axiom listing for {thm}')
+              elif s - std:
+                  axioms_ok = False
+                  print(f'FAIL: {thm}: axioms outside the standard three: {sorted(s - std)}')
+              else:
+                  print(f'{thm}: axioms within the standard three ({sorted(s)})')
+          if build_exit == 0 and axioms_ok:
+              overall = 'PASS'
+          elif build_exit == 0:
+              overall = 'PARTIAL'
+          else:
+              overall = 'FAIL'
+          print(f'VERDICT: {overall}')
+          with open(ev + 'verdict.txt', 'w') as f:
+              f.write(f'ROUTE: {route}\nBUILD-EXIT: {build_exit}\nVERDICT: {overall}\n')
+          sys.exit(0 if overall == 'PASS' else 1)
+          EOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: block-anderson-forge-evidence
+          path: ba-evidence
+
+      - name: Leave shared checkout clean (meta-rule)
+        if: always()
+        run: |
+          rm -rf ba-forge
+          git checkout --force HEAD 2>/dev/null || true

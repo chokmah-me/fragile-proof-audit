@@ -1,0 +1,338 @@
+name: spectral-graph-forge
+
+# Independent recompile + axiom sample of preuves_spectrales.zip
+# (sha256-pinned below): Tristan Cazenave, arXiv:2611.03879 --
+# 79,505 of 305,755 auto-generated spectral-graph conjectures
+# "verified end to end in Lean". Pin:
+# incoming/spectral-graph-conjectures-2611-03879/PIN.md.
+#
+# The author's own verification route (lean/verifier_tout.sh in
+# the archive) is: lake exe cache get, lake build, then per-file
+# `lake env lean` over the 3,650 standalone files in
+# lean/Preuves/ (they are not a Lake target; `lake build`
+# compiles only the 23-file SpectralLean library). This forge
+# mirrors that route on the pinned bytes and counts a file
+# compiled only on exit 0 with no "error" in its log, exactly
+# the author's criterion.
+#
+# The 2026-11-09 probe reconciled the counts before any build:
+# the 79,505 verifiee = oui ids are set-equal to the g theorem
+# declarations on disk, the definitions in
+# SpectralLean/Invariants.lean are the standard ones, and the
+# exporter applies three true-but-unproved translation atoms
+# (rank(L) -> n - 1, tr(L) -> 2m, tr(A) -> 0 under
+# connectedness), so any PASS reads "statements modulo these
+# three rewrites" (see the PIN). A 22-row CSV bookkeeping GAP in
+# Lot07_fms is the author's, recorded in the PIN.
+#
+# Extra receipt beyond the author's route: a #print axioms
+# sample -- one Preuves file per lot (the alphabetically first
+# file declaring a g theorem; Lot05 declares none) plus the
+# Lot07 anomaly file F18099 -- each copied with axiom prints
+# appended and elaborated under `lake env lean`. Every sampled
+# listing must sit within the standard three, with no sorryAx.
+#
+# Fail-closed on: archive sha256 mismatch, wrong lean-file
+# counts (3,673 total / 3,650 Preuves), wrong key file hashes,
+# toolchain not v4.36.0-rc1, lake-manifest drift during
+# materialization, any sorry/admit/native_decide/axiom word in
+# the Lean sources (probe-verified zero). Build and compile
+# steps capture exit codes into the evidence and let the
+# Verdict step judge.
+#
+# Verdict: PASS = library build exit 0, all 3,650 Preuves files
+# compiled, axiom sample complete and clean. PARTIAL = compile
+# fully green but the axiom sample incomplete or unclean.
+# FAIL = anything else (a time-boxed step records 124).
+#
+# Manual dispatch only. Heavy leg on the desktop runner
+# (dispatched 2026-11-09 at the user's word: register both
+# probed claims, run both on the desktop runner). Time-boxes:
+# cache 1800 + library 3600 + preuves 21600 + sample 5400 =
+# 32400 s (540 min), under the 720-minute job cap with room for
+# fetch, extraction, and scans.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: spectral-graph-forge
+  cancel-in-progress: false
+
+env:
+  ARCHIVE_URL: https://www.lamsade.dauphine.fr/~cazenave/papers/preuves_spectrales.zip
+  ARCHIVE_SHA256: aa113f4a64c0a05260e381987de19c8ad7d66f8c372639f2543f1dd08c6ed500
+  EXPECTED_LEAN_FILES: "3673"
+  EXPECTED_PREUVES: "3650"
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/spectral-graph-forge.yml
+
+  forge:
+    needs: gate
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 720
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v4
+
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          set +e
+          mkdir -p spectral-evidence spectral-forge
+          df -h . || true
+          echo "cpus: $(nproc || echo unknown)"
+          free -h || true
+          uname -a || true
+          exit 0
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Fetch and pin the archive (fail-closed)
+        run: |
+          set -euo pipefail
+          curl -fsSL -o spectral-evidence/preuves_spectrales.zip "$ARCHIVE_URL"
+          echo "$ARCHIVE_SHA256  spectral-evidence/preuves_spectrales.zip" | sha256sum -c -
+          cp spectral-evidence/preuves_spectrales.zip spectral-evidence/archive-pinned.zip
+          python3 -c "import zipfile; zipfile.ZipFile('spectral-evidence/preuves_spectrales.zip').extractall('spectral-raw')"
+          rm -rf spectral-forge
+          mkdir -p spectral-forge
+          cp -r spectral-raw/preuves_spectrales spectral-forge/
+          rm -rf spectral-raw
+          total=$(find spectral-forge/preuves_spectrales/lean -name '*.lean' | wc -l)
+          preuves=$(find spectral-forge/preuves_spectrales/lean/Preuves -name '*.lean' | wc -l)
+          echo "lean files: $total (expected $EXPECTED_LEAN_FILES); Preuves: $preuves (expected $EXPECTED_PREUVES)" | tee spectral-evidence/file-counts.txt
+          [ "$total" -eq "$EXPECTED_LEAN_FILES" ] || { echo "FAIL: lean file count $total != $EXPECTED_LEAN_FILES"; exit 1; }
+          [ "$preuves" -eq "$EXPECTED_PREUVES" ] || { echo "FAIL: Preuves count $preuves != $EXPECTED_PREUVES"; exit 1; }
+
+      - name: Verify key hashes (fail-closed)
+        working-directory: spectral-forge/preuves_spectrales
+        run: |
+          set -euo pipefail
+          echo "0fe17238cd725ea6237bb24d18c6da48e9d17488b26d79c682ed8c8bcad46aec  index_conjectures.csv" | sha256sum -c -
+          echo "4fc93e985005fee78228b2a5025529b20d7e95ad1b3e6d148d99d1b6857b44a9  LISEZMOI.md" | sha256sum -c -
+          echo "199b030dcc86af064dd73e22107e016f3aac5c901ce593161c347734f49d33cb  prouveur/lean_export.py" | sha256sum -c -
+          echo "bbd66c4854db14410aa46fc804ec0ffb7eaeb2154f6186851cb2fa503da02cd5  lean/SpectralLean/Invariants.lean" | sha256sum -c -
+          echo "2cddfb8e86dd4a155936e94a3ece29b8b5c5ab9e8db447d58ecd13d170d62250  lean/SpectralLean.lean" | sha256sum -c -
+          echo "1f900b4bce85bc2655cc0eeb4e6609738a28b310830fa82b586f407f972166f7  lean/SpectralLean/Prelude.lean" | sha256sum -c -
+          echo "d581a24b57a4ae9e0b2132ca8ac7cc3ac336a9fc2751fe6b29414e2d434d54c4  lean/lean-toolchain" | sha256sum -c -
+          echo "243e37f92edde2bf5881e4acf71cdb42e4eff95a500f1dad9b60332b133d2857  lean/lakefile.toml" | sha256sum -c -
+          echo "22990f2c1c8e1a7b6e19a6ccd80a0e4388b256b8c625b92a0087cd2690acef5e  lean/lake-manifest.json" | sha256sum -c -
+          echo "f2a07499d7f782ae5f83d95af1ea6e9eddec4e574ff1cb0020a948b70d1b60a2  lean/verifier_tout.sh" | sha256sum -c -
+
+      - name: Source policy scan (no sorry, no admit, no native_decide, no axiom)
+        working-directory: spectral-forge/preuves_spectrales/lean
+        run: |
+          set -euo pipefail
+          if grep -rnw --include='*.lean' -e sorry -e admit -e native_decide . | grep -v '^\./\.lake/'; then
+            echo "FAIL: sorry/admit/native_decide in sources"
+            exit 1
+          fi
+          if grep -rnw --include='*.lean' -e axiom . | grep -v '^\./\.lake/'; then
+            echo "FAIL: axiom word in sources (probe-verified zero in the pinned tree)"
+            exit 1
+          fi
+          grep -rh '^theorem g' Preuves --include='*.lean' | wc -l > ../../../spectral-evidence/g-signatures.txt
+          echo "scan clean: no sorry/admit/native_decide, no axiom word; g signatures: $(cat ../../../spectral-evidence/g-signatures.txt)"
+
+      - name: Forge prerequisites (toolchain v4.36.0-rc1)
+        working-directory: spectral-forge/preuves_spectrales/lean
+        run: |
+          set -euo pipefail
+          elan toolchain install leanprover/lean4:v4.36.0-rc1
+          lean --version | tee ../../../spectral-evidence/lean-version.txt
+          grep -q "4.36.0-rc1" ../../../spectral-evidence/lean-version.txt || { echo "SETUP-FAIL: toolchain is not v4.36.0-rc1"; exit 1; }
+
+      - name: Fetch the Mathlib cache
+        working-directory: spectral-forge/preuves_spectrales/lean
+        run: |
+          set +e
+          timeout 1800 lake exe cache get > ../../../spectral-evidence/cache-get.log 2>&1
+          code=$?
+          echo "$code" > ../../../spectral-evidence/cache-exit.txt
+          if [ "$code" -eq 0 ]; then
+            echo "cache" > ../../../spectral-evidence/route.txt
+          else
+            echo "source" > ../../../spectral-evidence/route.txt
+          fi
+          tail -3 ../../../spectral-evidence/cache-get.log
+          echo "cache exit: $code; route: $(cat ../../../spectral-evidence/route.txt) (recorded; the build proceeds either way and the Verdict step judges)"
+          if echo "22990f2c1c8e1a7b6e19a6ccd80a0e4388b256b8c625b92a0087cd2690acef5e  lake-manifest.json" | sha256sum -c - >> ../../../spectral-evidence/cache-get.log 2>&1; then
+            echo "manifest unchanged by materialization"
+          else
+            echo "FAIL: lake-manifest.json drifted during materialization (Lake resolved revisions other than the pinned ones)"
+            exit 1
+          fi
+
+      - name: Build the SpectralLean library
+        working-directory: spectral-forge/preuves_spectrales/lean
+        run: |
+          set +e
+          export RUST_MIN_STACK=1073741824
+          ulimit -s 1048576 2>/dev/null || true
+          timeout 3600 lake build > ../../../spectral-evidence/build-lib.log 2>&1
+          code=$?
+          echo "$code" > ../../../spectral-evidence/build-lib-exit.txt
+          tail -3 ../../../spectral-evidence/build-lib.log
+          echo "library build exit: $code (124 = time-boxed; recorded, the Verdict step judges)"
+
+      - name: Compile every Preuves file (author's route, per-file exit codes)
+        working-directory: spectral-forge/preuves_spectrales/lean
+        run: |
+          set +e
+          export EV="$GITHUB_WORKSPACE/spectral-evidence"
+          mkdir -p "$EV/preuves-status" "$EV/preuves-logs"
+          cat > "$EV/compile_one.sh" <<'EOS'
+          #!/bin/sh
+          f="$1"
+          key=$(printf '%s' "$f" | tr '/' '_')
+          log="$EV/preuves-logs/$key.log"
+          if lake env lean "$f" > "$log" 2>&1 && ! grep -q "error" "$log"; then
+            echo "OK $f" > "$EV/preuves-status/$key.txt"
+            rm -f "$log"
+          else
+            echo "FAIL $f" > "$EV/preuves-status/$key.txt"
+          fi
+          exit 0
+          EOS
+          chmod +x "$EV/compile_one.sh"
+          P=$(nproc || echo 8)
+          [ "$P" -gt 8 ] && P=8
+          echo "parallelism: $P"
+          find Preuves -name '*.lean' | sort > "$EV/preuves-list.txt"
+          timeout 21600 xargs -P "$P" -I{} sh "$EV/compile_one.sh" {} < "$EV/preuves-list.txt"
+          code=$?
+          echo "$code" > "$EV/preuves-exit.txt"
+          ok=$(grep -rh '^OK ' "$EV/preuves-status" 2>/dev/null | wc -l)
+          fail=$(grep -rh '^FAIL ' "$EV/preuves-status" 2>/dev/null | wc -l)
+          printf 'total=%s ok=%s fail=%s\n' "$((ok + fail))" "$ok" "$fail" > "$EV/preuves-counts.txt"
+          cat "$EV/preuves-counts.txt"
+          echo "preuves compile wrapper exit: $code (124 = time-boxed; counts recorded, the Verdict step judges)"
+
+      - name: Axiom sample (one file per lot plus the Lot07 anomaly file)
+        working-directory: spectral-forge/preuves_spectrales/lean
+        run: |
+          set +e
+          export EV="$GITHUB_WORKSPACE/spectral-evidence"
+          mkdir -p "$EV/axiom-sample"
+          samples=""
+          for d in Preuves/Lot01 Preuves/Lot02 Preuves/Lot03_entiers Preuves/Lot04 Preuves/Lot05 Preuves/Lot06_entiers Preuves/Lot07_fms Preuves/Lot08_yang_lu Preuves/Lot09_puissances_reelles Preuves/Lot10_certificats_corriges; do
+            f=$(grep -l '^theorem g' "$d"/*.lean 2>/dev/null | sort | head -1)
+            if [ -n "$f" ]; then samples="$samples $f"; fi
+          done
+          samples="$samples Preuves/Lot07_fms/F18099.lean"
+          samples=$(printf '%s\n' $samples | sort -u)
+          echo "sample files:" | tee "$EV/axiom-sample/summary.txt"
+          printf '%s\n' $samples | tee -a "$EV/axiom-sample/summary.txt"
+          for f in $samples; do
+            if [ ! -f "$f" ]; then echo "MISSING $f" >> "$EV/axiom-sample/summary.txt"; continue; fi
+            key=$(basename "$f" .lean)
+            cp "$f" AxiomSample.lean
+            grep -o '^theorem [A-Za-z0-9_]*' "$f" | awk '{print "#print axioms " $2}' >> AxiomSample.lean
+            timeout 900 lake env lean AxiomSample.lean > "$EV/axiom-sample/$key.log" 2>&1
+            echo "$key exit: $?" >> "$EV/axiom-sample/summary.txt"
+            rm -f AxiomSample.lean
+          done
+          cat "$EV/axiom-sample/summary.txt"
+          echo "axiom sample done (the Verdict step judges the listings)"
+
+      - name: Verdict (fail-closed)
+        run: |
+          python3 - <<'EOF'
+          import os, re, sys
+          ev = 'spectral-evidence/'
+          def read(name, default=''):
+              try:
+                  return open(ev + name).read()
+              except Exception:
+                  return default
+          def exitcode(name):
+              t = read(name).strip()
+              return int(t) if t.lstrip('-').isdigit() else None
+          route = read('route.txt', 'unknown').strip() or 'unknown'
+          lib_exit = exitcode('build-lib-exit.txt')
+          print(f'Mathlib route: {route}')
+          print(f'library build exit: {lib_exit}')
+          if lib_exit == 124:
+              print('library build was TIME-BOXED (3600 s)')
+          counts = read('preuves-counts.txt')
+          m = re.search(r'total=(\d+) ok=(\d+) fail=(\d+)', counts)
+          total = ok = fail = -1
+          if m:
+              total, ok, fail = (int(x) for x in m.groups())
+          print(f'preuves compiled: ok={ok} fail={fail} total={total} (expected total=3650, fail=0)')
+          preuves_exit = exitcode('preuves-exit.txt')
+          if preuves_exit == 124:
+              print('preuves compile was TIME-BOXED (21600 s)')
+          std = {'propext', 'Classical.choice', 'Quot.sound'}
+          sample_dir = ev + 'axiom-sample'
+          sample_files = 0
+          sample_ok = True
+          try:
+              logs = sorted(f for f in os.listdir(sample_dir) if f.endswith('.log'))
+          except Exception:
+              logs = []
+          for lf in logs:
+              txt = read('axiom-sample/' + lf)
+              sample_files += 1
+              if 'sorryAx' in txt:
+                  sample_ok = False
+                  print(f'FAIL: sorryAx in sample {lf}')
+                  continue
+              listings = {}
+              for name, ax in re.findall(r"'([\w.]+)' depends on axioms: \[(.*?)\]", txt, re.DOTALL):
+                  listings[name] = {a.strip() for a in ax.replace('\n', ' ').split(',') if a.strip()}
+              for name in re.findall(r"'([\w.]+)' does not depend on any axioms", txt):
+                  listings[name] = set()
+              if not listings:
+                  sample_ok = False
+                  print(f'FAIL: no axiom listings in sample {lf}')
+                  continue
+              for name, s in listings.items():
+                  if s - std:
+                      sample_ok = False
+                      print(f'FAIL: {name} ({lf}): axioms outside the standard three: {sorted(s - std)}')
+                  else:
+                      print(f'{name} ({lf}): axioms within the standard three ({sorted(s)})')
+          print(f'axiom sample files with logs: {sample_files} (expected at least 9: one per lot with g theorems, plus F18099 if distinct)')
+          if sample_files < 9:
+              sample_ok = False
+              print('FAIL: axiom sample incomplete')
+          compiled = (lib_exit == 0 and total == 3650 and ok == 3650 and fail == 0)
+          if compiled and sample_ok:
+              overall = 'PASS'
+          elif compiled:
+              overall = 'PARTIAL'
+          else:
+              overall = 'FAIL'
+          print(f'VERDICT: {overall}')
+          with open(ev + 'verdict.txt', 'w') as f:
+              f.write(f'ROUTE: {route}\nLIB-EXIT: {lib_exit}\nPREUVES-OK: {ok}\nPREUVES-FAIL: {fail}\nSAMPLE-FILES: {sample_files}\nVERDICT: {overall}\n')
+          sys.exit(0 if overall == 'PASS' else 1)
+          EOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spectral-graph-forge-evidence
+          path: spectral-evidence
+
+      - name: Leave shared checkout clean (meta-rule)
+        if: always()
+        run: |
+          rm -rf spectral-forge spectral-evidence/preuves-status spectral-evidence/preuves-logs
+          git checkout --force HEAD 2>/dev/null || true
