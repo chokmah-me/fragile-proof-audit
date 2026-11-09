@@ -113,9 +113,9 @@ Key files (sha256):
    receipt is the per-file compile itself (each file elaborated
    by the toolchain's Lean from an empty environment against
    the built library) plus a `#print axioms` sample: copies of
-   sampled Preuves files (one per lot, plus the Lot07 anomaly
-   file F18099) with axiom prints appended, run under
-   `lake env lean`.
+   sampled Preuves files (one per lot; the Lot07 pick is
+   P0000.lean, which contains the anomaly theorem g18099) with
+   axiom prints appended, run under `lake env lean`.
 3. **Archive is the only source.** The forge downloads the zip
    from the author's site and verifies the pinned sha256 before
    extraction; a changed or unreachable archive fails the run

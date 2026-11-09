@@ -27,10 +27,27 @@ name: spectral-graph-forge
 #
 # Extra receipt beyond the author's route: a #print axioms
 # sample -- one Preuves file per lot (the alphabetically first
-# file declaring a g theorem; Lot05 declares none) plus the
-# Lot07 anomaly file F18099 -- each copied with axiom prints
-# appended and elaborated under `lake env lean`. Every sampled
-# listing must sit within the standard three, with no sorryAx.
+# file declaring a g theorem; Lot05 declares none). The Lot07
+# pick is P0000.lean, which carries the anomaly theorem g18099
+# (one of the 22 CSV-lag rows). Every sampled listing must sit
+# within the standard three, with no sorryAx.
+#
+# Run 2 (42680041490, 2026-11-09) failed at the Verdict step
+# with LIB-EXIT 124, 0/3,650 compiled: the Mathlib cache fetch
+# timed out at its 1800 s box while still fetching Mathlib
+# itself, so the run fell to the source route, and the library
+# build hit 4,690/18,029 Mathlib modules at its 3600 s box.
+# Every Preuves file then failed on the missing Mathlib.olean.
+# Run 3 raises the cache box to 3600 s and the library box to
+# 14400 s (the observed rate, 4,690 modules in 3600 s, puts a
+# full source build at ~3.8 h), cuts the preuves box to 10800 s
+# (the author's rate, ~10 s/file at P=8, needs ~76 min), and
+# fixes two sample-step bugs the run-2 evidence exposed: the
+# sample log key is now the lot-prefixed path (nine P0000.lean
+# files from nine lots previously overwrote one P0000.log, so
+# the verdict counted only 2 sample files), and the hardcoded
+# F18099.lean path is dropped (no such file; g18099 is in
+# Lot07's P0000.lean, already sampled).
 #
 # Fail-closed on: archive sha256 mismatch, wrong lean-file
 # counts (3,673 total / 3,650 Preuves), wrong key file hashes,
@@ -48,8 +65,8 @@ name: spectral-graph-forge
 # Manual dispatch only. Heavy leg on the desktop runner
 # (dispatched 2026-11-09 at the user's word: register both
 # probed claims, run both on the desktop runner). Time-boxes:
-# cache 1800 + library 3600 + preuves 21600 + sample 5400 =
-# 32400 s (540 min), under the 720-minute job cap with room for
+# cache 3600 + library 14400 + preuves 10800 + sample 9000 =
+# 37800 s (630 min), under the 720-minute job cap with room for
 # fetch, extraction, and scans.
 
 on:
@@ -160,7 +177,7 @@ jobs:
         working-directory: spectral-forge/preuves_spectrales/lean
         run: |
           set +e
-          timeout 1800 lake exe cache get > ../../../spectral-evidence/cache-get.log 2>&1
+          timeout 3600 lake exe cache get > ../../../spectral-evidence/cache-get.log 2>&1
           code=$?
           echo "$code" > ../../../spectral-evidence/cache-exit.txt
           if [ "$code" -eq 0 ]; then
@@ -183,7 +200,7 @@ jobs:
           set +e
           export RUST_MIN_STACK=1073741824
           ulimit -s 1048576 2>/dev/null || true
-          timeout 3600 lake build > ../../../spectral-evidence/build-lib.log 2>&1
+          timeout 14400 lake build > ../../../spectral-evidence/build-lib.log 2>&1
           code=$?
           echo "$code" > ../../../spectral-evidence/build-lib-exit.txt
           tail -3 ../../../spectral-evidence/build-lib.log
@@ -213,7 +230,7 @@ jobs:
           [ "$P" -gt 8 ] && P=8
           echo "parallelism: $P"
           find Preuves -name '*.lean' | sort > "$EV/preuves-list.txt"
-          timeout 21600 xargs -P "$P" -I{} sh "$EV/compile_one.sh" {} < "$EV/preuves-list.txt"
+          timeout 10800 xargs -P "$P" -I{} sh "$EV/compile_one.sh" {} < "$EV/preuves-list.txt"
           code=$?
           echo "$code" > "$EV/preuves-exit.txt"
           ok=$(grep -rh '^OK ' "$EV/preuves-status" 2>/dev/null | wc -l)
@@ -222,7 +239,7 @@ jobs:
           cat "$EV/preuves-counts.txt"
           echo "preuves compile wrapper exit: $code (124 = time-boxed; counts recorded, the Verdict step judges)"
 
-      - name: Axiom sample (one file per lot plus the Lot07 anomaly file)
+      - name: Axiom sample (one file per lot)
         working-directory: spectral-forge/preuves_spectrales/lean
         run: |
           set +e
@@ -233,13 +250,12 @@ jobs:
             f=$(grep -l '^theorem g' "$d"/*.lean 2>/dev/null | sort | head -1)
             if [ -n "$f" ]; then samples="$samples $f"; fi
           done
-          samples="$samples Preuves/Lot07_fms/F18099.lean"
           samples=$(printf '%s\n' $samples | sort -u)
           echo "sample files:" | tee "$EV/axiom-sample/summary.txt"
           printf '%s\n' $samples | tee -a "$EV/axiom-sample/summary.txt"
           for f in $samples; do
             if [ ! -f "$f" ]; then echo "MISSING $f" >> "$EV/axiom-sample/summary.txt"; continue; fi
-            key=$(basename "$f" .lean)
+            key=$(printf '%s' "$f" | tr '/' '_')
             cp "$f" AxiomSample.lean
             grep -o '^theorem [A-Za-z0-9_]*' "$f" | awk '{print "#print axioms " $2}' >> AxiomSample.lean
             timeout 900 lake env lean AxiomSample.lean > "$EV/axiom-sample/$key.log" 2>&1
@@ -267,7 +283,7 @@ jobs:
           print(f'Mathlib route: {route}')
           print(f'library build exit: {lib_exit}')
           if lib_exit == 124:
-              print('library build was TIME-BOXED (3600 s)')
+              print('library build was TIME-BOXED (14400 s)')
           counts = read('preuves-counts.txt')
           m = re.search(r'total=(\d+) ok=(\d+) fail=(\d+)', counts)
           total = ok = fail = -1
@@ -276,7 +292,7 @@ jobs:
           print(f'preuves compiled: ok={ok} fail={fail} total={total} (expected total=3650, fail=0)')
           preuves_exit = exitcode('preuves-exit.txt')
           if preuves_exit == 124:
-              print('preuves compile was TIME-BOXED (21600 s)')
+              print('preuves compile was TIME-BOXED (10800 s)')
           std = {'propext', 'Classical.choice', 'Quot.sound'}
           sample_dir = ev + 'axiom-sample'
           sample_files = 0
@@ -307,7 +323,7 @@ jobs:
                       print(f'FAIL: {name} ({lf}): axioms outside the standard three: {sorted(s - std)}')
                   else:
                       print(f'{name} ({lf}): axioms within the standard three ({sorted(s)})')
-          print(f'axiom sample files with logs: {sample_files} (expected at least 9: one per lot with g theorems, plus F18099 if distinct)')
+          print(f'axiom sample files with logs: {sample_files} (expected at least 9: one per lot with g theorems)')
           if sample_files < 9:
               sample_ok = False
               print('FAIL: axiom sample incomplete')
