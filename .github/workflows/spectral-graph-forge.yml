@@ -32,22 +32,17 @@ name: spectral-graph-forge
 # (one of the 22 CSV-lag rows). Every sampled listing must sit
 # within the standard three, with no sorryAx.
 #
-# Run 2 (42680041490, 2026-11-09) failed at the Verdict step
-# with LIB-EXIT 124, 0/3,650 compiled: the Mathlib cache fetch
-# timed out at its 1800 s box while still fetching Mathlib
-# itself, so the run fell to the source route, and the library
-# build hit 4,690/18,029 Mathlib modules at its 3600 s box.
-# Every Preuves file then failed on the missing Mathlib.olean.
-# Run 3 raises the cache box to 3600 s and the library box to
-# 14400 s (the observed rate, 4,690 modules in 3600 s, puts a
-# full source build at ~3.8 h), cuts the preuves box to 10800 s
-# (the author's rate, ~10 s/file at P=8, needs ~76 min), and
-# fixes two sample-step bugs the run-2 evidence exposed: the
-# sample log key is now the lot-prefixed path (nine P0000.lean
-# files from nine lots previously overwrote one P0000.log, so
-# the verdict counted only 2 sample files), and the hardcoded
-# F18099.lean path is dropped (no such file; g18099 is in
-# Lot07's P0000.lean, already sampled).
+# Run 3 (42714241902, 2026-11-10) cleared the run-2 failure
+# point (cache fetch exit 0, library build exit 0) but failed
+# at the Verdict step with PREUVES-OK 716 / FAIL 0: the
+# preuves compile timed out at its 10800 s box after only
+# Lot01 (716 files, 0 fail), because the per-file rate on this
+# runner is ~716 files per 10800 s, far slower than the
+# author's ~10 s/file estimate (each `lake env lean` loads
+# the whole Mathlib+SpectralLean olean set). The 9 axiom
+# samples were all clean (standard three only, no sorryAx).
+# Run 4 raises the preuves box to 72000 s (the observed rate
+# puts 3,650 files at ~55,000 s) and the job cap to 1680 min.
 #
 # Fail-closed on: archive sha256 mismatch, wrong lean-file
 # counts (3,673 total / 3,650 Preuves), wrong key file hashes,
@@ -65,8 +60,8 @@ name: spectral-graph-forge
 # Manual dispatch only. Heavy leg on the desktop runner
 # (dispatched 2026-11-09 at the user's word: register both
 # probed claims, run both on the desktop runner). Time-boxes:
-# cache 3600 + library 14400 + preuves 10800 + sample 9000 =
-# 37800 s (630 min), under the 720-minute job cap with room for
+# cache 3600 + library 14400 + preuves 72000 + sample 9000 =
+# 99000 s (27.5 h), under the 1680-minute job cap with room for
 # fetch, extraction, and scans.
 
 on:
@@ -97,7 +92,7 @@ jobs:
   forge:
     needs: gate
     runs-on: [self-hosted, desktop]
-    timeout-minutes: 720
+    timeout-minutes: 1680
     steps:
       - name: Check out this repo
         uses: actions/checkout@v4
@@ -230,7 +225,7 @@ jobs:
           [ "$P" -gt 8 ] && P=8
           echo "parallelism: $P"
           find Preuves -name '*.lean' | sort > "$EV/preuves-list.txt"
-          timeout 10800 xargs -P "$P" -I{} sh "$EV/compile_one.sh" {} < "$EV/preuves-list.txt"
+          timeout 72000 xargs -P "$P" -I{} sh "$EV/compile_one.sh" {} < "$EV/preuves-list.txt"
           code=$?
           echo "$code" > "$EV/preuves-exit.txt"
           ok=$(grep -rh '^OK ' "$EV/preuves-status" 2>/dev/null | wc -l)
@@ -292,7 +287,7 @@ jobs:
           print(f'preuves compiled: ok={ok} fail={fail} total={total} (expected total=3650, fail=0)')
           preuves_exit = exitcode('preuves-exit.txt')
           if preuves_exit == 124:
-              print('preuves compile was TIME-BOXED (10800 s)')
+              print('preuves compile was TIME-BOXED (72000 s)')
           std = {'propext', 'Classical.choice', 'Quot.sound'}
           sample_dir = ev + 'axiom-sample'
           sample_files = 0
