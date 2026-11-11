@@ -43,18 +43,31 @@ name: cfsg-corollary-forge
 #     claim, harvest 2026-10-27); that grading belongs to the
 #     audit note, not to this workflow.
 #
-# Dependency route: an in-workflow disk probe decides. The author's
-# cache script (lake-cache-get-fast.sh, fetched from the author's
-# endpoint and sha256-verified before execution; it hash-checks
-# every artifact and discards its fetch whole on any failure)
-# restores every module of CFSG + TauCeti + Mathlib, about 230 GB,
-# Linux x86_64 only. If free disk is under the threshold, or the
-# script fails, the route is a source build of the needed closures.
-# The route taken is recorded in the evidence either way.
-# Run 3 (2026-11-07) showed the script exits 0 even when its fetch
-# fails and discards (723 artifacts missing, 106 hash failures of
-# 240221), so the route is decided by the fetch log ("did not
-# complete cleanly" / "discarding"), never by the exit code alone.
+# Dependency route (run 6, 2026-11-11): seeded source. Both
+# earlier fetch routes failed on transport, never on a kernel
+# judgment. (a) Lake's own git transport: Lake clones AxiomMath/CFSG
+# as a partial (promisor) clone and its lazy blob fetches kept
+# disconnecting on the laptop (run 5, 2026-11-08: "fetch-pack:
+# unexpected disconnect while reading sideband packet", "fatal:
+# early EOF", "could not fetch 171d98aa72ce48cef6af6baf9bfc965d8cb7fba9
+# from promisor remote"); every later Lake step retried the same
+# fetch and died on it (materialize 124, cache 124, build-lib 124,
+# comparator / Comparator build / imports / axioms all exit 1).
+# (b) The author's ~230 GB artifact cache (lake-cache-get-fast.sh):
+# run 3's fetch was discarded after hash failures (723 artifacts
+# missing, 106 hash failures of 240221, script exit still 0), and
+# run 5's script timed out at its 3300 s box (exit 124) on the
+# laptop's 884 GB of free disk. Run 6 therefore materializes the
+# eleven manifest dependencies with the codeload seeding pattern
+# (the SemantEq route, seeded on this campaign's VM 2026-10-26):
+# per package, git init + fetch --depth 1 --filter=blob:none of the
+# pinned rev (commit and tree objects only, no blobs, no promisor),
+# the codeload tarball of the same rev extracted over it, and a
+# fail-closed assert that git write-tree equals the rev's tree
+# before HEAD is pinned to the rev. Lake then finds every package
+# already at its manifest revision and fetches nothing. The build
+# itself is a source build of the needed closures, as in run 4
+# (desktop: library + Checks built in 96.5 min once materialized).
 #
 # Trust order: the corollary library and the author's Checks target
 # build first (the conditional leg's receipts: the library's
@@ -69,8 +82,11 @@ name: cfsg-corollary-forge
 # Fail-closed on: wrong target SHA, wrong lean-file count, wrong
 # key file hashes, toolchain not v4.35.0-rc3, missing nanoda_bin,
 # unusable bwrap, lake-manifest drift during dependency
-# materialization, cache script hash mismatch (route falls back,
-# never executes), forbidden proof constructs anywhere except the
+# materialization, a seeded package whose extracted tree does not
+# hash to its pinned rev's tree (the seeding step is gating: no
+# later Lake step runs after a seeding failure, so a transport
+# failure cannot burn the build boxes retrying git fetches),
+# forbidden proof constructs anywhere except the
 # exactly 2 sorries in Comparator/Challenge.lean, any axiom
 # declaration in the tree. Build and comparator steps capture their
 # exit codes into the evidence and let the Verdict step judge, so a
@@ -83,10 +99,16 @@ name: cfsg-corollary-forge
 # 12:27:58Z, 46 min into the comparator step), after the library
 # build and the import inventory had succeeded. Job cap
 # 360 -> 720; comparator time-box 5400 -> 14400; library build
-# 6600 -> 9900; open Comparator build 3300 -> 5400. The step
-# time-boxes now sum to 1500 + 3300 + 9900 + 14400 + 5400 =
-# 34500 s (575 min), under the 720-minute cap with room for
-# setup, checkout, and the import inventory.
+# 6600 -> 9900; open Comparator build 3300 -> 5400.
+# Run 6 (2026-11-11, at the user's word): the fetch route is
+# replaced as described above (seeded source; Lake git transport
+# and the author artifact cache both retired after their run 3 /
+# run 5 transport failures), and the job cap rises 720 -> 960 for
+# slack over the worst case: the step time-boxes now sum to
+# 3600 (seed) + 9900 + 14400 + 5400 = 33300 s (555 min), plus the
+# unboxed import inventory (62 min measured, run 4) and checkout /
+# setup. The laptop lane is used again; the desktop is occupied by
+# the spectral-graph forge and stays untouched.
 
 on:
   workflow_dispatch:
@@ -102,8 +124,7 @@ env:
   TARGET_SHA: 161b0c2db2288330b16f347a844cc75a53f11b55
   PIN_DIR: incoming/axiom-cfsg-two-generators-corollary/repo-161b0c2
   EXPECTED_LEAN_FILES: "91"
-  CACHE_SCRIPT_SHA256: 65432483cfe71cbefe142ce082e7c1fc463524a861c8aee4cacd24ad53804ffe
-  CACHE_MIN_FREE_GB: "300"
+  EXPECTED_PACKAGES: "11"
 
 jobs:
   gate:
@@ -117,7 +138,7 @@ jobs:
   forge:
     needs: gate
     runs-on: [self-hosted, laptop]
-    timeout-minutes: 720
+    timeout-minutes: 960
     steps:
       - name: Check out this repo
         uses: actions/checkout@v4
@@ -233,65 +254,98 @@ jobs:
           bwrap --ro-bind / / --dev /dev /bin/true || { echo "SETUP-FAIL: bwrap present but cannot create a sandbox (user namespaces unavailable)"; exit 1; }
           echo "bwrap sandbox smoke test: OK" | tee -a ../cfsg-evidence/bwrap.txt
 
-      - name: Materialize dependencies at manifest revisions
+      - name: Seed dependencies from codeload tarballs (replaces Lake git transport)
         working-directory: cfsg-forge
         run: |
           set +e
+          cat > /tmp/cfsg-seed.sh <<'SEED_EOF'
+          set -euo pipefail
+          expected="$1"
+          root="$(pwd)"
+          manifest_lines="$(python3 -c '
+          import json
+          m = json.load(open("lake-manifest.json"))
+          for p in m["packages"]:
+              print(p["name"], p["url"], p["rev"])
+          ')"
+          count="$(printf '%s\n' "$manifest_lines" | grep -c . || true)"
+          echo "packages to seed: $count (expected $expected)"
+          [ "$count" -eq "$expected" ] || { echo "FAIL: manifest lists $count packages, expected $expected"; exit 1; }
+          while IFS=' ' read -r name url rev; do
+            [[ -n "$name" && -n "$url" && -n "$rev" ]] || { echo "FAIL: malformed manifest entry" >&2; exit 1; }
+            [[ "$rev" =~ ^[0-9a-f]{40}$ ]] || { echo "FAIL: bad rev for $name" >&2; exit 1; }
+            case "$url" in
+              https://github.com/*) ;;
+              *) echo "FAIL: unsupported url for $name: $url" >&2; exit 1 ;;
+            esac
+            p="${url%.git}"
+            p="${p#https://github.com/}"
+            owner="${p%%/*}"
+            repo="${p#*/}"
+            if [[ -z "$owner" || -z "$repo" || "$repo" == */* ]]; then
+              echo "FAIL: cannot parse owner/repo for $name: $url" >&2
+              exit 1
+            fi
+            dir="$root/.lake/packages/$name"
+            rm -rf "$dir"
+            mkdir -p "$dir"
+            cd "$dir"
+            git init -q
+            git remote add origin "$url"
+            git fetch -q --depth 1 --filter=blob:none origin "$rev"
+            curl -fsSL "https://codeload.github.com/$owner/$repo/tar.gz/$rev" \
+              | tar -xz --strip-components=1
+            git add -Af
+            tree_got="$(git write-tree)"
+            tree_want="$(git rev-parse "$rev^{tree}")"
+            if [[ "$tree_got" != "$tree_want" ]]; then
+              echo "FAIL: $name tree mismatch (got $tree_got, want $tree_want)" >&2
+              exit 1
+            fi
+            git update-ref --no-deref HEAD "$rev"
+            head_got="$(git rev-parse HEAD)"
+            if [[ "$head_got" != "$rev" ]]; then
+              echo "FAIL: $name HEAD mismatch (got $head_got, want $rev)" >&2
+              exit 1
+            fi
+            cd "$root"
+            echo "seeded $name @ $rev tree OK"
+          done <<< "$manifest_lines"
+          SEED_EOF
+          timeout 3600 bash /tmp/cfsg-seed.sh "$EXPECTED_PACKAGES" > ../cfsg-evidence/seed.log 2>&1
+          code=$?
+          echo "$code" > ../cfsg-evidence/seed-exit.txt
+          tail -15 ../cfsg-evidence/seed.log
+          if [ "$code" -ne 0 ]; then
+            echo "FAIL: dependency seeding failed (exit $code); see seed.log. This step is gating on purpose: no later Lake step runs, so a transport failure cannot burn the build boxes retrying git fetches (the run 5 failure shape)."
+            exit 1
+          fi
           export LAKE_ARTIFACT_CACHE=true
-          timeout 1500 lake build --no-build CFSGCorollary > ../cfsg-evidence/materialize.log 2>&1
+          timeout 600 lake build --no-build CFSGCorollary > ../cfsg-evidence/materialize.log 2>&1
           code=$?
           echo "$code" > ../cfsg-evidence/materialize-exit.txt
           ls .lake/packages >> ../cfsg-evidence/materialize.log 2>&1
           if echo "e435484b81675e96e998d45b55c59123d52a063a4e3742ce18514421fe994105  lake-manifest.json" | sha256sum -c - >> ../cfsg-evidence/materialize.log 2>&1; then
-            echo "manifest unchanged by materialization"
+            echo "manifest unchanged after seeding"
           else
-            echo "FAIL: lake-manifest.json drifted during materialization (Lake resolved revisions other than the pinned ones)"
+            echo "FAIL: lake-manifest.json drifted (Lake resolved revisions other than the pinned ones)"
             exit 1
           fi
           tail -5 ../cfsg-evidence/materialize.log
-          echo "materialize exit: $code (recorded; the Verdict step judges)"
+          if [ "$code" -ne 0 ]; then
+            echo "FAIL: Lake would not accept the seeded checkouts (materialize exit $code); see materialize.log"
+            exit 1
+          fi
+          echo "all $EXPECTED_PACKAGES dependencies seeded from codeload tarballs, tree-verified against their pinned revs, and accepted by Lake with no fetch"
 
-      - name: Dependency route (author artifact cache if disk allows, else source)
+      - name: Dependency route (seeded source; author artifact cache retired)
         working-directory: cfsg-forge
         run: |
-          set +e
-          export LAKE_ARTIFACT_CACHE=true
-          free_gb=$(cat ../cfsg-evidence/free-gb.txt 2>/dev/null || echo 0)
+          set -euo pipefail
           echo "source" > ../cfsg-evidence/route.txt
-          if [ "${free_gb:-0}" -ge "$CACHE_MIN_FREE_GB" ]; then
-            echo "free disk ${free_gb} GB >= ${CACHE_MIN_FREE_GB} GB: trying the author artifact cache"
-            curl -fsSL -o ../cfsg-evidence/lake-cache-get-fast.sh https://cfsg-downloads.axiommath.workers.dev/lake/lake-cache-get-fast.sh
-            got=$(sha256sum ../cfsg-evidence/lake-cache-get-fast.sh | awk '{print $1}')
-            if [ "$got" = "$CACHE_SCRIPT_SHA256" ]; then
-              ulimit -s 1048576 2>/dev/null || true
-              export RUST_MIN_STACK=1073741824 LAKE_CACHE_MAX_REVS=1
-              timeout 3300 bash ../cfsg-evidence/lake-cache-get-fast.sh . > ../cfsg-evidence/cache-get.log 2>&1
-              code=$?
-              echo "$code" > ../cfsg-evidence/cache-exit.txt
-              # The script exits 0 even when its fetch fails and is
-              # discarded whole (run 3, 2026-11-07: 723 artifacts
-              # missing, 106 hash failures of 240221, fetch discarded,
-              # exit still 0). The fetch log is therefore the only
-              # authority on whether anything was restored: a clean
-              # fetch leaves no discard warning in the log.
-              grep -E "artifacts missing|hash check" ../cfsg-evidence/cache-get.log | tail -1 > ../cfsg-evidence/cache-fetch.txt || true
-              if grep -q "did not complete cleanly" ../cfsg-evidence/cache-get.log || grep -qi "discarding" ../cfsg-evidence/cache-get.log; then
-                echo "fetch FAILED and was discarded (see cache-fetch.txt); nothing was restored, route is source despite script exit $code" | tee -a ../cfsg-evidence/cache-get.log
-              elif [ "$code" -eq 0 ]; then
-                echo "cache" > ../cfsg-evidence/route.txt
-                echo "fetch clean (no discard warning in cache-get.log)" > ../cfsg-evidence/cache-fetch.txt
-              else
-                echo "cache script exited $code; its design discards a failed fetch whole, so the route falls back to source" | tee -a ../cfsg-evidence/cache-get.log
-              fi
-            else
-              echo "cache script sha256 mismatch (got $got, expected $CACHE_SCRIPT_SHA256): NOT executed; route is source" | tee ../cfsg-evidence/cache-get.log
-              echo "hash-mismatch" > ../cfsg-evidence/cache-exit.txt
-            fi
-          else
-            echo "free disk ${free_gb} GB < ${CACHE_MIN_FREE_GB} GB: source route (the author cache needs about 230 GB)" | tee ../cfsg-evidence/cache-get.log
-            echo "skipped" > ../cfsg-evidence/cache-exit.txt
-          fi
-          echo "route: $(cat ../cfsg-evidence/route.txt)"
+          echo "skipped" > ../cfsg-evidence/cache-exit.txt
+          echo "route: source. Dependencies were seeded from codeload tarballs and tree-verified (seed.log); the build compiles the needed closures from source. The author's ~230 GB artifact cache is retired for this campaign: run 3's fetch was discarded after hash failures and run 5's script timed out at 3300 s (exit 124). Lake's git transport is likewise retired: run 5 died on its promisor blob fetch of AxiomMath/CFSG (could not fetch 171d98aa72ce48cef6af6baf9bfc965d8cb7fba9 from promisor remote; fetch-pack early EOF)." | tee ../cfsg-evidence/cache-get.log
+          echo "route: source (seeded)"
 
       - name: Build the library and the author's Checks (conditional-leg receipts)
         working-directory: cfsg-forge
