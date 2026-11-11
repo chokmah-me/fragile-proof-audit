@@ -13,6 +13,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [Zhang–Jing–Zhao–Liu–Wang Lean-QuantumAlg (arXiv:2610.30216) — V-A build + axioms PASS (run 40323638441), V-B statement fidelity PASS at the contract layer, Table 1 measurement scripts GAP](lean-quantumalg.md) | 2026-10-26 |
 | [biplanar graphs with independence number two are 9-colorable](biplanar-alpha2-9-colorable.md) | 2026-09-28 |
 | [Borsuk dimension 63 (Grinsztajn 2026)](borsuk-63.md) |  |
+| [Block Anderson model localization scale in 1D (Yin, arXiv:2611.09776), Lean formalization — PASS: full build from source at the pinned commit (run 42727661807, build exit 0), all 12 headline declarations on the standard three axioms alone; 32 paper-to-Lean divergences graded at probe, zero load-bearing at headline, intermediate SCOPE items cataloged (Lemma 9.3 existential weakening first)](block-anderson-localization.md) | 2026-11-11 |
 | [CAT-G polynomial claim between (2.3) and (2.4) — BREAK](cat-g.md) |  |
 | [Chung–Graham–Spiro gap-set conjecture (Track D#6)](chung-graham-spiro.md) |  |
 | [Cohen's subadditivity conjecture (Track D#1)](cohen-subadditivity.md) |  |
