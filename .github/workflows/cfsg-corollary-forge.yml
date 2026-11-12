@@ -118,6 +118,22 @@ name: cfsg-corollary-forge
 # same 960-minute cap. The desktop was dark at dispatch (the
 # verify jobs from the morning push still queued), so this run
 # queues until that runner returns.
+# Run 9 (2026-11-12, at the user's word): the materialize
+# acceptance probe inside the seeding step is demoted to
+# report-only. Run 8 judged the seeded route: the seed leg itself
+# passed (seed-exit 0; all 11 packages tree-verified at their
+# pinned revs; evidence zip sha256 567b6c8e), and the step then
+# died on the probe: `lake build --no-build CFSGCorollary`
+# exited 3 with 1,257 "target is out-of-date" errors. The seeded
+# checkouts are source-only (no .olean artifacts, no populated
+# artifact cache), so --no-build cannot pass by construction.
+# The probe still runs and records materialize.log /
+# materialize-exit.txt as evidence, but its exit no longer gates
+# the step. The checks that bind are unchanged: the per-package
+# write-tree assert in the seed script and the lake-manifest.json
+# hash assert below it. Acceptance of the seeded checkouts is
+# proven by the build step. Same target, same lane (desktop),
+# same time-boxes, same 960-minute cap.
 
 on:
   workflow_dispatch:
@@ -342,10 +358,9 @@ jobs:
           fi
           tail -5 ../cfsg-evidence/materialize.log
           if [ "$code" -ne 0 ]; then
-            echo "FAIL: Lake would not accept the seeded checkouts (materialize exit $code); see materialize.log"
-            exit 1
+            echo "NOTE (run 9): materialize probe exit $code is report-only, not a failure. On a source-only seeded tree every target is out-of-date, so lake build --no-build cannot pass (run 8 died at this gate); the probe exit is recorded in materialize-exit.txt as evidence only. Acceptance of the seeded checkouts is proven by the build step."
           fi
-          echo "all $EXPECTED_PACKAGES dependencies seeded from codeload tarballs, tree-verified against their pinned revs, and accepted by Lake with no fetch"
+          echo "all $EXPECTED_PACKAGES dependencies seeded from codeload tarballs, tree-verified against their pinned revs; manifest unchanged after seeding"
 
       - name: Dependency route (seeded source; author artifact cache retired)
         working-directory: cfsg-forge
