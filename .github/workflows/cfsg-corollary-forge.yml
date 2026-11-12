@@ -109,6 +109,15 @@ name: cfsg-corollary-forge
 # unboxed import inventory (62 min measured, run 4) and checkout /
 # setup. The laptop lane is used again; the desktop is occupied by
 # the spectral-graph forge and stays untouched.
+# Run 8 (2026-11-12, at the user's word): the heavy leg moves to
+# the desktop runner. The laptop runner died mid-seed-step on
+# run 6 and never returned; run 7 sat queued 24 h and was
+# cancelled at the queue limit without starting (0 steps, no
+# runner ever assigned), so the seeded-source route is still
+# unjudged. No other change: same target, same step time-boxes,
+# same 960-minute cap. The desktop was dark at dispatch (the
+# verify jobs from the morning push still queued), so this run
+# queues until that runner returns.
 
 on:
   workflow_dispatch:
@@ -137,7 +146,7 @@ jobs:
 
   forge:
     needs: gate
-    runs-on: [self-hosted, laptop]
+    runs-on: [self-hosted, desktop]
     timeout-minutes: 960
     steps:
       - name: Check out this repo
