@@ -96,8 +96,16 @@ name: Aaronson-Ambainis forge (Dell laptop lane)
 # three target checkouts from the shared runner workspace so a
 # dead run leaves no residue for the repo verifier).
 #
-# Run 1: dispatched 2026-11-13 after the pre-dispatch gate PASS;
-# result recorded at close-out in the audit note.
+# Run 1 (43494287149, 2026-11-13): FAILED at the toolchain step
+# in 69 s. v4.33.0 installed fine, but the step's bare
+# `lean --version` in the repo root resolved through elan's
+# directory override to this repo's own toolchain (4.32.2), so
+# the grep assertion on the versions file failed. No other leg
+# ran. Fix in run 2: the version probes run with
+# ELAN_TOOLCHAIN=leanprover/lean4:v4.33.0 set, testing the
+# installed toolchain rather than the repo default. Run 1 also
+# established: go and cargo absent on the Dell (installed
+# in-job), systemd-run present, elan preinstalled.
 
 on:
   workflow_dispatch:
@@ -201,8 +209,8 @@ jobs:
         run: |
           elan toolchain install leanprover/lean4:v4.33.0
           {
-            lean --version
-            lake --version
+            ELAN_TOOLCHAIN=leanprover/lean4:v4.33.0 lean --version
+            ELAN_TOOLCHAIN=leanprover/lean4:v4.33.0 lake --version
             elan --version
           } > aa-evidence/toolchain-versions.txt 2>&1
           cat aa-evidence/toolchain-versions.txt
