@@ -157,10 +157,16 @@ audit-queue decision at CFSG close-out.
 
 ## Queue status
 
-Registered as CLAIM 2026-11-13. Audit NOT queued. The
-queue decision (this claim vs subexponential factoring,
-per the 2026-11-06 execution order) is taken at CFSG
-run 10 close-out. The Yang-Mills registration of
-2026-11-12 (incoming/yang-mills-openai-20261028) stands
-queued behind this claim wherever it lands. No forge at
-registration; no verdict.
+Registered as CLAIM 2026-11-13. Audit NOT queued at
+registration; the queue decision was to be taken at CFSG
+run 10 close-out (Argon adjudication 2026-11-13, upheld).
+
+SUPERSEDED 2026-11-13 at the user's word ("Yes, the AA
+audit on the Dell"): the audit runs NOW on the Dell laptop
+lane [self-hosted, laptop], ahead of CFSG close-out. Forge:
+.github/workflows/aaronson-ambainis-forge.yml, with the
+ST-1 to ST-5 probes at scripts/forge/aa-probes/Probes.lean
+(first full application of the M1 statement tests). The
+Yang-Mills registration of 2026-11-12
+(incoming/yang-mills-openai-20261028) stays queued behind
+this claim. No verdict yet.

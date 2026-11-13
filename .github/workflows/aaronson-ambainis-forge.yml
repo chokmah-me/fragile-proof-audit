@@ -1,0 +1,603 @@
+name: Aaronson-Ambainis forge (Dell laptop lane)
+
+# Forge for the Aaronson-Ambainis corollary claim (PSI announcement
+# 2026-11-06; harvest 2026-11-05 claim aaronson-ambainis-psi-20261106;
+# PIN main@eedd185, incoming/aaronson-ambainis-psi-20261106/PIN.md).
+# Target: physical-superintelligence/aaronson-ambainis @
+# 2a6ceaef872ae993708950f951989134084b851a (single commit, Apache-2.0):
+# Aaronson-Ambainis for Boolean functions, proved by reduction to
+# Agarwal-Ben-David Theorem 1.7. Four endpoints in
+# AaronsonAmbainis/Main.lean: aaronson_ambainis (PrintedConjecture),
+# aaronson_ambainis_explicit (ExplicitBound), aaronson_ambainis_pm
+# (ExplicitBoundPM), aaronson_ambainis_of_fbsDegreeBound
+# (FbsDegreeBound -> ExplicitBoundImproved). Toolchain v4.33.0,
+# Mathlib v4.33.0 (manifest rev db584cd6); 95 Lean files.
+#
+# Audit directed to the DELL LAPTOP lane by the user 2026-11-13
+# ("Yes, the AA audit on the Dell"), ahead of the CFSG run 10
+# close-out; the Dell was verified Idle at dispatch time and the
+# desktop stays busy with CFSG run 10. Dell: Win11 + WSL2 Ubuntu
+# 24.04, 32 GB host RAM, WSL cap 28 GiB, 4 cores / 8 threads.
+#
+# RECEIPT STANDARD (D1, Argon adjudication 2026-11-06): a lake build
+# over the authors' build cache certifies nothing by itself. The
+# receipt leg is the STANDALONE leanprover/comparator
+# (scripts/run_comparator.sh in the artifact): lean4export from the
+# challenge/solution modules, contents checked by the Lean kernel
+# AND by nanoda, inside a Landlock sandbox, from a fresh checkout
+# in which nothing of the solution has been built. Tools are built
+# in-job at the exact revs pinned in the artifact's
+# comparator/PINS.env (asserted against the values recorded in the
+# PIN before use). The unsandboxed variant
+# (verification/run_comparator_unsandboxed.sh, fake landrun)
+# certifies nothing and is never run by this forge.
+#
+# Comparator shape (artifact comparator/README + PINS.env):
+# comparator 71b52ec29e06 (built with its own toolchain
+# v4.30.0-rc2), lean4export 15f6055e299a (built with the project
+# toolchain), landrun 5ed4a3db3a4a (Go), nanoda 68d5ca9db226
+# (robsimmons fork, cargo). run_comparator.sh requires Linux,
+# Landlock, a systemd user session, an UNPRIVILEGED user (refuses
+# root), systemd-run --user --wait, a fresh checkout, and
+# `lake exe cache get` first; it runs check_sandbox.sh first
+# (landrun --best-effort can silently confine nothing; the
+# two-write test is the gate) and refuses to run if the sandbox
+# check fails. The authors' own CI runs the theorem leg and the
+# control leg as separate matrix jobs so the false-proof controls
+# are never compiled on the judging machine; this forge mirrors
+# that separation with two fresh checkouts (aa-thm, aa-ctl) plus a
+# third (aa-build) for build / axiom / replay / probe legs.
+#
+# GRADING, pre-registered (docs/harvest-loop.md M1 add-on,
+# statement tests ST-1 to ST-5; first full application):
+# - The three unconditional endpoints grade PASS only on: this
+#   run's comparator acceptance ("Your solution is okay!", exit 0),
+#   axiom closure to exactly the standard three (propext,
+#   Quot.sound, Classical.choice), the serialized leanchecker
+#   replays exiting 0, and the ST probes of
+#   scripts/forge/aa-probes/Probes.lean compiling clean. A
+#   VACUOUS-PROVED probe outcome or a mandatory probe failure caps
+#   the grade at PARTIAL.
+# - aaronson_ambainis_of_fbsDegreeBound is CONDITIONAL on
+#   FbsDegreeBound (Agarwal-Ben-David Theorem 1.7, arXiv:2410.19062),
+#   which is proved nowhere in the artifact. Under ST-5 it caps at
+#   PARTIAL regardless of the comparator outcome; comparator
+#   acceptance, axiom closure, and the ST-1 witness on the
+#   predicate are its recorded evidence.
+# - The comparator controls leg (run_comparator_controls.sh) is
+#   report-only per the standing doctrine (controls_ok); a controls
+#   failure does not by itself fail the verdict, but it is recorded
+#   and weighed at close-out.
+# - The audit verdict is issued by the main agent at close-out from
+#   the evidence; the verdict step here computes the receipt tier
+#   and fails the job if the comparator receipt core is missing.
+#
+# SOURCE POLICY SCAN scope: AaronsonAmbainis.lean and
+# AaronsonAmbainis/ only. The artifact's verification/ tree is the
+# authors' control-project fixtures (it contains deliberate sorries
+# and a deliberate extra axiom, by design, for the controls) and
+# scripts/ is their tooling (count_declarations.lean has an
+# `unsafe def main`); neither is imported by the library. Inside
+# the library the only sorries are the four comparator-challenge
+# proofs in AaronsonAmbainis/Comparator/Challenge.lean, which no
+# library file imports.
+#
+# NAMED RISKS, checked in-job rather than assumed: (a) the runner
+# service's context for systemd-run --user (the probe step attempts
+# loginctl enable-linger + user-manager start remediation and
+# records the outcome; the comparator legs record exit 97 and skip
+# if no user session is available); (b) Landlock on the WSL2
+# kernel (check_sandbox.sh is the artifact's own gate and runs
+# inside run_comparator.sh before judging); (c) in-job Go / Rust
+# installs if the runner lacks them (tool builds are in $HOME and
+# tools/ under the workspace, revs hash-asserted); (d) Dell
+# sleep/reboot mid-run (house rule: the run is re-dispatchable, no
+# state is carried between runs; the cleanup step removes all
+# three target checkouts from the shared runner workspace so a
+# dead run leaves no residue for the repo verifier).
+#
+# Run 1: dispatched 2026-11-13 after the pre-dispatch gate PASS;
+# result recorded at close-out in the audit note.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aaronson-ambainis-forge
+  cancel-in-progress: false
+
+env:
+  TARGET_SHA: 2a6ceaef872ae993708950f951989134084b851a
+  EXPECTED_LEAN_FILES: "95"
+  EXPECTED_PACKAGES: "9"
+
+jobs:
+  gate:
+    name: Pre-dispatch gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v4
+
+      - name: Run pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/aaronson-ambainis-forge.yml
+
+  forge:
+    name: Aaronson-Ambainis forge (comparator, build, axioms, replay, probes)
+    needs: gate
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 1200
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v4
+
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          mkdir -p aa-evidence aa-thm aa-ctl aa-build tools
+          {
+            echo "date: $(date -Is)"
+            echo "runner: $RUNNER_NAME"
+            echo "user: $(id)"
+            uname -a || true
+            echo "nproc: $(nproc)"
+            free -h || true
+            df -h . || true
+            command -v go || echo "go: ABSENT"
+            go version || true
+            command -v cargo || echo "cargo: ABSENT"
+            cargo --version || true
+            command -v systemd-run || echo "systemd-run: ABSENT"
+          } > aa-evidence/runner.txt 2>&1
+          cat aa-evidence/runner.txt
+          exit 0
+
+      - name: systemd user session probe
+        continue-on-error: true
+        run: |
+          set +e
+          export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+          {
+            echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR"
+            echo "--- probe 1: systemd-run --user --wait --pipe /bin/true"
+            systemd-run --user --wait --pipe /bin/true
+            echo "probe1 exit: $?"
+          } > aa-evidence/systemd-probe.log 2>&1
+          if grep -q "probe1 exit: 0" aa-evidence/systemd-probe.log; then
+            echo "1" > aa-evidence/systemd-ok.txt
+          else
+            {
+              echo "--- remediation attempt (report-only)"
+              sudo -n loginctl enable-linger "$USER" || echo "linger: FAILED or no sudo"
+              sudo -n systemctl start "user@$(id -u).service" || echo "user manager start: FAILED or no sudo"
+              sleep 3
+              echo "--- probe 2"
+              systemd-run --user --wait --pipe /bin/true
+              echo "probe2 exit: $?"
+            } >> aa-evidence/systemd-probe.log 2>&1
+            if grep -q "probe2 exit: 0" aa-evidence/systemd-probe.log; then
+              echo "1" > aa-evidence/systemd-ok.txt
+            else
+              echo "0" > aa-evidence/systemd-ok.txt
+            fi
+          fi
+          cat aa-evidence/systemd-probe.log
+          echo "systemd-ok: $(cat aa-evidence/systemd-ok.txt)"
+          exit 0
+
+      - name: Install elan
+        run: |
+          if [ ! -x "$HOME/.elan/bin/elan" ]; then
+            curl -sSfL https://elan.lean-lang.org -o elan-init.sh
+            sh elan-init.sh -y --default-toolchain none
+          fi
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Install project toolchain
+        run: |
+          elan toolchain install leanprover/lean4:v4.33.0
+          {
+            lean --version
+            lake --version
+            elan --version
+          } > aa-evidence/toolchain-versions.txt 2>&1
+          cat aa-evidence/toolchain-versions.txt
+          grep -q "4.33.0" aa-evidence/toolchain-versions.txt
+
+      - name: Pin target commit
+        run: |
+          set -euo pipefail
+          sha="$TARGET_SHA"
+          case "$sha" in (*[!0-9a-f]*|'') echo "TARGET_SHA is not 40-hex: '$sha'" >&2; exit 1;; esac
+          [ "${#sha}" -eq 40 ] || { echo "TARGET_SHA length ${#sha} != 40" >&2; exit 1; }
+          curl -fsSL -o aa-target.tar.gz "https://codeload.github.com/physical-superintelligence/aaronson-ambainis/tar.gz/$sha"
+          sha256sum aa-target.tar.gz > aa-evidence/tarball.sha256
+          top="$(tar -tzf aa-target.tar.gz | head -1)"
+          echo "tarball top: $top"
+          [ "$top" = "aaronson-ambainis-$sha/" ] || { echo "unexpected tarball top: $top" >&2; exit 1; }
+          for d in aa-thm aa-ctl aa-build; do
+            tar -xzf aa-target.tar.gz -C "$d" --strip-components=1
+            n="$(find "$d" -name '*.lean' -not -path '*/.lake/*' | wc -l)"
+            echo "$d lean files: $n"
+            [ "$n" -eq "$EXPECTED_LEAN_FILES" ] || { echo "$d: expected $EXPECTED_LEAN_FILES lean files" >&2; exit 1; }
+            pkgs="$(python3 -c "import json;m=json.load(open('$d/lake-manifest.json'));print(len([p for p in m['packages'] if p.get('type')=='git']))")"
+            echo "$d manifest git packages: $pkgs"
+            [ "$pkgs" -eq "$EXPECTED_PACKAGES" ] || { echo "$d: expected $EXPECTED_PACKAGES packages" >&2; exit 1; }
+          done
+          echo "target pin OK: $sha"
+
+      - name: Verify key hashes
+        run: |
+          set -euo pipefail
+          cat > aa-key-hashes.txt <<'EOF'
+          302cd63c54178885b89e669f33b38f12f4dd7ae7e5cac537b3203e3768d8fb2b  lean-toolchain
+          d970b7ed85c5db3df473e322c20572a40b3a554bfbc021e9cf4b575d4e56e3c4  lake-manifest.json
+          dd63776b831d110f41278692400653fac3001b166548e5c2a8971dd0dabd3a52  AaronsonAmbainis/Conjecture.lean
+          a34f2591efc9142a3d607e15fbcec38d7942ba6986afad6045fdcc9439330f58  AaronsonAmbainis/Main.lean
+          edd52b53250ec4081f43321354d4c44fb905e1dd38dae1d30a670a9a4c407abd  AaronsonAmbainis/Comparator/Challenge.lean
+          25cfc13bf70b1efd51205c442d72ed76e0b8ad0b9dcdbd412c349c2385252031  AaronsonAmbainis/Comparator/Solution.lean
+          b870e814f20c9a1ad00c3935c09b1344be0183af4322b74572b2f6fbc8f416ad  README.md
+          90605e00514b888ac9940d59f2e832a3e40cc9b39b5aae002d34b5b331789196  comparator/PINS.env
+          8f7ba435bd831e8d9f998c58a72dbae301989aba63d42c855e9936dffc6c9756  comparator/config.json
+          EOF
+          for d in aa-thm aa-ctl aa-build; do
+            (cd "$d" && sha256sum -c ../aa-key-hashes.txt) > "aa-evidence/hashes-$d.txt" 2>&1
+            echo "$d hashes OK"
+          done
+
+      - name: Source policy scan
+        run: |
+          set -euo pipefail
+          : > aa-evidence/scan.txt
+          for d in aa-thm aa-ctl aa-build; do
+            scope=("$d/AaronsonAmbainis.lean" "$d/AaronsonAmbainis")
+            sorry_files="$(grep -rlw -e sorry -e admit "${scope[@]}" | sort || true)"
+            echo "$d sorry/admit files: $sorry_files" | tee -a aa-evidence/scan.txt
+            [ "$sorry_files" = "$d/AaronsonAmbainis/Comparator/Challenge.lean" ] || { echo "$d: sorries outside the comparator challenge" >&2; exit 1; }
+            nsorry="$(grep -cw sorry "$d/AaronsonAmbainis/Comparator/Challenge.lean")"
+            echo "$d challenge sorries: $nsorry" | tee -a aa-evidence/scan.txt
+            [ "$nsorry" -eq 4 ] || { echo "$d: expected exactly 4 challenge sorries" >&2; exit 1; }
+            if grep -rnw -e native_decide "${scope[@]}"; then echo "$d: native_decide in library" >&2; exit 1; fi
+            if grep -rnE '^[[:space:]]*(axiom|unsafe|extern)[[:space:]]' "${scope[@]}"; then echo "$d: axiom/unsafe/extern declaration in library" >&2; exit 1; fi
+            if grep -rnE '^[[:space:]]*partial[[:space:]]+(def|theorem)' "${scope[@]}"; then echo "$d: partial def in library" >&2; exit 1; fi
+            if grep -rnw -e implemented_by "${scope[@]}"; then echo "$d: implemented_by in library" >&2; exit 1; fi
+          done
+          echo "source policy scan OK" | tee -a aa-evidence/scan.txt
+
+      - name: Write seed helper
+        run: |
+          cat > "$RUNNER_TEMP/aa-seed.py" <<'PYEOF'
+          import json, os, subprocess, sys, tarfile, io, urllib.request
+          ROOT = sys.argv[1]
+          def run(cmd, cwd=None):
+              r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+              if r.returncode != 0:
+                  raise RuntimeError(f"{cmd} failed: {r.stdout[-500:]} {r.stderr[-500:]}")
+              return r.stdout.strip()
+          manifest = json.load(open(os.path.join(ROOT, "lake-manifest.json")))
+          pkgs = os.path.join(ROOT, ".lake", "packages")
+          os.makedirs(pkgs, exist_ok=True)
+          for p in manifest["packages"]:
+              if p.get("type") != "git":
+                  continue
+              name, url, rev = p["name"], p["url"], p["rev"]
+              slug = url.removeprefix("https://github.com/").removesuffix(".git")
+              dest = os.path.join(pkgs, name)
+              if os.path.exists(dest):
+                  subprocess.run(["rm", "-rf", dest], check=True)
+              os.makedirs(dest)
+              run(["git", "init", "-q", "."], cwd=dest)
+              run(["git", "remote", "add", "origin", url], cwd=dest)
+              run(["git", "fetch", "-q", "--depth", "1", "--filter=blob:none", "origin", rev], cwd=dest)
+              tree = run(["git", "rev-parse", f"{rev}^{{tree}}"], cwd=dest)
+              req = urllib.request.Request(f"https://codeload.github.com/{slug}/tar.gz/{rev}",
+                                           headers={"User-Agent": "aa-forge-seed"})
+              with urllib.request.urlopen(req) as f:
+                  data = f.read()
+              tf = tarfile.open(fileobj=io.BytesIO(data), mode="r:gz")
+              prefix = tf.getmembers()[0].name.split("/")[0] + "/"
+              for m in tf.getmembers():
+                  if m.name.startswith(prefix):
+                      m.name = m.name[len(prefix):]
+                      if m.name:
+                          tf.extract(m, dest)
+              run(["git", "add", "-Af"], cwd=dest)
+              wt = run(["git", "write-tree"], cwd=dest)
+              assert wt == tree, f"{name}: write-tree {wt} != {tree}"
+              run(["git", "update-ref", "--no-deref", "HEAD", rev], cwd=dest)
+              print(f"seeded {name} @ {rev[:12]} tree OK", flush=True)
+          print("ALL SEEDED")
+          PYEOF
+          python3 -c "import ast; ast.parse(open('$RUNNER_TEMP/aa-seed.py').read()); print('seed helper parses')"
+
+      - name: Build comparator tools at pinned revs
+        run: |
+          set -euo pipefail
+          # PINS assert: parse (never source) the artifact's comparator/PINS.env
+          # in aa-thm and compare against the revs recorded in the PIN.
+          pins="aa-thm/comparator/PINS.env"
+          getpin() { grep -E "^$1=" "$pins" | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'"; }
+          [ "$(getpin COMPARATOR_REV)" = "71b52ec29e06d4b7d882726553b1ceb99a2499e0" ] || { echo "COMPARATOR_REV mismatch" >&2; exit 1; }
+          [ "$(getpin LEAN4EXPORT_REV)" = "15f6055e299ad5b89345e533cc2192f4cc00f659" ] || { echo "LEAN4EXPORT_REV mismatch" >&2; exit 1; }
+          [ "$(getpin LANDRUN_REV)" = "5ed4a3db3a4ad930d577215c6b9abaa19df7f99f" ] || { echo "LANDRUN_REV mismatch" >&2; exit 1; }
+          [ "$(getpin NANODA_REV)" = "68d5ca9db226849b41a6fff59d796ff19d0a8840" ] || { echo "NANODA_REV mismatch" >&2; exit 1; }
+          echo "PINS.env revs match the PIN" | tee aa-evidence/tools.txt
+          # Go (for landrun), if absent: official tarball into $HOME/.local.
+          if ! command -v go >/dev/null 2>&1; then
+            curl -fsSL -o go.tar.gz "https://go.dev/dl/go1.25.12.linux-amd64.tar.gz"
+            sha256sum go.tar.gz >> aa-evidence/tools.txt
+            rm -rf "$HOME/.local/go" "$HOME/.local/go1.25.12"
+            mkdir -p "$HOME/.local"
+            tar -xzf go.tar.gz -C "$HOME/.local"
+            mv "$HOME/.local/go" "$HOME/.local/go1.25.12"
+            rm -f go.tar.gz
+          fi
+          GODIR="$(dirname "$(command -v go || echo "$HOME/.local/go1.25.12/bin/go")")"
+          echo "$GODIR" >> "$GITHUB_PATH"
+          export PATH="$GODIR:$PATH"
+          go version | tee -a aa-evidence/tools.txt
+          # landrun at the pinned rev, via the Go module proxy.
+          go install "github.com/zouuup/landrun/cmd/landrun@5ed4a3db3a4ad930d577215c6b9abaa19df7f99f"
+          echo "$HOME/go/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/go/bin:$PATH"
+          command -v landrun | tee -a aa-evidence/tools.txt
+          # lean4export at the pinned rev, built with the PROJECT toolchain
+          # (the artifact CI copies the project's lean-toolchain over it).
+          curl -fsSL -o le.tar.gz "https://codeload.github.com/leanprover/lean4export/tar.gz/15f6055e299ad5b89345e533cc2192f4cc00f659"
+          sha256sum le.tar.gz >> aa-evidence/tools.txt
+          mkdir -p tools/lean4export
+          tar -xzf le.tar.gz -C tools/lean4export --strip-components=1
+          rm -f le.tar.gz
+          cp aa-thm/lean-toolchain tools/lean4export/lean-toolchain
+          (cd tools/lean4export && lake build lean4export)
+          echo "$PWD/tools/lean4export/.lake/build/bin" >> "$GITHUB_PATH"
+          export PATH="$PWD/tools/lean4export/.lake/build/bin:$PATH"
+          command -v lean4export | tee -a aa-evidence/tools.txt
+          # comparator at the pinned rev, built with its OWN toolchain
+          # (v4.30.0-rc2; elan fetches it from the project's lean-toolchain).
+          curl -fsSL -o comp.tar.gz "https://codeload.github.com/leanprover/comparator/tar.gz/71b52ec29e06d4b7d882726553b1ceb99a2499e0"
+          sha256sum comp.tar.gz >> aa-evidence/tools.txt
+          mkdir -p tools/comparator
+          tar -xzf comp.tar.gz -C tools/comparator --strip-components=1
+          rm -f comp.tar.gz
+          (cd tools/comparator && lake build comparator)
+          echo "$PWD/tools/comparator/.lake/build/bin" >> "$GITHUB_PATH"
+          export PATH="$PWD/tools/comparator/.lake/build/bin:$PATH"
+          command -v comparator | tee -a aa-evidence/tools.txt
+          # Rust (for nanoda), if absent: rustup minimal profile.
+          if ! command -v cargo >/dev/null 2>&1; then
+            curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+          fi
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.cargo/bin:$PATH"
+          cargo --version | tee -a aa-evidence/tools.txt
+          # nanoda at the pinned rev.
+          curl -fsSL -o nanoda.tar.gz "https://codeload.github.com/robsimmons/nanoda/tar.gz/68d5ca9db226849b41a6fff59d796ff19d0a8840"
+          sha256sum nanoda.tar.gz >> aa-evidence/tools.txt
+          mkdir -p tools/nanoda
+          tar -xzf nanoda.tar.gz -C tools/nanoda --strip-components=1
+          rm -f nanoda.tar.gz
+          (cd tools/nanoda && cargo build --release --locked)
+          [ -x tools/nanoda/target/release/nanoda_bin ] || { echo "nanoda_bin not built" >&2; exit 1; }
+          echo "$PWD/tools/nanoda/target/release" >> "$GITHUB_PATH"
+          export PATH="$PWD/tools/nanoda/target/release:$PATH"
+          command -v nanoda_bin | tee -a aa-evidence/tools.txt
+          echo "comparator tools OK" | tee -a aa-evidence/tools.txt
+
+      - name: Comparator theorems leg (aa-thm)
+        run: |
+          export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+          cd aa-thm
+          python3 "$RUNNER_TEMP/aa-seed.py" . > ../aa-evidence/seed-thm.log 2>&1
+          grep -q "ALL SEEDED" ../aa-evidence/seed-thm.log
+          timeout 1800 lake exe cache get > ../aa-evidence/cache-thm.log 2>&1
+          echo "cache get exit: $?" >> ../aa-evidence/cache-thm.log
+          if [ "$(cat ../aa-evidence/systemd-ok.txt)" != "1" ]; then
+            echo "no systemd user session (see systemd-probe.log); comparator not run" > ../aa-evidence/comparator.log
+            echo "97" > ../aa-evidence/comparator-exit.txt
+            exit 0
+          fi
+          ./comparator/check_sandbox.sh > ../aa-evidence/sandbox-check.log 2>&1 || true
+          set +e
+          timeout 10800 ./scripts/run_comparator.sh 2>&1 | tee ../aa-evidence/comparator.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "$code" > ../aa-evidence/comparator-exit.txt
+          echo "comparator exit: $code"
+
+      - name: Comparator controls leg (aa-ctl)
+        run: |
+          export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+          cd aa-ctl
+          python3 "$RUNNER_TEMP/aa-seed.py" . > ../aa-evidence/seed-ctl.log 2>&1
+          grep -q "ALL SEEDED" ../aa-evidence/seed-ctl.log
+          timeout 1800 lake exe cache get > ../aa-evidence/cache-ctl.log 2>&1
+          if [ "$(cat ../aa-evidence/systemd-ok.txt)" != "1" ]; then
+            echo "no systemd user session; controls not run" > ../aa-evidence/controls.log
+            echo "97" > ../aa-evidence/controls-exit.txt
+            exit 0
+          fi
+          set +e
+          timeout 5400 ./scripts/run_comparator_controls.sh 2>&1 | tee ../aa-evidence/controls.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "$code" > ../aa-evidence/controls-exit.txt
+          echo "controls exit: $code"
+
+      - name: Upload early evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aaronson-ambainis-forge-evidence-early
+          path: aa-evidence/
+          if-no-files-found: warn
+
+      - name: Build leg (aa-build)
+        run: |
+          cd aa-build
+          python3 "$RUNNER_TEMP/aa-seed.py" . > ../aa-evidence/seed-build.log 2>&1
+          grep -q "ALL SEEDED" ../aa-evidence/seed-build.log
+          timeout 1800 lake exe cache get > ../aa-evidence/cache-build.log 2>&1
+          set +e
+          timeout 14400 /usr/bin/time -v lake build 2>&1 | tee ../aa-evidence/build.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "$code" > ../aa-evidence/build-exit.txt
+          grep "Maximum resident set size" ../aa-evidence/build.log > ../aa-evidence/build-rss.txt || true
+          echo "build exit: $code"
+          python3 verification/check_no_placeholders.py AaronsonAmbainis AaronsonAmbainis.lean > ../aa-evidence/scan-authors.log 2>&1 || true
+          tail -2 ../aa-evidence/scan-authors.log || true
+
+      - name: Axiom closure leg
+        run: |
+          cd aa-build
+          set +e
+          ./scripts/print_axioms.sh > ../aa-evidence/authors-axioms.log 2>&1
+          echo "$?" > ../aa-evidence/authors-axioms-exit.txt
+          set -e
+          cat > AxiomPrint.lean <<'EOF'
+          import AaronsonAmbainis.Main
+          #print axioms AaronsonAmbainis.aaronson_ambainis
+          #print axioms AaronsonAmbainis.aaronson_ambainis_explicit
+          #print axioms AaronsonAmbainis.aaronson_ambainis_pm
+          #print axioms AaronsonAmbainis.aaronson_ambainis_of_fbsDegreeBound
+          EOF
+          set +e
+          timeout 1800 lake env lean AxiomPrint.lean > ../aa-evidence/axioms.log 2>&1
+          code=$?
+          set -e
+          echo "$code" > ../aa-evidence/axioms-exit.txt
+          cat ../aa-evidence/axioms.log
+          echo "axioms exit: $code"
+
+      - name: Replay legs (serialized)
+        run: |
+          cd aa-build
+          set +e
+          timeout 7200 env LEAN_NUM_THREADS=1 lake env leanchecker -v AaronsonAmbainis > ../aa-evidence/replay.log 2>&1
+          echo "$?" > ../aa-evidence/replay-exit.txt
+          timeout 14400 lake env leanchecker --fresh AaronsonAmbainis.Main > ../aa-evidence/replay-fresh.log 2>&1
+          echo "$?" > ../aa-evidence/replay-fresh-exit.txt
+          set -e
+          echo "replay exit: $(cat ../aa-evidence/replay-exit.txt), replay-fresh exit: $(cat ../aa-evidence/replay-fresh-exit.txt)"
+          tail -3 ../aa-evidence/replay.log
+          tail -3 ../aa-evidence/replay-fresh.log
+
+      - name: ST-3 linter leg
+        run: |
+          cd aa-build
+          set +e
+          timeout 1800 lake env lean -Dlinter.unusedVariables=true AaronsonAmbainis/Bridge/Capstone.lean > ../aa-evidence/st3-capstone.log 2>&1
+          echo "capstone: $?" > ../aa-evidence/st3-exit.txt
+          timeout 1800 lake env lean -Dlinter.unusedVariables=true AaronsonAmbainis/Main.lean >> ../aa-evidence/st3-main.log 2>&1
+          echo "main: $?" >> ../aa-evidence/st3-exit.txt
+          set -e
+          cat ../aa-evidence/st3-exit.txt
+          grep -c "not explicitly referenced" ../aa-evidence/st3-capstone.log ../aa-evidence/st3-main.log || true
+
+      - name: ST statement tests leg
+        run: |
+          cd aa-build
+          cp ../scripts/forge/aa-probes/Probes.lean Probes.lean
+          set +e
+          timeout 3600 lake env lean Probes.lean 2>&1 | tee ../aa-evidence/probes.log
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "$code" > ../aa-evidence/probes-exit.txt
+          echo "probes exit: $code"
+
+      - name: Verdict
+        run: |
+          python3 - <<'PYEOF'
+          import json, os, re, sys
+          E = "aa-evidence"
+          def rd(name, default=""):
+              p = os.path.join(E, name)
+              return open(p).read() if os.path.exists(p) else default
+          def ex(name):
+              s = rd(name).strip()
+              try:
+                  return int(s)
+              except ValueError:
+                  return None
+          comp_exit = ex("comparator-exit.txt")
+          comp_log = rd("comparator.log")
+          comp_ok = comp_exit == 0 and "Your solution is okay!" in comp_log
+          ctl_exit = ex("controls-exit.txt")
+          ctl_log = rd("controls.log")
+          ctl_ok = ctl_exit == 0 and "comparator controls: all five runs ended as they must" in ctl_log
+          build_exit = ex("build-exit.txt")
+          ax_exit = ex("axioms-exit.txt")
+          ax_log = rd("axioms.log")
+          allowed = {"propext", "Quot.sound", "Classical.choice"}
+          mentioned = set(re.findall(r"depends on axioms: \[([^\]]*)\]", ax_log))
+          ax_names = set()
+          for m in mentioned:
+              ax_names |= {t.strip() for t in m.split(",") if t.strip()}
+          endpoints_seen = all(n in ax_log for n in [
+              "aaronson_ambainis", "aaronson_ambainis_explicit",
+              "aaronson_ambainis_pm", "aaronson_ambainis_of_fbsDegreeBound"])
+          axioms_ok = (ax_exit == 0 and endpoints_seen and ax_names <= allowed
+                       and "sorryAx" not in ax_log)
+          replay_exit = ex("replay-exit.txt")
+          fresh_exit = ex("replay-fresh-exit.txt")
+          probes_exit = ex("probes-exit.txt")
+          probes_log = rd("probes.log")
+          probes_ok = probes_exit == 0 and "sorryAx" not in probes_log
+          systemd_ok = rd("systemd-ok.txt").strip() == "1"
+          if comp_ok and axioms_ok and build_exit == 0 and replay_exit == 0 and fresh_exit == 0 and probes_ok:
+              tier = "KERNEL-RECEIPT-COMPLETE"
+          elif comp_ok and axioms_ok:
+              tier = "COMPARATOR-RECEIPT (replay/probe legs short; grading capped per pre-registration)"
+          else:
+              tier = "NO-RECEIPT"
+          verdict = {
+              "target_sha": os.environ.get("TARGET_SHA"),
+              "systemd_user_session": systemd_ok,
+              "comparator_exit": comp_exit,
+              "comparator_ok": comp_ok,
+              "controls_exit": ctl_exit,
+              "controls_ok": ctl_ok,
+              "build_exit": build_exit,
+              "axioms_exit": ax_exit,
+              "axioms_ok": axioms_ok,
+              "axiom_names_seen": sorted(ax_names),
+              "replay_exit": replay_exit,
+              "replay_fresh_exit": fresh_exit,
+              "probes_exit": probes_exit,
+              "probes_axioms_clean": "sorryAx" not in probes_log,
+              "probes_ok": probes_ok,
+              "tier": tier,
+              "notes": [
+                  "aaronson_ambainis_of_fbsDegreeBound caps at PARTIAL under ST-5 (antecedent FbsDegreeBound unproved in the artifact) regardless of tier.",
+                  "controls are report-only (controls_ok) per standing doctrine.",
+                  "The audit verdict is issued by the main agent at close-out from this evidence.",
+              ],
+          }
+          with open(os.path.join(E, "verdict.json"), "w") as f:
+              json.dump(verdict, f, indent=2)
+          with open(os.path.join(E, "summary.md"), "w") as f:
+              f.write("# Aaronson-Ambainis forge summary\n\n")
+              for k, v in verdict.items():
+                  f.write(f"- {k}: {v}\n")
+          print(json.dumps(verdict, indent=2))
+          sys.exit(0 if (comp_ok and axioms_ok) else 1)
+          PYEOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aaronson-ambainis-forge-evidence
+          path: aa-evidence/
+          if-no-files-found: warn
+
+      - name: Cleanup target checkouts
+        if: always()
+        run: |
+          rm -rf aa-thm aa-ctl aa-build tools aa-target.tar.gz aa-key-hashes.txt
+          ls -la
