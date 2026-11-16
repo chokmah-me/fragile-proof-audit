@@ -15,6 +15,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 | [Borsuk dimension 63 (Grinsztajn 2026)](borsuk-63.md) |  |
 | [Block Anderson model localization scale in 1D (Yin, arXiv:2611.09776), Lean formalization — PASS: full build from source at the pinned commit (run 42727661807, build exit 0), all 12 headline declarations on the standard three axioms alone; 32 paper-to-Lean divergences graded at probe, zero load-bearing at headline, intermediate SCOPE items cataloged (Lemma 9.3 existential weakening first)](block-anderson-localization.md) | 2026-11-11 |
 | [CAT-G polynomial claim between (2.3) and (2.4) — BREAK](cat-g.md) |  |
+| [CFSG two-generation corollary, Lean formalization (AxiomMath/CFSGCorollary @161b0c2) — RETIRED, no verdict: 12 forge runs produced no kernel judgment; decisive run 12 (43683817213) timed out on all three build legs (exit 124, each at 99% of targets) and the comparator kernel check never started](cfsg-two-generators-corollary.md) | 2026-11-16 |
 | [Chung–Graham–Spiro gap-set conjecture (Track D#6)](chung-graham-spiro.md) |  |
 | [Cohen's subadditivity conjecture (Track D#1)](cohen-subadditivity.md) |  |
 | [Audit: Erdos-Straus gate — arXiv:2404.01508v3 (Lopez)](erdos-straus-gate.md) |  |
