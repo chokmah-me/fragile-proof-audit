@@ -8,70 +8,32 @@
   "claims": [
     {
       "id": "ternary-goldbach-lean",
-      "title": "Ternary Goldbach conjecture formalized in Lean 4 (Helfgott, conditional on two numerical hypotheses)",
-      "score": 5,
       "paper": {
         "status": "URL-RESOLVED",
         "url": "https://github.com/calr3/ternary-goldbach",
         "detail": "non-arXiv URL reachable (content not checked)"
       },
-      "axis2": {
-        "status": "NOT-APPLICABLE"
-      },
       "code": {
         "status": "PUBLIC",
         "slug": "calr3/ternary-goldbach",
         "branch": "main",
-        "size_kb": 14261,
+        "size_kb": 14263,
         "pushed_at": "2026-11-16",
         "url": "https://github.com/calr3/ternary-goldbach",
-        "head_sha": "60ac565084e0dbc90beb6d2f2222756f95c92468",
+        "head_sha": "c34d7dbde11663108fff5d3894932833e7104e11",
         "head_date": "2026-11-16",
         "lean_files": 444,
         "tree_truncated": false,
         "has_lakefile": true,
         "lean_toolchain": "leanprover/lean4:v4.35.0"
-      },
-      "signals": [
-        "ai_generated",
-        "single_author",
-        "formal_subset_of_claim"
-      ],
-      "adjustments": [
-        "toolchain pinned: leanprover/lean4:v4.35.0"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ],
-      "formalization_coverage": {
-        "lean_files": 444,
-        "has_lakefile": true,
-        "toolchain": "leanprover/lean4:v4.35.0",
-        "declared_verification": [
-          "Palomar registration (id not parsed) declared",
-          "multi-kernel / comparator replay declared"
-        ],
-        "probe_query": "Ternary Goldbach conjecture formalized in Lean 4 (Helfgott, conditional on two numerical hypotheses). Every odd integer > 5 is a sum of three primes, formalized in Lean 4 following"
       }
     },
     {
       "id": "eleven-unit-squares-packing",
-      "title": "Optimal packing of eleven unit squares, Lean-formalized (Trump bound, 2,184 Voronoi patterns)",
-      "score": 2,
       "paper": {
         "status": "URL-BLOCKED",
         "url": "https://hexagonmath.org/2611.00359v1",
         "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
-      },
-      "axis2": {
-        "status": "NOT-APPLICABLE"
       },
       "code": {
         "status": "PUBLIC",
@@ -86,45 +48,10 @@
         "tree_truncated": false,
         "has_lakefile": true,
         "lean_toolchain": "leanprover/lean4:v4.34.1"
-      },
-      "signals": [
-        "ai_generated",
-        "single_author",
-        "pinned_toolchain"
-      ],
-      "adjustments": [
-        "toolchain pinned: leanprover/lean4:v4.34.1",
-        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ],
-        [
-          "E",
-          "CAS-transcript replay (certificate)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ],
-      "formalization_coverage": {
-        "lean_files": 7928,
-        "has_lakefile": true,
-        "toolchain": "leanprover/lean4:v4.34.1",
-        "declared_verification": [
-          "Palomar registration (id not parsed) declared",
-          "multi-kernel / comparator replay declared"
-        ],
-        "probe_query": "Optimal packing of eleven unit squares, Lean-formalized (Trump bound, 2,184 Voronoi patterns). Eleven independently rotated unit squares require a container of side at least T = 3."
       }
     },
     {
       "id": "anisotropic-calderon-lean",
-      "title": "Anisotropic Calderon uniqueness, special case, in Lean 4 (comparator-declared)",
-      "score": 2,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2611.10537",
@@ -135,23 +62,6 @@
         ],
         "published": "2026-11-07",
         "url": "https://arxiv.org/abs/2611.10537"
-      },
-      "axis2": {
-        "status": "AGREE",
-        "arxiv_id": "2611.10537",
-        "title": "Formal Proof of an Anisotropic Calder\u00f3n Uniqueness Theorem",
-        "authors": [
-          "C\u0103t\u0103lin I. C\u00e2rstea",
-          "Lauri Oksanen"
-        ],
-        "publication_date": "2026-11-07",
-        "title_ok": true,
-        "author_overlap": [
-          "c\u00e2rstea",
-          "oksanen"
-        ],
-        "year_ok": true,
-        "openalex_id": "https://openalex.org/W7225749354"
       },
       "code": {
         "status": "PUBLIC",
@@ -166,36 +76,10 @@
         "tree_truncated": false,
         "has_lakefile": true,
         "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
-      },
-      "signals": [
-        "formal_subset_of_claim",
-        "pinned_toolchain"
-      ],
-      "adjustments": [
-        "toolchain pinned: leanprover/lean4:v4.35.0-rc3",
-        "+1: arXiv title does not closely match harvest title (check citation)"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ]
-      ],
-      "formalization_coverage": {
-        "lean_files": 3113,
-        "has_lakefile": true,
-        "toolchain": "leanprover/lean4:v4.35.0-rc3",
-        "declared_verification": [
-          "Palomar registration (id not parsed) declared",
-          "multi-kernel / comparator replay declared"
-        ],
-        "probe_query": "Anisotropic Calderon uniqueness, special case, in Lean 4 (comparator-declared). Lean 4 formal proof of a special case of the smooth anisotropic Calderon uniqueness theorem: on the "
       }
     },
     {
       "id": "icosahedron-rational-faces",
-      "title": "No regular icosahedron has a rational point on every face (Lean, 48 kernel certificates)",
-      "score": 3,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2611.11577",
@@ -205,21 +89,6 @@
         ],
         "published": "2026-11-08",
         "url": "https://arxiv.org/abs/2611.11577"
-      },
-      "axis2": {
-        "status": "AGREE",
-        "arxiv_id": "2611.11577",
-        "title": "No regular icosahedron has a rational point on every face: a proof checked in Lean",
-        "authors": [
-          "Mikhail Levit"
-        ],
-        "publication_date": "2026-11-08",
-        "title_ok": true,
-        "author_overlap": [
-          "levit"
-        ],
-        "year_ok": true,
-        "openalex_id": "https://openalex.org/W7225698947"
       },
       "code": {
         "status": "PUBLIC",
@@ -233,44 +102,10 @@
         "lean_files": 62,
         "tree_truncated": false,
         "has_lakefile": true
-      },
-      "signals": [
-        "ai_generated",
-        "single_author",
-        "pinned_toolchain"
-      ],
-      "adjustments": [
-        "+1: Lean files present, no lean-toolchain pin found"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ],
-        [
-          "E",
-          "CAS-transcript replay (certificate)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ],
-      "formalization_coverage": {
-        "lean_files": 62,
-        "has_lakefile": true,
-        "toolchain": null,
-        "declared_verification": [
-          "Palomar registration (id not parsed) declared",
-          "multi-kernel / comparator replay declared"
-        ],
-        "probe_query": "No regular icosahedron has a rational point on every face (Lean, 48 kernel certificates). Every regular icosahedron in R^3 has at least one of its twenty closed faces containing no"
       }
     },
     {
       "id": "quadratic-apn-f2-10",
-      "title": "Quadratic APN functions of F2^10: 298 of 299 self-equivalence types settled",
-      "score": 1,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2611.18358",
@@ -280,11 +115,6 @@
         ],
         "published": "2026-11-13",
         "url": "https://arxiv.org/abs/2611.18358"
-      },
-      "axis2": {
-        "status": "ABSENT",
-        "arxiv_id": "2611.18358",
-        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
       },
       "code": {
         "status": "PUBLIC",
@@ -298,20 +128,10 @@
         "lean_files": 0,
         "tree_truncated": false,
         "has_lakefile": false
-      },
-      "signals": [
-        "single_author"
-      ],
-      "adjustments": [
-        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
-      ],
-      "lanes": [],
-      "formalization_coverage": null
+      }
     },
     {
       "id": "annular-counterexamples-lean",
-      "title": "Annular counterexamples + Kahane skew-shape identity in Lean (refutes Kang-Lee-Lim unimodality)",
-      "score": 4,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2611.14506",
@@ -321,21 +141,6 @@
         ],
         "published": "2026-11-10",
         "url": "https://arxiv.org/abs/2611.14506"
-      },
-      "axis2": {
-        "status": "AGREE",
-        "arxiv_id": "2611.14506",
-        "title": "Annular Obstructions and Skew-Shape Block Identities",
-        "authors": [
-          "Adam Til\u00e8pe"
-        ],
-        "publication_date": "2026-11-10",
-        "title_ok": true,
-        "author_overlap": [
-          "til\u00e8pe"
-        ],
-        "year_ok": true,
-        "openalex_id": "https://openalex.org/W7225825768"
       },
       "code": {
         "status": "PUBLIC",
@@ -350,116 +155,38 @@
         "tree_truncated": false,
         "has_lakefile": true,
         "lean_toolchain": "leanprover/lean4:v4.35.0-rc4"
-      },
-      "signals": [
-        "single_author",
-        "formal_subset_of_claim"
-      ],
-      "adjustments": [
-        "toolchain pinned: leanprover/lean4:v4.35.0-rc4",
-        "+1: arXiv title does not closely match harvest title (check citation)"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ],
-        [
-          "F",
-          "counterexample search (conjecture kill)"
-        ]
-      ],
-      "formalization_coverage": {
-        "lean_files": 1,
-        "has_lakefile": true,
-        "toolchain": "leanprover/lean4:v4.35.0-rc4",
-        "declared_verification": [
-          "Palomar registration (id not parsed) declared",
-          "multi-kernel / comparator replay declared"
-        ],
-        "probe_query": "Annular counterexamples + Kahane skew-shape identity in Lean (refutes Kang-Lee-Lim unimodality). A single bridging-lamination coefficient row gives 1+q^2, refuting Theorem 14 (unim"
       }
     },
     {
       "id": "landau-siegel-interpolation-lean",
-      "title": "Landau-Siegel interpolation lemma formalized; Comparator-accepted proof (OpenAI Lemma 3 / Corollary 4)",
-      "score": 1,
       "paper": {
         "status": "URL-BLOCKED",
         "url": "https://hexagonmath.org/2611.00200v2",
         "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
       },
-      "axis2": {
-        "status": "NOT-APPLICABLE"
-      },
       "code": {
         "status": "NON-GITHUB",
         "detail": "https://zenodo.org/records/23695266"
-      },
-      "signals": [
-        "disclosed_llm_help",
-        "single_author",
-        "pinned_toolchain"
-      ],
-      "adjustments": [
-        "code repo check: NON-GITHUB",
-        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
-      ],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ],
-      "formalization_coverage": null
+      }
     },
     {
       "id": "markov-uniqueness-trillion",
-      "title": "Markov uniqueness verified for the first one trillion values (Zenodo, unaffiliated single author)",
-      "score": 3,
       "paper": {
         "status": "URL-RESOLVED",
         "url": "https://zenodo.org/records/24096109",
         "detail": "non-arXiv URL reachable (content not checked)"
       },
-      "axis2": {
-        "status": "NOT-APPLICABLE"
-      },
       "code": {
         "status": "NON-GITHUB",
         "detail": "https://zenodo.org/records/24096109"
-      },
-      "signals": [
-        "anonymous_or_unaffiliated",
-        "single_author",
-        "released_under_pressure"
-      ],
-      "adjustments": [
-        "code repo check: NON-GITHUB"
-      ],
-      "lanes": [
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ],
-      "formalization_coverage": null
+      }
     },
     {
       "id": "fibonacci-matching-coefficient-minors",
-      "title": "Certified positivity for Fibonacci matching transforms (finite-range certificate, k <= 180)",
-      "score": 3,
       "paper": {
         "status": "URL-RESOLVED",
         "url": "https://zenodo.org/records/24103414",
         "detail": "non-arXiv URL reachable (content not checked)"
-      },
-      "axis2": {
-        "status": "NOT-APPLICABLE"
       },
       "code": {
         "status": "PUBLIC",
@@ -473,25 +200,10 @@
         "lean_files": 0,
         "tree_truncated": false,
         "has_lakefile": false
-      },
-      "signals": [
-        "single_author",
-        "anonymous_or_unaffiliated",
-        "ai_only_review"
-      ],
-      "adjustments": [],
-      "lanes": [
-        [
-          "E",
-          "CAS-transcript replay (certificate)"
-        ]
-      ],
-      "formalization_coverage": null
+      }
     },
     {
       "id": "pinwheel-5-6-bound",
-      "title": "Real-period pinwheel scheduling 5/6 bound, computer-assisted (14,287 schedules + SMT checks)",
-      "score": 0,
       "paper": {
         "status": "VERIFIED",
         "arxiv_id": "2611.10624",
@@ -505,27 +217,6 @@
         "published": "2026-11-07",
         "url": "https://arxiv.org/abs/2611.10624"
       },
-      "axis2": {
-        "status": "AGREE",
-        "arxiv_id": "2611.10624",
-        "title": "A Simple Computer-Assisted Proof of the 5/6-Bound for Real-Period Pinwheel Scheduling",
-        "authors": [
-          "Hiroshi Fujiwara",
-          "Grzegorz Gutowski",
-          "Katsuhisa Ouchi",
-          "Alexander Wolff"
-        ],
-        "publication_date": "2026-11-07",
-        "title_ok": true,
-        "author_overlap": [
-          "fujiwara",
-          "gutowski",
-          "ouchi",
-          "wolff"
-        ],
-        "year_ok": true,
-        "openalex_id": "https://openalex.org/W7225730867"
-      },
       "code": {
         "status": "PUBLIC",
         "slug": "grzegorz-gutowski/pinwheel_scheduling",
@@ -538,24 +229,8 @@
         "lean_files": 0,
         "tree_truncated": false,
         "has_lakefile": false
-      },
-      "signals": [],
-      "adjustments": [],
-      "lanes": [
-        [
-          "G",
-          "logical-gap exposure (formalized subset vs headline)"
-        ],
-        [
-          "E",
-          "CAS-transcript replay (certificate)"
-        ],
-        [
-          "A",
-          "scalar gate (quantitative bound)"
-        ]
-      ],
-      "formalization_coverage": null
+      }
     }
-  ]
+  ],
+  "last_health_check": "2026-11-16"
 }
