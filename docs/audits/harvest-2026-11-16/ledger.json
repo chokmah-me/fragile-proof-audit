@@ -1,0 +1,561 @@
+{
+  "date": "2026-11-16",
+  "harvest_sha": "1255ab8bec79ea0d9bcd25ad03c922f9311283571261dd9ec4b45b556494e839",
+  "meta": {
+    "window": "2026-11-09..2026-11-16",
+    "source": "weekly harvest scan 2026-11-16 -- three parallel sweeps: (a) arXiv math.CO/math.NT (math.CO 356 entries enumerated 2026-11-09..13; math.NT no full listing enumeration, targeted search only); (b) arXiv math.PR/math.NA/cs.DM/cs.SC (cs.DM 11 primary + cs.SC 11 fully abs-page-checked; math.PR ~136 and math.NA ~130 keyword-screened, not title-enumerated); (c) math blogs, public GitHub repos, HexagonMath deposits and Zenodo records. Top code links spot-verified live by the parent: ternary-goldbach repo (public, 423 commits, current 60ac565, lean-toolchain present, full build 2026-11-14 at acb9dc7), pinwheel_scheduling repo (public, MIT, certificate dirs + checkers as documented), yang-mills-group/OpenAI-YM-20261028 (public, Lean 4.32.0, lean-toolchain + comparator.json -- see last_scan.md, registered-claim availability note, NOT a shortlist item). Registered candidate toric-code-lean-device-model: trigger checked (arXiv:2611.03329 still v1 only, no ancillary files, no repo link) -- not fired, stays WAITING, silent in delivery. Coverage caveats: math.NT title-level coverage thin (no full listing enumeration -- main gap in this slice); math.CO titles screened only for the latest ~15 entries plus keyword searches; math.PR Nov 13 entries 51-82 and the Nov 11/10/9 day-lists not title-enumerated; math.NA title-unscreened; announcements through Fri 13 Nov covered, Nov 14-15 weekend (no mail), Nov 16 mail visible at scan time; Hexagon/Zenodo discovery search-index based, Nov 14-16 deposits may exist beyond the index; gitlab.com is policy-blocked in this environment, so the Girsanov Lean repo URL could not be resolved (near-miss, recon may revisit). Near-misses failing public inputs: 2611.18344 (cospectral graphs, no code/data), 2611.18391 (1-WL outerplanar, Rocq formalization claimed, no repo), 2611.18384 (diagonal coloring, theory), 2611.16358 (genus-two zeta sample complexity, no implementation), 2611.16130 (Diophantine Z in Q, theory), 2611.16713 (twisted Kloosterman moments, theory), 2611.16828 (short exponential sums, theory), 2611.14334 (SVP infinity NP-hard, theory), Hexagon 2611.00216 (k-Markov uniqueness, theory), 2611.11341 (ideal-membership certificates, theory), 2611.17386 (TSP subtour constraints, Concorde experiments, no code link), 2611.14817 (planar queue number <=33, no code), 2611.14909 (subspace evasive sets, no code), 2611.12642 (tetrahedral-similarity counterexample, no code), 2611.11376 (distance-edge-monitoring, theory), 2611.10701 (weighted matroid intersection, theory), 2611.10920 (holonomic positivity certificates, no code link), 2611.13048 / 2611.15258 / 2611.15307 (certified L-infinity / control computation, no code links), 2611.16849 (constrained intersection representations, theory), Hexagon 2611.00431v1 (Euler triples, AI-assisted theory, no code), Hexagon 2611.00086v2 (Frank Vega class numbers, conditional claim, no code), Zenodo 24256378 (Hess L-values study, numerical support only, no theorem claim), Anthropic Fable 5.2 FLT 30-hour re-proof (announced Nov 9, no repo/axiom printout/outside check), 2611.05514 (re-checked per 2026-11-09 flag: still no public code link, outside window). Cut by the 10-cap, held for next run if still fresh: 2611.11641 (collatz-syracuse-holomorphic, ancillary verified: single CollatzAttractor.lean + Python verifiers + JSON report, 20 Lean theorems cover local multiplier computations only), Hexagon 2610.00419v1 (finite-prime-gaps-h2-h5, H_2 <= 19,844 is ~80x weaker than the known Polymath bound 246). Out-of-window flags for next runs: 2611.07921 (Booker/Lee/Zubrilina twistless converse, GitHub supplementary material, submitted Nov 5), 2611.10269 (Bellini CCZ-projection test, companion to ranked APN claim, submitted Nov 6), 2611.12907 (3x3 matmul, 51 additions/step, Lean-checked Ring51.lean, v1 Oct 17, surfaced via Nov 11 cross-list), Asvin G splitting densities Lean v1.2 released Nov 11-12 (paper Oct 16), 2606.01356 formal-mathfin v4 (804 results, ~158k lines, q-fin.MF, revised Nov 7)."
+  },
+  "claims": [
+    {
+      "id": "ternary-goldbach-lean",
+      "title": "Ternary Goldbach conjecture formalized in Lean 4 (Helfgott, conditional on two numerical hypotheses)",
+      "score": 5,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://github.com/calr3/ternary-goldbach",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "calr3/ternary-goldbach",
+        "branch": "main",
+        "size_kb": 14261,
+        "pushed_at": "2026-11-16",
+        "url": "https://github.com/calr3/ternary-goldbach",
+        "head_sha": "60ac565084e0dbc90beb6d2f2222756f95c92468",
+        "head_date": "2026-11-16",
+        "lean_files": 444,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0"
+      },
+      "signals": [
+        "ai_generated",
+        "single_author",
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 444,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Ternary Goldbach conjecture formalized in Lean 4 (Helfgott, conditional on two numerical hypotheses). Every odd integer > 5 is a sum of three primes, formalized in Lean 4 following"
+      }
+    },
+    {
+      "id": "eleven-unit-squares-packing",
+      "title": "Optimal packing of eleven unit squares, Lean-formalized (Trump bound, 2,184 Voronoi patterns)",
+      "score": 2,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://hexagonmath.org/2611.00359v1",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "Queuingtheorydotcom/11SquaresFormalized",
+        "branch": "main",
+        "size_kb": 650644,
+        "pushed_at": "2026-10-06",
+        "url": "https://github.com/Queuingtheorydotcom/11SquaresFormalized",
+        "head_sha": "cdc746ed907d258057c283aeb6d077cb2c27e349",
+        "head_date": "2026-10-06",
+        "lean_files": 7928,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.34.1"
+      },
+      "signals": [
+        "ai_generated",
+        "single_author",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.34.1",
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 7928,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.34.1",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Optimal packing of eleven unit squares, Lean-formalized (Trump bound, 2,184 Voronoi patterns). Eleven independently rotated unit squares require a container of side at least T = 3."
+      }
+    },
+    {
+      "id": "anisotropic-calderon-lean",
+      "title": "Anisotropic Calderon uniqueness, special case, in Lean 4 (comparator-declared)",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.10537",
+        "title": "Formal Proof of an Anisotropic Calder\u00f3n Uniqueness Theorem",
+        "authors": [
+          "C\u0103t\u0103lin I. C\u00e2rstea",
+          "Lauri Oksanen"
+        ],
+        "published": "2026-11-07",
+        "url": "https://arxiv.org/abs/2611.10537"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.10537",
+        "title": "Formal Proof of an Anisotropic Calder\u00f3n Uniqueness Theorem",
+        "authors": [
+          "C\u0103t\u0103lin I. C\u00e2rstea",
+          "Lauri Oksanen"
+        ],
+        "publication_date": "2026-11-07",
+        "title_ok": true,
+        "author_overlap": [
+          "c\u00e2rstea",
+          "oksanen"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7225749354"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "catalin-carstea/anisotropic-calderon-lean",
+        "branch": "main",
+        "size_kb": 14499,
+        "pushed_at": "2026-11-09",
+        "url": "https://github.com/catalin-carstea/anisotropic-calderon-lean",
+        "head_sha": "0f09786282d0f2d3865fa0f175b63c35969d25f7",
+        "head_date": "2026-11-09",
+        "lean_files": 3113,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc3"
+      },
+      "signals": [
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc3",
+        "+1: arXiv title does not closely match harvest title (check citation)"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 3113,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0-rc3",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Anisotropic Calderon uniqueness, special case, in Lean 4 (comparator-declared). Lean 4 formal proof of a special case of the smooth anisotropic Calderon uniqueness theorem: on the "
+      }
+    },
+    {
+      "id": "icosahedron-rational-faces",
+      "title": "No regular icosahedron has a rational point on every face (Lean, 48 kernel certificates)",
+      "score": 3,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.11577",
+        "title": "No regular icosahedron has a rational point on every face: a proof checked in Lean",
+        "authors": [
+          "Mikhail Levit"
+        ],
+        "published": "2026-11-08",
+        "url": "https://arxiv.org/abs/2611.11577"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.11577",
+        "title": "No regular icosahedron has a rational point on every face: a proof checked in Lean",
+        "authors": [
+          "Mikhail Levit"
+        ],
+        "publication_date": "2026-11-08",
+        "title_ok": true,
+        "author_overlap": [
+          "levit"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7225698947"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "MikhailLevit1987/icosahedron-rational-faces",
+        "branch": "master",
+        "size_kb": 902,
+        "pushed_at": "2026-11-08",
+        "url": "https://github.com/MikhailLevit1987/icosahedron-rational-faces",
+        "head_sha": "f2539dbc4000b5168711fa2155bf1d13a2bf2a33",
+        "head_date": "2026-11-08",
+        "lean_files": 62,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "ai_generated",
+        "single_author",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 62,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "No regular icosahedron has a rational point on every face (Lean, 48 kernel certificates). Every regular icosahedron in R^3 has at least one of its twenty closed faces containing no"
+      }
+    },
+    {
+      "id": "quadratic-apn-f2-10",
+      "title": "Quadratic APN functions of F2^10: 298 of 299 self-equivalence types settled",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.18358",
+        "title": "Quadratic APN Functions of $\\mathbb{F}_2^{10}$ with a Self-Equivalence of Prime Order",
+        "authors": [
+          "Emanuele Bellini"
+        ],
+        "published": "2026-11-13",
+        "url": "https://arxiv.org/abs/2611.18358"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2611.18358",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "peacker/apn10-self-equivalences",
+        "branch": "main",
+        "size_kb": 70851,
+        "pushed_at": "2026-11-13",
+        "url": "https://github.com/peacker/apn10-self-equivalences",
+        "head_sha": "6f8a932a9f935e5fa8ea39208046e486a3436743",
+        "head_date": "2026-11-13",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "single_author"
+      ],
+      "adjustments": [
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [],
+      "formalization_coverage": null
+    },
+    {
+      "id": "annular-counterexamples-lean",
+      "title": "Annular counterexamples + Kahane skew-shape identity in Lean (refutes Kang-Lee-Lim unimodality)",
+      "score": 4,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.14506",
+        "title": "Annular Obstructions and Skew-Shape Block Identities",
+        "authors": [
+          "Adam Til\u00e8pe"
+        ],
+        "published": "2026-11-10",
+        "url": "https://arxiv.org/abs/2611.14506"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.14506",
+        "title": "Annular Obstructions and Skew-Shape Block Identities",
+        "authors": [
+          "Adam Til\u00e8pe"
+        ],
+        "publication_date": "2026-11-10",
+        "title_ok": true,
+        "author_overlap": [
+          "til\u00e8pe"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7225825768"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "adamtilepe/Annular_Counterexamples_and_Skew-Shape_Block_Identities",
+        "branch": "main",
+        "size_kb": 1201,
+        "pushed_at": "2026-11-12",
+        "url": "https://github.com/adamtilepe/Annular_Obstructions_and_Skew-Shape_Block_Identities",
+        "head_sha": "e4727e42bb5b0298c578a92ee9c8c0d115a5f1df",
+        "head_date": "2026-11-12",
+        "lean_files": 1,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc4"
+      },
+      "signals": [
+        "single_author",
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc4",
+        "+1: arXiv title does not closely match harvest title (check citation)"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 1,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0-rc4",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Annular counterexamples + Kahane skew-shape identity in Lean (refutes Kang-Lee-Lim unimodality). A single bridging-lamination coefficient row gives 1+q^2, refuting Theorem 14 (unim"
+      }
+    },
+    {
+      "id": "landau-siegel-interpolation-lean",
+      "title": "Landau-Siegel interpolation lemma formalized; Comparator-accepted proof (OpenAI Lemma 3 / Corollary 4)",
+      "score": 1,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://hexagonmath.org/2611.00200v2",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://zenodo.org/records/23695266"
+      },
+      "signals": [
+        "disclosed_llm_help",
+        "single_author",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "markov-uniqueness-trillion",
+      "title": "Markov uniqueness verified for the first one trillion values (Zenodo, unaffiliated single author)",
+      "score": 3,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://zenodo.org/records/24096109",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://zenodo.org/records/24096109"
+      },
+      "signals": [
+        "anonymous_or_unaffiliated",
+        "single_author",
+        "released_under_pressure"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "fibonacci-matching-coefficient-minors",
+      "title": "Certified positivity for Fibonacci matching transforms (finite-range certificate, k <= 180)",
+      "score": 3,
+      "paper": {
+        "status": "URL-RESOLVED",
+        "url": "https://zenodo.org/records/24103414",
+        "detail": "non-arXiv URL reachable (content not checked)"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "yonezaemon1-hub/fibonacci-matching-coefficient-minors",
+        "branch": "main",
+        "size_kb": 320,
+        "pushed_at": "2026-11-12",
+        "url": "https://github.com/yonezaemon1-hub/fibonacci-matching-coefficient-minors",
+        "head_sha": "9791ea06c41ba50f9efe801d9dd572cc781b94c0",
+        "head_date": "2026-11-12",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [
+        "single_author",
+        "anonymous_or_unaffiliated",
+        "ai_only_review"
+      ],
+      "adjustments": [],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "pinwheel-5-6-bound",
+      "title": "Real-period pinwheel scheduling 5/6 bound, computer-assisted (14,287 schedules + SMT checks)",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.10624",
+        "title": "A Simple Computer-Assisted Proof of the 5/6-Bound for Real-Period Pinwheel Scheduling",
+        "authors": [
+          "Hiroshi Fujiwara",
+          "Grzegorz Gutowski",
+          "Katsuhisa Ouchi",
+          "Alexander Wolff"
+        ],
+        "published": "2026-11-07",
+        "url": "https://arxiv.org/abs/2611.10624"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.10624",
+        "title": "A Simple Computer-Assisted Proof of the 5/6-Bound for Real-Period Pinwheel Scheduling",
+        "authors": [
+          "Hiroshi Fujiwara",
+          "Grzegorz Gutowski",
+          "Katsuhisa Ouchi",
+          "Alexander Wolff"
+        ],
+        "publication_date": "2026-11-07",
+        "title_ok": true,
+        "author_overlap": [
+          "fujiwara",
+          "gutowski",
+          "ouchi",
+          "wolff"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7225730867"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "grzegorz-gutowski/pinwheel_scheduling",
+        "branch": "main",
+        "size_kb": 3138,
+        "pushed_at": "2026-10-30",
+        "url": "https://github.com/grzegorz-gutowski/pinwheel_scheduling",
+        "head_sha": "c133a7159fc26d41612111a412ee3e57c720414d",
+        "head_date": "2026-10-30",
+        "lean_files": 0,
+        "tree_truncated": false,
+        "has_lakefile": false
+      },
+      "signals": [],
+      "adjustments": [],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    }
+  ]
+}
