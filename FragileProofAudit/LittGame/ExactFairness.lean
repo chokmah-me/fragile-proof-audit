@@ -554,3 +554,135 @@ theorem card_wordsOfLength (L : ℕ) :
       exact Prod.ext h.1 h.2
 
 end FragileProofAudit.LittGame
+
+/-!
+## Pattern predicate and `L_M(I)` (2026-11-18, Lemma 1 increment 2)
+
+`HasPattern A B M I Y` is the paper's `Patt_{A,B}(Y) = M` with
+`|X_j| = i_j`, stated through the existing `PatternDecomp` data plus
+one condition the structure does not carry: at every gap-block
+junction, no occurrence of `A` or `B` starts inside the gap
+(`NoEarlyBlock` on `X_j ++ E_{j+1}`). That is where the straddle /
+firstness question is settled: a decomposition whose gaps are clean
+(`NoABSubword`) and early-block-free has its blocks at the successive
+first occurrences, as in the paper. The condition lives in the
+predicate, not in `PatternDecomp`, per the adopted plan.
+
+`patternWords A B M I` is `L_M(I)`: the filter of
+`wordsOfLength (patternLength M I)` by `HasPattern`. Decidability of
+the predicate is classical (`Classical.decPred`); only cardinalities
+of these Finsets are ever used, and no `native_decide` is involved.
+-/
+
+namespace FragileProofAudit.LittGame
+
+open Finset
+
+variable {q : ℕ}
+
+/-- A word of length `L + 1` in `wordsOfLength` is a cons whose tail
+    has length `L` (Hydrogen double-check nice-to-have, 2026-11-18). -/
+theorem cons_mem_wordsOfLength {a : Fin q} {Z : List (Fin q)} {L : ℕ} :
+    a :: Z ∈ wordsOfLength (L + 1) ↔ Z ∈ wordsOfLength L := by
+  rw [mem_wordsOfLength, mem_wordsOfLength]
+  simp
+
+/-- No occurrence of `A` or `B` in `W` starts at a position `< n`.
+    Applied with `W = X ++ E` and `n = X.length`, this rules out
+    occurrences straddling the end of the gap `X`. -/
+def NoEarlyBlock (A B W : List (Fin q)) (n : ℕ) : Prop :=
+  (∀ i : ℕ, i < n → ∀ h : i + A.length ≤ W.length,
+    (W.drop i).take A.length ≠ A) ∧
+  (∀ i : ℕ, i < n → ∀ h : i + B.length ≤ W.length,
+    (W.drop i).take B.length ≠ B)
+
+/-- Total length of a word with pattern `M` and gap lengths `I`:
+    the gaps plus the pattern blocks. A plain `ℕ`, never a type index. -/
+def patternLength (M : Pattern q) (I : List ℕ) : ℕ :=
+  I.sum + (M.map List.length).sum
+
+/-- `Y` has pattern `M` with gap lengths `I`: clean gaps of lengths
+    `I` interleave `M` to form `Y`, with no `A`/`B` occurrence starting
+    inside any gap (the firstness condition). -/
+def HasPattern (A B : List (Fin q)) (M : Pattern q) (I : List ℕ)
+    (Y : List (Fin q)) : Prop :=
+  ∃ gaps : List (List (Fin q)),
+    gaps.length = M.length + 1 ∧
+    gaps.map List.length = I ∧
+    (∀ X ∈ gaps, NoABSubword q A B X) ∧
+    (∀ p ∈ gaps.zip M, NoEarlyBlock A B (p.1 ++ p.2) p.1.length) ∧
+    (∀ E ∈ M, E = A ∨ E = B) ∧
+    Y = interleaveGaps gaps M
+
+/-- `L_M(I)`: the words with pattern `M` and gap lengths `I`. -/
+noncomputable def patternWords (A B : List (Fin q)) (M : Pattern q)
+    (I : List ℕ) : Finset (List (Fin q)) :=
+  letI : DecidablePred (HasPattern A B M I) := Classical.decPred _
+  (wordsOfLength (patternLength M I)).filter (HasPattern A B M I)
+
+/-- Length of an interleaving, when the gap count matches
+    (`gaps.length = M.length + 1`): the catch-all arm of
+    `interleaveGaps` is then never the value taken. -/
+theorem length_interleaveGaps {gaps : List (List (Fin q))}
+    {M : Pattern q} (h : gaps.length = M.length + 1) :
+    (interleaveGaps gaps M).length
+      = (gaps.map List.length).sum + (M.map List.length).sum := by
+  induction gaps generalizing M with
+  | nil => simp at h
+  | cons X gaps ih =>
+    cases M with
+    | nil =>
+      have h0 : gaps.length = 0 := by
+        simp only [List.length_cons, List.length_nil] at h
+        omega
+      cases gaps with
+      | nil => simp [interleaveGaps]
+      | cons Z zs =>
+        simp only [List.length_cons] at h0
+        omega
+    | cons E M =>
+      have h' : gaps.length = M.length + 1 := by
+        simp only [List.length_cons] at h
+        omega
+      have hstep : interleaveGaps (X :: gaps) (E :: M)
+          = X ++ E ++ interleaveGaps gaps M := by
+        simp only [interleaveGaps]
+      rw [hstep, List.length_append, List.length_append, ih h']
+      simp only [List.map_cons, List.sum_cons]
+      omega
+
+/-- Membership in `L_M(I)` is exactly the pattern predicate: the
+    length side of the filter is automatic from the predicate. -/
+theorem mem_patternWords {A B : List (Fin q)} {M : Pattern q}
+    {I : List ℕ} {Y : List (Fin q)} :
+    Y ∈ patternWords A B M I ↔ HasPattern A B M I Y := by
+  classical
+  constructor
+  · intro h
+    simp only [patternWords, Finset.mem_filter] at h
+    exact h.2
+  · intro h
+    obtain ⟨gaps, hlen, hmap, hclean, hfirst, hmem, rfl⟩ := h
+    simp only [patternWords, Finset.mem_filter, mem_wordsOfLength]
+    refine ⟨?_, ⟨gaps, hlen, hmap, hclean, hfirst, hmem, rfl⟩⟩
+    show (interleaveGaps gaps M).length = patternLength M I
+    rw [length_interleaveGaps hlen, hmap]
+    rfl
+
+/-- The pattern predicate is `PatternDecomp` data with the prescribed
+    gap lengths, plus the firstness condition on the junctions. -/
+theorem hasPattern_iff {A B : List (Fin q)} {M : Pattern q}
+    {I : List ℕ} {Y : List (Fin q)} :
+    HasPattern A B M I Y ↔
+      ∃ D : PatternDecomp q A B, D.Y = Y ∧ D.pat = M ∧
+        D.gaps.map List.length = I ∧
+        (∀ p ∈ D.gaps.zip D.pat,
+          NoEarlyBlock A B (p.1 ++ p.2) p.1.length) := by
+  constructor
+  · rintro ⟨gaps, hlen, hmap, hclean, hfirst, hmem, hY⟩
+    exact ⟨⟨Y, M, gaps, hmem, hlen, hclean, hY⟩, rfl, rfl, hmap, hfirst⟩
+  · rintro ⟨D, rfl, rfl, hmap, hfirst⟩
+    exact ⟨D.gaps, D.gaps_len, hmap, D.gaps_clean, hfirst, D.pat_mem,
+      D.decomp⟩
+
+end FragileProofAudit.LittGame
