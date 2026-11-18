@@ -485,5 +485,72 @@ structure PatternDecomp (q : ℕ) (A B : List (Fin q)) where
 -- The `Finset.univ : Finset (Fin L → Fin q)` with computed `L` causes
 -- prohibitive typeclass search; deferred to a dedicated increment.
 -- Basdevant et al., Lemma 1: `|L_M(I)| = |L_{φ(M)}(I')|`.
+-- Increment 1 (2026-11-18): `wordsOfLength` now exists (section below),
+-- built by recursion on lists under adopted route 1B of the Lemma 1
+-- design session; `L_M(I)` itself is Increment 2 of that plan.
+
+end FragileProofAudit.LittGame
+
+/-!
+## Bounded word enumeration (2026-11-18, Lemma 1 increment 1)
+
+Route 1B of the Lemma 1 design session (`LEMMA1-DESIGN-SESSION.md`;
+ruling 2026-11-18, adopted with amendments): `L_M(I)` will be a filter
+of an explicit Finset of words built by recursion on lists. No
+`Finset.univ : Finset (Fin L → Fin q)` with computed `L` is ever formed,
+so the `da62cb6` typeclass blowup does not revive; the only
+`Finset.univ` used is over the fixed alphabet `Fin q`.
+-/
+
+namespace FragileProofAudit.LittGame
+
+open Finset
+
+variable {q : ℕ}
+
+/-- All words of length `L` over the alphabet `Fin q`, by recursion on
+    `L`: a word of length `L + 1` is a letter consed onto a word of
+    length `L`. -/
+def wordsOfLength : ℕ → Finset (List (Fin q))
+  | 0 => {[]}
+  | L + 1 => (Finset.univ ×ˢ wordsOfLength L).image (fun p => p.1 :: p.2)
+
+/-- Membership in `wordsOfLength L` is exactly having length `L`. -/
+theorem mem_wordsOfLength {L : ℕ} {Y : List (Fin q)} :
+    Y ∈ wordsOfLength L ↔ Y.length = L := by
+  induction L generalizing Y with
+  | zero =>
+    cases Y with
+    | nil => simp [wordsOfLength]
+    | cons a Z => simp [wordsOfLength]
+  | succ L ih =>
+    constructor
+    · intro h
+      simp only [wordsOfLength, Finset.mem_image, Finset.mem_product,
+        Finset.mem_univ, true_and] at h
+      obtain ⟨⟨a, Z⟩, hZ, rfl⟩ := h
+      simp only [List.length_cons]
+      rw [ih.mp hZ]
+    · intro h
+      cases Y with
+      | nil => simp at h
+      | cons a Z =>
+        simp only [wordsOfLength, Finset.mem_image, Finset.mem_product,
+          Finset.mem_univ, true_and]
+        exact ⟨⟨a, Z⟩, ih.mpr (by simpa using h), rfl⟩
+
+/-- There are `q ^ L` words of length `L` over `Fin q`. -/
+theorem card_wordsOfLength (L : ℕ) :
+    (wordsOfLength (q := q) L).card = q ^ L := by
+  induction L with
+  | zero => simp [wordsOfLength]
+  | succ L ih =>
+    simp only [wordsOfLength]
+    rw [Finset.card_image_of_injective]
+    · rw [Finset.card_product, Finset.card_univ, Fintype.card_fin, ih,
+        pow_succ']
+    · intro p₁ p₂ h
+      simp only [List.cons.injEq] at h
+      exact Prod.ext h.1 h.2
 
 end FragileProofAudit.LittGame
