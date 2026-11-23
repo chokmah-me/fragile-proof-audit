@@ -1,0 +1,563 @@
+{
+  "date": "2026-11-23",
+  "harvest_sha": "fad982f6c2300c6a2c94da9a03adac8d545145386e18555819deec39d44ad52d",
+  "meta": {
+    "window": "2026-11-16..2026-11-23",
+    "source": "weekly harvest scan 2026-11-23 -- three parallel sweeps: (a) arXiv math.CO/math.NT (search-driven; arXiv API timed out twice, no full listing enumeration; Nov 23 math.CO listing 56 entries, titles not shown); (b) arXiv math.PR/math.NA/cs.DM/cs.SC (cs.DM 11 primary + cs.SC 5 fully abs-page-checked; math.PR/math.NA keyword-screened, Nov 17 remainders and Nov 16 mail not title-enumerated; cross-scope Lean claims in cs.DS/math.AP routed in by sweep B, verified live); (c) math blogs, public GitHub repos, HexagonMath deposits and Zenodo records (Tao Nov 20 post covered; Gowers latest Oct 16; Hexagon discovery via Post-Cutoff Nov 21 listing, 89 deposits 2611.00697-00789, subset individually opened; Zenodo record pages returned 403, listing-level only). Top code links spot-verified live by the parent: GRH mirror repo (public, created 2026-11-20, commit 7cbf7a0c, lean-toolchain present, 175,187 files), Euler arXiv:2611.26772 abs page (submitted Nov 19, ancillary terminal_smoothness files), Navier-Stokes repo (public, created 2026-11-20, commit ad53419, certificate NOT in repo per README), Turan five-cycle Hexagon page (2611.00770v1, Nov 21, Zenodo 23743819, toolchain v4.32.2, 692 native_decide facts), Zarankiewicz Hexagon page (2611.00319v1, Nov 16, archive release v1 commit 10385847). Registered candidate toric-code-lean-device-model: trigger checked (arXiv:2611.03329 still v1 only, no ancillary files, no repo link) -- not fired, stays WAITING, silent in delivery. Coverage caveats: math.NT keyword-searched only, not fully enumerated; Nov 21-22 weekend submissions and Nov 23 mail may be incompletely indexed; Hexagon Nov 19-23 deposits beyond those found may exist (Kruer-group 35-deposit cascade of Lean-checked Erdos-problem results 2611.00746-00787, 2611.00760, 2611.00739, 2611.00702/00703/00704, 2611.00730, 2611.00788, 2611.00789, 2611.00699, 2611.00700/00701, 2611.00557, 2611.00580 not individually assessed); Nov 22-23 deposits unswept (search-index lag); gitlab.com policy-blocked, Girsanov Lean repo still unresolvable. Near-misses failing public inputs: 2611.05514 (re-checked, still no code), 2611.16043 (Girsanov-Wasserstein, GitLab ref unresolvable), 2611.19610 (elite primes, Lean claimed, no repo/ancillary), 2611.20146 (evacuation Farkas certificates, no files), 2611.23622 (2x2 matmul, no code), 2611.18148 (pulsed-field ablation, no code link), 2611.01257 (DFT bound, Lean claimed, no code location), Hexagon 2611.00729v1 (peaceable queens a(19)=52, a(20)=58, repo URL unlocated), Hexagon 2611.00644v1 (AKLT gap, Lean source explicitly not included), Hexagon 2611.00721v1 / 2611.00716v1 (pure theory), Hexagon 2611.00769v1 (Euler dense blow-up data, no code/Lean), Masullo GRH manuscript (no public code/data), Anthropic Fable 5.2 FLT re-proof (Lean code still unreleased), 2611.26272 (Paper2Lean tool paper, not a single claim), 2611.17618 (Lean-PEP tool paper). Cut by the 10-cap: chromatic-cochromatic-gap-random-graph (Hexagon 2611.00562v1, Lean/Palomar covers only weaker 0.032 constant), biased-random-walk-gw-speed-monotonicity (Hexagon 2611.00735v1, full-interval decrease only sketched), romanoff-upper-density-04893562 (Hexagon 2611.00570v1), pte-2adic-n13-n15 (Hexagon 2611.00571v1), mub-c6-no-fourier-vanishing (arXiv:2611.19809, bound not new), collatz-syracuse-holomorphic (arXiv:2611.11641, single .lean file, no repo/pin). Out-of-window flags: Hexagon 2611.00333 (exact LRX diameter of S_n, Lean repo + Palomar PALOMAR-2026-11-10-000010, published Nov 11-12, missed by the 2026-11-16 run), Hexagon 2611.00349 (Caceres Lambda <= 0.174, Nov 13, weaker than audited 0.1486), 2611.10961 (Grothendieck/Korenblum constants, Nov 7, code location unverified), hubbard-spectral-moments-lean (arXiv:2611.19929, cond-mat, repo stated in paper but not live-verified this run)."
+  },
+  "claims": [
+    {
+      "id": "grh-lean-alpoge",
+      "title": "Riemann Hypothesis and GRH for Dirichlet L-functions, Lean-only proof (Alpoge, 17.4M lines, no human-readable paper)",
+      "score": 3,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://alpo.ge/remark.pdf",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "CocoSgt/riemann-hypothesis-lean",
+        "branch": "main",
+        "size_kb": 317419,
+        "pushed_at": "2026-11-20",
+        "url": "https://github.com/CocoSgt/riemann-hypothesis-lean",
+        "head_sha": "7cbf7a0c32fca1badf05931879a37c3f8a2b03b4",
+        "head_date": "2026-11-20",
+        "lean_files": 44876,
+        "tree_truncated": true,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.33.1"
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "single_author",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.33.1",
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 44876,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.33.1",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared",
+          "zero-sorry declared"
+        ],
+        "probe_query": "Riemann Hypothesis and GRH for Dirichlet L-functions, Lean-only proof (Alpoge, 17.4M lines, no human-readable paper). The Riemann Hypothesis and GRH for Dirichlet L-functions hold,"
+      }
+    },
+    {
+      "id": "unforced-navier-stokes-blowup",
+      "title": "Finite-time blowup for the unforced 3D Navier-Stokes equations (Alpoge-Buckmaster, Millennium problem in unforced form)",
+      "score": 7,
+      "paper": {
+        "status": "URL-FAILED",
+        "url": "https://github.com/tristanbuckmaster/navier-stokes/blob/main/paper/finite-time-blow-up-navier-stokes.pdf",
+        "detail": "http 503"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "tristanbuckmaster/navier-stokes",
+        "branch": "main",
+        "size_kb": 9323,
+        "pushed_at": "2026-11-20",
+        "url": "https://github.com/tristanbuckmaster/navier-stokes",
+        "head_sha": "ad53419de079eb8f95f60313473374624a348546",
+        "head_date": "2026-11-20",
+        "lean_files": 2271,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "released_under_pressure",
+        "formal_subset_of_claim",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found",
+        "+1: paper identifier did not resolve (URL-FAILED)"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (interval certificate)"
+        ],
+        [
+          "F",
+          "counterexample search (conjecture kill)"
+        ],
+        [
+          "A",
+          "scalar gate (blowup criterion)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 2271,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "Finite-time blowup for the unforced 3D Navier-Stokes equations (Alpoge-Buckmaster, Millennium problem in unforced form). Finite-time blowup for the unforced 3D Navier-Stokes equati"
+      }
+    },
+    {
+      "id": "unforced-euler-blowup",
+      "title": "Finite-time singularity for the unforced 3D Euler equations on T^3 (Alpoge-Buckmaster-Coiculescu)",
+      "score": 6,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.26772",
+        "title": "Finite-Time Singularity Formation for the Three-Dimensional Euler Equations",
+        "authors": [
+          "Levent Alp\u00f6ge",
+          "Tristan Buckmaster",
+          "Matei P. Coiculescu"
+        ],
+        "published": "2026-11-19",
+        "url": "https://arxiv.org/abs/2611.26772"
+      },
+      "axis2": {
+        "status": "ABSENT",
+        "arxiv_id": "2611.26772",
+        "detail": "no OpenAlex record (index lag possible; not evidence of non-existence)"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "mcoiculescu/EulerBlowupPublic",
+        "branch": "main",
+        "size_kb": 4645,
+        "pushed_at": "2026-11-20",
+        "url": "https://github.com/mcoiculescu/EulerBlowupPublic",
+        "head_sha": "fd3a1588967810b9abe42a1dcf46ee662d6434e2",
+        "head_date": "2026-11-20",
+        "lean_files": 738,
+        "tree_truncated": false,
+        "has_lakefile": true
+      },
+      "signals": [
+        "ai_generated",
+        "disclosed_llm_help",
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "+1: Lean files present, no lean-toolchain pin found",
+        "OpenAlex: no record yet (index lag possible; absence is not evidence)"
+      ],
+      "lanes": [
+        [
+          "A",
+          "scalar gate (blowup criterion)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 738,
+        "has_lakefile": true,
+        "toolchain": null,
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "zero-sorry declared"
+        ],
+        "probe_query": "Finite-time singularity for the unforced 3D Euler equations on T^3 (Alpoge-Buckmaster-Coiculescu). Smooth periodic initial data on T^3 for the unforced 3D incompressible Euler equa"
+      }
+    },
+    {
+      "id": "tight-five-cycle-turan-density",
+      "title": "Turan density of the tight five-cycle is exactly 2sqrt(3)-3 (Mubayi-Rodl conjecture settled, Lean-checked)",
+      "score": 3,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://hexagonmath.org/2611.00770v1",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://doi.org/10.5281/zenodo.23743819"
+      },
+      "signals": [
+        "ai_generated",
+        "single_author",
+        "ai_only_review",
+        "pinned_toolchain"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "mcs-orderings-lean",
+      "title": "MCS orderings stable under matching and single-edge updates (41 theorems in Lean, Palomar-registered)",
+      "score": 1,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.18369",
+        "title": "How rigid is maximum cardinality search? Stability and locality of MCS orderings under edge updates, verified in Lean",
+        "authors": [
+          "Md Thoriqul Islam Thonmay",
+          "Gregory Morse"
+        ],
+        "published": "2026-11-13",
+        "url": "https://arxiv.org/abs/2611.18369"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.18369",
+        "title": "How rigid is maximum cardinality search? Stability and locality of MCS orderings under edge updates, verified in Lean",
+        "authors": [
+          "Md Thoriqul Islam Thonmay",
+          "Gregory Morse"
+        ],
+        "publication_date": "2026-11-13",
+        "title_ok": true,
+        "author_overlap": [
+          "morse",
+          "thonmay"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7233744294"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "thonmay/mcs-lean",
+        "branch": "master",
+        "size_kb": 298,
+        "pushed_at": "2026-11-11",
+        "url": "https://github.com/thonmay/mcs-lean",
+        "head_sha": "544721b684ccd9c3fda31a6d9003ffed4b39da70",
+        "head_date": "2026-11-11",
+        "lean_files": 22,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.35.0-rc2"
+      },
+      "signals": [
+        "pinned_toolchain",
+        "formal_subset_of_claim"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.35.0-rc2"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 22,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.35.0-rc2",
+        "declared_verification": [
+          "Palomar registration `PALOMAR-2026-10-04-000009` declared",
+          "multi-kernel / comparator replay declared"
+        ],
+        "probe_query": "MCS orderings stable under matching and single-edge updates (41 theorems in Lean, Palomar-registered). MCS orderings are stable under matching/single-edge updates (prefix hypothesi"
+      }
+    },
+    {
+      "id": "tug-of-war-p-laplacian-lean",
+      "title": "Tug-of-war convergence to the normalized p-Laplacian, complete Lean formalization (225 files)",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.20169",
+        "title": "A formally verified convergence theorem for the tug-of-war scheme of the normalized $p$-Laplacian",
+        "authors": [
+          "Juan J. Manfredi",
+          "Behrooz Moosavi"
+        ],
+        "published": "2026-11-15",
+        "url": "https://arxiv.org/abs/2611.20169"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.20169",
+        "title": "A formally verified convergence theorem for the tug-of-war scheme of the normalized $p$-Laplacian",
+        "authors": [
+          "Juan J. Manfredi",
+          "Behrooz Moosavi"
+        ],
+        "publication_date": "2026-11-15",
+        "title_ok": true,
+        "author_overlap": [
+          "manfredi",
+          "moosavi"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7235141494"
+      },
+      "code": {
+        "status": "PUBLIC",
+        "slug": "BehroozMoosavi/tugofwar_formalization",
+        "branch": "main",
+        "size_kb": 5043,
+        "pushed_at": "2026-11-15",
+        "url": "https://github.com/BehroozMoosavi/tugofwar_formalization",
+        "head_sha": "6884ed06c32788e0e27f48ccf4eb9a63616d7ecb",
+        "head_date": "2026-11-15",
+        "lean_files": 231,
+        "tree_truncated": false,
+        "has_lakefile": true,
+        "lean_toolchain": "leanprover/lean4:v4.34.0-rc2"
+      },
+      "signals": [
+        "pinned_toolchain",
+        "disclosed_llm_help"
+      ],
+      "adjustments": [
+        "toolchain pinned: leanprover/lean4:v4.34.0-rc2"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ]
+      ],
+      "formalization_coverage": {
+        "lean_files": 231,
+        "has_lakefile": true,
+        "toolchain": "leanprover/lean4:v4.34.0-rc2",
+        "declared_verification": [
+          "Palomar registration (id not parsed) declared",
+          "multi-kernel / comparator replay declared",
+          "zero-sorry declared"
+        ],
+        "probe_query": "Tug-of-war convergence to the normalized p-Laplacian, complete Lean formalization (225 files). Complete Lean formalization of convergence of p-harmonious functions to the viscosity"
+      }
+    },
+    {
+      "id": "zarankiewicz-z1315-34",
+      "title": "Zarankiewicz number z(13,15;3,4) = 114 exactly (SAT + dual certificates + Lean)",
+      "score": 1,
+      "paper": {
+        "status": "URL-BLOCKED",
+        "url": "https://hexagonmath.org/2611.00319v1",
+        "detail": "http 403 (bot-blocked); reachable by humans, not verified by loop"
+      },
+      "axis2": {
+        "status": "NOT-APPLICABLE"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://hexagonmath.org/2611.00319v1"
+      },
+      "signals": [
+        "disclosed_llm_help"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "paper URL bot-blocked (http 403); human-reachable, not loop-verified"
+      ],
+      "lanes": [
+        [
+          "G",
+          "logical-gap exposure (formalized subset vs headline)"
+        ],
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "mub-dimension-ten-no-fourier-pair",
+      "title": "No four MUBs in C^10 contain three product bases; 3,040 rays unbiased to standard+Fourier pair",
+      "score": 0,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.21188",
+        "title": "No complete set of mutually unbiased bases in dimension ten contains the Fourier pair or three product bases",
+        "authors": [
+          "Jinze Yang",
+          "Yile Liu",
+          "Yangyang Li",
+          "Xiu-Hao Deng"
+        ],
+        "published": "2026-11-16",
+        "url": "https://arxiv.org/abs/2611.21188"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.21188",
+        "title": "No complete set of mutually unbiased bases in dimension ten contains the Fourier pair or three product bases",
+        "authors": [
+          "Jinze Yang",
+          "Yile Liu",
+          "Yangyang Li",
+          "Xiu-Hao Deng"
+        ],
+        "publication_date": "2026-11-16",
+        "title_ok": true,
+        "author_overlap": [
+          "deng",
+          "li",
+          "liu",
+          "yang"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7235741374"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2611.21188"
+      },
+      "signals": [],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (interval certificate)"
+        ],
+        [
+          "A",
+          "scalar gate (quantitative bound)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "rolle-words-degree-six",
+      "title": "Exactly 2,706 Rolle words are realizable in degree six (ChatGPT-generated, full artifact)",
+      "score": 5,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.15505",
+        "title": "An exact certificate-based enumeration of Rolle words of degree six",
+        "authors": [
+          "Andrej A. Novikov"
+        ],
+        "published": "2026-11-11",
+        "url": "https://arxiv.org/abs/2611.15505"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.15505",
+        "title": "An exact certificate-based enumeration of Rolle words of degree six",
+        "authors": [
+          "Andrej Novikov"
+        ],
+        "publication_date": "2026-11-11",
+        "title_ok": true,
+        "author_overlap": [
+          "novikov"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7226025730"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2611.15505"
+      },
+      "signals": [
+        "single_author",
+        "ai_generated",
+        "disclosed_llm_help"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB",
+        "+1: arXiv title does not closely match harvest title (check citation)"
+      ],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ]
+      ],
+      "formalization_coverage": null
+    },
+    {
+      "id": "collatz-up-down-graph",
+      "title": "Collatz-type maps classified via the up-down graph (critical up-frequency log_3 2)",
+      "score": 2,
+      "paper": {
+        "status": "VERIFIED",
+        "arxiv_id": "2611.20344",
+        "title": "Up or down at every integer: Collatz-type maps of arbitrary sets and the up-down graph",
+        "authors": [
+          "Oleg Vasilyev"
+        ],
+        "published": "2026-11-16",
+        "url": "https://arxiv.org/abs/2611.20344"
+      },
+      "axis2": {
+        "status": "AGREE",
+        "arxiv_id": "2611.20344",
+        "title": "Up or down at every integer: Collatz-type maps of arbitrary sets and the up-down graph",
+        "authors": [
+          "Oleg Vasilyev"
+        ],
+        "publication_date": "2026-11-16",
+        "title_ok": true,
+        "author_overlap": [
+          "vasilyev"
+        ],
+        "year_ok": true,
+        "openalex_id": "https://openalex.org/W7234897498"
+      },
+      "code": {
+        "status": "NON-GITHUB",
+        "detail": "https://arxiv.org/abs/2611.20344"
+      },
+      "signals": [
+        "single_author",
+        "anonymous_or_unaffiliated"
+      ],
+      "adjustments": [
+        "code repo check: NON-GITHUB"
+      ],
+      "lanes": [
+        [
+          "E",
+          "CAS-transcript replay (certificate)"
+        ]
+      ],
+      "formalization_coverage": null
+    }
+  ]
+}
