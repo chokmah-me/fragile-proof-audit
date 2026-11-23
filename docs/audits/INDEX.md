@@ -6,6 +6,7 @@ Receipt hashes for the gate notes (script + output sha256, backfilled 2026-10-09
 
 | Note | Date |
 |---|---|
+| [Aaronson-Ambainis conjecture, Lean formalization (PSI, 2026-11-06) — PASS for the three unconditional endpoints (own comparator run 45219404757: nanoda and Lean kernels accept, standard three axioms, replays and ST-1 to ST-5 probes green); PARTIAL for the fourth endpoint, conditional on the unformalized FbsDegreeBound (ST-5 cap)](aaronson-ambainis-psi.md) | 2026-11-23 |
 | [ab-fluid audit — Alpöge–Buckmaster forced blowup (Euler / Boussinesq / IPM)](ab-fluid.md) |  |
 | [Agoh–Giuga oracle (Phase 3(h) first milestone)](agoh-giuga.md) |  |
 | [Baste–Fürst–Henning–Mohr–Rautenbach domination inequality (Track D#2)](baste-domination.md) |  |

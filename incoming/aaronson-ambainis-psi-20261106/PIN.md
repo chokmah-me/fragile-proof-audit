@@ -170,3 +170,24 @@ ST-1 to ST-5 probes at scripts/forge/aa-probes/Probes.lean
 Yang-Mills registration of 2026-11-12
 (incoming/yang-mills-openai-20261028) stays queued behind
 this claim. No verdict yet.
+
+## Close-out (2026-11-23)
+
+CLOSED at the user's tap. Audit note:
+docs/audits/aaronson-ambainis-psi.md. Verdict: PASS for the
+three unconditional endpoints; PARTIAL for
+aaronson_ambainis_of_fbsDegreeBound under the ST-5 cap
+(antecedent FbsDegreeBound unformalized). Decisive run:
+forge run 4 (45219404757, main@2c4d440, Dell laptop lane),
+SUCCESS in 1h 3m 38s, verdict tier KERNEL-RECEIPT-COMPLETE:
+our own comparator run accepted the solution with both
+kernels ("Your solution is okay!", exit 0), all four
+endpoints on exactly the standard three axioms, serialized
+and fresh replays exit 0, ST-1 to ST-5 probes green, the
+five comparator controls ended as they must (report-only).
+Runs 1-3 failed on forge plumbing only (toolchain probe,
+tar SIGPIPE, nanoda repo URL); each fix is recorded in the
+workflow header. Evidence artifacts and hashes are in the
+note. The Yang-Mills registration
+(incoming/yang-mills-openai-20261028) is next in the audit
+queue. Reopen conditions are stated in the note.
