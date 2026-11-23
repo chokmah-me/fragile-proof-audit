@@ -1,0 +1,678 @@
+name: Yang-Mills forge (Dell laptop lane)
+
+# Forge for the Yang-Mills claim (OpenAI submission 2026-10-28,
+# assessed by the Yang-Mills group in Assessment 1, 2026-11-10;
+# PIN main@699375d, incoming/yang-mills-openai-20261028/PIN.md).
+# Target: yang-mills-group/YM @ 55ba9fc36293b3f4d52c6b1f813169a0be76ee98
+# (single commit, Apache-2.0), package submissions/openai-20261028/:
+# a relativistic QFT satisfying the Wightman axioms constructed as
+# a scaling limit of 4D Wilson lattice gauge theory for any simple
+# compact gauge group. NOT claimed, per the assessors' own scope:
+# uniqueness of the infinite-volume limit, a mass gap, confinement,
+# all-orders perturbative matching. Three comparator endpoints:
+# YangMills.jointExistence (submission), YMReview.Acceptance.
+# combined_acceptance (A1-A7), YMReview.OPE.constructed (A8).
+# Submission toolchain v4.32.0, Mathlib rev 81a5d257; 9,477 Lean
+# files in submission/, 43 review modules in checks/.
+#
+# Audit queued behind Aaronson-Ambainis at registration
+# (2026-11-12); the AA audit closed 2026-11-23 and the user said
+# proceed the same day. Lane: DELL LAPTOP [self-hosted, laptop]
+# (32 GB host RAM), the lane that carried the AA receipt; the
+# desktop lane is capped at 2 processors (WSL config, the user's
+# hand to restore) and is wrong for a build of this size.
+#
+# RECEIPT STANDARD (D1): the group's recorded PASS legs were all
+# run in macOS development mode: fake-landrun.sh, no external
+# kernel ("external_kernel": false in verification/tool-pins.json),
+# and the packaged replay reused the verified October build cache.
+# Under D1 those legs cap at PARTIAL here. This forge changes
+# exactly the mode, and nothing else:
+# - the source build starts from an empty .lake in a fresh
+#   extraction of the pinned commit (only the Mathlib cache is
+#   fetched, which the comparator README itself accepts);
+# - the comparator runs under REAL landrun isolation (zouuup/
+#   landrun @5ed4a3db3a4a, the rev the AA forge receipted with),
+#   not the artifact's fake-landrun.sh launcher;
+# - the comparator configs are the author's three configs with
+#   ONE field added, "enable_nanoda": true, so the nanoda
+#   external kernel (robsimmons/nanoda_lib @68d5ca9db226, the rev
+#   the AA run 4 fix receipted) checks the export alongside the
+#   Lean default kernel. The derived configs are hashed into the
+#   evidence and diffed against the author's in-job.
+# Where the mode does not matter, this forge runs the group's own
+# reproduction runner (scripts/verify.py, sha256 in the PIN) for
+# its build / review / prepare stages, so their orchestration is
+# reproduced rather than paraphrased. The mode-bearing stages
+# (controls, comparators) are driven directly by this workflow
+# with the environment overrides verify.py documents
+# (COMPARATOR_LANDRUN / COMPARATOR_LEAN4EXPORT / COMPARATOR_NANODA).
+#
+# Tools are built in-job at the exact revs pinned in the
+# artifact's verification/tool-pins.json (asserted against the
+# PIN before use): comparator d03acab154d269c06e60e4de7e4cc85deebff94b
+# on Lean v4.34.0, lean4export 4e7915201d3f9f04470d9eae002fa695f7cdc589
+# on Lean v4.32.0.
+#
+# SHAPE NOTE: unlike the AA forge (three fresh checkouts), this
+# forge uses ONE extraction. The comparator legs run against the
+# in-job build: at 9,477 files, a second from-scratch compile
+# inside the comparator sandbox is not affordable, and the
+# receipt chain does not need it (the oleans the comparator
+# exports were built by this job, from the pinned sources, in
+# this run; the comparator then re-checks the exported contents
+# with two independent kernels). The serialized leanchecker
+# replay leg is the second full kernel pass. This trade-off is
+# recorded here so the close-out note grades against it openly.
+#
+# GRADING, pre-registered (docs/harvest-loop.md M1-M4 + the
+# ST-1 to ST-5 statement tests):
+# - The three endpoints grade at the kernel tier only on: this
+#   run's comparator acceptance for all three configs ("Your
+#   solution is okay!", exit 0, Lean default kernel AND nanoda
+#   acceptance lines present), axiom closure of the three
+#   endpoints to exactly the standard three, the verify.py build
+#   and review stages exiting 0, the serialized replay exiting 0,
+#   and the ST probes of scripts/forge/ym-probes/Probes.lean
+#   compiling clean. The verdict step computes the tier:
+#   KERNEL-RECEIPT-COMPLETE, COMPARATOR-RECEIPT (comparator +
+#   axioms + build + review hold, replay/probes short), or
+#   NO-RECEIPT.
+# - The comparator controls (the artifact's four fixtures:
+#   accept, statement_mismatch, forbidden_axiom,
+#   definition_mismatch) are report-only per standing doctrine
+#   (controls_ok); they run under the same real-landrun + nanoda
+#   mode as the theorem legs.
+# - M1 seams 1 (A8/A7 witness identity), 2 (OS correspondence,
+#   text-level), 4 (the group's human review is pending by their
+#   own statement), and 5 (scalar bridge domain) are note-level
+#   findings, not workflow gates. The probes supply ST-1
+#   evidence at the SU(2) instance for all three endpoints,
+#   including joint inhabitation; they do not and cannot settle
+#   witness identity, and the note will grade that seam as it
+#   stands.
+# - The audit verdict is issued by the main agent at close-out
+#   from the evidence; the verdict step fails the job if the
+#   comparator receipt core is missing.
+#
+# SOURCE POLICY SCAN scope: submission/ and checks/. Expected
+# and asserted in-job: the only sorry in scope is the single
+# placeholder in submission/Challenge.lean (the comparator
+# challenge, by design); checks/ carries none. The review
+# challenge modules (verification/AcceptanceChallenge.lean,
+# verification/OPEChallenge.lean) and the four control fixtures
+# carry sorries by design and are outside the scan scope; they
+# are never imported by the submission library.
+#
+# NAMED RISKS: (a) build scale: the group's recorded floor is
+# ~3 h with a warm Mathlib cache on their Mac and a ~52 GiB
+# completed tree; this runner has multiplied such estimates
+# before, so the build leg carries an 8 h box inside a 24 h job,
+# and the early-evidence upload lands the tools + controls
+# receipts before the build starts; (b) runner sleep/reboot
+# mid-run (house rule: the run is re-dispatchable, no state is
+# carried between runs; cleanup removes the target extraction
+# so a dead run leaves no residue); (c) Landlock on the WSL2
+# kernel (the controls leg is the live test: if landrun confines
+# nothing, the accept control's behaviour under the real
+# launcher is where it shows, and the leg is recorded either
+# way); (d) in-job Go / Rust installs if the runner lacks them
+# (the AA runs established both are installed in-job under
+# $HOME and persist across runs on this runner).
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yang-mills-forge
+  cancel-in-progress: false
+
+env:
+  TARGET_SHA: 55ba9fc36293b3f4d52c6b1f813169a0be76ee98
+  PKG: submissions/openai-20261028
+  EXPECTED_LEAN_FILES: "9564"
+  EXPECTED_PACKAGES: "9"
+
+jobs:
+  gate:
+    name: Pre-dispatch gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v4
+
+      - name: Run pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/yang-mills-forge.yml
+
+  forge:
+    name: Yang-Mills forge (build, review, comparator, axioms, replay, probes)
+    needs: gate
+    runs-on: [self-hosted, laptop]
+    timeout-minutes: 1440
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v4
+
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          mkdir -p ym-evidence ym-src ym-ctl tools ym-runs
+          {
+            echo "date: $(date -Is)"
+            echo "runner: $RUNNER_NAME"
+            echo "user: $(id)"
+            uname -a || true
+            echo "nproc: $(nproc)"
+            free -h || true
+            df -h . || true
+            command -v go || echo "go: ABSENT"
+            go version || true
+            command -v cargo || echo "cargo: ABSENT"
+            cargo --version || true
+            command -v landrun || echo "landrun: ABSENT"
+          } > ym-evidence/runner.txt 2>&1
+          cat ym-evidence/runner.txt
+          exit 0
+
+      - name: Install elan
+        run: |
+          if [ ! -x "$HOME/.elan/bin/elan" ]; then
+            curl -sSfL https://elan.lean-lang.org -o elan-init.sh
+            sh elan-init.sh -y --default-toolchain none
+          fi
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Install toolchains
+        run: |
+          elan toolchain install leanprover/lean4:v4.32.0
+          elan toolchain install leanprover/lean4:v4.34.0
+          {
+            ELAN_TOOLCHAIN=leanprover/lean4:v4.32.0 lean --version
+            ELAN_TOOLCHAIN=leanprover/lean4:v4.32.0 lake --version
+            ELAN_TOOLCHAIN=leanprover/lean4:v4.34.0 lean --version
+            ELAN_TOOLCHAIN=leanprover/lean4:v4.34.0 lake --version
+            elan --version
+          } > ym-evidence/toolchain-versions.txt 2>&1
+          cat ym-evidence/toolchain-versions.txt
+          grep -q "4.32.0" ym-evidence/toolchain-versions.txt
+          grep -q "4.34.0" ym-evidence/toolchain-versions.txt
+
+      - name: Pin target commit
+        run: |
+          set -euo pipefail
+          sha="$TARGET_SHA"
+          case "$sha" in (*[!0-9a-f]*|'') echo "TARGET_SHA is not 40-hex: '$sha'" >&2; exit 1;; esac
+          [ "${#sha}" -eq 40 ] || { echo "TARGET_SHA length ${#sha} != 40" >&2; exit 1; }
+          curl -fsSL -o ym-target.tar.gz "https://codeload.github.com/yang-mills-group/YM/tar.gz/$sha"
+          sha256sum ym-target.tar.gz > ym-evidence/tarball.sha256
+          tar -tzf ym-target.tar.gz > ym-tar-listing.txt
+          top="$(head -1 ym-tar-listing.txt)"
+          echo "tarball top: $top"
+          [ "$top" = "YM-$sha/" ] || { echo "unexpected tarball top: $top" >&2; exit 1; }
+          tar -xzf ym-target.tar.gz -C ym-src --strip-components=1
+          n="$(find "ym-src/$PKG" -name '*.lean' -not -path '*/.lake/*' | wc -l)"
+          echo "package lean files: $n"
+          [ "$n" -eq "$EXPECTED_LEAN_FILES" ] || { echo "expected $EXPECTED_LEAN_FILES lean files" >&2; exit 1; }
+          pkgs="$(python3 -c "import json;m=json.load(open('ym-src/$PKG/submission/lake-manifest.json'));print(len([p for p in m['packages'] if p.get('type')=='git']))")"
+          echo "manifest git packages: $pkgs"
+          [ "$pkgs" -eq "$EXPECTED_PACKAGES" ] || { echo "expected $EXPECTED_PACKAGES packages" >&2; exit 1; }
+          echo "target pin OK: $sha"
+
+      - name: Verify key hashes
+        run: |
+          set -euo pipefail
+          cat > ym-key-hashes.txt <<'EOF'
+          c303146d967bda49354b97ef6b7c6a4c94bd3952835a50aabeaa55a233b4f2e9  submissions/openai-20261028/checks/AcceptanceSpec.lean
+          40f8c57aa96db688784fe57491c87ad6cc69f061d58174802b8593ac83ef0d92  submissions/openai-20261028/checks/CombinedAcceptance.lean
+          3ea7ffb5f7b386036ddb9bab7753d5bcc3e198853aee70b09f06be67891813dc  submissions/openai-20261028/checks/OPESpec.lean
+          ef5926e323e8fa47b8096a04e5a4c4cdaeba7a90545be9613e77c6eda5f75578  submissions/openai-20261028/checks/OPECheck.lean
+          4c4fdc2170e3443c86c55b66407752744f46783abf7a255476f8bc6b2e31936e  submissions/openai-20261028/checks/CompleteOS.lean
+          710440530a850faf6cddb2daac24d43b4ab2b94351f647ef118cd63257d211f4  submissions/openai-20261028/verification/acceptance.json
+          60c4ac055447d037bcdf54d1f9ce8bd6be46b2571106116df16ee5fdf83946ad  submissions/openai-20261028/verification/ope.json
+          999fe22d03854bd94606516c212dbf5663976ff8151b1ed7efa086947ca08237  submissions/openai-20261028/verification/submission.json
+          2ab65d789bf76002b624b5956e5245d634ab547c3e01dc22c77f982a50d18d1b  submissions/openai-20261028/verification/tool-pins.json
+          24e71f5e379502c68b35e3b85ab4bb2ea11fe75828ecc435f641c28fa9e2680f  submissions/openai-20261028/scripts/verify.py
+          1ee2d290dfa6786ccd7888a4db7be48cbb55aad72a53e2533b2e1834b2ff1bb8  submissions/openai-20261028/provenance/october-import.json
+          2773c517aa90b66ea8a2c52bddddf84393157797f8341be0df45294fff7fd32e  submissions/openai-20261028/submission/lean-toolchain
+          8e658c00900bf723cbe90436eb1f78fca4f287e008a85c21fdceaf59e61db219  docs/assessment-1.pdf
+          EOF
+          (cd ym-src && sha256sum -c ../ym-key-hashes.txt) > ym-evidence/hashes.txt 2>&1
+          cat ym-evidence/hashes.txt
+          echo "key hashes OK"
+
+      - name: Source policy scan
+        run: |
+          set -euo pipefail
+          cd "ym-src/$PKG"
+          : > ../../ym-evidence/scan.txt
+          sorry_files="$(grep -rlw -e sorry -e admit submission checks --include='*.lean' | sort || true)"
+          echo "sorry/admit files in submission+checks: $sorry_files" | tee -a ../../ym-evidence/scan.txt
+          [ "$sorry_files" = "submission/Challenge.lean" ] || { echo "sorries outside the comparator challenge" >&2; exit 1; }
+          nsorry="$(grep -cw sorry submission/Challenge.lean)"
+          echo "challenge sorries: $nsorry" | tee -a ../../ym-evidence/scan.txt
+          [ "$nsorry" -eq 1 ] || { echo "expected exactly 1 challenge sorry" >&2; exit 1; }
+          if grep -rnw -e native_decide submission checks --include='*.lean'; then echo "native_decide in scope" >&2; exit 1; fi
+          if grep -rnE '^[[:space:]]*(axiom|unsafe|extern)[[:space:]]' submission checks --include='*.lean'; then echo "axiom/unsafe/extern declaration in scope" >&2; exit 1; fi
+          if grep -rnE '^[[:space:]]*partial[[:space:]]+(def|theorem)' submission checks --include='*.lean'; then echo "partial def in scope" >&2; exit 1; fi
+          if grep -rnw -e implemented_by submission checks --include='*.lean'; then echo "implemented_by in scope" >&2; exit 1; fi
+          echo "source policy scan OK" | tee -a ../../ym-evidence/scan.txt
+
+      - name: Write seed helper
+        run: |
+          cat > "$RUNNER_TEMP/ym-seed.py" <<'PYEOF'
+          import json, os, subprocess, sys, tarfile, io, urllib.request
+          ROOT = sys.argv[1]
+          def run(cmd, cwd=None):
+              r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+              if r.returncode != 0:
+                  raise RuntimeError(f"{cmd} failed: {r.stdout[-500:]} {r.stderr[-500:]}")
+              return r.stdout.strip()
+          manifest = json.load(open(os.path.join(ROOT, "lake-manifest.json")))
+          pkgs = os.path.join(ROOT, ".lake", "packages")
+          os.makedirs(pkgs, exist_ok=True)
+          for p in manifest["packages"]:
+              if p.get("type") != "git":
+                  continue
+              name, url, rev = p["name"], p["url"], p["rev"]
+              slug = url.removeprefix("https://github.com/").removesuffix(".git")
+              dest = os.path.join(pkgs, name)
+              if os.path.exists(dest):
+                  subprocess.run(["rm", "-rf", dest], check=True)
+              os.makedirs(dest)
+              run(["git", "init", "-q", "."], cwd=dest)
+              run(["git", "remote", "add", "origin", url], cwd=dest)
+              run(["git", "fetch", "-q", "--depth", "1", "--filter=blob:none", "origin", rev], cwd=dest)
+              tree = run(["git", "rev-parse", f"{rev}^{{tree}}"], cwd=dest)
+              req = urllib.request.Request(f"https://codeload.github.com/{slug}/tar.gz/{rev}",
+                                           headers={"User-Agent": "ym-forge-seed"})
+              with urllib.request.urlopen(req) as f:
+                  data = f.read()
+              tf = tarfile.open(fileobj=io.BytesIO(data), mode="r:gz")
+              prefix = tf.getmembers()[0].name.split("/")[0] + "/"
+              for m in tf.getmembers():
+                  if m.name.startswith(prefix):
+                      m.name = m.name[len(prefix):]
+                      if m.name:
+                          tf.extract(m, dest)
+              run(["git", "add", "-Af"], cwd=dest)
+              wt = run(["git", "write-tree"], cwd=dest)
+              assert wt == tree, f"{name}: write-tree {wt} != {tree}"
+              run(["git", "update-ref", "--no-deref", "HEAD", rev], cwd=dest)
+              print(f"seeded {name} @ {rev[:12]} tree OK", flush=True)
+          print("ALL SEEDED")
+          PYEOF
+          python3 -c "import ast; ast.parse(open('$RUNNER_TEMP/ym-seed.py').read()); print('seed helper parses')"
+
+      - name: Build comparator tools at pinned revs
+        run: |
+          set -euo pipefail
+          # Tool pins assert: parse the artifact's verification/tool-pins.json
+          # (never execute it) and compare against the revs recorded in the PIN.
+          python3 - <<'PYEOF' | tee ym-evidence/tools.txt
+          import json
+          pins = {t["name"]: t for t in json.load(open("ym-src/submissions/openai-20261028/verification/tool-pins.json"))["tools"]}
+          assert pins["comparator"]["revision"] == "d03acab154d269c06e60e4de7e4cc85deebff94b", pins["comparator"]
+          assert pins["comparator"]["toolchain"] == "leanprover/lean4:v4.34.0", pins["comparator"]
+          assert pins["lean4export"]["revision"] == "4e7915201d3f9f04470d9eae002fa695f7cdc589", pins["lean4export"]
+          assert pins["lean4export"]["toolchain"] == "leanprover/lean4:v4.32.0", pins["lean4export"]
+          print("tool-pins.json revs match the PIN")
+          PYEOF
+          # Go (for landrun), if absent: official tarball into $HOME/.local.
+          if ! command -v go >/dev/null 2>&1; then
+            curl -fsSL -o go.tar.gz "https://go.dev/dl/go1.25.12.linux-amd64.tar.gz"
+            sha256sum go.tar.gz >> ym-evidence/tools.txt
+            rm -rf "$HOME/.local/go" "$HOME/.local/go1.25.12"
+            mkdir -p "$HOME/.local"
+            tar -xzf go.tar.gz -C "$HOME/.local"
+            mv "$HOME/.local/go" "$HOME/.local/go1.25.12"
+            rm -f go.tar.gz
+          fi
+          GODIR="$(dirname "$(command -v go || echo "$HOME/.local/go1.25.12/bin/go")")"
+          echo "$GODIR" >> "$GITHUB_PATH"
+          export PATH="$GODIR:$PATH"
+          go version | tee -a ym-evidence/tools.txt
+          # landrun at the rev receipted by the AA forge, via the Go module proxy.
+          go install "github.com/zouuup/landrun/cmd/landrun@5ed4a3db3a4ad930d577215c6b9abaa19df7f99f"
+          echo "$HOME/go/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/go/bin:$PATH"
+          command -v landrun | tee -a ym-evidence/tools.txt
+          # lean4export at the pinned rev, built with its pinned toolchain (v4.32.0).
+          curl -fsSL -o le.tar.gz "https://codeload.github.com/leanprover/lean4export/tar.gz/4e7915201d3f9f04470d9eae002fa695f7cdc589"
+          sha256sum le.tar.gz >> ym-evidence/tools.txt
+          mkdir -p tools/lean4export
+          tar -xzf le.tar.gz -C tools/lean4export --strip-components=1
+          rm -f le.tar.gz
+          echo "leanprover/lean4:v4.32.0" > tools/lean4export/lean-toolchain
+          (cd tools/lean4export && lake build lean4export)
+          [ -x tools/lean4export/.lake/build/bin/lean4export ] || { echo "lean4export not built" >&2; exit 1; }
+          echo "$PWD/tools/lean4export/.lake/build/bin" >> "$GITHUB_PATH"
+          export PATH="$PWD/tools/lean4export/.lake/build/bin:$PATH"
+          command -v lean4export | tee -a ym-evidence/tools.txt
+          # comparator at the pinned rev, built with its pinned toolchain (v4.34.0).
+          curl -fsSL -o comp.tar.gz "https://codeload.github.com/leanprover/comparator/tar.gz/d03acab154d269c06e60e4de7e4cc85deebff94b"
+          sha256sum comp.tar.gz >> ym-evidence/tools.txt
+          mkdir -p tools/comparator
+          tar -xzf comp.tar.gz -C tools/comparator --strip-components=1
+          rm -f comp.tar.gz
+          echo "leanprover/lean4:v4.34.0" > tools/comparator/lean-toolchain
+          (cd tools/comparator && lake build comparator)
+          [ -x tools/comparator/.lake/build/bin/comparator ] || { echo "comparator not built" >&2; exit 1; }
+          echo "$PWD/tools/comparator/.lake/build/bin" >> "$GITHUB_PATH"
+          export PATH="$PWD/tools/comparator/.lake/build/bin:$PATH"
+          command -v comparator | tee -a ym-evidence/tools.txt
+          # Rust (for nanoda), if absent: rustup minimal profile.
+          if ! command -v cargo >/dev/null 2>&1; then
+            curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+          fi
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.cargo/bin:$PATH"
+          cargo --version | tee -a ym-evidence/tools.txt
+          # nanoda at the rev receipted by the AA forge run 4 fix
+          # (robsimmons/nanoda_lib; the plain robsimmons/nanoda repo 404s at this rev).
+          curl -fsSL -o nanoda.tar.gz "https://codeload.github.com/robsimmons/nanoda_lib/tar.gz/68d5ca9db226849b41a6fff59d796ff19d0a8840"
+          sha256sum nanoda.tar.gz >> ym-evidence/tools.txt
+          mkdir -p tools/nanoda
+          tar -xzf nanoda.tar.gz -C tools/nanoda --strip-components=1
+          rm -f nanoda.tar.gz
+          (cd tools/nanoda && cargo build --release --locked)
+          [ -x tools/nanoda/target/release/nanoda_bin ] || { echo "nanoda_bin not built" >&2; exit 1; }
+          echo "$PWD/tools/nanoda/target/release" >> "$GITHUB_PATH"
+          export PATH="$PWD/tools/nanoda/target/release:$PATH"
+          command -v nanoda_bin | tee -a ym-evidence/tools.txt
+          echo "comparator tools OK" | tee -a ym-evidence/tools.txt
+
+      - name: Comparator controls leg (report-only)
+        run: |
+          set +e
+          cp -r "ym-src/$PKG/verification/controls" ym-ctl/controls
+          export COMPARATOR_LANDRUN="$HOME/go/bin/landrun"
+          export COMPARATOR_LEAN4EXPORT="$PWD/tools/lean4export/.lake/build/bin/lean4export"
+          export COMPARATOR_NANODA="$PWD/tools/nanoda/target/release/nanoda_bin"
+          COMP="$PWD/tools/comparator/.lake/build/bin/comparator"
+          : > ym-evidence/controls.log
+          ok=1
+          check() {
+            name="$1"; want="$2"; reason="$3"
+            d="ym-ctl/controls/$name"
+            out="$(cd "$d" && timeout 1800 lake env "$COMP" comparator.json 2>&1)"
+            code=$?
+            echo "=== control $name (exit $code) ===" >> ym-evidence/controls.log
+            echo "$out" >> ym-evidence/controls.log
+            if [ "$want" = "accept" ]; then
+              if [ "$code" -eq 0 ] && echo "$out" | grep -q "Your solution is okay!"; then
+                echo "control $name: accepted, as it must be" >> ym-evidence/controls.log
+              else
+                echo "control $name: DID NOT ACCEPT (wanted accept)" >> ym-evidence/controls.log; ok=0
+              fi
+            else
+              if [ "$code" -ne 0 ] && echo "$out" | grep -qF "$reason"; then
+                echo "control $name: rejected for its own reason, as it must be" >> ym-evidence/controls.log
+              else
+                echo "control $name: DID NOT REJECT AS REQUIRED (wanted: $reason)" >> ym-evidence/controls.log; ok=0
+              fi
+            fi
+          }
+          check accept accept ""
+          check statement_mismatch reject "Challenge and solution theorem statement do not match: 'comparatorSmoke'"
+          check forbidden_axiom reject "Illegal axiom detected: 'unapproved'"
+          check definition_mismatch reject "Const does not match between challenge and target 'reference'"
+          if [ "$ok" -eq 1 ]; then
+            echo "comparator controls: all four runs ended as they must" >> ym-evidence/controls.log
+            echo "0" > ym-evidence/controls-exit.txt
+          else
+            echo "comparator controls: MISMATCH (see above)" >> ym-evidence/controls.log
+            echo "1" > ym-evidence/controls-exit.txt
+          fi
+          set -e
+          cat ym-evidence/controls.log
+          echo "controls exit: $(cat ym-evidence/controls-exit.txt)"
+
+      - name: Upload early evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: yang-mills-forge-evidence-early
+          path: ym-evidence/
+          if-no-files-found: warn
+
+      - name: Seed submission packages
+        run: |
+          set -euo pipefail
+          python3 "$RUNNER_TEMP/ym-seed.py" "ym-src/$PKG/submission" > ym-evidence/seed.log 2>&1
+          grep -q "ALL SEEDED" ym-evidence/seed.log
+          cat ym-evidence/seed.log
+          echo "packages seeded"
+
+      - name: Source build leg (verify.py build stage, empty environment)
+        run: |
+          set +e
+          cd "ym-src/$PKG"
+          timeout 28800 /usr/bin/time -v python3 scripts/verify.py build --run-dir "$GITHUB_WORKSPACE/ym-runs/build" > "$GITHUB_WORKSPACE/ym-evidence/build.log" 2>&1
+          code=$?
+          set -e
+          echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/build-exit.txt"
+          cp "$GITHUB_WORKSPACE/ym-runs/build/result.json" "$GITHUB_WORKSPACE/ym-evidence/build-result.json" 2>/dev/null || true
+          grep "Maximum resident set size" ym-evidence/build.log > ym-evidence/build-rss.txt || true
+          tail -5 ym-evidence/build.log
+          echo "build exit: $code"
+
+      - name: Review leg (verify.py review stage, 43 modules fresh)
+        run: |
+          set +e
+          cd "ym-src/$PKG"
+          timeout 7200 python3 scripts/verify.py review --run-dir "$GITHUB_WORKSPACE/ym-runs/review" > "$GITHUB_WORKSPACE/ym-evidence/review.log" 2>&1
+          code=$?
+          set -e
+          echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/review-exit.txt"
+          cp "$GITHUB_WORKSPACE/ym-runs/review/result.json" "$GITHUB_WORKSPACE/ym-evidence/review-result.json" 2>/dev/null || true
+          tail -5 ym-evidence/review.log
+          echo "review exit: $code"
+
+      - name: Prepare review project (verify.py prepare stage)
+        run: |
+          set -euo pipefail
+          cd "ym-src/$PKG"
+          python3 scripts/verify.py prepare --run-dir "$GITHUB_WORKSPACE/ym-runs/prepare" > "$GITHUB_WORKSPACE/ym-evidence/prepare.log" 2>&1
+          test -d "$GITHUB_WORKSPACE/ym-runs/prepare/project"
+          echo "review project prepared"
+
+      - name: Review project build
+        run: |
+          set +e
+          cd ym-runs/prepare/project
+          timeout 3600 lake build > "$GITHUB_WORKSPACE/ym-evidence/project-build.log" 2>&1
+          code=$?
+          set -e
+          echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/project-build-exit.txt"
+          echo "project build exit: $code"
+
+      - name: Comparator legs (three endpoints, real landrun + nanoda)
+        run: |
+          set -euo pipefail
+          mkdir -p ym-evidence/configs
+          python3 - <<'PYEOF'
+          import json, os
+          base = "ym-src/submissions/openai-20261028/verification"
+          for name in ["submission", "acceptance", "ope"]:
+              cfg = json.load(open(os.path.join(base, name + ".json")))
+              derived = dict(cfg)
+              derived["enable_nanoda"] = True
+              with open(f"ym-evidence/configs/{name}.json", "w") as f:
+                  json.dump(derived, f, indent=2, sort_keys=True)
+              with open(f"ym-evidence/configs/{name}.diff.txt", "w") as f:
+                  f.write(f"author config: {json.dumps(cfg, sort_keys=True)}\n")
+                  f.write(f"derived config: {json.dumps(derived, sort_keys=True)}\n")
+                  f.write("delta: one field added, enable_nanoda=true; modules, theorems, axioms unchanged\n")
+          print("derived configs written")
+          PYEOF
+          export COMPARATOR_LANDRUN="$HOME/go/bin/landrun"
+          export COMPARATOR_LEAN4EXPORT="$PWD/tools/lean4export/.lake/build/bin/lean4export"
+          export COMPARATOR_NANODA="$PWD/tools/nanoda/target/release/nanoda_bin"
+          COMP="$PWD/tools/comparator/.lake/build/bin/comparator"
+          run_target() {
+            name="$1"; dir="$2"
+            cfg="$GITHUB_WORKSPACE/ym-evidence/configs/$name.json"
+            (cd "$dir" && timeout 7200 lake env "$COMP" "$cfg") > "ym-evidence/comparator-$name.log" 2>&1
+            code=$?
+            echo "$code" > "ym-evidence/comparator-$name-exit.txt"
+            echo "comparator $name exit: $code"
+            tail -3 "ym-evidence/comparator-$name.log"
+          }
+          set +e
+          run_target submission "ym-src/$PKG/submission"
+          run_target acceptance "ym-runs/prepare/project"
+          run_target ope "ym-runs/prepare/project"
+          set -e
+
+      - name: Axiom closure leg
+        run: |
+          set +e
+          cd ym-runs/prepare/project
+          cat > AxiomPrint.lean <<'EOF'
+          import Solution
+          import CombinedAcceptance
+          import OPECheck
+          #print axioms YangMills.jointExistence
+          #print axioms YMReview.Acceptance.combined_acceptance
+          #print axioms YMReview.OPE.constructed
+          EOF
+          timeout 1800 lake env lean AxiomPrint.lean > "$GITHUB_WORKSPACE/ym-evidence/axioms.log" 2>&1
+          code=$?
+          set -e
+          echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/axioms-exit.txt"
+          cat ym-evidence/axioms.log
+          echo "axioms exit: $code"
+
+      - name: Replay leg (serialized leanchecker)
+        run: |
+          set +e
+          cd "ym-src/$PKG/submission"
+          timeout 14400 lake env leanchecker -v Challenge ChallengeSpec PublicTheory PublicWilson PublicView WilsonBridge HierarchyBridge TraceBridge ContactSpec ContactBridge Construction Solution ConcreteSU2 > "$GITHUB_WORKSPACE/ym-evidence/replay.log" 2>&1
+          code=$?
+          set -e
+          echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/replay-exit.txt"
+          tail -3 ym-evidence/replay.log
+          echo "replay exit: $code"
+
+      - name: ST-3 linter leg
+        run: |
+          set +e
+          cd ym-runs/prepare/project
+          timeout 1800 lake env lean -Dlinter.unusedVariables=true CombinedAcceptance.lean > "$GITHUB_WORKSPACE/ym-evidence/st3-combined.log" 2>&1
+          echo "combined: $?" > "$GITHUB_WORKSPACE/ym-evidence/st3-exit.txt"
+          timeout 1800 lake env lean -Dlinter.unusedVariables=true OPECheck.lean > "$GITHUB_WORKSPACE/ym-evidence/st3-ope.log" 2>&1
+          echo "ope: $?" >> "$GITHUB_WORKSPACE/ym-evidence/st3-exit.txt"
+          set -e
+          cat "$GITHUB_WORKSPACE/ym-evidence/st3-exit.txt"
+          grep -c "not explicitly referenced" "$GITHUB_WORKSPACE/ym-evidence/st3-combined.log" "$GITHUB_WORKSPACE/ym-evidence/st3-ope.log" || true
+
+      - name: ST statement tests leg
+        run: |
+          set +e
+          cd ym-runs/prepare/project
+          cp "$GITHUB_WORKSPACE/scripts/forge/ym-probes/Probes.lean" Probes.lean
+          timeout 3600 lake env lean Probes.lean 2>&1 | tee "$GITHUB_WORKSPACE/ym-evidence/probes.log"
+          code=${PIPESTATUS[0]}
+          set -e
+          echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/probes-exit.txt"
+          echo "probes exit: $code"
+
+      - name: Verdict
+        run: |
+          python3 - <<'PYEOF'
+          import json, os, re, sys
+          E = "ym-evidence"
+          def rd(name, default=""):
+              p = os.path.join(E, name)
+              return open(p).read() if os.path.exists(p) else default
+          def ex(name):
+              s = rd(name).strip()
+              try:
+                  return int(s)
+              except ValueError:
+                  return None
+          def comp_ok(name):
+              log = rd(f"comparator-{name}.log")
+              return (ex(f"comparator-{name}-exit.txt") == 0
+                      and "Your solution is okay!" in log
+                      and "Lean default kernel accepts the solution" in log
+                      and "Nanoda kernel accepts the solution" in log)
+          comp = {n: comp_ok(n) for n in ["submission", "acceptance", "ope"]}
+          comp_all = all(comp.values())
+          ctl_exit = ex("controls-exit.txt")
+          ctl_ok = ctl_exit == 0 and "comparator controls: all four runs ended as they must" in rd("controls.log")
+          build_exit = ex("build-exit.txt")
+          review_exit = ex("review-exit.txt")
+          project_build_exit = ex("project-build-exit.txt")
+          ax_exit = ex("axioms-exit.txt")
+          ax_log = rd("axioms.log")
+          allowed = {"propext", "Quot.sound", "Classical.choice"}
+          mentioned = set(re.findall(r"depends on axioms: \[([^\]]*)\]", ax_log))
+          ax_names = set()
+          for m in mentioned:
+              ax_names |= {t.strip() for t in m.split(",") if t.strip()}
+          endpoints_seen = all(n in ax_log for n in [
+              "jointExistence", "combined_acceptance", "constructed"])
+          axioms_ok = (ax_exit == 0 and endpoints_seen and ax_names <= allowed
+                       and "sorryAx" not in ax_log)
+          replay_exit = ex("replay-exit.txt")
+          probes_exit = ex("probes-exit.txt")
+          probes_log = rd("probes.log")
+          probes_ok = probes_exit == 0 and "sorryAx" not in probes_log
+          core = comp_all and axioms_ok and build_exit == 0 and review_exit == 0 and project_build_exit == 0
+          if core and replay_exit == 0 and probes_ok:
+              tier = "KERNEL-RECEIPT-COMPLETE"
+          elif core:
+              tier = "COMPARATOR-RECEIPT (replay/probe legs short; grading capped per pre-registration)"
+          else:
+              tier = "NO-RECEIPT"
+          verdict = {
+              "target_sha": os.environ.get("TARGET_SHA"),
+              "comparator": comp,
+              "comparator_all_ok": comp_all,
+              "controls_exit": ctl_exit,
+              "controls_ok": ctl_ok,
+              "build_exit": build_exit,
+              "review_exit": review_exit,
+              "project_build_exit": project_build_exit,
+              "axioms_exit": ax_exit,
+              "axioms_ok": axioms_ok,
+              "axiom_names_seen": sorted(ax_names),
+              "replay_exit": replay_exit,
+              "probes_exit": probes_exit,
+              "probes_axioms_clean": "sorryAx" not in probes_log,
+              "probes_ok": probes_ok,
+              "tier": tier,
+              "notes": [
+                  "M1 seams 1 (A8/A7 witness identity), 2 (OS correspondence), 4 (group human review pending), 5 (scalar bridge domain) are note-level; the workflow grades the kernel tier only.",
+                  "controls are report-only (controls_ok) per standing doctrine.",
+                  "The audit verdict is issued by the main agent at close-out from this evidence.",
+              ],
+          }
+          with open(os.path.join(E, "verdict.json"), "w") as f:
+              json.dump(verdict, f, indent=2)
+          with open(os.path.join(E, "summary.md"), "w") as f:
+              f.write("# Yang-Mills forge summary\n\n")
+              for k, v in verdict.items():
+                  f.write(f"- {k}: {v}\n")
+          print(json.dumps(verdict, indent=2))
+          sys.exit(0 if core else 1)
+          PYEOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: yang-mills-forge-evidence
+          path: ym-evidence/
+          if-no-files-found: warn
+
+      - name: Cleanup target checkouts
+        if: always()
+        run: |
+          rm -rf ym-src ym-ctl ym-runs tools ym-target.tar.gz ym-tar-listing.txt ym-key-hashes.txt elan-init.sh
+          ls -la
