@@ -1,0 +1,296 @@
+name: CompCert4Lean forge (desktop lane)
+
+# Forge for the CompCert4Lean investigation (NOT a registered claim;
+# no verdict-lock entry; investigation directed by the user
+# 2026-11-23 in the CompCert4Lean audit side chat, dispatch at his
+# tap the same day).
+#
+# Paper: Wang, Chen, Long, Rinard, "CompCert4Lean: Porting a
+# Verified C Compiler to Lean in Six Weeks with Parallel Coding
+# Agents", arXiv:2611.21084v1 (16 Nov 2026). Target:
+# fanlong/compcert4lean @ d8d1e5b696eb5c263ff3eb9030e4eb8b9dde6655
+# (main HEAD at audit time). Toolchain leanprover/lean4:v4.33.0
+# (the target's own lean-toolchain). lake-manifest.json has ZERO
+# packages: no Mathlib, the build is self-contained.
+#
+# Audit questions this forge settles (audit note 2026-11-23,
+# verdict PARTIAL + GAP):
+# 1. Does the pinned commit kernel-check at all? (No build was run
+#    in the VM audit; the README at this commit says "proof
+#    completion is still in progress" against the paper's
+#    4,908/4,908 obligations closed.)
+# 2. Printed-axiom audit of the end-to-end theorems
+#    (transf_c_program_correct, c_semantic_preservation,
+#    transf_c_program_match, compilerPassCertificates_proof):
+#    every printed axiom must be in {propext, Classical.choice,
+#    Quot.sound} under EITHER spelling (bare or qualified; the
+#    2026-10-23 verdict-gate lesson: classify against the printed
+#    form, carry both spellings).
+# 3. Composition probe (non-gating): do the repo's own certificate
+#    proof terms (compilerPassCertificates_proof,
+#    linker_program_certificate_proof, Prototype/Services float
+#    instances) assemble into the certificate-free end-to-end
+#    statement? Probe exit code is recorded; the main agent weighs
+#    it at close-out. A probe failure does NOT fail the verdict;
+#    a build or axiom failure DOES.
+#
+# Lane: [self-hosted, desktop] only (runner-first dispatch rule,
+# 2026-10-21). One heavy job at a time on the desktop box is the
+# dispatcher's responsibility, checked before dispatch.
+#
+# Target SHA arrives via the workflow_dispatch input, is copied
+# into env, and is validated as exactly 40 lowercase hex BEFORE
+# any use (fail-closed).
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_sha:
+        description: "compcert4lean commit SHA (40 hex)"
+        required: true
+        default: "d8d1e5b696eb5c263ff3eb9030e4eb8b9dde6655"
+
+env:
+  TARGET_SHA: ${{ inputs.target_sha }}
+  TARGET_REPO: "https://github.com/fanlong/compcert4lean"
+  EXPECTED_LEAN_FILES: "189"
+  EXPECTED_TOOLCHAIN: "leanprover/lean4:v4.33.0"
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pre-dispatch checks on this workflow
+        run: python3 scripts/harness/pre_dispatch_checks.py --workflows .github/workflows/compcert4lean-forge.yml
+
+  forge:
+    needs: gate
+    runs-on: [self-hosted, desktop]
+    timeout-minutes: 720
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v4
+
+      - name: Runner probe
+        continue-on-error: true
+        run: |
+          set +e
+          mkdir -p "$GITHUB_WORKSPACE/compcert-evidence"
+          df -h "$GITHUB_WORKSPACE" || true
+          echo "cpus: $(nproc || echo unknown)"
+          free -h || true
+          uname -a || true
+          exit 0
+
+      - name: Install elan
+        run: |
+          set -euo pipefail
+          if [ ! -x "$HOME/.elan/bin/elan" ]; then
+            curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain none
+          fi
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Clone and pin the target (fail-closed)
+        run: |
+          set -euo pipefail
+          EV="$GITHUB_WORKSPACE/compcert-evidence"
+          if ! [[ "$TARGET_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "FAIL: TARGET_SHA is not exactly 40 lowercase hex: $TARGET_SHA"; exit 1
+          fi
+          rm -rf compcert-target
+          git clone "$TARGET_REPO" compcert-target
+          cd compcert-target
+          git checkout "$TARGET_SHA"
+          actual=$(git rev-parse HEAD)
+          echo "$actual" > "$EV/target-head.txt"
+          [ "$actual" = "$TARGET_SHA" ] || { echo "FAIL: HEAD $actual != TARGET_SHA $TARGET_SHA"; exit 1; }
+          total=$(find CompCert4Lean -name '*.lean' | wc -l)
+          lines=$(find CompCert4Lean -name '*.lean' -exec cat {} + | wc -l)
+          echo "lean files: $total (expected $EXPECTED_LEAN_FILES); lines: $lines" | tee "$EV/file-counts.txt"
+          [ "$total" -eq "$EXPECTED_LEAN_FILES" ] || { echo "FAIL: lean file count $total != $EXPECTED_LEAN_FILES"; exit 1; }
+          tc=$(cat lean-toolchain)
+          echo "toolchain file: $tc" | tee "$EV/toolchain-file.txt"
+          [ "$tc" = "$EXPECTED_TOOLCHAIN" ] || { echo "FAIL: lean-toolchain $tc != $EXPECTED_TOOLCHAIN"; exit 1; }
+
+      - name: Source policy scan (recorded, fail-closed)
+        working-directory: compcert-target
+        run: |
+          set -euo pipefail
+          EV="$GITHUB_WORKSPACE/compcert-evidence"
+          {
+            echo "sorry: $(grep -rnw --include='*.lean' -e sorry CompCert4Lean CompCert4Lean.lean | wc -l)"
+            echo "admit: $(grep -rnw --include='*.lean' -e admit CompCert4Lean CompCert4Lean.lean | wc -l)"
+            echo "axiom-decl: $(grep -rn --include='*.lean' -E '^[[:space:]]*axiom[[:space:]]' CompCert4Lean CompCert4Lean.lean | wc -l)"
+            echo "native_decide: $(grep -rn --include='*.lean' -e native_decide CompCert4Lean CompCert4Lean.lean | wc -l)"
+            echo "unsafe: $(grep -rnw --include='*.lean' -e unsafe CompCert4Lean CompCert4Lean.lean | wc -l)"
+            echo "ofReduceBool: $(grep -rn --include='*.lean' -e ofReduceBool CompCert4Lean CompCert4Lean.lean | wc -l)"
+          } | tee "$EV/policy-scan.txt"
+          if grep -qvx ".*: 0" "$EV/policy-scan.txt"; then
+            echo "FAIL: policy scan found a nonzero count"; exit 1
+          fi
+          echo "scan clean: all counts zero"
+
+      - name: Toolchain v4.33.0
+        working-directory: compcert-target
+        run: |
+          set -euo pipefail
+          EV="$GITHUB_WORKSPACE/compcert-evidence"
+          elan toolchain install leanprover/lean4:v4.33.0
+          ELAN_TOOLCHAIN=leanprover/lean4:v4.33.0 lean --version > "$EV/lean-version.txt" 2>&1
+          cat "$EV/lean-version.txt"
+          grep -q "4.33.0" "$EV/lean-version.txt" || { echo "SETUP-FAIL: toolchain is not v4.33.0"; exit 1; }
+
+      - name: Build the CompCert4Lean library and compiler (recorded)
+        working-directory: compcert-target
+        run: |
+          set +e
+          EV="$GITHUB_WORKSPACE/compcert-evidence"
+          timeout 21600 lake build > "$EV/build.log" 2>&1
+          code=$?
+          echo "$code" > "$EV/build-exit.txt"
+          tail -5 "$EV/build.log"
+          echo "lake build exit: $code (124 = time-boxed; recorded, the Verdict step judges)"
+
+      - name: Axiom audit of the end-to-end theorems (recorded)
+        working-directory: compcert-target
+        run: |
+          set +e
+          EV="$GITHUB_WORKSPACE/compcert-evidence"
+          if [ "$(cat "$EV/build-exit.txt")" != "0" ]; then
+            echo "SKIPPED: build did not succeed" > "$EV/axiom-audit.log"
+            echo "skip" > "$EV/axiom-exit.txt"
+            exit 0
+          fi
+          cat > AxiomAudit.lean <<'LEANEOF'
+          import CompCert4Lean
+          import CompCert4Lean.Prototype.Services
+          #print axioms CompCert4Lean.Driver.Compiler.transf_c_program_correct
+          #print axioms CompCert4Lean.Driver.Compiler.c_semantic_preservation
+          #print axioms CompCert4Lean.Driver.Compiler.transf_c_program_match
+          #print axioms CompCert4Lean.Driver.Compiler.compilerPassCertificates_proof
+          LEANEOF
+          timeout 3600 lake env lean AxiomAudit.lean > "$EV/axiom-audit.log" 2>&1
+          code=$?
+          echo "$code" > "$EV/axiom-exit.txt"
+          rm -f AxiomAudit.lean
+          cat "$EV/axiom-audit.log"
+          echo "axiom audit exit: $code (recorded, the Verdict step judges)"
+
+      - name: Composition probe (recorded, non-gating)
+        continue-on-error: true
+        working-directory: compcert-target
+        run: |
+          set +e
+          EV="$GITHUB_WORKSPACE/compcert-evidence"
+          if [ "$(cat "$EV/build-exit.txt")" != "0" ]; then
+            echo "SKIPPED: build did not succeed" > "$EV/compose-probe.log"
+            echo "skip" > "$EV/compose-exit.txt"
+            exit 0
+          fi
+          cat > ComposeProbe.lean <<'LEANEOF'
+          import CompCert4Lean
+          import CompCert4Lean.Prototype.Services
+          open CompCert4Lean.Driver.Compiler in
+          example
+              (cfg : CompCert4Lean.Config.CompilerConfig)
+              (selectionOracle : CompCert4Lean.Backend.Selection.SelectionOracle)
+              (inlineCfg : CompCert4Lean.Backend.Inlining.InliningConfig)
+              (regallocOracle : CompCert4Lean.Backend.Allocation.RegallocOracle)
+              (enumerationService : CompCert4Lean.Backend.Linearize.EnumerationService) :
+              CompilerPassCertificates cfg selectionOracle inlineCfg regallocOracle enumerationService
+                CompCert4Lean.Cfrontend.Ctypes.linker_program_certificate_proof
+                CompCert4Lean.Cfrontend.Ctypes.linker_program_certificate_proof :=
+            compilerPassCertificates_proof cfg selectionOracle inlineCfg regallocOracle enumerationService
+              CompCert4Lean.Cfrontend.Ctypes.linker_program_certificate_proof
+              CompCert4Lean.Cfrontend.Ctypes.linker_program_certificate_proof
+          open CompCert4Lean.Driver.Compiler in
+          example
+              (cfg : CompCert4Lean.Config.CompilerConfig)
+              (selectionOracle : CompCert4Lean.Backend.Selection.SelectionOracle)
+              (inlineCfg : CompCert4Lean.Backend.Inlining.InliningConfig)
+              (regallocOracle : CompCert4Lean.Backend.Allocation.RegallocOracle)
+              (enumerationService : CompCert4Lean.Backend.Linearize.EnumerationService)
+              (ctx : CompCert4Lean.Cfrontend.SimplExpr.FreshIdentContext)
+              (xi : CompCert4Lean.Common.ExternalCalls.ExternalCalls)
+              (p : CompCert4Lean.Cfrontend.Csyntax.program)
+              (tp : CompCert4Lean.X86.Asm.program)
+              (h : transf_c_program cfg selectionOracle inlineCfg regallocOracle enumerationService ctx p = CompCert4Lean.Common.Errors.res.OK tp) :
+              CompCert4Lean.Common.Smallstep.backward_simulation
+                (CompCert4Lean.Cfrontend.Csem.semantics xi p)
+                (CompCert4Lean.X86.Asm.semantics cfg xi tp) :=
+            transf_c_program_correct cfg selectionOracle inlineCfg regallocOracle enumerationService
+              CompCert4Lean.Cfrontend.Ctypes.linker_program_certificate_proof
+              CompCert4Lean.Cfrontend.Ctypes.linker_program_certificate_proof
+              (compilerPassCertificates_proof cfg selectionOracle inlineCfg regallocOracle enumerationService
+                CompCert4Lean.Cfrontend.Ctypes.linker_program_certificate_proof
+                CompCert4Lean.Cfrontend.Ctypes.linker_program_certificate_proof)
+              ctx xi p tp h
+          LEANEOF
+          timeout 3600 lake env lean ComposeProbe.lean > "$EV/compose-probe.log" 2>&1
+          code=$?
+          echo "$code" > "$EV/compose-exit.txt"
+          rm -f ComposeProbe.lean
+          tail -20 "$EV/compose-probe.log"
+          echo "compose probe exit: $code (recorded, NON-GATING, the main agent weighs it)"
+          exit 0
+
+      - name: Verdict (fail-closed)
+        run: |
+          python3 - <<'EOF'
+          import re, sys
+          ev = 'compcert-evidence/'
+          def read(name, default=''):
+              try:
+                  return open(ev + name).read()
+              except OSError:
+                  return default
+          build_exit = read('build-exit.txt').strip()
+          axiom_exit = read('axiom-exit.txt').strip()
+          compose_exit = read('compose-exit.txt').strip()
+          log = read('axiom-audit.log')
+          allowed = {'propext', 'Classical.choice', 'Quot.sound'}
+          problems = []
+          if build_exit != '0':
+              problems.append('build exit %r != 0' % build_exit)
+          listings = re.findall(r"depends on axioms:\s*\[([^\]]*)\]", log)
+          no_dep = log.count('does not depend on any axioms')
+          if axiom_exit != '0':
+              problems.append('axiom audit exit %r != 0' % axiom_exit)
+          if len(listings) + no_dep < 4:
+              problems.append('only %d axiom listings found, expected 4' % (len(listings) + no_dep))
+          for lst in listings:
+              names = set()
+              for chunk in lst.replace('\n', ' ').split(','):
+                  chunk = chunk.strip()
+                  if chunk:
+                      names.add(chunk)
+              extra = names - allowed
+              if extra:
+                  problems.append('off-allowlist axioms: %s' % sorted(extra))
+          verdict = 'PASS' if not problems else 'FAIL'
+          with open(ev + 'verdict.txt', 'w') as f:
+              f.write('verdict: %s\n' % verdict)
+              f.write('build_exit: %s\n' % build_exit)
+              f.write('axiom_exit: %s\n' % axiom_exit)
+              f.write('compose_exit (non-gating): %s\n' % compose_exit)
+              f.write('axiom listings: %d, no-dependency listings: %d\n' % (len(listings), no_dep))
+              for p in problems:
+                  f.write('problem: %s\n' % p)
+          print(open(ev + 'verdict.txt').read())
+          sys.exit(0 if verdict == 'PASS' else 1)
+          EOF
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compcert4lean-forge-evidence
+          path: compcert-evidence/
+          retention-days: 90
+
+      - name: Leave shared runner clean
+        if: always()
+        run: |
+          rm -rf compcert-target compcert-evidence
