@@ -36,7 +36,7 @@ name: Aaronson-Ambainis forge (Dell laptop lane)
 # comparator 71b52ec29e06 (built with its own toolchain
 # v4.30.0-rc2), lean4export 15f6055e299a (built with the project
 # toolchain), landrun 5ed4a3db3a4a (Go), nanoda 68d5ca9db226
-# (robsimmons fork, cargo). run_comparator.sh requires Linux,
+# (robsimmons/nanoda_lib fork, cargo). run_comparator.sh requires Linux,
 # Landlock, a systemd user session, an UNPRIVILEGED user (refuses
 # root), systemd-run --user --wait, a fresh checkout, and
 # `lake exe cache get` first; it runs check_sandbox.sh first
@@ -115,6 +115,16 @@ name: Aaronson-Ambainis forge (Dell laptop lane)
 # PINS parser drops its own latent `| head -1` (grep emits
 # the single matching line; a duplicate key would fail the
 # equality assert, fail-closed).
+# Run 3 (45210985540, 2026-11-23): the run 2 fix worked (pin
+# step green), then FAILED in Build comparator tools in
+# 2m 23s: the nanoda tarball fetch 404'd (curl exit 22). The
+# URL named robsimmons/nanoda; the artifact's PINS.env and
+# comparator/README name the fork robsimmons/nanoda_lib, and
+# the pinned rev 68d5ca9db226 resolves there (verified live
+# from the VM: 404 on robsimmons/nanoda, 200 on
+# robsimmons/nanoda_lib; the comparator, lean4export and Go
+# URLs verified live as well). Fix in run 4: fetch nanoda
+# from robsimmons/nanoda_lib.
 
 on:
   workflow_dispatch:
@@ -394,7 +404,7 @@ jobs:
           export PATH="$HOME/.cargo/bin:$PATH"
           cargo --version | tee -a aa-evidence/tools.txt
           # nanoda at the pinned rev.
-          curl -fsSL -o nanoda.tar.gz "https://codeload.github.com/robsimmons/nanoda/tar.gz/68d5ca9db226849b41a6fff59d796ff19d0a8840"
+          curl -fsSL -o nanoda.tar.gz "https://codeload.github.com/robsimmons/nanoda_lib/tar.gz/68d5ca9db226849b41a6fff59d796ff19d0a8840"
           sha256sum nanoda.tar.gz >> aa-evidence/tools.txt
           mkdir -p tools/nanoda
           tar -xzf nanoda.tar.gz -C tools/nanoda --strip-components=1
