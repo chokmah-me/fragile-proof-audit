@@ -106,6 +106,15 @@ name: Aaronson-Ambainis forge (Dell laptop lane)
 # installed toolchain rather than the repo default. Run 1 also
 # established: go and cargo absent on the Dell (installed
 # in-job), systemd-run present, elan preinstalled.
+# Run 2 (43502121391, 2026-11-13): the toolchain fix worked
+# (step green), then FAILED at Pin target commit in 33 s:
+# `tar -tzf ... | head -1` under pipefail: head closes the
+# pipe after one line, tar dies on SIGPIPE ("tar: stdout:
+# write error", exit 2). Fix in run 3: the listing goes to
+# aa-tar-listing.txt first (removed at cleanup), and the
+# PINS parser drops its own latent `| head -1` (grep emits
+# the single matching line; a duplicate key would fail the
+# equality assert, fail-closed).
 
 on:
   workflow_dispatch:
@@ -224,7 +233,8 @@ jobs:
           [ "${#sha}" -eq 40 ] || { echo "TARGET_SHA length ${#sha} != 40" >&2; exit 1; }
           curl -fsSL -o aa-target.tar.gz "https://codeload.github.com/physical-superintelligence/aaronson-ambainis/tar.gz/$sha"
           sha256sum aa-target.tar.gz > aa-evidence/tarball.sha256
-          top="$(tar -tzf aa-target.tar.gz | head -1)"
+          tar -tzf aa-target.tar.gz > aa-tar-listing.txt
+          top="$(head -1 aa-tar-listing.txt)"
           echo "tarball top: $top"
           [ "$top" = "aaronson-ambainis-$sha/" ] || { echo "unexpected tarball top: $top" >&2; exit 1; }
           for d in aa-thm aa-ctl aa-build; do
@@ -328,7 +338,7 @@ jobs:
           # PINS assert: parse (never source) the artifact's comparator/PINS.env
           # in aa-thm and compare against the revs recorded in the PIN.
           pins="aa-thm/comparator/PINS.env"
-          getpin() { grep -E "^$1=" "$pins" | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'"; }
+          getpin() { grep -E "^$1=" "$pins" | cut -d= -f2- | tr -d '"' | tr -d "'"; }
           [ "$(getpin COMPARATOR_REV)" = "71b52ec29e06d4b7d882726553b1ceb99a2499e0" ] || { echo "COMPARATOR_REV mismatch" >&2; exit 1; }
           [ "$(getpin LEAN4EXPORT_REV)" = "15f6055e299ad5b89345e533cc2192f4cc00f659" ] || { echo "LEAN4EXPORT_REV mismatch" >&2; exit 1; }
           [ "$(getpin LANDRUN_REV)" = "5ed4a3db3a4ad930d577215c6b9abaa19df7f99f" ] || { echo "LANDRUN_REV mismatch" >&2; exit 1; }
@@ -607,5 +617,5 @@ jobs:
       - name: Cleanup target checkouts
         if: always()
         run: |
-          rm -rf aa-thm aa-ctl aa-build tools aa-target.tar.gz aa-key-hashes.txt
+          rm -rf aa-thm aa-ctl aa-build tools aa-target.tar.gz aa-key-hashes.txt aa-tar-listing.txt
           ls -la
