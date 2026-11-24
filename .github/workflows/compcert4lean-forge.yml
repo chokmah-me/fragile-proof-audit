@@ -67,7 +67,7 @@ jobs:
 
   forge:
     needs: gate
-    runs-on: [self-hosted, desktop]
+    runs-on: [self-hosted, laptop]
     timeout-minutes: 720
     steps:
       - name: Check out this repo
