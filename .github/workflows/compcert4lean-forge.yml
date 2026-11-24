@@ -1,4 +1,4 @@
-name: CompCert4Lean forge (desktop lane)
+name: CompCert4Lean forge (laptop lane)
 
 # Forge for the CompCert4Lean investigation (NOT a registered claim;
 # no verdict-lock entry; investigation directed by the user
@@ -34,9 +34,10 @@ name: CompCert4Lean forge (desktop lane)
 #    it at close-out. A probe failure does NOT fail the verdict;
 #    a build or axiom failure DOES.
 #
-# Lane: [self-hosted, desktop] only (runner-first dispatch rule,
-# 2026-10-21). One heavy job at a time on the desktop box is the
-# dispatcher's responsibility, checked before dispatch.
+# Lane: [self-hosted, laptop] (retargeted from desktop 2026-11-24
+# at the user's word after the desktop runner never picked up run
+# 45227850553 in 21h). One heavy job at a time on the laptop box is
+# the dispatcher's responsibility, checked before dispatch.
 #
 # Target SHA arrives via the workflow_dispatch input, is copied
 # into env, and is validated as exactly 40 lowercase hex BEFORE
