@@ -299,6 +299,17 @@ jobs:
                       if m.name:
                           tf.extract(m, dest)
               run(["git", "add", "-Af"], cwd=dest)
+              # Codeload tarballs ship submodule gitlinks as empty dirs, so
+              # the extracted tree lacks them; restore each gitlink from the
+              # commit tree (aesop's lean_packages/std is the first such).
+              # update-index --cacheinfo records the entry without needing
+              # the submodule object locally.
+              for line in run(["git", "ls-tree", "-r", rev], cwd=dest).splitlines():
+                  meta, path = line.split("\t", 1)
+                  mode, _typ, sha = meta.split()
+                  if mode == "160000":
+                      run(["git", "update-index", "--add", "--cacheinfo",
+                           f"{mode},{sha},{path}"], cwd=dest)
               wt = run(["git", "write-tree"], cwd=dest)
               assert wt == tree, f"{name}: write-tree {wt} != {tree}"
               run(["git", "update-ref", "--no-deref", "HEAD", rev], cwd=dest)
