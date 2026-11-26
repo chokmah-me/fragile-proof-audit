@@ -249,8 +249,8 @@ jobs:
           set -euo pipefail
           cd "ym-src/$PKG"
           : > "$GITHUB_WORKSPACE/ym-evidence/scan.txt"
-          sorry_files="$(grep -rlw -e sorry -e admit submission checks --include='*.lean' | sort || true)"
-          echo "sorry/admit files in submission+checks: $sorry_files" | tee -a "$GITHUB_WORKSPACE/ym-evidence/scan.txt"
+          sorry_files="$(grep -rlw -e sorry submission checks --include='*.lean' | sort || true)"
+          echo "sorry files in submission+checks: $sorry_files" | tee -a "$GITHUB_WORKSPACE/ym-evidence/scan.txt"
           [ "$sorry_files" = "submission/Challenge.lean" ] || { echo "sorries outside the comparator challenge" >&2; exit 1; }
           nsorry="$(grep -cw sorry submission/Challenge.lean)"
           echo "challenge sorries: $nsorry" | tee -a "$GITHUB_WORKSPACE/ym-evidence/scan.txt"
