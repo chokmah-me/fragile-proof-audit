@@ -248,18 +248,18 @@ jobs:
         run: |
           set -euo pipefail
           cd "ym-src/$PKG"
-          : > ../../ym-evidence/scan.txt
+          : > "$GITHUB_WORKSPACE/ym-evidence/scan.txt"
           sorry_files="$(grep -rlw -e sorry -e admit submission checks --include='*.lean' | sort || true)"
-          echo "sorry/admit files in submission+checks: $sorry_files" | tee -a ../../ym-evidence/scan.txt
+          echo "sorry/admit files in submission+checks: $sorry_files" | tee -a "$GITHUB_WORKSPACE/ym-evidence/scan.txt"
           [ "$sorry_files" = "submission/Challenge.lean" ] || { echo "sorries outside the comparator challenge" >&2; exit 1; }
           nsorry="$(grep -cw sorry submission/Challenge.lean)"
-          echo "challenge sorries: $nsorry" | tee -a ../../ym-evidence/scan.txt
+          echo "challenge sorries: $nsorry" | tee -a "$GITHUB_WORKSPACE/ym-evidence/scan.txt"
           [ "$nsorry" -eq 1 ] || { echo "expected exactly 1 challenge sorry" >&2; exit 1; }
           if grep -rnw -e native_decide submission checks --include='*.lean'; then echo "native_decide in scope" >&2; exit 1; fi
           if grep -rnE '^[[:space:]]*(axiom|unsafe|extern)[[:space:]]' submission checks --include='*.lean'; then echo "axiom/unsafe/extern declaration in scope" >&2; exit 1; fi
           if grep -rnE '^[[:space:]]*partial[[:space:]]+(def|theorem)' submission checks --include='*.lean'; then echo "partial def in scope" >&2; exit 1; fi
           if grep -rnw -e implemented_by submission checks --include='*.lean'; then echo "implemented_by in scope" >&2; exit 1; fi
-          echo "source policy scan OK" | tee -a ../../ym-evidence/scan.txt
+          echo "source policy scan OK" | tee -a "$GITHUB_WORKSPACE/ym-evidence/scan.txt"
 
       - name: Write seed helper
         run: |
