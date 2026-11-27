@@ -458,7 +458,41 @@ jobs:
           cat ym-evidence/seed.log
           echo "packages seeded"
 
+      - name: Restore incremental build stash
+        run: |
+          set -euo pipefail
+          # Incremental build (2026-11-27): the submission build compiles
+          # 9,470 modules and did not finish inside one 8h leg on this
+          # runner (run 4, exit 124). Lake artifacts from the previous run
+          # of the SAME pinned target are kept in a stash outside the
+          # workspace and restored here, after seeding, so each run resumes
+          # where the last stopped. Lake trace hashes re-verify every
+          # artifact against the pinned sources; the comparator and replay
+          # legs re-check the finished artifacts with external kernels, so
+          # a restored artifact cannot pass on trust. verify.py records
+          # source_build_present_at_start honestly in its result.json.
+          STASH="$HOME/ym-forge-stash/$TARGET_SHA"
+          SUB="ym-src/$PKG/submission"
+          if [ -d "$STASH/build" ]; then
+            mkdir -p "$SUB/.lake/build"
+            cp -a "$STASH/build/." "$SUB/.lake/build/"
+            echo "restored root build tree from stash"
+          else
+            echo "no stash yet; cold build"
+          fi
+          if [ -d "$STASH/pkgbuild" ]; then
+            for d in "$STASH"/pkgbuild/*/; do
+              [ -d "$d" ] || continue
+              pkg="$(basename "$d")"
+              mkdir -p "$SUB/.lake/packages/$pkg/.lake/build"
+              cp -a "$d/." "$SUB/.lake/packages/$pkg/.lake/build/"
+              echo "restored package build tree: $pkg"
+            done
+          fi
+          du -sh "$SUB/.lake/build" 2>/dev/null || true
+
       - name: Source build leg (verify.py build stage, empty environment)
+        id: buildleg
         run: |
           set +e
           cd "ym-src/$PKG"
@@ -467,11 +501,39 @@ jobs:
           set -e
           echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/build-exit.txt"
           cp "$GITHUB_WORKSPACE/ym-runs/build/result.json" "$GITHUB_WORKSPACE/ym-evidence/build-result.json" 2>/dev/null || true
-          grep "Maximum resident set size" ym-evidence/build.log > ym-evidence/build-rss.txt || true
-          tail -5 ym-evidence/build.log
+          grep "Maximum resident set size" "$GITHUB_WORKSPACE/ym-evidence/build.log" > "$GITHUB_WORKSPACE/ym-evidence/build-rss.txt" || true
+          tail -5 "$GITHUB_WORKSPACE/ym-evidence/build.log"
           echo "build exit: $code"
+          # Progress capture: how far the module build actually got, so a
+          # timeout is measurable instead of a 3-line log (run 4 gap).
+          BLOG="$GITHUB_WORKSPACE/ym-runs/build/submission-build.log"
+          if [ -f "$BLOG" ]; then
+            { echo "built-lines: $(grep -c 'Built' "$BLOG" || true)"
+              grep 'Built' "$BLOG" | tail -3 || true
+              tail -3 "$BLOG" || true
+            } > "$GITHUB_WORKSPACE/ym-evidence/build-progress.txt" || true
+          fi
+          # Save the build trees to the stash for the next run, whatever
+          # the build outcome; a save failure is recorded, never masking.
+          STASH="$HOME/ym-forge-stash/$TARGET_SHA"
+          SUB="$GITHUB_WORKSPACE/ym-src/$PKG/submission"
+          mkdir -p "$STASH/build" "$STASH/pkgbuild"
+          if cp -a "$SUB/.lake/build/." "$STASH/build/"; then
+            echo "stash save OK (root build)" > "$GITHUB_WORKSPACE/ym-evidence/stash.txt"
+          else
+            echo "STASH SAVE FAILED (root build)" > "$GITHUB_WORKSPACE/ym-evidence/stash.txt"
+          fi
+          for d in "$SUB"/.lake/packages/*/.lake/build; do
+            [ -d "$d" ] || continue
+            pkg="$(basename "$(dirname "$(dirname "$d")")")"
+            mkdir -p "$STASH/pkgbuild/$pkg"
+            cp -a "$d/." "$STASH/pkgbuild/$pkg/" || echo "STASH SAVE FAILED (package $pkg)" >> "$GITHUB_WORKSPACE/ym-evidence/stash.txt"
+          done
+          cat "$GITHUB_WORKSPACE/ym-evidence/stash.txt"
+          if [ "$code" -eq 0 ]; then echo "build_ok=true" >> "$GITHUB_OUTPUT"; else echo "build_ok=false" >> "$GITHUB_OUTPUT"; fi
 
       - name: Review leg (verify.py review stage, 43 modules fresh)
+        if: steps.buildleg.outputs.build_ok == 'true'
         run: |
           set +e
           cd "ym-src/$PKG"
@@ -480,10 +542,11 @@ jobs:
           set -e
           echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/review-exit.txt"
           cp "$GITHUB_WORKSPACE/ym-runs/review/result.json" "$GITHUB_WORKSPACE/ym-evidence/review-result.json" 2>/dev/null || true
-          tail -5 ym-evidence/review.log
+          tail -5 "$GITHUB_WORKSPACE/ym-evidence/review.log"
           echo "review exit: $code"
 
       - name: Prepare review project (verify.py prepare stage)
+        if: steps.buildleg.outputs.build_ok == 'true'
         run: |
           set -euo pipefail
           cd "ym-src/$PKG"
@@ -492,6 +555,7 @@ jobs:
           echo "review project prepared"
 
       - name: Review project build
+        if: steps.buildleg.outputs.build_ok == 'true'
         run: |
           set +e
           cd ym-runs/prepare/project
@@ -502,6 +566,7 @@ jobs:
           echo "project build exit: $code"
 
       - name: Comparator legs (three endpoints, real landrun + nanoda)
+        if: steps.buildleg.outputs.build_ok == 'true'
         run: |
           set -euo pipefail
           mkdir -p ym-evidence/configs
@@ -540,6 +605,7 @@ jobs:
           set -e
 
       - name: Axiom closure leg
+        if: steps.buildleg.outputs.build_ok == 'true'
         run: |
           set +e
           cd ym-runs/prepare/project
@@ -555,10 +621,11 @@ jobs:
           code=$?
           set -e
           echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/axioms-exit.txt"
-          cat ym-evidence/axioms.log
+          cat "$GITHUB_WORKSPACE/ym-evidence/axioms.log"
           echo "axioms exit: $code"
 
       - name: Replay leg (serialized leanchecker)
+        if: steps.buildleg.outputs.build_ok == 'true'
         run: |
           set +e
           cd "ym-src/$PKG/submission"
@@ -566,10 +633,11 @@ jobs:
           code=$?
           set -e
           echo "$code" > "$GITHUB_WORKSPACE/ym-evidence/replay-exit.txt"
-          tail -3 ym-evidence/replay.log
+          tail -3 "$GITHUB_WORKSPACE/ym-evidence/replay.log"
           echo "replay exit: $code"
 
       - name: ST-3 linter leg
+        if: steps.buildleg.outputs.build_ok == 'true'
         run: |
           set +e
           cd ym-runs/prepare/project
@@ -582,6 +650,7 @@ jobs:
           grep -c "not explicitly referenced" "$GITHUB_WORKSPACE/ym-evidence/st3-combined.log" "$GITHUB_WORKSPACE/ym-evidence/st3-ope.log" || true
 
       - name: ST statement tests leg
+        if: steps.buildleg.outputs.build_ok == 'true'
         run: |
           set +e
           cd ym-runs/prepare/project
